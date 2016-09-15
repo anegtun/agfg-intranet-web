@@ -1,0 +1,4 @@
+syntax: glob
+intranet/.project
+.settings/**
+**/.project
