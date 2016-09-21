@@ -15,7 +15,9 @@
  */
 
 $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework');
-$cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
+$cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version());
+$authUser = $this->Session->read('Auth.User');
+$menu_option = empty($menu_option) ? '' : $menu_option;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -80,13 +82,19 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 				</div>
 				<div class="collapse navbar-collapse" id="myNavbar">
 					<ul class="nav navbar-nav">
-						<li class="active"><?php echo $this->Html->link('Inicio', array('controller'=>'Main')) ?></li>
+						<li class="<?php echo empty($menu_option) ? 'active' : '' ?>">
+							<?php echo $this->Html->link('Inicio', array('controller'=>'Main')) ?>
+						</li>
+						<?php if(!empty($authUser)) : ?>
+							<li class="<?php echo ($menu_option==='users') ? 'active' : '' ?>">
+								<?php echo $this->Html->link('Usuarios', array('controller'=>'Users')) ?>
+							</li>
+						<?php endif ?>
 						<!--li><a href="#">About</a></li>
 						<li><a href="#">Projects</a></li>
 						<li><a href="#">Contact</a></li-->
 					</ul>
 					<ul class="nav navbar-nav navbar-right">
-						<?php $authUser = $this->Session->read('Auth.User'); ?>
 						<?php if(!empty($authUser)) : ?>
 							<li>
 								<a><?php echo $authUser['name'] ?></a>
