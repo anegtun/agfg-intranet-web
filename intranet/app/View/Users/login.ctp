@@ -9,9 +9,10 @@
 	            <?php echo __('Introduce o teu usuario e contrasinal'); ?>
 	        </legend>
 	        <?php
-	        echo $this->Form->input('username', array('label' => 'Usuario'));
-	        echo $this->Form->input('password', array('label' => 'Contrasinal'));
+	        echo $this->Form->input('username', array('label'=>'Usuario'));
+	        echo $this->Form->input('password', array('label'=>'Contrasinal'));
+	        echo $this->Form->button('Entrar', array('type'=>'submit', 'class'=>'btn-primary'));
 	        ?>
 	    </fieldset>
-	<?php echo $this->Form->end(__('Entrar')); ?>
+	<?php echo $this->Form->end(); ?>
 </div>
