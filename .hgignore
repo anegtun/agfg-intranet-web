@@ -2,3 +2,5 @@ syntax: glob
 intranet/.project
 .settings/**
 **/.project
+*/tmp/cache/**
+*/tmp/logs/*
