@@ -4,3 +4,4 @@ syntax: glob
 */tmp/cache/**
 */tmp/logs/*
 .project
+*/tmp/**
