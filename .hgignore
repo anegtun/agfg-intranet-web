@@ -5,3 +5,4 @@ syntax: glob
 */tmp/logs/*
 .project
 */tmp/**
+*/logs/**
