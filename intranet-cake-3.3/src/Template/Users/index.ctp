@@ -1,15 +1,24 @@
-<table>
-<?php foreach ($users as $user): ?>
+<?php $this->extend('/Users/template') ?>
+
+<table class="table table-striped table-bordered table-hover">
     <tr>
-        <td><?= $user->username ?></td>
-        <td><?= $user->name ?></td>
-        <td><?= $user->role ?></td>
-        <td><?= $user->created ?></td>
-        <td><?= $user->modified ?></td>
-        <td class="actions">
-            <?= $this->Html->link(__('Edit'), ['action' => 'view', $user->id]) ?>
-            <?php //$this->Form->postLink(__('Delete'), ['action' => 'delete', $application->id], ['confirm' => __('Are you sure you want to delete # {0}?', $application->id)]) ?>
-        </td>
+        <th>Usuario</th>
+        <th>Nome</th>
+        <th>Rol</th>
+        <th>Creado</th>
+        <th></th>
+        <th></th>
     </tr>
-<?php endforeach ?>
+    <?php foreach($users as $u) : ?>
+        <tr>
+            <td><?= $u->username ?></td>
+            <td><?= $u->name ?></td>
+            <td><?= $u->role ?></td>
+            <td><?= $u->created ?></td>
+            <td><?= $this->Html->link(__('Editar'), ['action' => 'edit', $u->id]) ?></td>
+            <td><?php //$this->Html->link('Eliminar', array('controller'=>'Users', 'action'=>'delete', $u['User']['id'])) ?></td>
+        </tr>
+    <?php endforeach ?>
 </table>
+
+<?= $this->Html->link(__('Crear'), array('action'=>'add'), array('class'=>'btn-primary')) ?>
