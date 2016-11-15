@@ -10,7 +10,7 @@
             </legend>
             <?= $this->Form->input('username', array('label'=>'Usuario')) ?>
             <?= $this->Form->input('password', array('label'=>'Contrasinal')) ?>
-            <?= $this->Form->button('Entrar', array('type'=>'submit', 'class'=>'btn-primary')) ?>
+            <?= $this->Form->button('Entrar', array('type'=>'submit', 'class'=>'btn btn-primary')) ?>
         </fieldset>
     <?= $this->Form->end() ?>
 </div>

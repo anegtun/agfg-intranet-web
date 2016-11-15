@@ -6,16 +6,18 @@ use Cake\Validation\Validator;
 
 class UsersTable extends Table {
     
-    protected $_table = 'agfg_users';
+    public function initialize(array $config) {
+        $this->table('agfg_users');
+    }
 
     public function validationDefault(Validator $validator) {
         return $validator
-            ->notEmpty('username', 'A username is required')
-            ->notEmpty('password', 'A password is required')
-            ->notEmpty('role', 'A role is required')
+            ->notEmpty('username', 'O usuario é obrigatorio')
+            ->notEmpty('password', 'O contrasinal é obrigatorio')
+            ->notEmpty('role', 'O rol é obrigatorio')
             ->add('role', 'inList', [
                 'rule' => ['inList', ['admin', 'author']],
-                'message' => 'Please enter a valid role'
+                'message' => 'Introduce un valor válido para o rol'
             ]);
     }
 

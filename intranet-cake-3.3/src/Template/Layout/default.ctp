@@ -70,10 +70,10 @@ $menu_option = empty($menu_option) ? '' : $menu_option;
                             <li class="<?= ($menu_option==='users') ? 'active' : '' ?>">
                                 <?= $this->Html->link('Usuarios', ['controller'=>'Users', 'action'=>'index']) ?>
                             </li>
+                            <li class="<?= ($menu_option==='teams') ? 'active' : '' ?>">
+                                <?= $this->Html->link('Equipos', ['controller'=>'Teams', 'action'=>'index']) ?>
+                            </li>
                         <?php endif ?>
-                        <!--li><a href="#">About</a></li>
-                        <li><a href="#">Projects</a></li>
-                        <li><a href="#">Contact</a></li-->
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <?php if(!empty($authUser)) : ?>

@@ -21,4 +21,4 @@
     <?php endforeach ?>
 </table>
 
-<?= $this->Html->link(__('Crear'), array('action'=>'add'), array('class'=>'btn-primary')) ?>
+<?= $this->Html->link(__('Crear'), array('action'=>'add'), array('class'=>'btn btn-primary')) ?>
