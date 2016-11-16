@@ -73,6 +73,9 @@ $menu_option = empty($menu_option) ? '' : $menu_option;
                             <li class="<?= ($menu_option==='teams') ? 'active' : '' ?>">
                                 <?= $this->Html->link('Equipos', ['controller'=>'Teams', 'action'=>'index']) ?>
                             </li>
+                            <li class="<?= ($menu_option==='competitions') ? 'active' : '' ?>">
+                                <?= $this->Html->link('Competicións', ['controller'=>'Competitions', 'action'=>'index']) ?>
+                            </li>
                         <?php endif ?>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">

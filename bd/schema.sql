@@ -22,6 +22,7 @@ CREATE TABLE agfg_equipas (
   id int NOT NULL AUTO_INCREMENT,
   codigo varchar(3) NOT NULL,
   nome varchar(200) DEFAULT NULL,
+  logo varchar(200) DEFAULT NULL,
   PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
