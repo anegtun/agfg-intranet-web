@@ -4,7 +4,7 @@ namespace App\Model\Table;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
-class TeamsTable extends Table {
+class EquipasTable extends Table {
 
     public function initialize(array $config) {
         $this->table('agfg_equipas');

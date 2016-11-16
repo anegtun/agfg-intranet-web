@@ -1,7 +1,7 @@
-<?php $this->extend('/Competitions/template') ?>
+<?php $this->extend('template') ?>
 
 <div class="users form">
-    <?= $this->Form->create($competition, ['url'=>['action'=>'save']]) ?>
+    <?= $this->Form->create($competicion, ['url'=>['action'=>'save']]) ?>
         <?= $this->Form->hidden('id') ?>
         <fieldset>
             <legend><?= __('Competición') ?></legend>

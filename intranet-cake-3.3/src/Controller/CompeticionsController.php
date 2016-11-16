@@ -5,40 +5,41 @@ use App\Controller\AppController;
 use Cake\Event\Event;
 use App\Model\TiposCompeticion;
 
-class CompetitionsController extends AppController {
+class CompeticionsController extends AppController {
     
     public function initialize() {
+        parent::initialize();
         $this->TiposCompeticion = new TiposCompeticion();
     }
 
     public function index() {
         $this->set('tiposCompeticion', $this->TiposCompeticion->getTipos());
-        $this->set('competitions', $this->Competitions->find('all'));
+        $this->set('competicions', $this->Competicions->find('all'));
     }
 
     public function detail($id=null) {
-        $competition = empty($id) ? $this->Competitions->newEntity() : $this->Competitions->get($id);
+        $competicion = empty($id) ? $this->Competicions->newEntity() : $this->Competicions->get($id);
         $tiposCompeticion = $this->TiposCompeticion->getTipos();
-        $this->set(compact('competition', 'tiposCompeticion'));
+        $this->set(compact('competicion', 'tiposCompeticion'));
     }
 
     public function save() {
-        $competition = $this->Competitions->newEntity();
+        $competicion = $this->Competicions->newEntity();
         if ($this->request->is('post') || $this->request->is('put')) {
-            $team = $this->Competitions->patchEntity($competition, $this->request->data);
-            if ($this->Competitions->save($team)) {
+            $team = $this->Competicions->patchEntity($competicion, $this->request->data);
+            if ($this->Competicions->save($team)) {
                 $this->Flash->success(__('Gardouse a competición correctamente.'));
                 return $this->redirect(['action'=>'index']);
             }
             $this->Flash->error(__('Erro ao gardar a competición.'));
         }
-        $this->set(compact('competition'));
+        $this->set(compact('competicion'));
         $this->render('detail');
     }
 
     public function delete($id) {
-        $team = $this->Competitions->get($id);
-        if($this->Competitions->delete($team)) {
+        $competicion = $this->Competicions->get($id);
+        if($this->Competicions->delete($competicion)) {
             $this->Flash->success(__('Eliminouse a competición correctamente.'));
         } else {
             $this->Flash->error(__('Erro ao eliminar a competición.'));

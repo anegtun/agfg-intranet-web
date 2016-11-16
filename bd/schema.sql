@@ -1,6 +1,7 @@
 DROP TABLE IF EXISTS agfg_users;
 DROP TABLE IF EXISTS agfg_partido;
 DROP TABLE IF EXISTS agfg_fase;
+DROP TABLE IF EXISTS agfg_competicion_equipas;
 DROP TABLE IF EXISTS agfg_competicion;
 DROP TABLE IF EXISTS agfg_equipas;
 
@@ -8,12 +9,12 @@ DROP TABLE IF EXISTS agfg_equipas;
 
 CREATE TABLE agfg_users (
   id int unsigned NOT NULL AUTO_INCREMENT,
-  username varchar(50) DEFAULT NULL,
-  password varchar(255) DEFAULT NULL,
-  role varchar(20) DEFAULT NULL,
+  nome_usuario varchar(50) DEFAULT NULL,
+  contrasinal varchar(255) DEFAULT NULL,
+  nome varchar(255) DEFAULT NULL,
+  rol varchar(20) DEFAULT NULL,
   created datetime DEFAULT NULL,
   modified datetime DEFAULT NULL,
-  name varchar(255) DEFAULT NULL,
   PRIMARY KEY (id)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
@@ -31,6 +32,13 @@ CREATE TABLE agfg_competicion (
   nome varchar(200) DEFAULT NULL,
   ano varchar(200) DEFAULT NULL,
   tipo varchar(200) DEFAULT NULL,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE agfg_competicion_equipas (
+  id int NOT NULL AUTO_INCREMENT,
+  id_equipo int NOT NULL,
+  id_competicion int NOT NULL,
   PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 

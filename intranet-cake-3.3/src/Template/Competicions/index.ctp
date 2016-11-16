@@ -1,4 +1,4 @@
-<?php $this->extend('/Competitions/template') ?>
+<?php $this->extend('template') ?>
 
 <table class="table table-striped table-bordered table-hover">
     <tr>
@@ -8,7 +8,7 @@
         <th></th>
         <th></th>
     </tr>
-    <?php foreach($competitions as $c) : ?>
+    <?php foreach($competicions as $c) : ?>
         <tr>
             <td><?= $c->nome ?></td>
             <td><?= $c->ano ?></td>

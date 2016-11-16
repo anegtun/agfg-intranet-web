@@ -1,4 +1,4 @@
-<?php $this->extend('/Users/template') ?>
+<?php $this->extend('template') ?>
 
 <table class="table table-striped table-bordered table-hover">
     <tr>
@@ -9,11 +9,11 @@
         <th></th>
         <th></th>
     </tr>
-    <?php foreach($users as $u) : ?>
+    <?php foreach($usuarios as $u) : ?>
         <tr>
-            <td><?= $u->username ?></td>
-            <td><?= $u->name ?></td>
-            <td><?= $u->role ?></td>
+            <td><?= $u->nome_usuario ?></td>
+            <td><?= $u->nome ?></td>
+            <td><?= $u->rol ?></td>
             <td><?= $u->created ?></td>
             <td><?= $this->Html->link(__('Editar'), ['action' => 'edit', $u->id]) ?></td>
             <td><?php //$this->Html->link('Eliminar', array('controller'=>'Users', 'action'=>'delete', $u['User']['id'])) ?></td>
