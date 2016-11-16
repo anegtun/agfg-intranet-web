@@ -4,6 +4,7 @@
     <tr>
         <th>Código</th>
         <th>Nome</th>
+        <th>Logo</th>
         <th></th>
         <th></th>
     </tr>
@@ -11,6 +12,7 @@
         <tr>
             <td><?= $t->codigo ?></td>
             <td><?= $t->nome ?></td>
+            <td><?= empty($t->logo) ? '' : $this->Html->image($t->logo, ['width'=>30,'height'=>30]) ?></td>
             <td><?= $this->Html->link(__('Editar'), ['action'=>'detail', $t->id]) ?></td>
             <td><?= $this->Html->link(__('Eliminar'), ['action'=>'delete', $t->id]) ?></td>
         </tr>
