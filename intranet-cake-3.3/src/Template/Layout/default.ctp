@@ -68,13 +68,13 @@ $menu_option = empty($menu_option) ? '' : $menu_option;
                         </li>
                         <?php if(!empty($authUser)) : ?>
                             <li class="<?= ($menu_option==='users') ? 'active' : '' ?>">
-                                <?= $this->Html->link('Usuarios', ['controller'=>'Users', 'action'=>'index']) ?>
+                                <?= $this->Html->link('Usuarios', ['controller'=>'Usuarios', 'action'=>'index']) ?>
                             </li>
                             <li class="<?= ($menu_option==='teams') ? 'active' : '' ?>">
-                                <?= $this->Html->link('Equipos', ['controller'=>'Teams', 'action'=>'index']) ?>
+                                <?= $this->Html->link('Equipos', ['controller'=>'Equipas', 'action'=>'index']) ?>
                             </li>
                             <li class="<?= ($menu_option==='competitions') ? 'active' : '' ?>">
-                                <?= $this->Html->link('Competicións', ['controller'=>'Competitions', 'action'=>'index']) ?>
+                                <?= $this->Html->link('Competicións', ['controller'=>'Competicions', 'action'=>'index']) ?>
                             </li>
                         <?php endif ?>
                     </ul>
@@ -86,7 +86,7 @@ $menu_option = empty($menu_option) ? '' : $menu_option;
                             <li>
                                 <?= $this->Html->link(
                                     '<span class="glyphicon glyphicon-log-out"></span> Saír',
-                                    ['controller'=>'Users', 'action'=>'logout'],
+                                    ['controller'=>'Main', 'action'=>'logout'],
                                     ['escape'=>false]
                                 ) ?>
                             </li>
@@ -94,7 +94,7 @@ $menu_option = empty($menu_option) ? '' : $menu_option;
                             <li>
                                 <?= $this->Html->link(
                                     '<span class="glyphicon glyphicon-log-in"></span> Entrar',
-                                    ['controller'=>'Users', 'action'=>'login'],
+                                    ['controller'=>'Main', 'action'=>'login'],
                                     ['escape'=>false]
                                 ) ?>
                             </li>

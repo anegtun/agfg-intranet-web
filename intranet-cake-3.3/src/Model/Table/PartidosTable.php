@@ -4,7 +4,7 @@ namespace App\Model\Table;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
-class MatchTable extends Table {
+class PartidosTable extends Table {
 
     public function initialize(array $config) {
         $this->table('agfg_partido');

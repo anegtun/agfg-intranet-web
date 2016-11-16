@@ -1,7 +1,7 @@
-<?php $this->extend('/Teams/template') ?>
+<?php $this->extend('template') ?>
 
 <div class="users form">
-    <?= $this->Form->create($team, ['url'=>['action'=>'save']]) ?>
+    <?= $this->Form->create($equipa, ['url'=>['action'=>'save']]) ?>
         <?= $this->Form->hidden('id') ?>
         <fieldset>
             <legend><?= __('Equipo') ?></legend>

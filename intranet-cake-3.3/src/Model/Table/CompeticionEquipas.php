@@ -4,17 +4,17 @@ namespace App\Model\Table;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
-class CompetitionPhaseTable extends Table {
+class CompeticionEquipasTable extends Table {
 
     public function initialize(array $config) {
-        $this->table('agfg_fase');
+        $this->table('agfg_competicion_equipas');
     }
 
     public function validationDefault(Validator $validator) {
         return $validator
-            ->notEmpty('id_competicion', 'A competición é obrigatoria')
             ->notEmpty('nome', 'O nome é obrigatorio')
-            ->notEmpty('tipo', 'O tipo é obrigatorio');
+            ->notEmpty('tipo', 'O tipo é obrigatorio')
+            ->notEmpty('ano', 'O ano é obrigatorio');
     }
 
 }
