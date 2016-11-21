@@ -71,4 +71,4 @@ CREATE TABLE agfg_partido (
 
 
 
-INSERT INTO agfg_users VALUES (1,'agfg-admin','$2a$10$BRzX/K3Ds/8dV1X6MsU2QOc3eBvu7J8bxOa3KyIDSWzztU4ggKfdW','admin','2016-09-21 19:38:38','2016-09-21 19:38:38','Administrador');
+INSERT INTO agfg_users VALUES (1,'agfg-admin','$2a$10$BRzX/K3Ds/8dV1X6MsU2QOc3eBvu7J8bxOa3KyIDSWzztU4ggKfdW','Administrador','admin','2016-09-21 19:38:38','2016-09-21 19:38:38');
