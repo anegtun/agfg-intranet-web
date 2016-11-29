@@ -18,7 +18,7 @@ class CompeticionsController extends AppController {
     }
 
     public function detail($id=null) {
-        $competicion = empty($id) ? $this->Competicions->newEntity() : $this->Competicions->get($id);
+        $competicion = empty($id) ? $this->Competicions->newEntity() : $this->Competicions->get($id, ['contain'=>['Fases']]);
         $tiposCompeticion = $this->TiposCompeticion->getTipos();
         $this->set(compact('competicion', 'tiposCompeticion'));
     }
