@@ -12,8 +12,8 @@ class Usuario extends Entity {
         'id' => false
     ];
 
-    protected function _setPassword($password) {
-        return (new DefaultPasswordHasher)->hash($password);
+    protected function _setContrasinal($contrasinal) {
+        return (new DefaultPasswordHasher)->hash($contrasinal);
     }
 
 }
