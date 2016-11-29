@@ -4,12 +4,14 @@ namespace App\Controller;
 use App\Controller\AppController;
 use Cake\Event\Event;
 use App\Model\TiposCompeticion;
+use Cake\ORM\TableRegistry;
 
 class CompeticionsController extends AppController {
     
     public function initialize() {
         parent::initialize();
         $this->TiposCompeticion = new TiposCompeticion();
+        $this->Fases = TableRegistry::get('Fases');
     }
 
     public function index() {
@@ -22,6 +24,13 @@ class CompeticionsController extends AppController {
         $tiposCompeticion = $this->TiposCompeticion->getTipos();
         $this->set(compact('competicion', 'tiposCompeticion'));
     }
+
+    public function detailFase($id=null) {
+        $fase = empty($id) ? $this->Fases->newEntity() : $this->Fases->get($id);
+        $this->set(compact('fase'));
+    }
+
+
 
     public function save() {
         $competicion = $this->Competicions->newEntity();
