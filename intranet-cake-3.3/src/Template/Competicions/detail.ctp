@@ -25,12 +25,12 @@
             <tr>
                 <td><?= $f->nome ?></td>
                 <td><?= $f->tipo ?></td>
-                <td><?= $this->Html->link(__('Editar'), ['action'=>'detail', $f->id]) ?></td>
-                <td><?= $this->Html->link(__('Eliminar'), ['action'=>'delete', $f->id]) ?></td>
+                <td><?= $this->Html->link(__('Editar'), ['action'=>'detailFase', $f->id]) ?></td>
+                <td><?= $this->Html->link(__('Eliminar'), ['action'=>'deleteFase', $f->id]) ?></td>
             </tr>
         <?php endforeach ?>
     </table>
 
-    <?= $this->Html->link(__('Crear'), ['action'=>'detail', 'idCompeticion'=>$f->id], ['class'=>'btn btn-primary']) ?>
+    <?= $this->Html->link(__('Crear'), ['action'=>'detailFase', 'idCompeticion'=>$f->id], ['class'=>'btn btn-primary']) ?>
 
 <?php endif ?>
