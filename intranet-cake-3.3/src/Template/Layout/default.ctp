@@ -81,7 +81,7 @@ $menu_option = empty($menu_option) ? '' : $menu_option;
                     <ul class="nav navbar-nav navbar-right">
                         <?php if(!empty($authUser)) : ?>
                             <li>
-                                <a><?php echo $authUser['name'] ?></a>
+                                <a><?= $authUser['nome'] ?></a>
                             </li>
                             <li>
                                 <?= $this->Html->link(
