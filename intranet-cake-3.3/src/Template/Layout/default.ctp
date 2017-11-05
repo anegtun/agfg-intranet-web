@@ -67,11 +67,11 @@ $menu_option = empty($menu_option) ? '' : $menu_option;
                             <?= $this->Html->link('Inicio', ['controller'=>'Main', 'action'=>'index']) ?>
                         </li>
                         <?php if(!empty($authUser)) : ?>
-                            <li class="<?= ($menu_option==='users') ? 'active' : '' ?>">
+                            <?php /*li class="<?= ($menu_option==='users') ? 'active' : '' ?>">
                                 <?= $this->Html->link('Usuarios', ['controller'=>'Usuarios', 'action'=>'index']) ?>
-                            </li>
-                            <li class="<?= ($menu_option==='teams') ? 'active' : '' ?>">
-                                <?= $this->Html->link('Equipos', ['controller'=>'Equipas', 'action'=>'index']) ?>
+                            </li*/ ?>
+                            <li class="<?= ($menu_option==='clubes') ? 'active' : '' ?>">
+                                <?= $this->Html->link('Clubes', ['controller'=>'Clubes', 'action'=>'index']) ?>
                             </li>
                             <li class="<?= ($menu_option==='competitions') ? 'active' : '' ?>">
                                 <?= $this->Html->link('Competicións', ['controller'=>'Competicions', 'action'=>'index']) ?>
