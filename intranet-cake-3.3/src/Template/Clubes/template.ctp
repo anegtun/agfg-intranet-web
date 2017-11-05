@@ -1,5 +1,5 @@
 <?php
-$this->set('menu_option', 'teams');
+$this->set('menu_option', 'clubes');
 
 echo $this->fetch('content');
 ?>
