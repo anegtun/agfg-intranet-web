@@ -8,8 +8,8 @@
             <legend>
                 <?php echo __('Introduce o teu usuario e contrasinal'); ?>
             </legend>
-            <?= $this->Form->input('nome_usuario', array('label'=>'Usuario')) ?>
-            <?= $this->Form->input('contrasinal', array('label'=>'Contrasinal', 'type'=>'password')) ?>
+            <?= $this->Form->control('nome_usuario', array('label'=>'Usuario')) ?>
+            <?= $this->Form->control('contrasinal', array('label'=>'Contrasinal', 'type'=>'password')) ?>
             <?= $this->Form->button('Entrar', array('type'=>'submit', 'class'=>'btn btn-primary')) ?>
         </fieldset>
     <?= $this->Form->end() ?>
