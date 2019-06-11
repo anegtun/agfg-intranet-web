@@ -7,7 +7,7 @@ use Cake\Validation\Validator;
 class UsuariosTable extends Table {
     
     public function initialize(array $config) {
-        $this->table('agfg_users');
+        $this->setTable('agfg_users');
     }
 
     public function validationDefault(Validator $validator) {

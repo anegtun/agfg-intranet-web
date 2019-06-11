@@ -1,5 +1,5 @@
 <?php
-$authUser = $this->request->session()->read('Auth.User');
+$authUser = $this->request->getSession()->read('Auth.User');
 $menu_option = empty($menu_option) ? '' : $menu_option;
 ?>
 
