@@ -13,7 +13,7 @@
     <?= $this->Form->end() ?>
 </div>
 
-<?php if(!empty($competicion)) : ?>
+<?php if(!empty($competicion->id)) : ?>
     <table class="table table-striped table-bordered table-hover">
         <tr>
             <th>Nome</th>
@@ -31,6 +31,6 @@
         <?php endforeach ?>
     </table>
 
-    <?= $this->Html->link(__('Crear'), ['action'=>'detailFase', 'idCompeticion'=>$f->id], ['class'=>'btn btn-primary']) ?>
+    <?= $this->Html->link(__('Crear'), ['action'=>'detailFase', 'idCompeticion'=>$competicion->id], ['class'=>'btn btn-primary']) ?>
 
 <?php endif ?>
