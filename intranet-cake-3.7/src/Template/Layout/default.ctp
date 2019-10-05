@@ -70,8 +70,8 @@ $menu_option = empty($menu_option) ? '' : $menu_option;
                             <?php /*li class="<?= ($menu_option==='users') ? 'active' : '' ?>">
                                 <?= $this->Html->link('Usuarios', ['controller'=>'Usuarios', 'action'=>'index']) ?>
                             </li*/ ?>
-                            <li class="<?= ($menu_option==='clubes') ? 'active' : '' ?>">
-                                <?= $this->Html->link('Clubes', ['controller'=>'Clubes', 'action'=>'index']) ?>
+                            <li class="<?= ($menu_option==='equipas') ? 'active' : '' ?>">
+                                <?= $this->Html->link('Equipas', ['controller'=>'Equipas', 'action'=>'index']) ?>
                             </li>
                             <li class="<?= ($menu_option==='competitions') ? 'active' : '' ?>">
                                 <?= $this->Html->link('Competicións', ['controller'=>'Competicions', 'action'=>'index']) ?>
