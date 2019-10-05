@@ -7,6 +7,7 @@
             <legend><?= __('Equipa') ?></legend>
 			<?= $this->Form->input('codigo') ?>
 			<?= $this->Form->input('nome') ?>
+			<?= $this->Form->input('categoria', ['options'=>$categorias]) ?>
         </fieldset>
     <?= $this->Form->button(__('Enviar'), ['class'=>'btn btn-primary']); ?>
     <?= $this->Form->end() ?>

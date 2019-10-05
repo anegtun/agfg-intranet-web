@@ -2,22 +2,31 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use App\Model\Categorias;
 use Cake\Event\Event;
 
 class EquipasController extends AppController {
+    
+    public function initialize() {
+        parent::initialize();
+        $this->Categorias = new Categorias();
+    }
 
     public function index() {
-        $this->set('equipas', $this->Equipas->find('all'));
+        $categorias = $this->Categorias->getCategorias();
+        $equipas = $this->Equipas->find('all');
+        $this->set(compact('categorias', 'equipas'));
     }
 
     public function detalle($id=null) {
+        $categorias = $this->Categorias->getCategorias();
         $equipa = empty($id) ? $this->Equipas->newEntity() : $this->Equipas->get($id);
         //if(!empty($id)) {
         //    $this->loadModel('Equipas');
         //    $equipas = $this->Equipas->find('all')->where(['id_clube'=>$id])->all();
         //    $this->set(compact('equipas'));
         //}
-        $this->set(compact('equipa'));
+        $this->set(compact('categorias', 'equipa'));
     }
 
     public function gardar() {

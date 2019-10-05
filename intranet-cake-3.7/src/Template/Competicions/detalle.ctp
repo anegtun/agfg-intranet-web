@@ -6,7 +6,8 @@
         <fieldset>
             <legend><?= __('Competición') ?></legend>
             <?= $this->Form->input('nome') ?>
-            <?= $this->Form->input('ano') ?>
+            <?= $this->Form->input('tempada', ['options'=>$tempadas]) ?>
+            <?= $this->Form->input('categoria', ['options'=>$categorias]) ?>
             <?= $this->Form->input('tipo', ['options'=>$tiposCompeticion]) ?>
         </fieldset>
     <?= $this->Form->button(__('Enviar'), ['class'=>'btn btn-primary']); ?>

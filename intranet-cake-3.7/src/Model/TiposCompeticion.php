@@ -5,10 +5,9 @@ class TiposCompeticion {
     
     public function getTipos() {
         return [
-            'liga-normal'  => 'Liga normal',
-            'liga-partida' => 'Liga volta partida',
-            'copa-longa'   => 'Copa longa',
-            'iberico'      => 'Copa tipo ibérico'
+            'liga' => 'Liga',
+            'eliminatoria' => 'Eliminatoria',
+            'torneo'  => 'Torneo 1 día'
         ];
     }
 

@@ -2,27 +2,35 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
-use Cake\Event\Event;
+use App\Model\Categorias;
+use App\Model\Tempadas;
 use App\Model\TiposCompeticion;
+use Cake\Event\Event;
 use Cake\ORM\TableRegistry;
 
 class CompeticionsController extends AppController {
     
     public function initialize() {
         parent::initialize();
+        $this->Categorias = new Categorias();
+        $this->Tempadas = new Tempadas();
         $this->TiposCompeticion = new TiposCompeticion();
         $this->Fases = TableRegistry::get('Fases');
     }
 
     public function index() {
+        $this->set('categorias', $this->Categorias->getCategorias());
+        $this->set('tempadas', $this->Tempadas->getTempadas());
         $this->set('tiposCompeticion', $this->TiposCompeticion->getTipos());
         $this->set('competicions', $this->Competicions->find('all'));
     }
 
-    public function detail($id=null) {
+    public function detalle($id=null) {
         $competicion = empty($id) ? $this->Competicions->newEntity() : $this->Competicions->get($id, ['contain'=>['Fases']]);
+        $categorias = $this->Categorias->getCategorias();
+        $tempadas = $this->Tempadas->getTempadas();
         $tiposCompeticion = $this->TiposCompeticion->getTipos();
-        $this->set(compact('competicion', 'tiposCompeticion'));
+        $this->set(compact('competicion', 'categorias', 'tempadas', 'tiposCompeticion'));
     }
 
     public function detailFase($id=null) {
