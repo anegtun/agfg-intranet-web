@@ -1,16 +1,14 @@
-<?php $this->assign('title', 'Login'); ?>
-
-<div class="users form">
-    <?= $this->Flash->render('auth') ?>
-
+<div class="col-xs-12 login-form">
+    <h2>Identifíquese</h2>
     <?= $this->Form->create() ?>
-        <fieldset>
-            <legend>
-                <?php echo __('Introduce o teu usuario e contrasinal'); ?>
-            </legend>
-            <?= $this->Form->control('nome_usuario', array('label'=>'Usuario')) ?>
-            <?= $this->Form->control('contrasinal', array('label'=>'Contrasinal', 'type'=>'password')) ?>
-            <?= $this->Form->button('Entrar', array('type'=>'submit', 'class'=>'btn btn-primary')) ?>
-        </fieldset>
+        <div class="form-group">
+            <?= $this->Form->control('nome_usuario', ['class'=>'form-control','label'=>false]) ?>
+        </div>
+        <div class="form-group">
+            <?= $this->Form->control('contrasinal', ['class'=>'form-control','type'=>'password','label'=>false]) ?>
+        </div>
+        <?= $this->Form->button('Entrar', array('type'=>'submit', 'class'=>'btn btn-primary')) ?>
     <?= $this->Form->end() ?>
+
+    <?= $this->Flash->render('auth') ?>
 </div>
