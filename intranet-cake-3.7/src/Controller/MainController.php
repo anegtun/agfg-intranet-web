@@ -10,14 +10,12 @@ class MainController extends AppController {
         $this->Auth->allow(['index','login','logout']);
     }
 
-
-
     public function index() {
-    	// Vacio
+        if(!$this->Auth->user()) {
+            return $this->redirect(['action'=>'login']);
+        }
     }
     
-    
-
     public function login() {
         if ($this->request->is('post')) {
             $user = $this->Auth->identify();
@@ -27,6 +25,8 @@ class MainController extends AppController {
             }
             $this->Flash->error(__('Invalid username or password, try again'));
         }
+        // Pantalla login (peticion GET)
+        $this->layout = 'login';
     }
 
     public function logout() {

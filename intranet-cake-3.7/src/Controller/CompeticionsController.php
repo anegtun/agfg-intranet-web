@@ -40,7 +40,7 @@ class CompeticionsController extends AppController {
 
 
 
-    public function save() {
+    public function gardar() {
         $competicion = $this->Competicions->newEntity();
         if ($this->request->is('post') || $this->request->is('put')) {
             $team = $this->Competicions->patchEntity($competicion, $this->request->data);
@@ -54,7 +54,7 @@ class CompeticionsController extends AppController {
         $this->render('detail');
     }
 
-    public function delete($id) {
+    public function borrar($id) {
         $competicion = $this->Competicions->get($id);
         if($this->Competicions->delete($competicion)) {
             $this->Flash->success(__('Eliminouse a competición correctamente.'));
