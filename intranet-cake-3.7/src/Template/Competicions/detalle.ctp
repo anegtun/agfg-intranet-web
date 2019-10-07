@@ -8,11 +8,11 @@
                 <li>
                     <?= $this->Html->link(
                         '<i class="glyphicon glyphicon-home"><span class="sr-only">Inicio</span></i>',
-                        ['controller'=>'Main', 'action'=>'index'],
-                        ['escape'=>false]) ?>    
+                        array('controller'=>'Main', 'action'=>'index'),
+                        array('escape'=>false)) ?>    
                 </li>
                 <li>
-                    <?= $this->Html->link('Competicións', ['controller'=>'Competicions', 'action'=>'index']) ?>    
+                    <?= $this->Html->link('Competicións', array('controller'=>'Competicions', 'action'=>'index')) ?>    
                 </li>
                 <li class="active">Competición</li>
             </ol>
@@ -22,23 +22,23 @@
 
 <div class="container-full" style="margin-top:2em;">
     <div class="row">
-    <?= $this->Form->create($competicion, ['url'=>['action'=>'gardar']]) ?>
+    <?= $this->Form->create($competicion, array('url'=>array('action'=>'gardar'))) ?>
             <?= $this->Form->hidden('id') ?>
             <fieldset>
                 <legend>Competición</legend>
                 <div class="form-group">
-                    <?= $this->Form->control('nome', ['class'=>'form-control','label'=>'Nome']) ?>
+                    <?= $this->Form->control('nome', array('class'=>'form-control','label'=>'Nome')) ?>
                 </div>
                 <div class="form-group">
-                    <?= $this->Form->control('tempada', ['options'=>array_merge([''=>''], $tempadas), 'class'=>'form-control','label'=>'Tempada']) ?>
+                    <?= $this->Form->control('tempada', array('options'=>array_merge(array(''=>''), $tempadas), 'class'=>'form-control','label'=>'Tempada')) ?>
                 </div>
                 <div class="form-group">
-                    <?= $this->Form->control('categoria', ['options'=>array_merge([''=>''], $categorias), 'class'=>'form-control','label'=>'Categoría']) ?>
+                    <?= $this->Form->control('categoria', array('options'=>array_merge(array(''=>''), $categorias), 'class'=>'form-control','label'=>'Categoría')) ?>
                 </div>
                 <div class="form-group">
-                    <?= $this->Form->control('tipo', ['options'=>array_merge([''=>''], $tiposCompeticion), 'class'=>'form-control','label'=>'Tipo competición']) ?>
+                    <?= $this->Form->control('tipo', array('options'=>array_merge(array(''=>''), $tiposCompeticion), 'class'=>'form-control','label'=>'Tipo competición')) ?>
                 </div>
-                <?= $this->Form->button(__('Enviar'), ['class'=>'btn btn-primary']); ?>
+                <?= $this->Form->button(__('Enviar'), array('class'=>'btn btn-primary')); ?>
             </fieldset>
         <?= $this->Form->end() ?>
     </div>

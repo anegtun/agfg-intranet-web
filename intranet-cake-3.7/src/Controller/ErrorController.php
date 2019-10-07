@@ -30,9 +30,9 @@ class ErrorController extends AppController
      */
     public function initialize()
     {
-        $this->loadComponent('RequestHandler', [
+        $this->loadComponent('RequestHandler', array(
             'enableBeforeRedirect' => false,
-        ]);
+        ));
     }
 
     /**

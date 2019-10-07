@@ -7,12 +7,12 @@ use Cake\Event\Event;
 class MainController extends AppController {
 
     public function beforeFilter(Event $event) {
-        $this->Auth->allow(['index','login','logout']);
+        $this->Auth->allow(array('index','login','logout'));
     }
 
     public function index() {
         if(!$this->Auth->user()) {
-            return $this->redirect(['action'=>'login']);
+            return $this->redirect(array('action'=>'login'));
         }
     }
     
@@ -26,7 +26,7 @@ class MainController extends AppController {
             $this->Flash->error(__('Invalid username or password, try again'));
         }
         // Pantalla login (peticion GET)
-        $this->layout = 'login';
+        $this->viewBuilder->setLayout('login');
     }
 
     public function logout() {

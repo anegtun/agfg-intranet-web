@@ -35,7 +35,7 @@ class EquipasController extends AppController {
             $equipa = $this->Equipas->patchEntity($equipa, $this->request->data);
             if ($this->Equipas->save($equipa)) {
                 $this->Flash->success(__('Gardouse a equipa correctamente.'));
-                return $this->redirect(['action'=>'index']);
+                return $this->redirect(array('action'=>'index'));
             }
             $this->Flash->error(__('Erro ao gardar a equipa.'));
         }
@@ -50,7 +50,7 @@ class EquipasController extends AppController {
         } else {
             $this->Flash->error(__('Erro ao eliminar a equipa.'));
         }
-        return $this->redirect(['action'=>'index']);
+        return $this->redirect(array('action'=>'index'));
     }
 
 }

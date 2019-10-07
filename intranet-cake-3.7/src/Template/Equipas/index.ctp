@@ -8,8 +8,8 @@
                 <li>
                     <?= $this->Html->link(
                         '<i class="glyphicon glyphicon-home"><span class="sr-only">Inicio</span></i>',
-                        ['controller'=>'Main', 'action'=>'index'],
-                        ['escape'=>false]) ?>    
+                        array('controller'=>'Main', 'action'=>'index'),
+                        array('escape'=>false)) ?>    
                 </li>
                 <!--li><a href="#">MAQINT<span class="sr-only">Maqint</span></a></li-->
                 <li class="active">Equipas</li>
@@ -37,21 +37,21 @@
                 <tbody>
                     <?php foreach($equipas as $e) : ?>
                         <tr>
-                            <td><?= empty($e->logo) ? '' : $this->Html->image($e->logo, ['width'=>30,'height'=>30]) ?></td>
+                            <td><?= empty($e->logo) ? '' : $this->Html->image($e->logo, array('width'=>30,'height'=>30)) ?></td>
                             <td><?= $e->codigo ?></td>
                             <td><?= $e->nome ?></td>
                             <td><?= $categorias[$e->categoria] ?></td>
                             <td>
                                 <?= $this->Html->link(
                                     '',
-                                    ['action'=>'detalle', $e->id],
-                                    ['class'=>'glyphicon glyphicon-pencil']) ?>
+                                    array('action'=>'detalle', $e->id),
+                                    array('class'=>'glyphicon glyphicon-pencil')) ?>
                             </td>
                             <td>
                                 <?= $this->Html->link(
                                     '',
-                                    ['action'=>'borrar', $e->id],
-                                    ['class'=>'glyphicon glyphicon-trash']) ?>
+                                    array('action'=>'borrar', $e->id),
+                                    array('class'=>'glyphicon glyphicon-trash')) ?>
                             </td>
                         </tr>
                     <?php endforeach ?>

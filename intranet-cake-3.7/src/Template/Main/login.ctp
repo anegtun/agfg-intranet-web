@@ -2,10 +2,10 @@
     <h2>Identifíquese</h2>
     <?= $this->Form->create() ?>
         <div class="form-group">
-            <?= $this->Form->control('nome_usuario', ['class'=>'form-control','label'=>false]) ?>
+            <?= $this->Form->control('nome_usuario', array('class'=>'form-control','label'=>false)) ?>
         </div>
         <div class="form-group">
-            <?= $this->Form->control('contrasinal', ['class'=>'form-control','type'=>'password','label'=>false]) ?>
+            <?= $this->Form->control('contrasinal', array('class'=>'form-control','type'=>'password','label'=>false)) ?>
         </div>
         <?= $this->Form->button('Entrar', array('type'=>'submit', 'class'=>'btn btn-primary')) ?>
     <?= $this->Form->end() ?>

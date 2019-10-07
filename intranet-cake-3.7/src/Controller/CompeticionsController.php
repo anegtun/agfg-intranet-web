@@ -26,7 +26,7 @@ class CompeticionsController extends AppController {
     }
 
     public function detalle($id=null) {
-        $competicion = empty($id) ? $this->Competicions->newEntity() : $this->Competicions->get($id, ['contain'=>['Fases']]);
+        $competicion = empty($id) ? $this->Competicions->newEntity() : $this->Competicions->get($id, array('contain'=>array('Fases')));
         $categorias = $this->Categorias->getCategorias();
         $tempadas = $this->Tempadas->getTempadas();
         $tiposCompeticion = $this->TiposCompeticion->getTipos();
@@ -46,7 +46,7 @@ class CompeticionsController extends AppController {
             $team = $this->Competicions->patchEntity($competicion, $this->request->data);
             if ($this->Competicions->save($team)) {
                 $this->Flash->success(__('Gardouse a competición correctamente.'));
-                return $this->redirect(['action'=>'index']);
+                return $this->redirect(array('action'=>'index'));
             }
             $this->Flash->error(__('Erro ao gardar a competición.'));
         }
@@ -61,7 +61,7 @@ class CompeticionsController extends AppController {
         } else {
             $this->Flash->error(__('Erro ao eliminar a competición.'));
         }
-        return $this->redirect(['action'=>'index']);
+        return $this->redirect(array('action'=>'index'));
     }
 
 }

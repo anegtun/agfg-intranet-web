@@ -15,7 +15,7 @@
             <td><?= $u->nome ?></td>
             <td><?= $u->rol ?></td>
             <td><?= $u->created ?></td>
-            <td><?= $this->Html->link(__('Editar'), ['action' => 'edit', $u->id]) ?></td>
+            <td><?= $this->Html->link(__('Editar'), array('action' => 'edit', $u->id)) ?></td>
             <td><?php //$this->Html->link('Eliminar', array('controller'=>'Users', 'action'=>'delete', $u['User']['id'])) ?></td>
         </tr>
     <?php endforeach ?>

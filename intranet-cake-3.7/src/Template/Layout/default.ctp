@@ -65,7 +65,7 @@ $menu_option = empty($menu_option) ? '' : $menu_option;
             <header id="main-header" class="row">
                 <div id="header-controls">
                     <a href="index.html" id="header-logo">
-                        <?= $this->Html->image("/images/maqint-logo.png", ['alt' => 'AGFG']); ?>
+                        <?= $this->Html->image("/images/maqint-logo.png", array('alt' => 'AGFG')); ?>
                         <span class="sr-only">AGFG</span>
                     </a>
                     <div id="header-left-menu-toggler">
@@ -105,8 +105,8 @@ $menu_option = empty($menu_option) ? '' : $menu_option;
                                             <li class="hidden-from-md">
                                                 <?= $this->Html->link(
                                                     '<span class="text-danger"><i class="glyphicon glyphicon-log-out p-r-5"><span class="sr-only">Saír</span></i> <strong >Saír</strong></span>',
-                                                    ['controller'=>'Main', 'action'=>'logout'],
-                                                    ['escape'=>false]
+                                                    array('controller'=>'Main', 'action'=>'logout'),
+                                                    array('escape'=>false)
                                                 ) ?>
                                             </li>
                                         </ul>
@@ -114,8 +114,8 @@ $menu_option = empty($menu_option) ? '' : $menu_option;
                                     <div id="header-logout" class="hidden-xs hidden-sm">
                                         <?= $this->Html->link(
                                             '<span class="text-danger"><i class="glyphicon glyphicon-off p-r-5" data-toggle="tooltip" title="Saír"  data-placement="bottom"><span class="sr-only">Saír</span></i></span>',
-                                            ['controller'=>'Main', 'action'=>'logout'],
-                                            ['escape'=>false]
+                                            array('controller'=>'Main', 'action'=>'logout'),
+                                            array('escape'=>false)
                                         ) ?>
                                     </div>
                                 </div>
@@ -134,20 +134,20 @@ $menu_option = empty($menu_option) ? '' : $menu_option;
                             <li data-toggle="tooltip">
                                 <?= $this->Html->link(
                                     '<span class="glyphicon glyphicon-home"><span class="sr-only">Inicio</span></span> Inicio',
-                                    ['controller'=>'Main', 'action'=>'index'],
-                                    ['escape'=>false]) ?>
+                                    array('controller'=>'Main', 'action'=>'index'),
+                                    array('escape'=>false)) ?>
                             </li>
                             <li data-toggle="tooltip">
                                 <?= $this->Html->link(
                                     '<span class="glyphicon glyphicon glyphicon-user"><span class="sr-only">Equipas</span></span> Equipas',
-                                    ['controller'=>'Equipas', 'action'=>'index'],
-                                    ['escape'=>false]) ?>
+                                    array('controller'=>'Equipas', 'action'=>'index'),
+                                    array('escape'=>false)) ?>
                             </li>
                             <li data-toggle="tooltip">
                                 <?= $this->Html->link(
                                     '<span class="glyphicon glyphicon glyphicon-calendar"><span class="sr-only">Competicións</span></span> Competicións',
-                                    ['controller'=>'Competicions', 'action'=>'index'],
-                                    ['escape'=>false]) ?>
+                                    array('controller'=>'Competicions', 'action'=>'index'),
+                                    array('escape'=>false)) ?>
                             </li>
                         </ul>
                     </div>

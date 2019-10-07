@@ -1,14 +1,14 @@
 <?php $this->extend('template') ?>
 
 <div class="users form">
-    <?= $this->Form->create($fase, ['url'=>['action'=>'saveFase']]) ?>
+    <?= $this->Form->create($fase, array('url'=>array('action'=>'saveFase'))) ?>
         <?= $this->Form->hidden('id') ?>
         <fieldset>
             <legend><?= __('Fase') ?></legend>
             <?= $this->Form->input('nome') ?>
             <?= $this->Form->input('tipo') ?>
         </fieldset>
-    <?= $this->Form->button(__('Enviar'), ['class'=>'btn btn-primary']); ?>
+    <?= $this->Form->button(__('Enviar'), array('class'=>'btn btn-primary')); ?>
     <?= $this->Form->end() ?>
 </div>
 

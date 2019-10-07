@@ -41,26 +41,26 @@ class AppController extends Controller
     {
         parent::initialize();
 
-        $this->loadComponent('RequestHandler', [
+        $this->loadComponent('RequestHandler', array(
             'enableBeforeRedirect' => false,
-        ]);
+        ));
         $this->loadComponent('Flash');
-        $this->loadComponent('Auth', [
-            'loginRedirect' => [
+        $this->loadComponent('Auth', array(
+            'loginRedirect' => array(
                 'controller' => 'Main',
                 'action' => 'index'
-            ],
-            'logoutRedirect' => [
+            ),
+            'logoutRedirect' => array(
                 'controller' => 'Main',
                 'action' => 'index'
-            ],
-            'authenticate' => [
-                'Form' => [
+            ),
+            'authenticate' => array(
+                'Form' => array(
                     'userModel' => 'Usuarios',
-                    'fields' => ['username'=>'nome_usuario', 'password'=>'contrasinal']
-                ]
-            ]
-        ]);
+                    'fields' => array('username'=>'nome_usuario', 'password'=>'contrasinal')
+                )
+            )
+        ));
 
         /*
          * Enable the following component for recommended CakePHP security settings.
@@ -83,7 +83,7 @@ class AppController extends Controller
      */
     public function beforeRender(Event $event) {
         if (!array_key_exists('_serialize', $this->viewVars) &&
-            in_array($this->response->getType(), ['application/json', 'application/xml'])
+            in_array($this->response->getType(), array('application/json', 'application/xml'))
         ) {
             $this->set('_serialize', true);
         }
