@@ -64,17 +64,17 @@ $menu_option = empty($menu_option) ? '' : $menu_option;
                 <div class="collapse navbar-collapse" id="myNavbar">
                     <ul class="nav navbar-nav">
                         <li class="<?= empty($menu_option) ? 'active' : '' ?>">
-                            <?= $this->Html->link('Inicio', ['controller'=>'Main', 'action'=>'index']) ?>
+                            <?= $this->Html->link('Inicio', array('controller'=>'Main', 'action'=>'index')) ?>
                         </li>
                         <?php if(!empty($authUser)) : ?>
                             <?php /*li class="<?= ($menu_option==='users') ? 'active' : '' ?>">
                                 <?= $this->Html->link('Usuarios', ['controller'=>'Usuarios', 'action'=>'index']) ?>
                             </li*/ ?>
                             <li class="<?= ($menu_option==='equipas') ? 'active' : '' ?>">
-                                <?= $this->Html->link('Equipas', ['controller'=>'Equipas', 'action'=>'index']) ?>
+                                <?= $this->Html->link('Equipas', array('controller'=>'Equipas', 'action'=>'index')) ?>
                             </li>
                             <li class="<?= ($menu_option==='competitions') ? 'active' : '' ?>">
-                                <?= $this->Html->link('Competicións', ['controller'=>'Competicions', 'action'=>'index']) ?>
+                                <?= $this->Html->link('Competicións', array('controller'=>'Competicions', 'action'=>'index')) ?>
                             </li>
                         <?php endif ?>
                     </ul>
@@ -86,16 +86,16 @@ $menu_option = empty($menu_option) ? '' : $menu_option;
                             <li>
                                 <?= $this->Html->link(
                                     '<span class="glyphicon glyphicon-log-out"></span> Saír',
-                                    ['controller'=>'Main', 'action'=>'logout'],
-                                    ['escape'=>false]
+                                    array('controller'=>'Main', 'action'=>'logout'),
+                                    array('escape'=>false)
                                 ) ?>
                             </li>
                         <?php else : ?>
                             <li>
                                 <?= $this->Html->link(
                                     '<span class="glyphicon glyphicon-log-in"></span> Entrar',
-                                    ['controller'=>'Main', 'action'=>'login'],
-                                    ['escape'=>false]
+                                    array('controller'=>'Main', 'action'=>'login'),
+                                    array('escape'=>false)
                                 ) ?>
                             </li>
                         <?php endif ?>

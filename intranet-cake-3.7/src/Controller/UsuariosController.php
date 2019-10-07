@@ -8,7 +8,7 @@ class UsuariosController extends AppController {
 
     public function beforeFilter(Event $event) {
         parent::beforeFilter($event);
-        $this->Auth->allow(['add']);
+        $this->Auth->allow(array('add'));
     }
     
     
@@ -28,7 +28,7 @@ class UsuariosController extends AppController {
             $usuario = $this->Usuarios->patchEntity($usuario, $this->request->data);
             if ($this->Usuarios->save($usuario)) {
                 $this->Flash->success(__('Creouse o usuario correctamente.'));
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(array('action' => 'index'));
             }
             $this->Flash->error(__('Erro ao crear o usuario.'));
         }
@@ -36,7 +36,7 @@ class UsuariosController extends AppController {
     }
 
     public function edit($id = null) {
-        if (!$this->Usuarios->exists(['id'=>$id])) {
+        if (!$this->Usuarios->exists(array('id'=>$id))) {
             throw new NotFoundException(__('Usuario invalido'));
         }
         if ($this->request->is('post') || $this->request->is('put')) {

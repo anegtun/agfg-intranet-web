@@ -8,8 +8,8 @@
                 <li>
                     <?= $this->Html->link(
                         '<i class="glyphicon glyphicon-home"><span class="sr-only">Inicio</span></i>',
-                        ['controller'=>'Main', 'action'=>'index'],
-                        ['escape'=>false]) ?>    
+                        array('controller'=>'Main', 'action'=>'index'),
+                        array('escape'=>false)) ?>    
                 </li>
                 <li class="active">Competicións</li>
             </ol>
@@ -43,14 +43,14 @@
                             <td>
                                 <?= $this->Html->link(
                                     '',
-                                    ['action'=>'detalle', $c->id],
-                                    ['class'=>'glyphicon glyphicon-pencil']) ?>
+                                    array('action'=>'detalle', $c->id),
+                                    array('class'=>'glyphicon glyphicon-pencil')) ?>
                             </td>
                             <td>
                                 <?= $this->Html->link(
                                     '',
-                                    ['action'=>'borrar', $c->id],
-                                    ['class'=>'glyphicon glyphicon-trash']) ?>
+                                    array('action'=>'borrar', $c->id),
+                                    array('class'=>'glyphicon glyphicon-trash')) ?>
                             </td>
                         </tr>
                     <?php endforeach ?>

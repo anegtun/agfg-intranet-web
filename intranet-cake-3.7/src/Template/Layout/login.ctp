@@ -27,11 +27,11 @@
         <meta name="msapplication-TileColor" content="#ffffff">
 
         <!-- custom:css -->
-        <?= $this->Html->css(["/maqint/maqint", "login-page"]) ?>
+        <?= $this->Html->css(array("/maqint/maqint", "login-page")) ?>
         <!-- libs:js -->
         <?= $this->Html->script("/libs/ckeditor/ckeditor") ?>
         <!-- custom:js -->
-        <?= $this->Html->script(["/maqint/maqint-config", "/maqint/maqint", "/maqint/support"]) ?>
+        <?= $this->Html->script(array("/maqint/maqint-config", "/maqint/maqint", "/maqint/support")) ?>
     </head>
 
     <body>
@@ -52,7 +52,7 @@
                                         <div class="row">
                                             <!-- Logo -->
                                             <div class="col-xs-12 text-center login-logo">
-                                                <?= $this->Html->image("/images/maqint-logo-medium.png", ['alt' => 'AGFG']); ?>
+                                                <?= $this->Html->image("/images/agfg-logo.png", array('alt'=>'AGFG')); ?>
                                             </div>
 
                                             <!-- Content -->
@@ -65,7 +65,9 @@
                                     </div>
                                     <div class="hidden-xs hidden-sm col-md-6 col-sm-8 login-right">
                                         <!-- MAQINT logo -->
-                                        <div class="col-xs-12 text-center login-right-content"></div>
+                                        <div class="col-xs-12 text-center login-right-content">
+                                            <?= $this->Html->image("/images/agfg-logo-main.png", array('alt'=>'AGFG', 'style'=>'width:200px; margin-bottom:200px')); ?>
+                                        </div>
 
                                         <!-- Disclaimer -->
                                         <div class="xunta-disclaimer">
