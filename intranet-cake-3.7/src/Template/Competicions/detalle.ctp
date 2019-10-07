@@ -22,7 +22,7 @@
 
 <div class="container-full" style="margin-top:2em;">
     <div class="row">
-    <?= $this->Form->create($competicion, array('url'=>array('action'=>'gardar'))) ?>
+    <?= $this->Form->create($competicion, array('type'=>'post', 'url'=>array('action'=>'gardar'))) ?>
             <?= $this->Form->hidden('id') ?>
             <fieldset>
                 <legend>Competición</legend>

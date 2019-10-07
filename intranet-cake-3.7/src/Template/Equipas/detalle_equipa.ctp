@@ -1,7 +1,7 @@
 <?php $this->extend('template') ?>
 
 <div class="users form">
-    <?= $this->Form->create($equipa, array('url'=>array('action'=>'gardarEquipa'))) ?>
+    <?= $this->Form->create($equipa, array('type'=>'post', 'url'=>array('action'=>'gardarEquipa'))) ?>
         <?= $this->Form->hidden('id') ?>
         <?= $this->Form->hidden('id_clube') ?>
         <fieldset>

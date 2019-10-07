@@ -32,7 +32,7 @@ class EquipasController extends AppController {
     public function gardar() {
         $equipa = $this->Equipas->newEntity();
         if ($this->request->is('post') || $this->request->is('put')) {
-            $equipa = $this->Equipas->patchEntity($equipa, $this->request->data);
+            $equipa = $this->Equipas->patchEntity($equipa, $this->request->getData());
             if ($this->Equipas->save($equipa)) {
                 $this->Flash->success(__('Gardouse a equipa correctamente.'));
                 return $this->redirect(array('action'=>'index'));

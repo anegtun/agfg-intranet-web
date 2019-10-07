@@ -1,7 +1,7 @@
 <?php $this->extend('template') ?>
 
 <div class="users form">
-    <?= $this->Form->create($fase, array('url'=>array('action'=>'saveFase'))) ?>
+    <?= $this->Form->create($fase, array('type'=>'post', 'url'=>array('action'=>'saveFase'))) ?>
         <?= $this->Form->hidden('id') ?>
         <fieldset>
             <legend><?= __('Fase') ?></legend>
