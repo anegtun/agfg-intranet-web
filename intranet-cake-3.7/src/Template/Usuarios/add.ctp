@@ -1,7 +1,7 @@
 <?php $this->extend('template') ?>
 
 <div class="users form">
-    <?= $this->Form->create($usuario) ?>
+    <?= $this->Form->create($usuario, array('type'=>'post')) ?>
         <fieldset>
             <legend><?= __('Engadir usuario') ?></legend>
             <?= $this->Form->input('nome_usuario') ?>
