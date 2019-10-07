@@ -11,9 +11,7 @@
                         array('controller'=>'Main', 'action'=>'index'),
                         array('escape'=>false)) ?>    
                 </li>
-                <li>
-                    <?= $this->Html->link('Competicións', array('controller'=>'Competicions', 'action'=>'index')) ?>    
-                </li>
+                <li><?= $this->Html->link('Competicións', array('controller'=>'Competicions', 'action'=>'index')) ?></li>
                 <li class="active">Competición</li>
             </ol>
         </div>
@@ -38,34 +36,41 @@
                 <div class="form-group">
                     <?= $this->Form->control('tipo', array('options'=>array_merge(array(''=>''), $tiposCompeticion), 'class'=>'form-control','label'=>'Tipo competición')) ?>
                 </div>
-                <?= $this->Form->button(__('Enviar'), array('class'=>'btn btn-primary')); ?>
+                <?= $this->Form->button('Gardar', array('class'=>'btn btn-primary')); ?>
             </fieldset>
         <?= $this->Form->end() ?>
     </div>
 
-    <div class="row">
-        <?php /*if(!empty($competicion->id)) : ?>
+    
+    <?php if(!empty($competicion->id)) : ?>
+        <div class="row" style="margin-top:2em;">
+            <h3>Fases</h3>
             <table class="table table-striped table-bordered table-hover">
                 <tr>
                     <th>Nome</th>
-                    <th>Tipo</th>
                     <th></th>
                     <th></th>
                 </tr>
                 <?php foreach($competicion->fases as $f) : ?>
                     <tr>
                         <td><?= $f->nome ?></td>
-                        <td><?= $f->tipo ?></td>
-                        <td><?= $this->Html->link(__('Editar'), ['action'=>'detailFase', $f->id]) ?></td>
-                        <td><?= $this->Html->link(__('Eliminar'), ['action'=>'deleteFase', $f->id]) ?></td>
+                        <td>
+                            <?= $this->Html->link(
+                                '',
+                                array('action'=>'detalleFase', $f->id),
+                                array('class'=>'glyphicon glyphicon-pencil')) ?>
+                        </td>
+                        <td>
+                            <?= $this->Html->link(
+                                '',
+                                array('action'=>'borrarFase', $f->id),
+                                array('class'=>'glyphicon glyphicon-trash')) ?>
+                        </td>
                     </tr>
                 <?php endforeach ?>
             </table>
-
-            <?= $this->Html->link(__('Crear'), ['action'=>'detailFase', 'idCompeticion'=>$competicion->id], ['class'=>'btn btn-primary']) ?>
-
-        <?php endif*/ ?>
-    </div>
+            <?= $this->Html->link('Crear', ['action'=>'detalleFase', 'idCompeticion'=>$competicion->id], ['class'=>'btn btn-primary']) ?>
+        </div>
+    <?php endif ?>
+    
 </div>
-
-
