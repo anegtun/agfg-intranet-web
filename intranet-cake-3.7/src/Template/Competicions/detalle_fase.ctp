@@ -29,6 +29,15 @@
                 <div class="form-group">
                     <?= $this->Form->control('nome', array('class'=>'form-control','label'=>'Nome')) ?>
                 </div>
+                <div class="form-group">
+                    <?php
+                        $fasesHelper = array(''=>'');
+                        foreach($outras_fases as $f) {
+                            $fasesHelper[$f->id] = $f->nome;
+                        }
+                        echo $this->Form->control('id_fase_pai', array('options'=>$fasesHelper, 'class'=>'form-control','label'=>'Fase pai'))
+                    ?>
+                </div>
 
                 <label>Equipas participantes</label>
                 <?php
@@ -50,24 +59,67 @@
             </fieldset>
         <?= $this->Form->end() ?>
     </div>
+
+    
+    <?php if(!empty($fase->id)) : ?>
+        <div class="row" style="margin-top:2em;">
+            <h3>Xornadas</h3>
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>Numero</th>
+                        <th>Data</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach($fase->xornadas as $x) : ?>
+                        <tr>
+                            <td><?= $x->numero ?></td>
+                            <td><?= $x->data->format('Y-m-d'); ?></td>
+                            <td class="text-center">
+                                <?= $this->Html->link(
+                                    '',
+                                    array('action'=>'borrarXornada', $x->id),
+                                    array('class'=>'glyphicon glyphicon-trash')) ?>
+                            </td>
+                        </tr>
+                    <?php endforeach ?>
+                <tbody>
+            </table>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg">Large modal</button>
+        </div>
+    <?php endif ?>
 </div>
 
 
-
-<?php /*if(!empty($fase)) : ?>
-    <table class="table table-striped table-bordered table-hover">
-        <tr>
-            <th>Data</th>
-            <th>Equipo 1</th>
-            <th>Equipo 2</th>
-        </tr>
-        <?php foreach($fase->partidos as $p) : ?>
-            <tr>
-                <td><?= $p->data_partido ?></td>
-                <td><?= $p->id_equipo1 ?></td>
-                <td><?= $p->id_equipo2 ?></td>
-            </tr>
-        <?php endforeach ?>
-    </table>
-
-<?php endif*/ ?>
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <?= $this->Form->create($fase, array('type'=>'post', 'url'=>array('action'=>'gardarXornada'))) ?>
+        <?= $this->Form->hidden('id', ['value'=>'']) ?>
+        <?= $this->Form->hidden('id_fase', ['value'=>$fase->id]) ?>
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Xornada</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <fieldset>
+                        <div class="form-group">
+                            <?= $this->Form->control('numero', array('class'=>'form-control','label'=>'Número')) ?>
+                        </div>
+                        <div class="form-group">
+                            <?= $this->Form->control('data', array('class'=>'form-control','label'=>'Data')) ?>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="modal-footer">
+                    <?= $this->Form->button('Gardar', array('class'=>'btn btn-primary')); ?>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Pechar</button>
+                </div>
+            </div>
+        </div>
+    <?= $this->Form->end() ?>
+</div>
