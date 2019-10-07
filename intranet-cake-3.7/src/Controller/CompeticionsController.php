@@ -18,6 +18,7 @@ class CompeticionsController extends AppController {
         $this->Fases = TableRegistry::get('Fases');
         $this->Equipas = TableRegistry::get('Equipas');
         $this->FasesEquipas = TableRegistry::get('FasesEquipas');
+        $this->Xornadas = TableRegistry::get('Xornadas');
     }
 
     public function index() {
@@ -28,7 +29,12 @@ class CompeticionsController extends AppController {
     }
 
     public function detalle($id=null) {
-        $competicion = empty($id) ? $this->Competicions->newEntity() : $this->Competicions->get($id, array('contain'=>array('Fases')));
+        $competicion = empty($id) ? $this->Competicions->newEntity() : $this->Competicions->get($id, ['contain'=>['Fases']]);
+        foreach($competicion->fases as $f) {
+            if(!empty($f->id_fase_pai)) {
+                $f->fasePai = $this->Fases->get($f->id_fase_pai);
+            }
+        }
         $categorias = $this->Categorias->getCategorias();
         $tempadas = $this->Tempadas->getTempadas();
         $tiposCompeticion = $this->TiposCompeticion->getTipos();
@@ -69,10 +75,12 @@ class CompeticionsController extends AppController {
         } else {
             $fase = $this->Fases->get($id);
             $fase->equipas = $this->FasesEquipas->find('list', ['keyField'=>'id_equipa','valueField'=>'id_equipa'])->where(['id_fase'=>$fase->id])->toArray();
+            $fase->xornadas = $this->Xornadas->find()->where(['id_fase'=>$fase->id]);
         }
         $competicion = $this->Competicions->get($fase->id_competicion);
         $equipas = $this->Equipas->find()->where(['categoria'=>$competicion->categoria]);
-        $this->set(compact('fase','competicion','equipas'));
+        $outras_fases = $this->Fases->find()->where(['id_competicion'=>$fase->id_competicion, 'id !='=>$id]);
+        $this->set(compact('fase','competicion','equipas','outras_fases'));
     }
 
     public function gardarFase() {
@@ -109,6 +117,31 @@ class CompeticionsController extends AppController {
             $this->Flash->error(__('Erro ao eliminar a fase.'));
         }
         return $this->redirect(['action'=>'detalle', $fase->id_competicion]);
+    }
+
+
+
+    public function gardarXornada() {
+        $xornada = $this->Xornadas->newEntity();
+        if ($this->request->is('post') || $this->request->is('put')) {
+            $xornada = $this->Xornadas->patchEntity($xornada, $this->request->getData());
+            if ($this->Xornadas->save($xornada)) {
+                $this->Flash->success(__('Gardouse a xornada correctamente.'));
+            } else {
+                $this->Flash->error(__('Erro ao gardar a xornada.'));
+            }
+        }
+        return $this->redirect(['action'=>'detalleFase',$xornada->id_fase]);
+    }
+
+    public function borrarXornada($id) {
+        $xornada = $this->Xornadas->get($id);
+        if($this->Xornadas->delete($xornada)) {
+            $this->Flash->success(__('Eliminouse a xornada correctamente.'));
+        } else {
+            $this->Flash->error(__('Erro ao eliminar a xornada.'));
+        }
+        return $this->redirect(['action'=>'detalleFase', $xornada->id_fase]);
     }
 
 }

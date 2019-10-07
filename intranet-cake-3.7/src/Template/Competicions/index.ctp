@@ -22,7 +22,7 @@
 <div class="container-full" style="margin-top:2em;">
     <div class="row">
         <div class="col-xs-12 table-responsive">
-            <table class="table table-striped table-hover table-bordered">
+            <table class="table table-striped table-hover">
                 <thead>
                     <tr>
                         <th class="celda-titulo">Nome</th>
@@ -40,13 +40,13 @@
                             <td><?= $tempadas[$c->tempada] ?></td>
                             <td><?= empty($c->categoria) ? '' : $categorias[$c->categoria] ?></td>
                             <td><?= empty($c->tipo) ? '' : $tiposCompeticion[$c->tipo] ?></td>
-                            <td>
+                            <td class="text-center">
                                 <?= $this->Html->link(
                                     '',
                                     array('action'=>'detalle', $c->id),
                                     array('class'=>'glyphicon glyphicon-pencil')) ?>
                             </td>
-                            <td>
+                            <td class="text-center">
                                 <?= $this->Html->link(
                                     '',
                                     array('action'=>'borrar', $c->id),

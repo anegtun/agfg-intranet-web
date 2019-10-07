@@ -45,29 +45,35 @@
     <?php if(!empty($competicion->id)) : ?>
         <div class="row" style="margin-top:2em;">
             <h3>Fases</h3>
-            <table class="table table-striped table-bordered table-hover">
-                <tr>
-                    <th>Nome</th>
-                    <th></th>
-                    <th></th>
-                </tr>
-                <?php foreach($competicion->fases as $f) : ?>
+            <table class="table table-striped table-hover">
+                <thead>
                     <tr>
-                        <td><?= $f->nome ?></td>
-                        <td>
-                            <?= $this->Html->link(
-                                '',
-                                array('action'=>'detalleFase', $f->id),
-                                array('class'=>'glyphicon glyphicon-pencil')) ?>
-                        </td>
-                        <td>
-                            <?= $this->Html->link(
-                                '',
-                                array('action'=>'borrarFase', $f->id),
-                                array('class'=>'glyphicon glyphicon-trash')) ?>
-                        </td>
+                        <th>Nome</th>
+                        <th>Fase pai</th>
+                        <th></th>
+                        <th></th>
                     </tr>
-                <?php endforeach ?>
+                </thead>
+                <tbody>
+                    <?php foreach($competicion->fases as $f) : ?>
+                        <tr>
+                            <td><?= $f->nome ?></td>
+                            <td><?= empty($f->fasePai) ? '' : $f->fasePai->nome ?></td>
+                            <td class="text-center">
+                                <?= $this->Html->link(
+                                    '',
+                                    array('action'=>'detalleFase', $f->id),
+                                    array('class'=>'glyphicon glyphicon-pencil')) ?>
+                            </td>
+                            <td class="text-center">
+                                <?= $this->Html->link(
+                                    '',
+                                    array('action'=>'borrarFase', $f->id),
+                                    array('class'=>'glyphicon glyphicon-trash')) ?>
+                            </td>
+                        </tr>
+                    <?php endforeach ?>
+                <tbody>
             </table>
             <?= $this->Html->link('Crear', ['action'=>'detalleFase', 'idCompeticion'=>$competicion->id], ['class'=>'btn btn-primary']) ?>
         </div>
