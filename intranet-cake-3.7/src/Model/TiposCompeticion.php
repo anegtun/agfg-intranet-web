@@ -4,11 +4,11 @@ namespace App\Model;
 class TiposCompeticion {
     
     public function getTipos() {
-        return [
+        return array(
             'liga' => 'Liga',
             'eliminatoria' => 'Eliminatoria',
             'torneo'  => 'Torneo 1 día'
-        ];
+        );
     }
 
     public function getTipo($key) {

@@ -4,10 +4,10 @@ namespace App\Model;
 class Categorias {
     
     public function getCategorias() {
-        return [
+        return array(
             'F' => 'Feminina',
             'M' => 'Masculina'
-        ];
+        );
     }
 
     public function getCategoria($key) {

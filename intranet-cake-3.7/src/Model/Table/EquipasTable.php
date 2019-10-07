@@ -7,7 +7,7 @@ use Cake\Validation\Validator;
 class EquipasTable extends Table {
 
     public function initialize(array $config) {
-        $this->table('agfg_equipas');
+        $this->setTable('agfg_equipas');
     }
 
     public function validationDefault(Validator $validator) {
