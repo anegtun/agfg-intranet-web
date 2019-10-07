@@ -12,7 +12,7 @@
                         array('escape'=>false)) ?>    
                 </li>
                 <li>
-                    <?= $this->Html->link('Equipas', array('controller'=>'Equipas', 'action'=>'index')) ?>    
+                    <?= $this->Html->link('Equipas', array('controller'=>'Equipas', 'action'=>'index')) ?>
                 </li>
                 <li class="active">Detalle</li>
             </ol>

@@ -45,10 +45,10 @@ $menu_option = empty($menu_option) ? '' : $menu_option;
             
             <header id="main-header" class="row">
                 <div id="header-controls">
-                    <a href="index.html" id="header-logo">
-                        <?= $this->Html->image("/images/agfg-logo.png", array('alt'=>'AGFG', 'width'=>'95')); ?>
-                        <span class="sr-only">AGFG</span>
-                    </a>
+                    <?= $this->Html->link(
+                        $this->Html->image("/images/agfg-logo.png", array('alt'=>'AGFG', 'width'=>'95')) . '<span class="sr-only">AGFG</span>',
+                        array('controller'=>'Main', 'action'=>'index'),
+                        array('escape'=>false, 'id'=>'header-logo')) ?>
                     <div id="header-left-menu-toggler">
                         <span class="glyphicon glyphicon-menu-hamburger"></span>
                     </div>
@@ -143,8 +143,7 @@ $menu_option = empty($menu_option) ? '' : $menu_option;
             <footer id="main-footer" class="row">
                 <div id="footer-logo">
                     <a href="https://gaelicogalego.gal">
-                        <img alt="Logo da Xunta" src="https://gaelicogalego.gal/wp-content/uploads/2018/12/agfg-header-2b.png" width="150" />
-                        <span class="sr-only">Ligazón á web da Xunta</span>
+                        <?= $this->Html->image('/images/agfg-logo-footer.png', array('width'=>'150')) ?>
                     </a>
                 </div>
                 <div id="footer-info">
