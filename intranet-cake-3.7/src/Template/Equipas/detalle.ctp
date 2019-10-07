@@ -35,7 +35,7 @@
                 <div class="form-group">
                     <?= $this->Form->control('categoria', array('options'=>array_merge(array(''=>''), $categorias), 'class'=>'form-control','label'=>'Categoría')) ?>
                 </div>
-                <?= $this->Form->button(__('Enviar'), array('class'=>'btn btn-primary')); ?>
+                <?= $this->Form->button('Gardar', array('class'=>'btn btn-primary')); ?>
             </fieldset>
         <?= $this->Form->end() ?>
     </div>

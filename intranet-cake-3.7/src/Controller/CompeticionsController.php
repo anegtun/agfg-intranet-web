@@ -16,6 +16,8 @@ class CompeticionsController extends AppController {
         $this->Tempadas = new Tempadas();
         $this->TiposCompeticion = new TiposCompeticion();
         $this->Fases = TableRegistry::get('Fases');
+        $this->Equipas = TableRegistry::get('Equipas');
+        $this->FasesEquipas = TableRegistry::get('FasesEquipas');
     }
 
     public function index() {
@@ -33,20 +35,13 @@ class CompeticionsController extends AppController {
         $this->set(compact('competicion', 'categorias', 'tempadas', 'tiposCompeticion'));
     }
 
-    public function detailFase($id=null) {
-        $fase = empty($id) ? $this->Fases->newEntity() : $this->Fases->get($id);
-        $this->set(compact('fase'));
-    }
-
-
-
     public function gardar() {
         $competicion = $this->Competicions->newEntity();
         if ($this->request->is('post') || $this->request->is('put')) {
-            $team = $this->Competicions->patchEntity($competicion, $this->request->data);
-            if ($this->Competicions->save($team)) {
+            $competicion = $this->Competicions->patchEntity($competicion, $this->request->getData());
+            if ($this->Competicions->save($competicion)) {
                 $this->Flash->success(__('Gardouse a competición correctamente.'));
-                return $this->redirect(array('action'=>'index'));
+                return $this->redirect(['action'=>'detalle', $competicion->id]);
             }
             $this->Flash->error(__('Erro ao gardar a competición.'));
         }
@@ -62,6 +57,58 @@ class CompeticionsController extends AppController {
             $this->Flash->error(__('Erro ao eliminar a competición.'));
         }
         return $this->redirect(array('action'=>'index'));
+    }
+
+
+
+    public function detalleFase($id=null) {
+        if(empty($id)) {
+            $fase = $this->Fases->newEntity();
+            $fase->id_competicion = $this->request->getQuery('idCompeticion');
+            $fase->equipas = [];
+        } else {
+            $fase = $this->Fases->get($id);
+            $fase->equipas = $this->FasesEquipas->find('list', ['keyField'=>'id_equipa','valueField'=>'id_equipa'])->where(['id_fase'=>$fase->id])->toArray();
+        }
+        $competicion = $this->Competicions->get($fase->id_competicion);
+        $equipas = $this->Equipas->find()->where(['categoria'=>$competicion->categoria]);
+        $this->set(compact('fase','competicion','equipas'));
+    }
+
+    public function gardarFase() {
+        $fase = $this->Fases->newEntity();
+        if ($this->request->is('post') || $this->request->is('put')) {
+            $data = $this->request->getData();
+            // Gardamos datos de fase
+            $fase = $this->Fases->patchEntity($fase, $data);
+            if (!$this->Fases->save($fase)) {
+                $this->Flash->error(__('Erro ao gardar a fase.'));
+                $this->set(compact('fase'));
+                return $this->render('detalleFase');
+            }
+            // Gardamos equipas
+            $this->FasesEquipas->deleteAll(['id_fase'=>$fase->id]);
+            if(!empty($data['equipas'])) {
+                foreach($data['equipas'] as $idE) {
+                    $faseEquipa = $this->FasesEquipas->newEntity();
+                    $faseEquipa->id_fase = $fase->id;
+                    $faseEquipa->id_equipa = $idE;
+                    $this->FasesEquipas->save($faseEquipa);
+                }
+            }
+            $this->Flash->success(__('Gardouse a fase correctamente.'));
+            $this->redirect(['action'=>'detalleFase', $fase->id]);
+        }
+    }
+
+    public function borrarFase($id) {
+        $fase = $this->Fases->get($id);
+        if($this->Fases->delete($fase)) {
+            $this->Flash->success(__('Eliminouse a fase correctamente.'));
+        } else {
+            $this->Flash->error(__('Erro ao eliminar a fase.'));
+        }
+        return $this->redirect(['action'=>'detalle', $fase->id_competicion]);
     }
 
 }
