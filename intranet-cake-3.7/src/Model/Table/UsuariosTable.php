@@ -15,10 +15,10 @@ class UsuariosTable extends Table {
             ->notEmpty('nome_usuario', 'O usuario é obrigatorio')
             ->notEmpty('contrasinal', 'O contrasinal é obrigatorio')
             ->notEmpty('rol', 'O rol é obrigatorio')
-            ->add('rol', 'inList', [
-                'rule' => ['inList', ['admin', 'author']],
+            ->add('rol', 'inList', array(
+                'rule' => array('inList', array('admin', 'author')),
                 'message' => 'Introduce un valor válido para o rol'
-            ]);
+            ));
     }
 
 }

@@ -7,7 +7,7 @@ use Cake\Validation\Validator;
 class FasesTable extends Table {
 
     public function initialize(array $config) {
-        $this->table('agfg_fase');
+        $this->setTable('agfg_fase');
         /*$this->belongsTo('Competicions', [
         	'className' => 'Competicions',
             'foreignKey' => 'id_competicion',

@@ -26,7 +26,7 @@ class MainController extends AppController {
             $this->Flash->error(__('Invalid username or password, try again'));
         }
         // Pantalla login (peticion GET)
-        $this->viewBuilder->setLayout('login');
+        $this->layout = 'login';
     }
 
     public function logout() {
