@@ -8,6 +8,17 @@ class XornadasTable extends Table {
 
     public function initialize(array $config) {
         $this->setTable('agfg_xornada');
+        $this->hasMany('Partidos', array(
+        	'className' => 'Partidos',
+            'foreignKey' => 'id_xornada',
+            //'conditions' => ['approved' => true]
+            'propertyName' => 'partidos',
+            //'dependent' => true,
+        ));
+    }
+
+    public function findWithPartidos($id_fase) {
+        return $this->find()->contain(['Partidos'])->where(['id_fase'=>$id_fase]);
     }
 
     public function validationDefault(Validator $validator) {

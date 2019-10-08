@@ -18,6 +18,7 @@ class CompeticionsController extends AppController {
         $this->Fases = TableRegistry::get('Fases');
         $this->Equipas = TableRegistry::get('Equipas');
         $this->FasesEquipas = TableRegistry::get('FasesEquipas');
+        $this->Partidos = TableRegistry::get('Partidos');
         $this->Xornadas = TableRegistry::get('Xornadas');
     }
 
@@ -76,12 +77,14 @@ class CompeticionsController extends AppController {
         } else {
             $fase = $this->Fases->get($id);
             $fase->equipas = $this->FasesEquipas->find('list', ['keyField'=>'id_equipa','valueField'=>'id_equipa'])->where(['id_fase'=>$fase->id])->toArray();
-            $fase->xornadas = $this->Xornadas->find()->where(['id_fase'=>$fase->id]);
+            $fase->xornadas = $this->Xornadas->findWithPartidos($fase->id);
+            $fase->equipasData = $this->Equipas->findInFase($fase->id);
             $outras_fases = $this->Fases->find()->where(['id_competicion'=>$fase->id_competicion, 'id !='=>$id]);
         }
         $competicion = $this->Competicions->get($fase->id_competicion);
         $equipas = $this->Equipas->find()->where(['categoria'=>$competicion->categoria])->order(['nome']);
-        $this->set(compact('fase','competicion','equipas','outras_fases'));
+        $equipas_map = $this->Equipas->find()->find('list', ['keyField'=>'id','valueField'=>'nome'])->toArray();
+        $this->set(compact('fase','competicion','equipas','equipas_map','outras_fases'));
     }
 
     public function gardarFase() {
@@ -143,6 +146,31 @@ class CompeticionsController extends AppController {
             $this->Flash->error(__('Erro ao eliminar a xornada.'));
         }
         return $this->redirect(['action'=>'detalleFase', $xornada->id_fase]);
+    }
+
+
+
+    public function gardarPartido() {
+        $partido = $this->Partidos->newEntity();
+        if ($this->request->is('post') || $this->request->is('put')) {
+            $partido = $this->Xornadas->patchEntity($partido, $this->request->getData());
+            if ($this->Partidos->save($partido)) {
+                $this->Flash->success(__('Gardouse o partido correctamente.'));
+            } else {
+                $this->Flash->error(__('Erro ao gardar o partido.'));
+            }
+        }
+        return $this->redirect(['action'=>'detalleFase',$partido->id_fase]);
+    }
+
+    public function borrarPartido($id) {
+        $partido = $this->Partidos->get($id);
+        if($this->Partidos->delete($partido)) {
+            $this->Flash->success(__('Eliminouse o partido correctamente.'));
+        } else {
+            $this->Flash->error(__('Erro ao eliminar o partido.'));
+        }
+        return $this->redirect(['action'=>'detalleFase', $partido->id_fase]);
     }
 
 }
