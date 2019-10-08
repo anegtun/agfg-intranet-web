@@ -25,7 +25,7 @@ class CompeticionsController extends AppController {
         $this->set('categorias', $this->Categorias->getCategorias());
         $this->set('tempadas', $this->Tempadas->getTempadas());
         $this->set('tiposCompeticion', $this->TiposCompeticion->getTipos());
-        $this->set('competicions', $this->Competicions->find('all'));
+        $this->set('competicions', $this->Competicions->find('all', ['order'=>'tempada DESC','nome']));
     }
 
     public function detalle($id=null) {
@@ -72,14 +72,15 @@ class CompeticionsController extends AppController {
             $fase = $this->Fases->newEntity();
             $fase->id_competicion = $this->request->getQuery('idCompeticion');
             $fase->equipas = [];
+            $outras_fases = $this->Fases->find()->where(['id_competicion'=>$fase->id_competicion]);
         } else {
             $fase = $this->Fases->get($id);
             $fase->equipas = $this->FasesEquipas->find('list', ['keyField'=>'id_equipa','valueField'=>'id_equipa'])->where(['id_fase'=>$fase->id])->toArray();
             $fase->xornadas = $this->Xornadas->find()->where(['id_fase'=>$fase->id]);
+            $outras_fases = $this->Fases->find()->where(['id_competicion'=>$fase->id_competicion, 'id !='=>$id]);
         }
         $competicion = $this->Competicions->get($fase->id_competicion);
-        $equipas = $this->Equipas->find()->where(['categoria'=>$competicion->categoria]);
-        $outras_fases = $this->Fases->find()->where(['id_competicion'=>$fase->id_competicion, 'id !='=>$id]);
+        $equipas = $this->Equipas->find()->where(['categoria'=>$competicion->categoria])->order(['nome']);
         $this->set(compact('fase','competicion','equipas','outras_fases'));
     }
 
