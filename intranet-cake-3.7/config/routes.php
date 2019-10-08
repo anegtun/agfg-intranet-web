@@ -57,6 +57,8 @@ Router::scope('/', function (RouteBuilder $routes) {
      */
     $routes->applyMiddleware('csrf');
 
+    $routes->setExtensions(['json']);
+
     $routes->connect('/', ['controller'=>'Main', 'action'=>'index']);
 
     /**
@@ -70,6 +72,8 @@ Router::scope('/', function (RouteBuilder $routes) {
      * ...and connect the rest of 'Pages' controller's URLs.
      */
     //$routes->connect('/pages/*', ['controller' => 'Pages', 'action' => 'display']);
+
+    $routes->resources('Calendario');
 
     /**
      * Connect catchall routes for all controllers.

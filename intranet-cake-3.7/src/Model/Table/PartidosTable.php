@@ -7,7 +7,7 @@ use Cake\Validation\Validator;
 class PartidosTable extends Table {
 
     public function initialize(array $config) {
-        $this->table('agfg_partido');
+        $this->setTable('agfg_partidos');
     }
 
     public function validationDefault(Validator $validator) {

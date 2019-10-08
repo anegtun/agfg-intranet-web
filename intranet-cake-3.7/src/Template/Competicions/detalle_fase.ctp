@@ -65,18 +65,10 @@
         <div class="row" style="margin-top:2em;">
             <h3>Xornadas</h3>
             <table class="table table-striped table-hover">
-                <thead>
-                    <tr>
-                        <th>Numero</th>
-                        <th>Data</th>
-                        <th></th>
-                    </tr>
-                </thead>
                 <tbody>
                     <?php foreach($fase->xornadas as $x) : ?>
                         <tr>
-                            <td><?= $x->numero ?></td>
-                            <td><?= $x->data->format('Y-m-d'); ?></td>
+                            <td colspan="3"><?= "Xornada $x->numero ({$x->data->format('Y-m-d')})" ?></td>
                             <td class="text-center">
                                 <?= $this->Html->link(
                                     '',
@@ -84,18 +76,33 @@
                                     array('class'=>'glyphicon glyphicon-trash')) ?>
                             </td>
                         </tr>
+                        <?php if(!empty($x->partidos)) : ?>
+                            <?php foreach($x->partidos as $p) : ?>
+                                <tr>
+                                    <td>&nbsp;</td>
+                                    <td><?= $equipas_map[$p->id_equipa1] ?></td>
+                                    <td><?= $equipas_map[$p->id_equipa2] ?></td>
+                                    <td class="text-center">
+                                        <?= $this->Html->link(
+                                            '',
+                                            array('action'=>'borrarPartido', $p->id),
+                                            array('class'=>'glyphicon glyphicon-trash')) ?>
+                                    </td>
+                                </tr>
+                            <?php endforeach ?>
+                        <?php endif ?>
                     <?php endforeach ?>
                 <tbody>
             </table>
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg">Engadir xornada</button>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalXornada">Engadir xornada</button>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalPartido">Engadir partido</button>
         </div>
     <?php endif ?>
 </div>
 
 
-<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+<div id="modalXornada" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <?= $this->Form->create($fase, array('type'=>'post', 'url'=>array('action'=>'gardarXornada'))) ?>
-        <?= $this->Form->hidden('id', ['value'=>'']) ?>
         <?= $this->Form->hidden('id_fase', ['value'=>$fase->id]) ?>
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -112,6 +119,53 @@
                         </div>
                         <div class="form-group">
                             <?= $this->Form->control('data', array('class'=>'form-control','label'=>'Data')) ?>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="modal-footer">
+                    <?= $this->Form->button('Gardar', array('class'=>'btn btn-primary')); ?>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Pechar</button>
+                </div>
+            </div>
+        </div>
+    <?= $this->Form->end() ?>
+</div>
+
+
+
+<div id="modalPartido" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <?= $this->Form->create($fase, array('type'=>'post', 'url'=>array('action'=>'gardarPartido'))) ?>
+        <?= $this->Form->hidden('id_fase', ['value'=>$fase->id]) ?>
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Partido</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <fieldset>
+                        <div class="form-group">
+                            <?php
+                                $xornadasHelper = array(''=>'');
+                                foreach($fase->xornadas as $x) {
+                                    $xornadasHelper[$x->id] = "Xornada $x->numero ({$x->data->format('Y-m-d')})";
+                                }
+                                echo $this->Form->control('id_xornada', array('options'=>$xornadasHelper, 'class'=>'form-control','label'=>'Xornada'))
+                            ?>
+                        </div>
+                        <?php
+                            $equipasHelper = array(''=>'');
+                            foreach($fase->equipasData as $e) {
+                                $equipasHelper[$e->id] = $e->nome;
+                            }
+                        ?>
+                        <div class="form-group">
+                            <?= $this->Form->control('id_equipa1', array('options'=>$equipasHelper, 'class'=>'form-control','label'=>'Equipa local')) ?>
+                        </div>
+                        <div class="form-group">
+                            <?= $this->Form->control('id_equipa2', array('options'=>$equipasHelper, 'class'=>'form-control','label'=>'Equipa visitante')) ?>
                         </div>
                     </fieldset>
                 </div>
