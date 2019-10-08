@@ -11,13 +11,11 @@ class CalendarioController extends AppController {
     public function initialize() {
         parent::initialize();
         $this->loadComponent('RequestHandler');
-        $this->Categorias = new Categorias();
-        //$this->Tempadas = new Tempadas();
-        //$this->TiposCompeticion = new TiposCompeticion();
+        $this->Auth->allow(['index']);
+
         $this->Competicions = TableRegistry::get('Competicions');
         $this->Fases = TableRegistry::get('Fases');
         $this->Equipas = TableRegistry::get('Equipas');
-        $this->FasesEquipas = TableRegistry::get('FasesEquipas');
         $this->Partidos = TableRegistry::get('Partidos');
         $this->Xornadas = TableRegistry::get('Xornadas');
     }
