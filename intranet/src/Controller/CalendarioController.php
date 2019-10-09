@@ -3,6 +3,7 @@ namespace App\Controller;
 
 use App\Controller\AppController;
 use App\Model\Categorias;
+use Cake\Core\Exception\Exception;
 use Cake\Event\Event;
 use Cake\ORM\TableRegistry;
 
@@ -20,9 +21,12 @@ class CalendarioController extends AppController {
         $this->Xornadas = TableRegistry::get('Xornadas');
     }
 
-    public function index($idCompeticion) {
-        $competicion = $this->Competicions->get($idCompeticion);
-        $fases = $this->Fases->find()->where(['id_competicion'=>$idCompeticion]);
+    public function index($uuid) {
+        $competicion = $this->Competicions->find()->where(['Competicions.uuid'=>$uuid])->first();
+        if(empty($competicion)) {
+            throw new Exception("No existe competición");
+        }
+        $fases = $this->Fases->find()->where(['id_competicion'=>$competicion->id]);
         $equipas_map = $this->Equipas->find()->find('list', ['keyField'=>'id','valueField'=>'nome'])->toArray();
         $equipas_logo_map = $this->Equipas->find()->find('list', ['keyField'=>'id','valueField'=>'logo'])->toArray();
 

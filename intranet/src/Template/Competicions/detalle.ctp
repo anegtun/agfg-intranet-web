@@ -28,6 +28,9 @@
                     <?= $this->Form->control('nome', array('class'=>'form-control','label'=>'Nome')) ?>
                 </div>
                 <div class="form-group">
+                    <?= $this->Form->control('uuid', array('class'=>'form-control','label'=>'UUID (uso en WordPress)','disabled'=>true)) ?>
+                </div>
+                <div class="form-group">
                     <?= $this->Form->control('tempada', array('options'=>array_merge(array(''=>''), $tempadas), 'class'=>'form-control','label'=>'Tempada')) ?>
                 </div>
                 <div class="form-group">

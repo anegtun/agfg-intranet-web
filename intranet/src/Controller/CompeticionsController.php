@@ -31,9 +31,11 @@ class CompeticionsController extends AppController {
 
     public function detalle($id=null) {
         $competicion = empty($id) ? $this->Competicions->newEntity() : $this->Competicions->get($id, ['contain'=>['Fases']]);
-        foreach($competicion->fases as $f) {
-            if(!empty($f->id_fase_pai)) {
-                $f->fasePai = $this->Fases->get($f->id_fase_pai);
+        if(!empty($id)) {
+            foreach($competicion->fases as $f) {
+                if(!empty($f->id_fase_pai)) {
+                    $f->fasePai = $this->Fases->get($f->id_fase_pai);
+                }
             }
         }
         $categorias = $this->Categorias->getCategorias();
@@ -46,6 +48,10 @@ class CompeticionsController extends AppController {
         $competicion = $this->Competicions->newEntity();
         if ($this->request->is('post') || $this->request->is('put')) {
             $competicion = $this->Competicions->patchEntity($competicion, $this->request->getData());
+            // Asignamos ID único aleatorio
+            if(empty($competicion->id)) {
+                $competicion->uuid = uniqid();
+            }
             if ($this->Competicions->save($competicion)) {
                 $this->Flash->success(__('Gardouse a competición correctamente.'));
                 return $this->redirect(['action'=>'detalle', $competicion->id]);
