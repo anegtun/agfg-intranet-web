@@ -11,9 +11,7 @@
                         array('controller'=>'Main', 'action'=>'index'),
                         array('escape'=>false)) ?>    
                 </li>
-                <li>
-                    <?= $this->Html->link('Equipas', array('controller'=>'Equipas', 'action'=>'index')) ?>
-                </li>
+                <li><?= $this->Html->link('Equipas', array('controller'=>'Equipas', 'action'=>'index')) ?></li>
                 <li class="active">Detalle</li>
             </ol>
         </div>
@@ -34,6 +32,9 @@
                 </div>
                 <div class="form-group">
                     <?= $this->Form->control('categoria', array('options'=>array_merge(array(''=>''), $categorias), 'class'=>'form-control','label'=>'Categoría')) ?>
+                </div>
+                <div class="form-group">
+                    <?= $this->Form->control('logo', array('class'=>'form-control','label'=>'Logo')) ?>
                 </div>
                 <?= $this->Form->button('Gardar', array('class'=>'btn btn-primary')); ?>
             </fieldset>
