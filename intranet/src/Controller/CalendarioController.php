@@ -24,6 +24,7 @@ class CalendarioController extends AppController {
         $competicion = $this->Competicions->get($idCompeticion);
         $fases = $this->Fases->find()->where(['id_competicion'=>$idCompeticion]);
         $equipas_map = $this->Equipas->find()->find('list', ['keyField'=>'id','valueField'=>'nome'])->toArray();
+        $equipas_logo_map = $this->Equipas->find()->find('list', ['keyField'=>'id','valueField'=>'logo'])->toArray();
 
         $res = [
             'competicion' => ['nome' => $competicion->nome],
@@ -43,6 +44,8 @@ class CalendarioController extends AppController {
                     $resP = [
                         'equipa1' => $equipas_map[$p->id_equipa1],
                         'equipa2' => $equipas_map[$p->id_equipa2],
+                        'logo_equipa1' => $equipas_logo_map[$p->id_equipa1],
+                        'logo_equipa2' => $equipas_logo_map[$p->id_equipa2],
                         'goles_equipa1' => $p->goles_equipa1,
                         'goles_equipa2' => $p->goles_equipa2,
                         'tantos_equipa1' => $p->tantos_equipa1,

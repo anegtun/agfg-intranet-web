@@ -11,7 +11,6 @@
                         array('controller'=>'Main', 'action'=>'index'),
                         array('escape'=>false)) ?>    
                 </li>
-                <!--li><a href="#">MAQINT<span class="sr-only">Maqint</span></a></li-->
                 <li class="active">Equipas</li>
             </ol>
         </div>
@@ -37,7 +36,7 @@
                 <tbody>
                     <?php foreach($equipas as $e) : ?>
                         <tr>
-                            <td><?= empty($e->logo) ? '' : $this->Html->image($e->logo, array('width'=>30,'height'=>30)) ?></td>
+                            <td class="text-center"><?= empty($e->logo) ? '' : $this->Html->image($e->logo, array('width'=>30,'height'=>30)) ?></td>
                             <td><?= $e->codigo ?></td>
                             <td><?= $e->nome ?></td>
                             <td><?= $categorias[$e->categoria] ?></td>
