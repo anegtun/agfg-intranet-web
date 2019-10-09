@@ -120,14 +120,26 @@ $menu_option = empty($menu_option) ? '' : $menu_option;
                             </li>
                             <li data-toggle="tooltip">
                                 <?= $this->Html->link(
-                                    '<span class="glyphicon glyphicon glyphicon-user"><span class="sr-only">Equipas</span></span> Equipas',
+                                    '<span class="glyphicon glyphicon-calendar"><span class="sr-only">Competicións</span></span> Competicións',
+                                    array('controller'=>'Competicions', 'action'=>'index'),
+                                    array('escape'=>false)) ?>
+                            </li>
+                            <li data-toggle="tooltip">
+                                <?= $this->Html->link(
+                                    '<span class="glyphicon glyphicon-user"><span class="sr-only">Equipas</span></span> Equipas',
                                     array('controller'=>'Equipas', 'action'=>'index'),
                                     array('escape'=>false)) ?>
                             </li>
                             <li data-toggle="tooltip">
                                 <?= $this->Html->link(
-                                    '<span class="glyphicon glyphicon glyphicon-calendar"><span class="sr-only">Competicións</span></span> Competicións',
-                                    array('controller'=>'Competicions', 'action'=>'index'),
+                                    '<span class="glyphicon glyphicon-education"><span class="sr-only">Árbitros</span></span> Árbitros',
+                                    array('controller'=>'Arbitros', 'action'=>'index'),
+                                    array('escape'=>false)) ?>
+                            </li>
+                            <li data-toggle="tooltip">
+                                <?= $this->Html->link(
+                                    '<span class="glyphicon glyphicon-flag"><span class="sr-only">Campos</span></span> Campos',
+                                    array('controller'=>'Campos', 'action'=>'index'),
                                     array('escape'=>false)) ?>
                             </li>
                         </ul>
