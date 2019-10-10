@@ -3,7 +3,7 @@
 <div class="container-full gray-bg">
     <div class="row page-header">
         <div class="col-xs-12 m-b-15">
-            <h1>Competicións</h1>
+            <h1>Árbitros</h1>
             <ol class="breadcrumb">
                 <li>
                     <?= $this->Html->link(
@@ -11,7 +11,7 @@
                         array('controller'=>'Main', 'action'=>'index'),
                         array('escape'=>false)) ?>    
                 </li>
-                <li class="active">Competicións</li>
+                <li class="active">Árbitros</li>
             </ol>
         </div>
     </div>
@@ -25,33 +25,29 @@
             <table class="table table-striped table-hover">
                 <thead>
                     <tr>
+                        <th class="celda-titulo">Alcume</th>
+                        <th class="celda-titulo">NIF</th>
                         <th class="celda-titulo">Nome</th>
-                        <th class="celda-titulo">Tempada</th>
-                        <th class="celda-titulo">Categoría</th>
-                        <th class="celda-titulo">Tipo</th>
-                        <th class="celda-titulo">UUID</th>
                         <th class="celda-titulo"></th>
                         <th class="celda-titulo"></th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach($competicions as $c) : ?>
+                    <?php foreach($arbitros as $a) : ?>
                         <tr>
-                            <td><?= $c->nome ?></td>
-                            <td><?= $tempadas[$c->tempada] ?></td>
-                            <td><?= empty($c->categoria) ? '' : $categorias[$c->categoria] ?></td>
-                            <td><?= empty($c->tipo) ? '' : $tiposCompeticion[$c->tipo] ?></td>
-                            <td><?= $c->uuid ?></td>
+                            <td><?= $a->alcume ?></td>
+                            <td><?= $a->nif ?></td>
+                            <td><?= $a->nome ?></td>
                             <td class="text-center">
                                 <?= $this->Html->link(
                                     '',
-                                    array('action'=>'detalle', $c->id),
+                                    array('action'=>'detalle', $a->id),
                                     array('class'=>'glyphicon glyphicon-pencil')) ?>
                             </td>
                             <td class="text-center">
                                 <?= $this->Html->link(
                                     '',
-                                    array('action'=>'borrar', $c->id),
+                                    array('action'=>'borrar', $a->id),
                                     array('class'=>'glyphicon glyphicon-trash')) ?>
                             </td>
                         </tr>
