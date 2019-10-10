@@ -32,7 +32,7 @@ function wp_agfg_calendario_plugin($atts) {
                     $resultado2 = sprintf('%01d', $p->goles_equipa2)."-".sprintf('%02d', $p->tantos_equipa2)." (".sprintf('%02d', $p->total_equipa2).")";
                 }
                 $dataPartido = empty($p->data_partido) ? 'Pte. data' : date('d/m - H:i', strtotime($p->data_partido));
-                $campo = empty($p->campo) ? 'Pte. campo' : $p->campo;
+                $campo = empty($p->campo) ? 'Pte. campo' : ($p->campo->nome.' ('.$p->campo->pobo.')');
                 $html .= '<div class="partido">';
                 $html .= '<table>';
                 $html .= "<thead><tr><th colspan='3'>$dataPartido<br>$campo</th></tr><thead>";

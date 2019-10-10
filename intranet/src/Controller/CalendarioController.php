@@ -14,6 +14,7 @@ class CalendarioController extends AppController {
         $this->loadComponent('RequestHandler');
         $this->Auth->allow(['index']);
 
+        $this->Campos = TableRegistry::get('Campos');
         $this->Competicions = TableRegistry::get('Competicions');
         $this->Fases = TableRegistry::get('Fases');
         $this->Equipas = TableRegistry::get('Equipas');
@@ -27,8 +28,8 @@ class CalendarioController extends AppController {
             throw new Exception("No existe competición");
         }
         $fases = $this->Fases->find()->where(['id_competicion'=>$competicion->id]);
-        $equipas_map = $this->Equipas->find()->find('list', ['keyField'=>'id','valueField'=>'nome'])->toArray();
-        $equipas_logo_map = $this->Equipas->find()->find('list', ['keyField'=>'id','valueField'=>'logo'])->toArray();
+        $campos = $this->Campos->findMap();
+        $equipas = $this->Equipas->findMap();
 
         $res = [
             'competicion' => ['nome' => $competicion->nome],
@@ -46,10 +47,10 @@ class CalendarioController extends AppController {
                 $partidos = $this->Partidos->find()->where(['id_xornada'=>$x->id]);
                 foreach($partidos as $p) {
                     $resP = [
-                        'equipa1' => $equipas_map[$p->id_equipa1],
-                        'equipa2' => $equipas_map[$p->id_equipa2],
-                        'logo_equipa1' => $equipas_logo_map[$p->id_equipa1],
-                        'logo_equipa2' => $equipas_logo_map[$p->id_equipa2],
+                        'equipa1' => $equipas[$p->id_equipa1]->nome,
+                        'equipa2' => $equipas[$p->id_equipa2]->nome,
+                        'logo_equipa1' => $equipas[$p->id_equipa1]->logo,
+                        'logo_equipa2' => $equipas[$p->id_equipa2]->logo,
                         'goles_equipa1' => $p->goles_equipa1,
                         'goles_equipa2' => $p->goles_equipa2,
                         'tantos_equipa1' => $p->tantos_equipa1,
@@ -57,9 +58,15 @@ class CalendarioController extends AppController {
                         'total_equipa1' => $p->getPuntuacionTotalEquipa1(),
                         'total_equipa2' => $p->getPuntuacionTotalEquipa2(),
                         'ganador' => $p->getGanador(),
-                        'data_partido' => $p->data_partido,
-                        'campo' => ''
+                        'data_partido' => $p->getDataHora(),
+                        'campo' => []
                     ];
+                    if(!empty($p->id_campo)) {
+                        $resP['campo'] = [
+                            'nome' => $campos[$p->id_campo]->nome,
+                            'pobo' => $campos[$p->id_campo]->pobo
+                        ];
+                    }
                     $resX['partidos'][] = $resP;
                 }
                 $resF['xornadas'][] = $resX;

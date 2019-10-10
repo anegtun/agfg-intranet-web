@@ -10,6 +10,15 @@ class CamposTable extends Table {
         $this->setTable('agfg_campos');
     }
 
+    public function findMap() {
+        $bd = $this->find()->order('nome');
+        $res = [];
+        foreach($bd as $e) {
+            $res[$e->id] = $e;
+        }
+        return $res;
+    }
+
     public function validationDefault(Validator $validator) {
         return $validator
             ->notEmpty('nome', 'O nome é obrigatorio')
