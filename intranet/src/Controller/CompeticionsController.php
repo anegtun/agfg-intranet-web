@@ -38,9 +38,9 @@ class CompeticionsController extends AppController {
                 }
             }
         }
-        $categorias = $this->Categorias->getCategorias();
-        $tempadas = $this->Tempadas->getTempadas();
-        $tiposCompeticion = $this->TiposCompeticion->getTipos();
+        $categorias = $this->Categorias->getCategoriasWithEmpty();
+        $tempadas = $this->Tempadas->getTempadasWithEmpty();
+        $tiposCompeticion = $this->TiposCompeticion->getTiposWithEmpty();
         $this->set(compact('competicion', 'categorias', 'tempadas', 'tiposCompeticion'));
     }
 

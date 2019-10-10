@@ -148,6 +148,34 @@ $menu_option = empty($menu_option) ? '' : $menu_option;
 
                 <div class="page-content">
                     <?= $this->Flash->render(); ?>
+
+                    <div class="container-full gray-bg">
+                        <div class="row page-header">
+                            <div class="col-xs-12 m-b-15">
+                                <?php if(!empty($cabeceiraTitulo)) : ?>
+                                    <h1><?= $cabeceiraTitulo ?></h1>
+                                <?php endif ?>
+                                <?php if(!empty($cabeceiraMigas)) : ?>
+                                    <ol class="breadcrumb">
+                                        <li>
+                                            <?= $this->Html->link(
+                                                '<i class="glyphicon glyphicon-home"><span class="sr-only">Inicio</span></i>',
+                                                ['controller'=>'Main', 'action'=>'index'],
+                                                ['escape'=>false]) ?>    
+                                        </li>
+                                        <?php foreach($cabeceiraMigas as $c) : ?>
+                                            <?php if(!empty($c['url'])) : ?>
+                                                <li><?= $this->Html->link($c['label'], $c['url']) ?></li>
+                                            <?php else : ?>
+                                                <li class="active"><?= $c['label'] ?></li>
+                                            <?php endif ?>
+                                        <?php endforeach ?>
+                                    </ol>
+                                <?php endif ?>
+                            </div>
+                        </div>
+                    </div>
+                    
                     <?= $this->fetch('content'); ?>
                 </div>
             </div>

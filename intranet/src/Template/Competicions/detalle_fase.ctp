@@ -1,23 +1,12 @@
-<?php $this->extend('template') ?>
-
-<div class="container-full gray-bg">
-    <div class="row page-header">
-        <div class="col-xs-12 m-b-15">
-            <h1>Competición</h1>
-            <ol class="breadcrumb">
-                <li>
-                    <?= $this->Html->link(
-                        '<i class="glyphicon glyphicon-home"><span class="sr-only">Inicio</span></i>',
-                        array('controller'=>'Main', 'action'=>'index'),
-                        array('escape'=>false)) ?>    
-                </li>
-                <li><?= $this->Html->link('Competicións', array('controller'=>'Competicions', 'action'=>'index')) ?></li>
-                <li><?= $this->Html->link($competicion->nome, array('controller'=>'Competicions', 'action'=>'detalle', $competicion->id)) ?></li>
-                <li class="active">Fase</li>
-            </ol>
-        </div>
-    </div>
-</div>
+<?php
+$this->extend('template');
+$this->set('cabeceiraTitulo', 'Fase competición');
+$this->set('cabeceiraMigas', [
+    ['label'=>'Competicións', 'url'=>['controller'=>'Competicions', 'action'=>'index']],
+    ['label'=>'Competición', 'url'=>['controller'=>'Competicions', 'action'=>'detalle', $competicion->id]],
+    ['label'=>'Fase']
+]);
+?>
 
 <div class="container-full" style="margin-top:2em;">
     <div class="row">
@@ -26,36 +15,21 @@
             <?= $this->Form->hidden('id_competicion') ?>
             <fieldset>
                 <legend>Fase</legend>
-                <div class="form-group">
-                    <?= $this->Form->control('nome', array('class'=>'form-control','label'=>'Nome')) ?>
-                </div>
-                <div class="form-group">
-                    <?php
-                        $fasesHelper = array(''=>'');
-                        foreach($outras_fases as $f) {
-                            $fasesHelper[$f->id] = $f->nome;
-                        }
-                        echo $this->Form->control('id_fase_pai', array('options'=>$fasesHelper, 'class'=>'form-control','label'=>'Fase pai'))
-                    ?>
-                </div>
+                <?= $this->Form->control('nome', ['label'=>'Nome']) ?>
+                <?= $this->Form->control('id_fase_pai', ['options'=>$this->AgfgForm->objectToKeyValue($outras_fases,'id','nome'), 'label'=>'Fase pai']) ?>
 
-                <label>Equipas participantes</label>
-                <?php
-                    $equipasHelper = array();
-                    foreach($equipas as $e) {
-                        $equipasHelper[$e->id] = $e->nome;
-                    }
-                    echo $this->Form->control('equipas', array(
+                <label for="equipas">Equipas participantes</label>
+                <?= $this->Form->control('equipas', [
                         'label'=>false,
                         'multiple' => 'checkbox',
-                        'options' => $equipasHelper,
+                        'options' => $this->AgfgForm->objectToKeyValue($equipas,'id','nome',false),
                         'templates'=>[
                             'checkboxWrapper' => '{{label}}',
                             'nestingLabel' => '<label{{attrs}}>{{input}} {{text}}</label><br/>']
-                    ));
+                    ]);
                 ?>
 
-                <?= $this->Form->button('Gardar', array('class'=>'btn btn-primary')); ?>
+                <?= $this->Form->button('Gardar', ['class'=>'btn btn-primary']); ?>
             </fieldset>
         <?= $this->Form->end() ?>
     </div>
@@ -69,12 +43,7 @@
                     <?php foreach($fase->xornadas as $x) : ?>
                         <tr>
                             <td colspan="3"><?= "Xornada $x->numero ({$x->data->format('Y-m-d')})" ?></td>
-                            <td class="text-center">
-                                <?= $this->Html->link(
-                                    '',
-                                    array('action'=>'borrarXornada', $x->id),
-                                    array('class'=>'glyphicon glyphicon-trash')) ?>
-                            </td>
+                            <td class="text-center"><?= $this->AgfgForm->deleteButton(['action'=>'borrarXornada', $x->id]) ?></td>
                         </tr>
                         <?php if(!empty($x->partidos)) : ?>
                             <?php foreach($x->partidos as $p) : ?>
@@ -82,12 +51,7 @@
                                     <td>&nbsp;</td>
                                     <td><?= $equipas_map[$p->id_equipa1] ?></td>
                                     <td><?= $equipas_map[$p->id_equipa2] ?></td>
-                                    <td class="text-center">
-                                        <?= $this->Html->link(
-                                            '',
-                                            array('action'=>'borrarPartido', $p->id),
-                                            array('class'=>'glyphicon glyphicon-trash')) ?>
-                                    </td>
+                                    <td class="text-center"><?= $this->AgfgForm->deleteButton(['action'=>'borrarPartido', $p->id]) ?></td>
                                 </tr>
                             <?php endforeach ?>
                         <?php endif ?>
@@ -114,16 +78,12 @@
                 </div>
                 <div class="modal-body">
                     <fieldset>
-                        <div class="form-group">
-                            <?= $this->Form->control('numero', array('class'=>'form-control','label'=>'Número')) ?>
-                        </div>
-                        <div class="form-group">
-                            <?= $this->Form->control('data', array('class'=>'form-control','label'=>'Data')) ?>
-                        </div>
+                        <?= $this->Form->control('numero', ['label'=>'Número']) ?>
+                        <?= $this->Form->control('data', ['label'=>'Data']) ?>
                     </fieldset>
                 </div>
                 <div class="modal-footer">
-                    <?= $this->Form->button('Gardar', array('class'=>'btn btn-primary')); ?>
+                    <?= $this->Form->button('Gardar', ['class'=>'btn btn-primary']); ?>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Pechar</button>
                 </div>
             </div>
@@ -146,31 +106,21 @@
                 </div>
                 <div class="modal-body">
                     <fieldset>
-                        <div class="form-group">
-                            <?php
-                                $xornadasHelper = array(''=>'');
-                                foreach($fase->xornadas as $x) {
-                                    $xornadasHelper[$x->id] = "Xornada $x->numero ({$x->data->format('Y-m-d')})";
-                                }
-                                echo $this->Form->control('id_xornada', array('options'=>$xornadasHelper, 'class'=>'form-control','label'=>'Xornada'))
-                            ?>
-                        </div>
                         <?php
-                            $equipasHelper = array(''=>'');
-                            foreach($fase->equipasData as $e) {
-                                $equipasHelper[$e->id] = $e->nome;
+                            $xornadasHelper = array(''=>'');
+                            foreach($fase->xornadas as $x) {
+                                $xornadasHelper[$x->id] = "Xornada $x->numero ({$x->data->format('Y-m-d')})";
                             }
+                            echo $this->Form->control('id_xornada', ['options'=>$xornadasHelper, 'label'=>'Xornada']);
+                            
+                            $equipasHelper = $this->AgfgForm->objectToKeyValue($fase->equipasData,'id','nome');
+                            echo $this->Form->control('id_equipa1', ['options'=>$equipasHelper, 'label'=>'Equipa local']);
+                            echo $this->Form->control('id_equipa2', ['options'=>$equipasHelper, 'label'=>'Equipa visitante']);
                         ?>
-                        <div class="form-group">
-                            <?= $this->Form->control('id_equipa1', array('options'=>$equipasHelper, 'class'=>'form-control','label'=>'Equipa local')) ?>
-                        </div>
-                        <div class="form-group">
-                            <?= $this->Form->control('id_equipa2', array('options'=>$equipasHelper, 'class'=>'form-control','label'=>'Equipa visitante')) ?>
-                        </div>
                     </fieldset>
                 </div>
                 <div class="modal-footer">
-                    <?= $this->Form->button('Gardar', array('class'=>'btn btn-primary')); ?>
+                    <?= $this->Form->button('Gardar', ['class'=>'btn btn-primary']); ?>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Pechar</button>
                 </div>
             </div>

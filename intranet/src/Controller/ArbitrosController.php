@@ -26,7 +26,7 @@ class ArbitrosController extends AppController {
             $arbitro = $this->Arbitros->patchEntity($arbitro, $this->request->getData());
             if ($this->Arbitros->save($arbitro)) {
                 $this->Flash->success(__('Gardouse o arbitro correctamente.'));
-                return $this->redirect(array('action'=>'index'));
+                return $this->redirect(['action'=>'index']);
             }
             $this->Flash->error(__('Erro ao gardar o arbitro.'));
         }

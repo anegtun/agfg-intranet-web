@@ -26,7 +26,7 @@ class CamposController extends AppController {
             $campo = $this->Campos->patchEntity($campo, $this->request->getData());
             if ($this->Campos->save($campo)) {
                 $this->Flash->success(__('Gardouse o campo correctamente.'));
-                return $this->redirect(array('action'=>'index'));
+                return $this->redirect(['action'=>'index']);
             }
             $this->Flash->error(__('Erro ao gardar o campo.'));
         }
