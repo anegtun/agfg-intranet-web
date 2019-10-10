@@ -75,12 +75,12 @@ $menu_option = empty($menu_option) ? '' : $menu_option;
                                             </div>
                                             <div id="header-user-info">
                                                 <div id="header-user-name" class="hidden-xs hidden-sm"><?= $authUser['nome'] ?></div>
-                                                <div id="header-user-role" class="hidden-xs hidden-sm">Administrador</div>
+                                                <div id="header-user-role" class="hidden-xs hidden-sm"><?= $authUser['rol'] ?></div>
                                             </div>
                                         </div>
                                         <ul class="dropdown-menu">
                                             <li class="hidden-from-md text-right"><a href="#"><strong class="main-blue"><?= $authUser['nome'] ?></strong><span class="sr-only"><?= $authUser['nome'] ?></span></a></li>
-                                            <li class="hidden-from-md text-right"><a href="#"><small class="medium-blue">Administrador</small><span class="sr-only">Administrador</span> </a></li>
+                                            <li class="hidden-from-md text-right"><a href="#"><small class="medium-blue"><?= $authUser['rol'] ?></small><span class="sr-only"><?= $authUser['rol'] ?></span> </a></li>
                                             <!-- Mobil -->
                                             <li class="divider visible-xs"></li>
                                             <li class="hidden-from-md">
@@ -124,30 +124,32 @@ $menu_option = empty($menu_option) ? '' : $menu_option;
                                     array('controller'=>'Resultados', 'action'=>'index'),
                                     array('escape'=>false)) ?>
                             </li>
-                            <li data-toggle="tooltip">
-                                <?= $this->Html->link(
-                                    '<span class="glyphicon glyphicon-calendar"><span class="sr-only">Competicións</span></span> Competicións',
-                                    array('controller'=>'Competicions', 'action'=>'index'),
-                                    array('escape'=>false)) ?>
-                            </li>
-                            <li data-toggle="tooltip">
-                                <?= $this->Html->link(
-                                    '<span class="glyphicon glyphicon-user"><span class="sr-only">Equipas</span></span> Equipas',
-                                    array('controller'=>'Equipas', 'action'=>'index'),
-                                    array('escape'=>false)) ?>
-                            </li>
-                            <li data-toggle="tooltip">
-                                <?= $this->Html->link(
-                                    '<span class="glyphicon glyphicon-education"><span class="sr-only">Árbitros</span></span> Árbitros',
-                                    array('controller'=>'Arbitros', 'action'=>'index'),
-                                    array('escape'=>false)) ?>
-                            </li>
-                            <li data-toggle="tooltip">
-                                <?= $this->Html->link(
-                                    '<span class="glyphicon glyphicon-flag"><span class="sr-only">Campos</span></span> Campos',
-                                    array('controller'=>'Campos', 'action'=>'index'),
-                                    array('escape'=>false)) ?>
-                            </li>
+                            <?php if($authUser['rol']==='admin') : ?>
+                                <li data-toggle="tooltip">
+                                    <?= $this->Html->link(
+                                        '<span class="glyphicon glyphicon-calendar"><span class="sr-only">Competicións</span></span> Competicións',
+                                        array('controller'=>'Competicions', 'action'=>'index'),
+                                        array('escape'=>false)) ?>
+                                </li>
+                                <li data-toggle="tooltip">
+                                    <?= $this->Html->link(
+                                        '<span class="glyphicon glyphicon-user"><span class="sr-only">Equipas</span></span> Equipas',
+                                        array('controller'=>'Equipas', 'action'=>'index'),
+                                        array('escape'=>false)) ?>
+                                </li>
+                                <li data-toggle="tooltip">
+                                    <?= $this->Html->link(
+                                        '<span class="glyphicon glyphicon-education"><span class="sr-only">Árbitros</span></span> Árbitros',
+                                        array('controller'=>'Arbitros', 'action'=>'index'),
+                                        array('escape'=>false)) ?>
+                                </li>
+                                <li data-toggle="tooltip">
+                                    <?= $this->Html->link(
+                                        '<span class="glyphicon glyphicon-flag"><span class="sr-only">Campos</span></span> Campos',
+                                        array('controller'=>'Campos', 'action'=>'index'),
+                                        array('escape'=>false)) ?>
+                                </li>
+                            <?php endif ?>
                         </ul>
                     </div>
                 </aside>
