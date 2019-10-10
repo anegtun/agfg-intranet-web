@@ -10,6 +10,15 @@ class EquipasTable extends Table {
         $this->setTable('agfg_equipas');
     }
 
+    public function findMap() {
+        $bd = $this->find()->order('nome');
+        $res = [];
+        foreach($bd as $e) {
+            $res[$e->id] = $e;
+        }
+        return $res;
+    }
+
     public function findInFase($id_fase, $type='all', $options=[]) {
         return $this
             ->find($type, $options)

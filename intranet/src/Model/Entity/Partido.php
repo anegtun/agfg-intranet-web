@@ -2,6 +2,7 @@
 namespace App\Model\Entity;
 
 use Cake\Auth\DefaultPasswordHasher;
+use Cake\I18N\Time;
 use Cake\ORM\Entity;
 
 class Partido extends Entity {
@@ -12,12 +13,40 @@ class Partido extends Entity {
         'id' => false
     );
 
+    public function formatDataHora() {
+        if(empty($this->data_partido)) {
+            return NULL;
+        }
+        return $this->data_partido->format('Y-m-d').' '.$this->hora_partido;
+    }
+
+    public function getDataHora() {
+        if(empty($this->data_partido)) {
+            return NULL;
+        }
+        $time = new Time($this->data_partido);
+        if(!empty($this->hora_partido)) {
+            $hour = explode(':',$this->hora_partido);
+            $time->addHours($hour[0]);
+            $time->addMinutes($hour[1]);
+        }
+        return $time;
+    }
+
     public function getPuntuacionTotalEquipa1() {
         return $this->_calculatePuntuacionTotal($this->goles_equipa1, $this->tantos_equipa1);
     }
 
     public function getPuntuacionTotalEquipa2() {
         return $this->_calculatePuntuacionTotal($this->goles_equipa2, $this->tantos_equipa2);
+    }
+
+    public function formatPuntuacionEquipa1() {
+        return $this->_formatPuntuacionTotal($this->goles_equipa1, $this->tantos_equipa1);
+    }
+
+    public function formatPuntuacionEquipa2() {
+        return $this->_formatPuntuacionTotal($this->goles_equipa2, $this->tantos_equipa2);
     }
 
     public function getGanador() {
@@ -44,6 +73,16 @@ class Partido extends Entity {
         $g = $goles===NULL ? 0 : $goles;
         $t = $tantos===NULL ? 0 : $tantos;
         return $g*3 + $t;
+    }
+
+    protected function _formatPuntuacionTotal($goles, $tantos) {
+        if($goles===NULL && $tantos===NULL) {
+            return NULL;
+        }
+        $g = $goles===NULL ? 0 : $goles;
+        $t = $tantos===NULL ? 0 : $tantos;
+        $p = $this->_calculatePuntuacionTotal($goles, $tantos);
+        return ($g*3).'-'.sprintf('%02d',$t).' ('.sprintf('%02d',$p).')';
     }
 
 }
