@@ -82,7 +82,7 @@ class Partido extends Entity {
         $g = $goles===NULL ? 0 : $goles;
         $t = $tantos===NULL ? 0 : $tantos;
         $p = $this->_calculatePuntuacionTotal($goles, $tantos);
-        return ($g*3).'-'.sprintf('%02d',$t).' ('.sprintf('%02d',$p).')';
+        return $g.'-'.sprintf('%02d',$t).' ('.sprintf('%02d',$p).')';
     }
 
 }
