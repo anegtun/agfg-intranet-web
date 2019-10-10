@@ -35,5 +35,6 @@ class AppView extends View {
      */
     public function initialize() {
         $this->loadHelper('Form', ['templates' => 'agfg_form']);
+        $this->loadHelper('AgfgForm');
     }
 }

@@ -1,23 +1,8 @@
-<?php $this->extend('template') ?>
-
-<div class="container-full gray-bg">
-    <div class="row page-header">
-        <div class="col-xs-12 m-b-15">
-            <h1>Árbitros</h1>
-            <ol class="breadcrumb">
-                <li>
-                    <?= $this->Html->link(
-                        '<i class="glyphicon glyphicon-home"><span class="sr-only">Inicio</span></i>',
-                        array('controller'=>'Main', 'action'=>'index'),
-                        array('escape'=>false)) ?>    
-                </li>
-                <li class="active">Árbitros</li>
-            </ol>
-        </div>
-    </div>
-</div>
-
-
+<?php
+$this->extend('template');
+$this->set('cabeceiraTitulo', 'Árbitros');
+$this->set('cabeceiraMigas', [['label'=>'Árbitros']]);
+?>
 
 <div class="container-full" style="margin-top:2em;">
     <div class="row">
@@ -38,18 +23,8 @@
                             <td><?= $a->alcume ?></td>
                             <td><?= $a->nif ?></td>
                             <td><?= $a->nome ?></td>
-                            <td class="text-center">
-                                <?= $this->Html->link(
-                                    '',
-                                    array('action'=>'detalle', $a->id),
-                                    array('class'=>'glyphicon glyphicon-pencil')) ?>
-                            </td>
-                            <td class="text-center">
-                                <?= $this->Html->link(
-                                    '',
-                                    array('action'=>'borrar', $a->id),
-                                    array('class'=>'glyphicon glyphicon-trash')) ?>
-                            </td>
+                            <td class="text-center"><?= $this->AgfgForm->editButton(['action'=>'detalle', $a->id]) ?></td>
+                            <td class="text-center"><?= $this->AgfgForm->deleteButton(['action'=>'borrar', $a->id]) ?></td>
                         </tr>
                     <?php endforeach ?>
                 </tbody>
