@@ -10,6 +10,10 @@ class TiposCompeticion {
             'torneo'  => 'Torneo 1 día'
         );
     }
+    
+    public function getTiposWithEmpty() {
+        return array_merge([''=>''], $this->getTipos());
+    }
 
     public function getTipo($key) {
         $tipos = $this->getTipos();

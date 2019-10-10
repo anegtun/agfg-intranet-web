@@ -22,8 +22,7 @@ use Cake\View\View;
  *
  * @link https://book.cakephp.org/3.0/en/views.html#the-app-view
  */
-class AppView extends View
-{
+class AppView extends View {
 
     /**
      * Initialization hook method.
@@ -34,7 +33,7 @@ class AppView extends View
      *
      * @return void
      */
-    public function initialize()
-    {
+    public function initialize() {
+        $this->loadHelper('Form', ['templates' => 'agfg_form']);
     }
 }
