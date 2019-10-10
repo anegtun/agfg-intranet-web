@@ -15,6 +15,10 @@ class Tempadas {
             '2019-20' => '2019/20'
         );
     }
+    
+    public function getTempadasWithEmpty() {
+        return array_merge([''=>''], $this->getTempadas());
+    }
 
     public function getTempada($key) {
         $list = $this->getTempadas();

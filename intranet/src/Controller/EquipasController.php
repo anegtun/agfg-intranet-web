@@ -19,7 +19,7 @@ class EquipasController extends AppController {
     }
 
     public function detalle($id=null) {
-        $categorias = $this->Categorias->getCategorias();
+        $categorias = $this->Categorias->getCategoriasWithEmpty();
         $equipa = empty($id) ? $this->Equipas->newEntity() : $this->Equipas->get($id);
         $this->set(compact('categorias', 'equipa'));
     }

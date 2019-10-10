@@ -9,6 +9,10 @@ class Categorias {
             'M' => 'Masculina'
         );
     }
+    
+    public function getCategoriasWithEmpty() {
+        return array_merge([''=>''], $this->getCategorias());
+    }
 
     public function getCategoria($key) {
         $cats = $this->getCategorias();

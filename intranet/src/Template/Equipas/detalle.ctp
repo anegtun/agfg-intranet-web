@@ -8,10 +8,10 @@
                 <li>
                     <?= $this->Html->link(
                         '<i class="glyphicon glyphicon-home"><span class="sr-only">Inicio</span></i>',
-                        array('controller'=>'Main', 'action'=>'index'),
-                        array('escape'=>false)) ?>    
+                        ['controller'=>'Main', 'action'=>'index'],
+                        ['escape'=>false]) ?>    
                 </li>
-                <li><?= $this->Html->link('Equipas', array('controller'=>'Equipas', 'action'=>'index')) ?></li>
+                <li><?= $this->Html->link('Equipas', ['controller'=>'Equipas', 'action'=>'index']) ?></li>
                 <li class="active">Detalle</li>
             </ol>
         </div>
@@ -20,23 +20,15 @@
 
 <div class="container-full" style="margin-top:2em;">
     <div class="row">
-        <?= $this->Form->create($equipa, array('type'=>'post', 'url'=>array('action'=>'gardar'))) ?>
+        <?= $this->Form->create($equipa, ['type'=>'post', 'url'=>['action'=>'gardar']]) ?>
             <?= $this->Form->hidden('id') ?>
             <fieldset>
                 <legend>Equipa</legend>
-                <div class="form-group">
-                    <?= $this->Form->control('codigo', array('class'=>'form-control','label'=>'Código')) ?>
-                </div>
-                <div class="form-group">
-                    <?= $this->Form->control('nome', array('class'=>'form-control','label'=>'Nome')) ?>
-                </div>
-                <div class="form-group">
-                    <?= $this->Form->control('categoria', array('options'=>array_merge(array(''=>''), $categorias), 'class'=>'form-control','label'=>'Categoría')) ?>
-                </div>
-                <div class="form-group">
-                    <?= $this->Form->control('logo', array('class'=>'form-control','label'=>'Logo')) ?>
-                </div>
-                <?= $this->Form->button('Gardar', array('class'=>'btn btn-primary')); ?>
+                <?= $this->Form->control('codigo', ['class'=>'form-control','label'=>'Código']) ?>
+                <?= $this->Form->control('nome', ['class'=>'form-control','label'=>'Nome']) ?>
+                <?= $this->Form->control('categoria', ['options'=>array_merge([],$categorias), 'class'=>'form-control','label'=>'Categoría']) ?>
+                <?= $this->Form->control('logo', ['class'=>'form-control','label'=>'Logo']) ?>
+                <?= $this->Form->button('Gardar', ['class'=>'btn btn-primary']); ?>
             </fieldset>
         <?= $this->Form->end() ?>
     </div>
