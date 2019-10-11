@@ -12,7 +12,7 @@ class AgfgFormHelper extends Helper {
     }
     
     public function deleteButton($url) {
-        return $this->Html->link('', $url, ['class'=>'glyphicon glyphicon-trash']);
+        return $this->Html->link('', $url, ['class'=>'glyphicon glyphicon-trash', 'confirm'=>'Seguro que queres borrar o rexistro?']);
     }
     
     public function objectToKeyValue($array, $key, $value, $allowEmpty=true) {

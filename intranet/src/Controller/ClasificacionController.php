@@ -34,7 +34,7 @@ class ClasificacionController extends AppController {
             ->join(['table'=>'agfg_xornada', 'alias'=>'Xornadas', 'conditions'=>['Xornadas.id = Partidos.id_xornada']])
             ->join(['table'=>'agfg_fase', 'alias'=>'Fases', 'conditions'=>['Fases.id = Xornadas.id_fase']])
             ->where(['Fases.id_competicion'=>$competicion->id]);
-            
+        
         $clsf = new Clasificacion($equipas, $partidos);
         $clsf->build();
         $clsf->desempatar();

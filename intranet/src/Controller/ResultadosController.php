@@ -51,6 +51,8 @@ class ResultadosController extends AppController {
         $partido->xornada = $this->Xornadas->get($partido->id_xornada);
         $partido->fase = $this->Fases->get($partido->xornada->id_fase);
         $partido->competicion = $this->Competicions->get($partido->fase->id_competicion);
+        // Hack para que o datepicker non a líe formateando a data (alterna dia/mes). Asi forzamos o noso formato.
+        $partido->data_partido_str = $partido->data_partido->format('d-m-Y');
 
         $arbitros = $this->Arbitros->findMap();
         $campos = $this->Campos->findMap();
