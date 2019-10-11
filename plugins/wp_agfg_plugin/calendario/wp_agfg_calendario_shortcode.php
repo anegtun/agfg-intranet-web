@@ -1,16 +1,6 @@
 <?php
-/*
-Plugin Name: Asociacion Galega de Futbol Gaelico - Calendario WordPress Plugin
-Plugin URI:  https://gaeligogalego.gal/
-Description: Plugin para visualización do calendario da AGFG.
-Version:     1.0.0
-Author:      Asociacion Galega de Futbol Gaelico
-Author URI:  https://gaeligogalego.gal/
-*/
 
-defined( 'ABSPATH' ) or die( 'Nope, not accessing this' );
-
-function wp_agfg_calendario_plugin($atts) {
+function wp_agfg_calendario_shortcode($atts) {
     $idCalendario = $atts['id'];
     $url = "https://intranet.gaelicogalego.gal/calendario/index/$idCalendario.json";
     $response = wp_remote_get($url);
@@ -58,6 +48,4 @@ function wp_agfg_calendario_plugin($atts) {
     return $html;
 }
 
-add_shortcode('agfg-calendario', 'wp_agfg_calendario_plugin');
-
-?>
+add_shortcode('agfg-calendario', 'wp_agfg_calendario_shortcode');
