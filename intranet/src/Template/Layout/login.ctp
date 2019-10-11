@@ -7,7 +7,7 @@
         <meta name="theme-color" content="#ffffff">
         <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
         <!-- Favicon -->
-        <?= $this->Html->meta('favicon.ico', '/images/favicon/favicon.ico', array('type' => 'icon')) ?>
+        <?= $this->Html->meta('favicon.ico', '/images/favicon/agfg-icon.png', array('type' => 'icon')) ?>
         <!-- custom:css -->
         <?= $this->Html->css(array("/maqint/maqint", "login-page")) ?>
         <!-- libs:js -->
