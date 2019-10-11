@@ -20,7 +20,7 @@ $emptyTemplates = [
             <legend>Partido</legend>
             <div class="row">
                 <div class="form-group col-lg-3">
-                    <?= $this->Form->control('data', ['class'=>'form-control fld-date', 'label'=>'Data', 'value'=>$partido->data_partido, 'templates'=>$emptyTemplates]) ?>
+                    <?= $this->Form->control('data', ['class'=>'form-control fld-date', 'label'=>'Data', 'value'=>$partido->data_partido_str, 'templates'=>$emptyTemplates]) ?>
                 </div>
                 <div class="form-group col-lg-3">
                     <?= $this->Form->control('hora_partido', ['class'=>'form-control fld-time', 'label'=>'Hora', 'templates'=>$emptyTemplates]) ?>

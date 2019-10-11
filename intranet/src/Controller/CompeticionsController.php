@@ -6,6 +6,7 @@ use App\Model\Categorias;
 use App\Model\Tempadas;
 use App\Model\TiposCompeticion;
 use Cake\Event\Event;
+use Cake\I18n\Time;
 use Cake\ORM\TableRegistry;
 
 class CompeticionsController extends AppController {
@@ -132,9 +133,11 @@ class CompeticionsController extends AppController {
 
 
     public function gardarXornada() {
+        $data = $this->request->getData();
         $xornada = $this->Xornadas->newEntity();
         if ($this->request->is('post') || $this->request->is('put')) {
-            $xornada = $this->Xornadas->patchEntity($xornada, $this->request->getData());
+            $xornada = $this->Xornadas->patchEntity($xornada, $data);
+            $xornada->data = empty($data['data_xornada']) ? NULL : Time::createFromFormat('d-m-Y', $data['data_xornada']);
             if ($this->Xornadas->save($xornada)) {
                 $this->Flash->success(__('Gardouse a xornada correctamente.'));
             } else {

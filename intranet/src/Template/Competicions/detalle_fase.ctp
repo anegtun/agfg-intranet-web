@@ -6,6 +6,10 @@ $this->set('cabeceiraMigas', [
     ['label'=>'Competición', 'url'=>['controller'=>'Competicions', 'action'=>'detalle', $competicion->id]],
     ['label'=>'Fase']
 ]);
+$emptyTemplates = [
+    'inputContainer' => '{{content}}',
+    'input' => '<input type="{{type}}" name="{{name}}" {{attrs}}/>',
+];
 ?>
 
 <div class="container-full" style="margin-top:2em;">
@@ -79,7 +83,7 @@ $this->set('cabeceiraMigas', [
                 <div class="modal-body">
                     <fieldset>
                         <?= $this->Form->control('numero', ['label'=>'Número']) ?>
-                        <?= $this->Form->control('data', ['label'=>'Data']) ?>
+                        <?= $this->Form->control('data_xornada', ['class'=>'form-control fld-date', 'label'=>'Data', 'templates'=>$emptyTemplates]) ?>
                     </fieldset>
                 </div>
                 <div class="modal-footer">
