@@ -2,7 +2,7 @@
 
 function wp_agfg_calendario_shortcode($atts) {
     $idCalendario = $atts['id'];
-    $url = "https://intranet.gaelicogalego.gal/calendario/index/$idCalendario.json";
+    $url = "https://intranet.gaelicogalego.gal/calendario/competicion/$idCalendario.json";
     $response = wp_remote_get($url);
     $data = json_decode($response['body']);
     
@@ -11,7 +11,14 @@ function wp_agfg_calendario_shortcode($atts) {
     $html .= "</style>";
     $html .= '<div class="calendario-full-new">';
     foreach($data->fases as $f) {
+        $html .= "<h3 style='color:#04395E; border-bottom:1px solid; clear:both; padding-top:2em;'>{$f->nome}</h3>";
         foreach($f->xornadas as $x) {
+            usort($x->partidos, function($a,$b) {
+                if($a->data_partido===NULL || $b->data_partido===NULL) {
+                    return 0;
+                }
+                return strtotime($a->data_partido) - strtotime($b->data_partido);
+            });
             $html .= "<div class=\"xornada\">";
             $d = date('d/m/Y', strtotime($x->data));
             $html .= "<h4>Xornada {$x->numero} ({$d})</h4>";

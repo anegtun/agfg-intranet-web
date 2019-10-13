@@ -48,10 +48,18 @@ class Clasificacion {
                         $this->_processGame($clasificacionParticular, $p);
                     }
                 }
-                // Ordeamos por puntos en partidos particulares.
-                // En caso de empate (metemos unha ponderación de 1000), miramos o total favor/contra
-                usort($clasificacionParticular, function($a, $b) {
-                    return ($b->puntos - $a->puntos)*1000 + ($b->totalFavor - $a->totalFavor);
+                // Ordeamos segundo estes criterios:
+                // - Puntos en partidos particulares (ponderación 1.000.000 para que prevaleza sobre o resto de criterios)
+                // - Diferenza de puntos particular (ponderación 1.000)
+                // - Mellor diferenza puntos global
+                usort($clasificacionParticular, function($a, $b) use($equipas) {
+                    $globalA = $equipas[$a->id];
+                    $globalB = $equipas[$b->id];
+                    return
+                        ($b->puntos - $a->puntos)*1000000 +
+                        (($b->totalFavor-$b->totalContra) - ($a->totalFavor-$a->totalContra))*1000 + 
+                        (($globalB->totalFavor-$globalB->totalContra) - ($globalA->totalFavor-$globalA->totalContra));
+                   
                 });
                 // Buscamos a posición máxima onde están os equipos empatados, para reaxustar posición a partir de ahí
                 $posicionMaxima = 1000;

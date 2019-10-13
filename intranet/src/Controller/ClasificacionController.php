@@ -12,7 +12,7 @@ class ClasificacionController extends AppController {
     public function initialize() {
         parent::initialize();
         $this->loadComponent('RequestHandler');
-        $this->Auth->allow(['index']);
+        $this->Auth->allow(['competicion']);
 
         $this->Competicions = TableRegistry::get('Competicions');
         $this->Fases = TableRegistry::get('Fases');
@@ -21,7 +21,7 @@ class ClasificacionController extends AppController {
         $this->Xornadas = TableRegistry::get('Xornadas');
     }
 
-    public function index($uuid) {
+    public function competicion($uuid) {
         $competicion = $this->Competicions->find()->where(['Competicions.uuid'=>$uuid])->first();
         if(empty($competicion)) {
             throw new Exception("Non existe competición");

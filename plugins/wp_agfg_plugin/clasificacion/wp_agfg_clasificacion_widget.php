@@ -13,7 +13,7 @@ class agfg_Clasificacion_Widget extends WP_Widget {
         $title = apply_filters( 'widget_title', $instance[ 'title' ] );
         $idCalendario = $instance['id_calendario'];
         $urlResultados = $instance['url_resultados'];
-        $url = "https://intranet.gaelicogalego.gal/clasificacion/index/$idCalendario.json";
+        $url = "https://intranet.gaelicogalego.gal/clasificacion/competicion/$idCalendario.json";
         $response = wp_remote_get($url);
         $clasificacion = json_decode($response['body']);
         
