@@ -12,7 +12,7 @@ class CalendarioController extends AppController {
     public function initialize() {
         parent::initialize();
         $this->loadComponent('RequestHandler');
-        $this->Auth->allow(['index']);
+        $this->Auth->allow(['competicion']);
 
         $this->Campos = TableRegistry::get('Campos');
         $this->Competicions = TableRegistry::get('Competicions');
@@ -22,7 +22,7 @@ class CalendarioController extends AppController {
         $this->Xornadas = TableRegistry::get('Xornadas');
     }
 
-    public function index($uuid) {
+    public function competicion($uuid) {
         $competicion = $this->Competicions->find()->where(['Competicions.uuid'=>$uuid])->first();
         if(empty($competicion)) {
             throw new Exception("No existe competición");
