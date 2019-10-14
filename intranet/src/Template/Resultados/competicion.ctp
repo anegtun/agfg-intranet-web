@@ -30,7 +30,7 @@ $this->set('cabeceiraMigas', [
                             </tr>
                             <?php foreach($x->partidos as $p) : ?>
                                 <tr>
-                                    <td><?= empty($d=$p->formatDataHora()) ? '-' : $d ?></td>
+                                    <td style="<?= empty($p->adiado)?'':'color:red'?>"><?= empty($d=$p->formatDataHora()) ? '-' : $d ?></td>
                                     <td class="text-center"><?= empty($equipas[$p->id_equipa1]->logo) ? '' : $this->Html->image($equipas[$p->id_equipa1]->logo, ['width'=>30,'height'=>30]) ?></td>
                                     <td><?= $equipas[$p->id_equipa1]->nome ?></td>
                                     <td><?= $p->formatPuntuacionEquipa1() ?></td>
