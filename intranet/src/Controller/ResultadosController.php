@@ -52,7 +52,7 @@ class ResultadosController extends AppController {
         $partido->fase = $this->Fases->get($partido->xornada->id_fase);
         $partido->competicion = $this->Competicions->get($partido->fase->id_competicion);
         // Hack para que o datepicker non a líe formateando a data (alterna dia/mes). Asi forzamos o noso formato.
-        $partido->data_partido_str = $partido->data_partido->format('d-m-Y');
+        $partido->data_partido_str = empty($partido->data_partido) ? NULL : $partido->data_partido->format('d-m-Y');
 
         $arbitros = $this->Arbitros->findMap();
         $campos = $this->Campos->findMap();
@@ -66,6 +66,10 @@ class ResultadosController extends AppController {
             $data = $this->request->getData();
             $partido = $this->Partidos->patchEntity($partido, $data);
             $partido->data_partido = empty($data['data']) ? NULL : Time::createFromFormat('d-m-Y', $data['data']);
+            $partido->goles_equipa1 = empty($data['goles_equipa1']) ? NULL : $data['goles_equipa1'];
+            $partido->tantos_equipa1 = empty($data['tantos_equipa1']) ? NULL : $data['tantos_equipa1'];
+            $partido->goles_equipa2 = empty($data['goles_equipa2']) ? NULL : $data['goles_equipa2'];
+            $partido->tantos_equipa2 = empty($data['tantos_equipa2']) ? NULL : $data['tantos_equipa2'];
             if ($this->Partidos->save($partido)) {
                 $this->Flash->success(__('Gardáronse os datos do partido correctamente.'));
                 return $this->redirect(['action'=>'competicion', $data['id_competicion']]);
