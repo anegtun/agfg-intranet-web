@@ -28,11 +28,25 @@ function wp_agfg_calendario_shortcode($atts) {
                     $resultado1 = sprintf('%01d', $p->goles_equipa1)."-".sprintf('%02d', $p->tantos_equipa1)." (".sprintf('%02d', $p->total_equipa1).")";
                     $resultado2 = sprintf('%01d', $p->goles_equipa2)."-".sprintf('%02d', $p->tantos_equipa2)." (".sprintf('%02d', $p->total_equipa2).")";
                 }
-                $dataPartido = empty($p->data_partido) ? 'Pte. data' : date('d/m - H:i', strtotime($p->data_partido));
+                $dataPartido = 'Pte. data';
+                if(!empty($p->data_partido)) {
+                    $dataPartidoDate = strtotime($p->data_partido);
+                    $dataStr = date('d/m', $dataPartidoDate);
+                    $horaStr = date('H:i', $dataPartidoDate);
+                    $dataPartido = $dataStr;
+                    if($horaStr!=='00:00') {
+                        $dataPartido .= ' - '.$horaStr;
+                    }
+                }
+                $dataStyle = "";
+                if(!empty($p->adiado)) {
+                    $dataPartido .= ' (ADIADO)';
+                    $dataStyle = 'color:#c54242';
+                }
                 $campo = empty($p->campo) ? 'Pte. campo' : ($p->campo->nome.' ('.$p->campo->pobo.')');
                 $html .= '<div class="partido">';
                 $html .= '<table>';
-                $html .= "<thead><tr><th colspan='3'>$dataPartido<br>$campo</th></tr><thead>";
+                $html .= "<thead><tr><th colspan='3' style='$dataStyle'>$dataPartido<br>$campo</th></tr><thead>";
                 $html .= '<tbody>';
                 $html .= '<tr>';
                 $html .= "<td><figure><img class='alignnone' src='{$p->logo_equipa1}' alt='{$p->equipa1}' width='18' height='20'></figure></td>";

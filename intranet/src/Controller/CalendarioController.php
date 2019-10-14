@@ -59,6 +59,7 @@ class CalendarioController extends AppController {
                         'total_equipa2' => $p->getPuntuacionTotalEquipa2(),
                         'ganador' => $p->getGanador(),
                         'data_partido' => $p->getDataHora(),
+                        'adiado' => $p->adiado,
                         'campo' => []
                     ];
                     if(!empty($p->id_campo)) {
