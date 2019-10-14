@@ -33,6 +33,11 @@ $emptyTemplates = [
                 </div>
             </div>
             <div class="row">
+                <div class="form-group col-lg-8">
+                    <?= $this->Form->checkbox('adiado', ['templates'=>$emptyTemplates]) ?> Adiado (marcar en caso de que o partido non se vaia xogar na fin de semana da xornada)
+                </div>
+            </div>
+            <div class="row">
                 <div class="form-group col-lg-3" style="padding-top: 1.5em;">
                     <?= $equipas[$partido->id_equipa1]->nome ?>
                 </div>
