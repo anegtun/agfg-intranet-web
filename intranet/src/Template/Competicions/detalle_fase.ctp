@@ -110,13 +110,8 @@ $emptyTemplates = [
                 </div>
                 <div class="modal-body">
                     <fieldset>
+                        <?= $this->Form->control('id_xornada', ['options'=>$this->AgfgForm->objectToKeyValue($fase->xornadas,'id','Xornada $e->numero ({$e->data->format(\'Y-m-d\')})'), 'label'=>'Xornada']) ?>
                         <?php
-                            $xornadasHelper = array(''=>'');
-                            foreach($fase->xornadas as $x) {
-                                $xornadasHelper[$x->id] = "Xornada $x->numero ({$x->data->format('Y-m-d')})";
-                            }
-                            echo $this->Form->control('id_xornada', ['options'=>$xornadasHelper, 'label'=>'Xornada']);
-                            
                             $equipasHelper = $this->AgfgForm->objectToKeyValue($fase->equipasData,'id','nome');
                             echo $this->Form->control('id_equipa1', ['options'=>$equipasHelper, 'label'=>'Equipa local']);
                             echo $this->Form->control('id_equipa2', ['options'=>$equipasHelper, 'label'=>'Equipa visitante']);
