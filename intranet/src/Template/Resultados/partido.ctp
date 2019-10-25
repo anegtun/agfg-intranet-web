@@ -26,10 +26,10 @@ $emptyTemplates = [
                     <?= $this->Form->control('hora_partido', ['class'=>'form-control fld-time', 'label'=>'Hora', 'templates'=>$emptyTemplates]) ?>
                 </div>
                 <div class="form-group col-lg-3">
-                    <?= $this->Form->control('id_campo', ['options'=>$this->AgfgForm->objectToKeyValue($campos,'id','nome'), 'label'=>'Campo', 'templates'=>$emptyTemplates]) ?>
+                    <?= $this->Form->control('id_campo', ['options'=>$this->AgfgForm->objectToKeyValue($campos,'id','$e->pobo - $e->nome'), 'label'=>'Campo', 'templates'=>$emptyTemplates]) ?>
                 </div>
                 <div class="form-group col-lg-3">
-                    <?= $this->Form->control('id_arbitro', ['options'=>$this->AgfgForm->objectToKeyValue($arbitros,'id','alcume'), 'label'=>'Árbitro', 'templates'=>$emptyTemplates]) ?>
+                    <?= $this->Form->control('id_arbitro', ['options'=>$this->AgfgForm->objectToKeyValue($arbitros,'id','$e->alcume ($e->nome)'), 'label'=>'Árbitro', 'templates'=>$emptyTemplates]) ?>
                 </div>
             </div>
             <div class="row">
