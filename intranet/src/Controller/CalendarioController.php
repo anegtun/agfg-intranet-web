@@ -47,21 +47,33 @@ class CalendarioController extends AppController {
                 $partidos = $this->Partidos->find()->where(['id_xornada'=>$x->id]);
                 foreach($partidos as $p) {
                     $resP = [
-                        'equipa1' => $equipas[$p->id_equipa1]->nome,
-                        'equipa2' => $equipas[$p->id_equipa2]->nome,
-                        'logo_equipa1' => $equipas[$p->id_equipa1]->logo,
-                        'logo_equipa2' => $equipas[$p->id_equipa2]->logo,
-                        'goles_equipa1' => $p->goles_equipa1,
-                        'goles_equipa2' => $p->goles_equipa2,
-                        'tantos_equipa1' => $p->tantos_equipa1,
-                        'tantos_equipa2' => $p->tantos_equipa2,
-                        'total_equipa1' => $p->getPuntuacionTotalEquipa1(),
-                        'total_equipa2' => $p->getPuntuacionTotalEquipa2(),
-                        'ganador' => $p->getGanador(),
                         'data_partido' => $p->getDataHora(),
                         'adiado' => $p->adiado,
+                        'equipa1' => [],
+                        'equipa2' => [],
+                        'ganador' => $p->getGanador(),
                         'campo' => []
                     ];
+                    if(!empty($p->id_equipa1)) {
+                        $resP['equipa1'] = [
+                            'codigo' => $equipas[$p->id_equipa1]->codigo,
+                            'nome' => $equipas[$p->id_equipa1]->nome,
+                            'logo' => $equipas[$p->id_equipa1]->logo,
+                            'goles' => $p->goles_equipa1,
+                            'tantos' => $p->tantos_equipa1,
+                            'total' => $p->getPuntuacionTotalEquipa1()
+                        ];
+                    }
+                    if(!empty($p->id_equipa2)) {
+                        $resP['equipa2'] = [
+                            'codigo' => $equipas[$p->id_equipa2]->codigo,
+                            'nome' => $equipas[$p->id_equipa2]->nome,
+                            'logo' => $equipas[$p->id_equipa2]->logo,
+                            'goles' => $p->goles_equipa2,
+                            'tantos' => $p->tantos_equipa2,
+                            'total' => $p->getPuntuacionTotalEquipa2()
+                        ];
+                    }
                     if(!empty($p->id_campo)) {
                         $resP['campo'] = [
                             'nome' => $campos[$p->id_campo]->nome,

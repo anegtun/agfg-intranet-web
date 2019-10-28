@@ -63,7 +63,7 @@
                                                 <p>Intranet da Asociación Galega de Fútbol Gaélico</p>
                                             </div>
                                             <div class="version">
-                                                Ver. <span>1.0.1</span>
+                                                Ver. <span>1.0.2</span>
                                             </div>
                                         </div>
                                     </div>
