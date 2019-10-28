@@ -30,7 +30,12 @@ class agfg_Clasificacion_Widget extends WP_Widget {
                 $html .=
                     "<tr>
                         <td>{$equipa->posicion}</td>
-                        <td><img src='{$equipa->logo}' alt='{$equipa->nome}' width='30'></td>
+                        <td>
+                            <div>
+                                <img src='{$equipa->logo}' alt='{$equipa->nome}' width='30' style='display: inline-block; height: 100%; vertical-align: middle;'>
+                                <strong style='padding-left:1em'>$equipa->codigo</strong>
+                            </div>
+                        </td>
                         <td>{$equipa->puntos}</td>
                         <td>{$equipa->partidosGanados}</td>
                         <td>{$equipa->partidosEmpatados}</td>

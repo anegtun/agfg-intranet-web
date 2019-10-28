@@ -25,8 +25,8 @@ function wp_agfg_calendario_shortcode($atts) {
             foreach($x->partidos as $p) {
                 $resultado1 = $resultado2 = '-';
                 if(!empty($p->ganador)) {
-                    $resultado1 = sprintf('%01d', $p->goles_equipa1)."-".sprintf('%02d', $p->tantos_equipa1)." (".sprintf('%02d', $p->total_equipa1).")";
-                    $resultado2 = sprintf('%01d', $p->goles_equipa2)."-".sprintf('%02d', $p->tantos_equipa2)." (".sprintf('%02d', $p->total_equipa2).")";
+                    $resultado1 = sprintf('%01d', $p->equipa1->goles)."-".sprintf('%02d', $p->equipa1->tantos)." (".sprintf('%02d', $p->equipa1->total).")";
+                    $resultado2 = sprintf('%01d', $p->equipa2->goles)."-".sprintf('%02d', $p->equipa2->tantos)." (".sprintf('%02d', $p->equipa2->total).")";
                 }
                 $dataPartido = 'Pte. data';
                 if(!empty($p->data_partido)) {
@@ -49,13 +49,13 @@ function wp_agfg_calendario_shortcode($atts) {
                 $html .= "<thead><tr><th colspan='3' style='$dataStyle'>$dataPartido<br>$campo</th></tr><thead>";
                 $html .= '<tbody>';
                 $html .= '<tr>';
-                $html .= "<td><figure><img class='alignnone' src='{$p->logo_equipa1}' alt='{$p->equipa1}' width='18' height='20'></figure></td>";
-                $html .= "<td>{$p->equipa1}</td>";
+                $html .= "<td><figure><img class='alignnone' src='{$p->equipa1->logo}' alt='{$p->equipa1->nome}' width='18' height='20'></figure></td>";
+                $html .= "<td>{$p->equipa1->nome}</td>";
                 $html .= "<td>$resultado1</td>";
                 $html .= '</tr>';
                 $html .= '<tr>';
-                $html .= "<td><figure><img class='alignnone' src='{$p->logo_equipa2}' alt='{$p->equipa2}' width='18' height='20'></figure></td>";
-                $html .= "<td>{$p->equipa2}</td>";
+                $html .= "<td><figure><img class='alignnone' src='{$p->equipa2->logo}' alt='{$p->equipa2->nome}' width='18' height='20'></figure></td>";
+                $html .= "<td>{$p->equipa2->nome}</td>";
                 $html .= "<td>$resultado2</td>";
                 $html .= '</tr>';
                 $html .= '</tbody>';
