@@ -16,7 +16,6 @@ $this->set('cabeceiraMigas', [
                 <?= $this->Form->control('nome', ['label'=>'Nome']) ?>
                 <?= $this->Form->control('uuid', ['label'=>'UUID (uso en WordPress)','disabled'=>true]) ?>
                 <?= $this->Form->control('tempada', ['options'=>$tempadas, 'label'=>'Tempada']) ?>
-                <?= $this->Form->control('categoria', ['options'=>$categorias, 'label'=>'Categoría']) ?>
                 <?= $this->Form->control('tipo', ['options'=>$tiposCompeticion, 'label'=>'Tipo competición']) ?>
                 <?= $this->Form->button('Gardar', ['class'=>'btn btn-primary']); ?>
             </fieldset>
@@ -30,6 +29,7 @@ $this->set('cabeceiraMigas', [
             <table class="table table-striped table-hover">
                 <thead>
                     <tr>
+                        <th>Categoría</th>
                         <th>Nome</th>
                         <th>Fase pai</th>
                         <th></th>
@@ -39,6 +39,7 @@ $this->set('cabeceiraMigas', [
                 <tbody>
                     <?php foreach($competicion->fases as $f) : ?>
                         <tr>
+                            <td><?= empty($f->categoria) ? '' : $categorias[$f->categoria] ?></td>
                             <td><?= $f->nome ?></td>
                             <td><?= empty($f->fasePai) ? '' : $f->fasePai->nome ?></td>
                             <td class="text-center"><?= $this->AgfgForm->editButton(['action'=>'detalleFase', $f->id]) ?></td>
