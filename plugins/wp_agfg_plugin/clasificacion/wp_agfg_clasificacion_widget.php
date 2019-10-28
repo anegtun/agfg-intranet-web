@@ -13,7 +13,11 @@ class agfg_Clasificacion_Widget extends WP_Widget {
         $title = apply_filters( 'widget_title', $instance[ 'title' ] );
         $idCalendario = $instance['id_calendario'];
         $urlResultados = $instance['url_resultados'];
+        $categoria = $instance['categoria'];
         $url = "https://intranet.gaelicogalego.gal/clasificacion/competicion/$idCalendario.json";
+        if(!empty($categoria)) {
+            $url .= "?categoria=$categoria";
+        }
         $response = wp_remote_get($url);
         $clasificacion = json_decode($response['body']);
         
@@ -55,6 +59,7 @@ class agfg_Clasificacion_Widget extends WP_Widget {
     public function form( $instance ) {
         $title = ! empty( $instance['title'] ) ? $instance['title'] : '';
         $calendar = ! empty( $instance['id_calendario'] ) ? $instance['id_calendario'] : '';
+        $categoria = ! empty( $instance['categoria'] ) ? $instance['categoria'] : '';
         $urlResultados = ! empty( $instance['url_resultados'] ) ? $instance['url_resultados'] : '';
         echo
             "<p>
@@ -66,6 +71,14 @@ class agfg_Clasificacion_Widget extends WP_Widget {
                 <input type='text' id='".$this->get_field_id('id_calendario')."' name='".$this->get_field_name('id_calendario')."' value='".esc_attr( $calendar )."' class='widefat' />
             </p>
             <p>
+                <label for='".$this->get_field_id('categoria')."'>Categoría:</label>
+                <select id='".$this->get_field_id('categoria')."' name='".$this->get_field_name('categoria')."' value='".esc_attr( $categoria )."' class='widefat'>
+                    <option value=''></option>
+                    <option value='F' ".(!empty($categoria)&&$categoria==='F'?"selected='selected'":'').">Feminina</option>
+                    <option value='M' ".(!empty($categoria)&&$categoria==='M'?"selected='selected'":'').">Masculina</option>
+                </select>
+            </p>
+            <p>
                 <label for='".$this->get_field_id('url_resultados')."'>URL resultados:</label>
                 <input type='text' id='".$this->get_field_id('url_resultados')."' name='".$this->get_field_name('url_resultados')."' value='".esc_attr( $urlResultados )."' class='widefat' />
             </p>";
@@ -75,6 +88,7 @@ class agfg_Clasificacion_Widget extends WP_Widget {
         $instance = $old_instance;
         $instance['title'] = strip_tags( $new_instance['title']);
         $instance['id_calendario'] = $new_instance['id_calendario'];
+        $instance['categoria'] = $new_instance['categoria'];
         $instance['url_resultados'] = $new_instance['url_resultados'];
         return $instance;
     }

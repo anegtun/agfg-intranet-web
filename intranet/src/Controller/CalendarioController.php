@@ -25,19 +25,19 @@ class CalendarioController extends AppController {
     public function competicion($uuid) {
         $competicion = $this->Competicions->find()->where(['Competicions.uuid'=>$uuid])->first();
         if(empty($competicion)) {
-            throw new Exception("No existe competición");
+            throw new Exception("Non existe competición");
         }
-        $fases = $this->Fases->find()->where(['id_competicion'=>$competicion->id]);
+        // Obtemos fases
+        $fases = $this->getFases($competicion);
         $campos = $this->Campos->findMap();
         $equipas = $this->Equipas->findMap();
 
         $res = [
             'competicion' => ['nome' => $competicion->nome],
-            'fases' => []
+            'xornadas' => []
         ];
         foreach($fases as $f) {
             $xornadas = $this->Xornadas->find()->where(['id_fase'=>$f->id])->order(['numero ASC']);
-            $resF = ['nome' => $f->nome, 'xornadas' => []];
             foreach($xornadas as $x) {
                 $resX = [
                     'numero' => $x->numero,
@@ -82,11 +82,19 @@ class CalendarioController extends AppController {
                     }
                     $resX['partidos'][] = $resP;
                 }
-                $resF['xornadas'][] = $resX;
+                $res['xornadas'][] = $resX;
             }
-            $res['fases'][] = $resF;
         }
         $this->set($res);
+    }
+
+    private function getFases($competicion) {
+        $conditions = ['id_competicion'=>$competicion->id];
+        $categoria = $this->request->getQuery('categoria');
+        if(!empty($categoria)) {
+            $conditions['categoria'] = $categoria;
+        }
+        return $this->Fases->find()->where($conditions);
     }
     
 }
