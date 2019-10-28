@@ -87,44 +87,44 @@ class Clasificacion {
     }
 
     private function _processGame(&$clsf, $partido) {
-            if(empty($clsf[$partido->id_equipa1])) {
-                $clsf[$partido->id_equipa1] = $this->_initClasificacion($partido->id_equipa1);
+        if(empty($clsf[$partido->id_equipa1])) {
+            $clsf[$partido->id_equipa1] = $this->_initClasificacion($partido->id_equipa1);
+        }
+        if(empty($clsf[$partido->id_equipa2])) {
+            $clsf[$partido->id_equipa2] = $this->_initClasificacion($partido->id_equipa2);
+        }
+        $clsf[$partido->id_equipa1]->golesFavor += $partido->goles_equipa1;
+        $clsf[$partido->id_equipa2]->golesFavor += $partido->goles_equipa2;
+        $clsf[$partido->id_equipa1]->golesContra += $partido->goles_equipa2;
+        $clsf[$partido->id_equipa2]->golesContra += $partido->goles_equipa1;
+        $clsf[$partido->id_equipa1]->tantosFavor += $partido->tantos_equipa1;
+        $clsf[$partido->id_equipa2]->tantosFavor += $partido->tantos_equipa2;
+        $clsf[$partido->id_equipa1]->tantosContra += $partido->tantos_equipa2;
+        $clsf[$partido->id_equipa2]->tantosContra += $partido->tantos_equipa1;
+        $clsf[$partido->id_equipa1]->totalFavor += $partido->getPuntuacionTotalEquipa1();
+        $clsf[$partido->id_equipa2]->totalFavor += $partido->getPuntuacionTotalEquipa2();
+        $clsf[$partido->id_equipa1]->totalContra += $partido->getPuntuacionTotalEquipa2();
+        $clsf[$partido->id_equipa2]->totalContra += $partido->getPuntuacionTotalEquipa1();
+        $ganador = $partido->getGanador();
+        if(!empty($ganador)) {
+            $clsf[$partido->id_equipa1]->partidosXogados++;
+            $clsf[$partido->id_equipa2]->partidosXogados++;
+            if($ganador==='L') {
+                $clsf[$partido->id_equipa1]->puntos += 2;
+                $clsf[$partido->id_equipa1]->partidosGanados++;
+                $clsf[$partido->id_equipa2]->partidosPerdidos++;
+            } elseif($ganador==='V') {
+                $clsf[$partido->id_equipa2]->puntos += 2;
+                $clsf[$partido->id_equipa1]->partidosPerdidos++;
+                $clsf[$partido->id_equipa2]->partidosGanados++;
+            } elseif($ganador==='E') {
+                $clsf[$partido->id_equipa1]->puntos++;
+                $clsf[$partido->id_equipa2]->puntos++;
+                $clsf[$partido->id_equipa1]->partidosEmpatados++;
+                $clsf[$partido->id_equipa2]->partidosEmpatados++;
             }
-            if(empty($clsf[$partido->id_equipa2])) {
-                $clsf[$partido->id_equipa2] = $this->_initClasificacion($partido->id_equipa2);
-            }
-            $clsf[$partido->id_equipa1]->golesFavor += $partido->goles_equipa1;
-            $clsf[$partido->id_equipa2]->golesFavor += $partido->goles_equipa2;
-            $clsf[$partido->id_equipa1]->golesContra += $partido->goles_equipa2;
-            $clsf[$partido->id_equipa2]->golesContra += $partido->goles_equipa1;
-            $clsf[$partido->id_equipa1]->tantosFavor += $partido->tantos_equipa1;
-            $clsf[$partido->id_equipa2]->tantosFavor += $partido->tantos_equipa2;
-            $clsf[$partido->id_equipa1]->tantosContra += $partido->tantos_equipa2;
-            $clsf[$partido->id_equipa2]->tantosContra += $partido->tantos_equipa1;
-            $clsf[$partido->id_equipa1]->totalFavor += $partido->getPuntuacionTotalEquipa1();
-            $clsf[$partido->id_equipa2]->totalFavor += $partido->getPuntuacionTotalEquipa2();
-            $clsf[$partido->id_equipa1]->totalContra += $partido->getPuntuacionTotalEquipa2();
-            $clsf[$partido->id_equipa2]->totalContra += $partido->getPuntuacionTotalEquipa1();
-            $ganador = $partido->getGanador();
-            if(!empty($ganador)) {
-                $clsf[$partido->id_equipa1]->partidosXogados++;
-                $clsf[$partido->id_equipa2]->partidosXogados++;
-                if($ganador==='L') {
-                    $clsf[$partido->id_equipa1]->puntos += 2;
-                    $clsf[$partido->id_equipa1]->partidosGanados++;
-                    $clsf[$partido->id_equipa2]->partidosPerdidos++;
-                } elseif($ganador==='V') {
-                    $clsf[$partido->id_equipa2]->puntos += 2;
-                    $clsf[$partido->id_equipa1]->partidosPerdidos++;
-                    $clsf[$partido->id_equipa2]->partidosGanados++;
-                } elseif($ganador==='E') {
-                    $clsf[$partido->id_equipa1]->puntos++;
-                    $clsf[$partido->id_equipa2]->puntos++;
-                    $clsf[$partido->id_equipa1]->partidosEmpatados++;
-                    $clsf[$partido->id_equipa2]->partidosEmpatados++;
-                }
-            }
-            return $clsf;
+        }
+        return $clsf;
     }
 
     private function _initClasificacion($id) {

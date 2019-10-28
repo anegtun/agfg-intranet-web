@@ -23,18 +23,25 @@ class ClasificacionController extends AppController {
 
     public function competicion($uuid) {
         $competicion = $this->Competicions->find()->where(['Competicions.uuid'=>$uuid])->first();
+        $categoria = $this->request->getQuery('categoria');
         if(empty($competicion)) {
             throw new Exception("Non existe competición");
         }
+        if(empty($categoria)) {
+            throw new Exception("Hai que especificar categoría");
+        }
         
-        $equipas = $this->Equipas->findMap();
-
+        if(!empty($categoria)) {
+            $conditions[] = $categoria;
+        }
         $partidos = $this->Partidos
             ->find()
             ->join(['table'=>'agfg_xornada', 'alias'=>'Xornadas', 'conditions'=>['Xornadas.id = Partidos.id_xornada']])
             ->join(['table'=>'agfg_fase', 'alias'=>'Fases', 'conditions'=>['Fases.id = Xornadas.id_fase']])
-            ->where(['Fases.id_competicion'=>$competicion->id]);
+            ->where(['Fases.id_competicion'=>$competicion->id, 'Fases.categoria'=>$categoria]);
         
+        $equipas = $this->Equipas->findMap();
+
         $clsf = new Clasificacion($equipas, $partidos);
         $clsf->build();
         $clsf->desempatar();
