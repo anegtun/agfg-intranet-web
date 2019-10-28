@@ -19,19 +19,22 @@ $emptyTemplates = [
             <?= $this->Form->hidden('id_competicion') ?>
             <fieldset>
                 <legend>Fase</legend>
+                <?= $this->Form->control('categoria', ['options'=>$categorias, 'label'=>'Categoría']) ?>
                 <?= $this->Form->control('nome', ['label'=>'Nome']) ?>
                 <?= $this->Form->control('id_fase_pai', ['options'=>$this->AgfgForm->objectToKeyValue($outras_fases,'id','nome'), 'label'=>'Fase pai']) ?>
 
-                <label for="equipas">Equipas participantes</label>
-                <?= $this->Form->control('equipas', [
-                        'label'=>false,
-                        'multiple' => 'checkbox',
-                        'options' => $this->AgfgForm->objectToKeyValue($equipas,'id','nome',false),
-                        'templates'=>[
-                            'checkboxWrapper' => '{{label}}',
-                            'nestingLabel' => '<label{{attrs}}>{{input}} {{text}}</label><br/>']
-                    ]);
-                ?>
+                <?php if(!empty($fase->id)) : ?>
+                    <label for="equipas">Equipas participantes</label>
+                    <?= $this->Form->control('equipas', [
+                            'label'=>false,
+                            'multiple' => 'checkbox',
+                            'options' => $this->AgfgForm->objectToKeyValue($equipas,'id','nome',false),
+                            'templates'=>[
+                                'checkboxWrapper' => '{{label}}',
+                                'nestingLabel' => '<label{{attrs}}>{{input}} {{text}}</label><br/>']
+                        ]);
+                    ?>
+                <?php endif ?>
 
                 <?= $this->Form->button('Gardar', ['class'=>'btn btn-primary']); ?>
             </fieldset>

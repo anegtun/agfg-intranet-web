@@ -12,7 +12,6 @@ $this->set('cabeceiraMigas', [['label'=>'Competicións']]);
                     <tr>
                         <th class="celda-titulo">Tempada</th>
                         <th class="celda-titulo">Nome</th>
-                        <th class="celda-titulo">Categoría</th>
                         <th class="celda-titulo">Tipo</th>
                         <th class="celda-titulo">UUID</th>
                         <th class="celda-titulo"></th>
@@ -24,7 +23,6 @@ $this->set('cabeceiraMigas', [['label'=>'Competicións']]);
                         <tr>
                             <td><?= $tempadas[$c->tempada] ?></td>
                             <td><?= $c->nome ?></td>
-                            <td><?= empty($c->categoria) ? '' : $categorias[$c->categoria] ?></td>
                             <td><?= empty($c->tipo) ? '' : $tiposCompeticion[$c->tipo] ?></td>
                             <td><?= $c->uuid ?></td>
                             <td class="text-center"><?= $this->AgfgForm->editButton(['action'=>'detalle', $c->id]) ?></td>
