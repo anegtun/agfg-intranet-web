@@ -61,27 +61,39 @@ class agfg_Clasificacion_Widget extends WP_Widget {
         $calendar = ! empty( $instance['id_calendario'] ) ? $instance['id_calendario'] : '';
         $categoria = ! empty( $instance['categoria'] ) ? $instance['categoria'] : '';
         $urlResultados = ! empty( $instance['url_resultados'] ) ? $instance['url_resultados'] : '';
-        echo
+
+        $competicionsUrl = "https://intranet.gaelicogalego.gal/mestras/competicions.json?tipo=liga";
+        $competicionsResponse = wp_remote_get($competicionsUrl);
+        $competicions = json_decode($competicionsResponse['body']);
+        $html =
             "<p>
                 <label for='".$this->get_field_id('title')."'>Titulo:</label>
                 <input type='text' id='".$this->get_field_id('title')."' name='".$this->get_field_name('title')."' value='".esc_attr( $title )."' class='widefat' />
-            </p>
-            <p>
-                <label for='".$this->get_field_id('id_calendario')."'>ID calendario (Intranet AGFG):</label>
-                <input type='text' id='".$this->get_field_id('id_calendario')."' name='".$this->get_field_name('id_calendario')."' value='".esc_attr( $calendar )."' class='widefat' />
-            </p>
-            <p>
+            </p>";
+        $html .=
+            "<p>
                 <label for='".$this->get_field_id('categoria')."'>Categoría:</label>
                 <select id='".$this->get_field_id('categoria')."' name='".$this->get_field_name('categoria')."' value='".esc_attr( $categoria )."' class='widefat'>
                     <option value=''></option>
-                    <option value='F' ".(!empty($categoria)&&$categoria==='F'?"selected='selected'":'').">Feminina</option>
-                    <option value='M' ".(!empty($categoria)&&$categoria==='M'?"selected='selected'":'').">Masculina</option>
+                    <option value='F' ".($categoria==='F'?"selected='selected'":'').">Feminina</option>
+                    <option value='M' ".($categoria==='M'?"selected='selected'":'').">Masculina</option>
                 </select>
-            </p>
-            <p>
+            </p>";
+        $html .=
+            "<p>
+                <label for='".$this->get_field_id('id_calendario')."'>Competición:</label>
+                <select id='".$this->get_field_id('id_calendario')."' name='".$this->get_field_name('id_calendario')."' class='widefat'>
+                    <option value=''></option>";
+        foreach($competicions as $c) {
+            $html .= "<option value='{$c->id}' ".($c->id===$calendar?" selected='selected'":"").">$c->nome</option>";
+        }
+        $html .= "</select></p>";
+        $html .=
+            "<p>
                 <label for='".$this->get_field_id('url_resultados')."'>URL resultados:</label>
                 <input type='text' id='".$this->get_field_id('url_resultados')."' name='".$this->get_field_name('url_resultados')."' value='".esc_attr( $urlResultados )."' class='widefat' />
             </p>";
+        echo $html;
     }
     
     public function update($new_instance, $old_instance) {

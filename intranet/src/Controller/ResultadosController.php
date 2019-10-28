@@ -34,16 +34,35 @@ class ResultadosController extends AppController {
 
     public function competicion($id) {
         $competicion = $this->Competicions->get($id, ['contain'=>['Fases']]);
+        $xornadas = [];
         foreach($competicion->fases as $f) {
-            $f->xornadas = $this->Xornadas->find()->where(['id_fase'=>$f->id]);
-            foreach($f->xornadas as $x) {
-                $x->partidos = $this->Partidos->find()->where(['id_xornada'=>$x->id])->order(['data_partido','hora_partido']);
+            $xornadasFase = $this->Xornadas->find()->where(['id_fase'=>$f->id]);
+            foreach($xornadasFase as $x) {
+                $key = $x->data->format('Y-m-d');
+                if(empty($xornadas[$key])) {
+                    $xornadas[$key] = $x;
+                    $xornadas[$key]->partidos = [];
+                }
+                $partidos = $this->Partidos->find()->where(['id_xornada'=>$x->id])->order(['data_partido','hora_partido']);
+                foreach($partidos as $p) {
+                    $p->categoria = $f->categoria;
+                    $xornadas[$key]->partidos[] = $p;
+                }
+                usort($xornadas[$key]->partidos, function($a, $b) {
+                    if(empty($b->data_partido)) {
+                        return -1;
+                    }
+                    if(empty($a->data_partido)) {
+                        return 1;
+                    }
+                    return ((int)$a->data_partido->toUnixString()) - ((int)$b->data_partido->toUnixString()) + strcmp($a->hora_partido, $b->hora_partido);
+                });
             }
         }
         $arbitros = $this->Arbitros->findMap();
         $campos = $this->Campos->findMap();
         $equipas = $this->Equipas->findMap();
-        $this->set(compact('competicion', 'arbitros', 'campos', 'equipas'));
+        $this->set(compact('competicion', 'xornadas', 'arbitros', 'campos', 'equipas'));
     }
 
     public function partido($id) {
