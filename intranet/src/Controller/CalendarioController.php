@@ -34,13 +34,20 @@ class CalendarioController extends RestController {
             'xornadas' => []
         ];
         foreach($fases as $f) {
-            $xornadas = $this->Xornadas->find()->where(['id_fase'=>$f->id])->order(['numero ASC']);
-            foreach($xornadas as $x) {
+            $xornadasFase = $this->Xornadas->find()->where(['id_fase'=>$f->id])->order(['data ASC']);
+            foreach($xornadasFase as $x) {
                 $resX = [
-                    'numero' => $x->numero,
                     'data' => $x->data,
                     'partidos' => []
                 ];
+                $index = -1;
+                foreach($res['xornadas'] as $i=>$xJson) {
+                    if($xJson['data']==$x->data) {
+                        $resX = $xJson;
+                        $index = $i;
+                        break;
+                    }
+                }
                 $partidos = $this->Partidos->find()->where(['id_xornada'=>$x->id]);
                 foreach($partidos as $p) {
                     $resP = [
@@ -79,7 +86,11 @@ class CalendarioController extends RestController {
                     }
                     $resX['partidos'][] = $resP;
                 }
-                $res['xornadas'][] = $resX;
+                if($index>0) {
+                    $res['xornadas'][$index] = $resX;
+                } else {
+                    $res['xornadas'][] = $resX;
+                }
             }
         }
         $this->set($res);
