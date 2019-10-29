@@ -1,7 +1,7 @@
 <?php
 namespace App\Controller;
 
-use App\Controller\AppController;
+use App\Controller\RestController;
 use App\Model\Categorias;
 use App\Model\Competicions;
 use App\Model\Tempadas;
@@ -10,13 +10,10 @@ use Cake\Core\Exception\Exception;
 use Cake\Event\Event;
 use Cake\ORM\TableRegistry;
 
-class MestrasController extends AppController {
+class MestrasController extends RestController {
     
     public function initialize() {
         parent::initialize();
-        $this->loadComponent('RequestHandler');
-        $this->Auth->allow(['competicions']);
-
         $this->Competicions = TableRegistry::get('Competicions');
         $this->Categorias = new Categorias();
         $this->Tempadas = new Tempadas();

@@ -1,19 +1,16 @@
 <?php
 namespace App\Controller;
 
-use App\Controller\AppController;
+use App\Controller\RestController;
 use App\Model\Clasificacion;
 use Cake\Core\Exception\Exception;
 use Cake\Event\Event;
 use Cake\ORM\TableRegistry;
 
-class ClasificacionController extends AppController {
+class ClasificacionController extends RestController {
     
     public function initialize() {
         parent::initialize();
-        $this->loadComponent('RequestHandler');
-        $this->Auth->allow(['competicion']);
-
         $this->Competicions = TableRegistry::get('Competicions');
         $this->Fases = TableRegistry::get('Fases');
         $this->Equipas = TableRegistry::get('Equipas');
