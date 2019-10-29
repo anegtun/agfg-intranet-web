@@ -48,17 +48,10 @@ class ResultadosController extends AppController {
                     $p->categoria = $f->categoria;
                     $xornadas[$key]->partidos[] = $p;
                 }
-                usort($xornadas[$key]->partidos, function($a, $b) {
-                    if(empty($b->data_partido)) {
-                        return -1;
-                    }
-                    if(empty($a->data_partido)) {
-                        return 1;
-                    }
-                    return ((int)$a->data_partido->toUnixString()) - ((int)$b->data_partido->toUnixString()) + strcmp($a->hora_partido, $b->hora_partido);
-                });
+                usort($xornadas[$key]->partidos, [$this,'cmpPartido']);
             }
         }
+        usort($xornadas, [$this,'cmpXornada']);
         $arbitros = $this->Arbitros->findMap();
         $campos = $this->Campos->findMap();
         $equipas = $this->Equipas->findMap();
@@ -99,4 +92,30 @@ class ResultadosController extends AppController {
         $this->render('partido');
     }
 
+    /**
+     * Ordena os partidos dunha xornada, por data/hora e, senon, por equipa local
+     */
+    private function cmpPartido($a, $b) {
+        $cmp = 0;
+        if(!empty($a->data_partido) && !empty($b->data_partido)) {
+            $cmp = ((int)$a->data_partido->toUnixString()) - ((int)$b->data_partido->toUnixString());
+            if($cmp===0) {
+                $cmp = strcmp($a->hora_partido, $b->hora_partido);
+            }
+        }
+        if(empty($cmp)) {
+            $equipaLocalA = $this->Equipas->get($a->id_equipa1);
+            $equipaLocalB = $this->Equipas->get($b->id_equipa1);
+            $cmp = strcoll($equipaLocalA->nome, $equipaLocalB->nome);
+        }
+        return $cmp;
+    }
+
+    /**
+     * Ordena as xornadas por data
+     */
+    private function cmpXornada($a, $b) {
+        return ((int)$a->data->toUnixString()) - ((int)$b->data->toUnixString());
+    }
+    
 }

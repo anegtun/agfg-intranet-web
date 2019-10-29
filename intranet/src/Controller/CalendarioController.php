@@ -1,19 +1,16 @@
 <?php
 namespace App\Controller;
 
-use App\Controller\AppController;
+use App\Controller\RestController;
 use App\Model\Categorias;
 use Cake\Core\Exception\Exception;
 use Cake\Event\Event;
 use Cake\ORM\TableRegistry;
 
-class CalendarioController extends AppController {
+class CalendarioController extends RestController {
     
     public function initialize() {
         parent::initialize();
-        $this->loadComponent('RequestHandler');
-        $this->Auth->allow(['competicion']);
-
         $this->Campos = TableRegistry::get('Campos');
         $this->Competicions = TableRegistry::get('Competicions');
         $this->Fases = TableRegistry::get('Fases');
