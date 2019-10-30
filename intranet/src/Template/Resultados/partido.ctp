@@ -38,25 +38,53 @@ $emptyTemplates = [
                 </div>
             </div>
             <div class="row">
-                <div class="form-group col-lg-3" style="padding-top: 1.5em;">
+                <h3>
+                    <?= $this->Html->image($equipas[$partido->id_equipa1]->logo, ['width'=>30]) ?>&nbsp;
                     <?= $equipas[$partido->id_equipa1]->nome ?>
-                </div>
+                </h3>
+            </div>
+            <div class="row">
                 <div class="form-group col-lg-1">
                     <?= $this->Form->control('goles_equipa1', ['class'=>'form-control','label'=>'Goles', 'templates'=>$emptyTemplates]) ?>
                 </div>
                 <div class="form-group col-lg-1">
                     <?= $this->Form->control('tantos_equipa1', ['class'=>'form-control','label'=>'Tantos', 'templates'=>$emptyTemplates]) ?>
                 </div>
+                <div class="form-group col-lg-1">
+                    <?= $this->Form->control('total_equipa1', ['class'=>'form-control','label'=>'Total', 'templates'=>$emptyTemplates]) ?>
+                </div>
             </div>
             <div class="row">
-                <div class="form-group col-lg-3" style="padding-top: 1.5em;">
-                    <?= $equipas[$partido->id_equipa2]->nome ?>
+                <div class="form-group col-lg-2">
+                    <?= $this->Form->checkbox('non_presentado_equipa1', ['templates'=>$emptyTemplates]) ?> Non presentado
                 </div>
+                <div class="form-group col-lg-1">
+                    <?= $this->Form->control('sancion_puntos_equipa1', ['class'=>'form-control','label'=>'Sanción pts.', 'templates'=>$emptyTemplates]) ?>
+                </div>
+            </div>
+            <div class="row">
+                <h3>
+                    <?= $this->Html->image($equipas[$partido->id_equipa2]->logo, ['width'=>30]) ?>&nbsp;
+                    <?= $equipas[$partido->id_equipa2]->nome ?>
+                </h3>
+            </div>
+            <div class="row">
                 <div class="form-group col-lg-1">
                     <?= $this->Form->control('goles_equipa2', ['class'=>'form-control','label'=>'Goles', 'templates'=>$emptyTemplates]) ?>
                 </div>
                 <div class="form-group col-lg-1">
                     <?= $this->Form->control('tantos_equipa2', ['class'=>'form-control','label'=>'Tantos', 'templates'=>$emptyTemplates]) ?>
+                </div>
+                <div class="form-group col-lg-1">
+                    <?= $this->Form->control('total_equipa2', ['class'=>'form-control','label'=>'Total', 'templates'=>$emptyTemplates]) ?>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-lg-2">
+                    <?= $this->Form->checkbox('non_presentado_equipa2', ['templates'=>$emptyTemplates]) ?> Non presentado
+                </div>
+                <div class="form-group col-lg-1">
+                    <?= $this->Form->control('sancion_puntos_equipa2', ['class'=>'form-control','label'=>'Sanción pts.', 'templates'=>$emptyTemplates]) ?>
                 </div>
             </div>
             <?= $this->Form->button('Gardar', ['class'=>'btn btn-primary']); ?>
