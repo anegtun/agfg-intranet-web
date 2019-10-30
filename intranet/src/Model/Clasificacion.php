@@ -124,6 +124,19 @@ class Clasificacion {
                 $clsf[$partido->id_equipa2]->partidosEmpatados++;
             }
         }
+        // Puntos de sanción por partido (non pode baixar de 0)
+        if(!empty($partido->sancion_puntos_equipa1)) {
+            $clsf[$partido->id_equipa1]->puntos -= $partido->sancion_puntos_equipa1;
+            if($clsf[$partido->id_equipa1]->puntos < 0) {
+                $clsf[$partido->id_equipa1]->puntos = 0;
+            }
+        }
+        if(!empty($partido->sancion_puntos_equipa2)) {
+            $clsf[$partido->id_equipa2]->puntos -= $partido->sancion_puntos_equipa2;
+            if($clsf[$partido->id_equipa2]->puntos < 0) {
+                $clsf[$partido->id_equipa2]->puntos = 0;
+            }
+        }
         return $clsf;
     }
 

@@ -65,7 +65,8 @@ class CalendarioController extends RestController {
                             'logo' => $equipas[$p->id_equipa1]->logo,
                             'goles' => $p->goles_equipa1,
                             'tantos' => $p->tantos_equipa1,
-                            'total' => $p->getPuntuacionTotalEquipa1()
+                            'total' => $p->getPuntuacionTotalEquipa1(),
+                            'non_presentado' => $p->non_presentado_equipa1
                         ];
                     }
                     if(!empty($p->id_equipa2)) {
@@ -75,7 +76,8 @@ class CalendarioController extends RestController {
                             'logo' => $equipas[$p->id_equipa2]->logo,
                             'goles' => $p->goles_equipa2,
                             'tantos' => $p->tantos_equipa2,
-                            'total' => $p->getPuntuacionTotalEquipa2()
+                            'total' => $p->getPuntuacionTotalEquipa2(),
+                            'non_presentado' => $p->non_presentado_equipa2
                         ];
                     }
                     if(!empty($p->id_campo)) {
