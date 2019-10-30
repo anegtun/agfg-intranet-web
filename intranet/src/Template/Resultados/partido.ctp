@@ -39,7 +39,9 @@ $emptyTemplates = [
             </div>
             <div class="row">
                 <h3>
-                    <?= $this->Html->image($equipas[$partido->id_equipa1]->logo, ['width'=>30]) ?>&nbsp;
+                    <?php if(!empty($equipas[$partido->id_equipa1]->logo)) : ?>
+                        <?= $this->Html->image($equipas[$partido->id_equipa1]->logo, ['width'=>30]) ?>&nbsp;
+                    <?php endif ?>
                     <?= $equipas[$partido->id_equipa1]->nome ?>
                 </h3>
             </div>
@@ -64,7 +66,9 @@ $emptyTemplates = [
             </div>
             <div class="row">
                 <h3>
-                    <?= $this->Html->image($equipas[$partido->id_equipa2]->logo, ['width'=>30]) ?>&nbsp;
+                    <?php if(!empty($equipas[$partido->id_equipa2]->logo)) : ?>
+                        <?= $this->Html->image($equipas[$partido->id_equipa2]->logo, ['width'=>30]) ?>&nbsp;
+                    <?php endif ?>
                     <?= $equipas[$partido->id_equipa2]->nome ?>
                 </h3>
             </div>
