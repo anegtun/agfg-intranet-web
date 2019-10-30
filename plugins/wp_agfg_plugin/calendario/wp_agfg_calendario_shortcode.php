@@ -9,6 +9,8 @@ function wp_agfg_calendario_shortcode($atts) {
     }
     $response = wp_remote_get($url);
     $data = json_decode($response['body']);
+
+    $diasSemana = ['Dom','Lun','Mar','Mér','Xov','Ven','Sáb'];
     
     $html = "<style>";
     $html .= ".calendario-full-new .partido table { border: 0 !important; }";
@@ -26,7 +28,11 @@ function wp_agfg_calendario_shortcode($atts) {
         $html .= "<h4>Xornada {$x->numero} ({$d})</h4>";
         foreach($x->partidos as $p) {
             $resultado1 = $resultado2 = '-';
-            if(!empty($p->ganador)) {
+            if(!empty($p->equipa1->non_presentado)) {
+                $resultado1 = 'N.P.';
+            } elseif(!empty($p->equipa2->non_presentado)) {
+                $resultado2 = 'N.P.';
+            } elseif(!empty($p->ganador)) {
                 $resultado1 = sprintf('%01d', $p->equipa1->goles)."-".sprintf('%02d', $p->equipa1->tantos)." (".sprintf('%02d', $p->equipa1->total).")";
                 $resultado2 = sprintf('%01d', $p->equipa2->goles)."-".sprintf('%02d', $p->equipa2->tantos)." (".sprintf('%02d', $p->equipa2->total).")";
             }
@@ -35,14 +41,15 @@ function wp_agfg_calendario_shortcode($atts) {
                 $dataPartidoDate = strtotime($p->data_partido);
                 $dataStr = date('d/m', $dataPartidoDate);
                 $horaStr = date('H:i', $dataPartidoDate);
-                $dataPartido = $dataStr;
+                $diaStr = date('w', $dataPartidoDate);
+                $dataPartido = "$diasSemana[$diaStr] $dataStr";
                 if($horaStr!=='00:00') {
-                    $dataPartido .= ' - '.$horaStr;
+                    $dataPartido .= " - $horaStr";
                 }
             }
             $dataStyle = "";
             if(!empty($p->adiado)) {
-                $dataPartido .= ' (ADIADO)';
+                $dataPartido .= ' (adiado)';
                 $dataStyle = 'color:#c54242';
             }
             $campo = empty($p->campo) ? 'Pte. campo' : ($p->campo->nome.' ('.$p->campo->pobo.')');
