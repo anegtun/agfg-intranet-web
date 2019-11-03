@@ -1,0 +1,10 @@
+/** Sobrescritura de Bootstrap de MAQINT **/
+
+table .text-warning {
+    color: #d49f00 !important;
+}
+
+.partido-check {
+    height: 67px;
+    padding-top: 2em;
+}

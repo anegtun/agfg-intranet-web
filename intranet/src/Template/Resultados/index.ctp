@@ -12,9 +12,8 @@ $this->set('cabeceiraMigas', [['label'=>'Horarios e resultados']]);
                     <tr>
                         <th class="celda-titulo">Nome</th>
                         <th class="celda-titulo">Tempada</th>
-                        <th class="celda-titulo">Categoría</th>
                         <th class="celda-titulo">Tipo</th>
-                        <th class="celda-titulo">UUID</th>
+                        <th class="celda-titulo">ID</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -22,7 +21,6 @@ $this->set('cabeceiraMigas', [['label'=>'Horarios e resultados']]);
                         <tr>
                             <td><?= $this->Html->link($c->nome, ['action'=>'competicion', $c->id]) ?></td>
                             <td><?= $tempadas[$c->tempada] ?></td>
-                            <td><?= empty($c->categoria) ? '' : $categorias[$c->categoria] ?></td>
                             <td><?= empty($c->tipo) ? '' : $tiposCompeticion[$c->tipo] ?></td>
                             <td><?= $c->uuid ?></td>
                         </tr>

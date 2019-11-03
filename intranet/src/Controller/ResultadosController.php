@@ -26,7 +26,6 @@ class ResultadosController extends AppController {
     }
 
     public function index() {
-        $this->set('categorias', $this->Categorias->getCategorias());
         $this->set('tempadas', $this->Tempadas->getTempadas());
         $this->set('tiposCompeticion', $this->TiposCompeticion->getTipos());
         $this->set('competicions', $this->Competicions->find('all', ['order'=>'tempada DESC','nome']));
@@ -69,19 +68,15 @@ class ResultadosController extends AppController {
         $arbitros = $this->Arbitros->findMap();
         $campos = $this->Campos->findMap();
         $equipas = $this->Equipas->findMap();
-        $this->set(compact('partido', 'arbitros', 'campos', 'equipas'));
+        $categorias = $this->Categorias->getCategorias();
+        $this->set(compact('partido', 'arbitros', 'campos', 'equipas', 'categorias'));
     }
 
     public function gardar() {
         $partido = $this->Competicions->newEntity();
         if ($this->request->is('post') || $this->request->is('put')) {
             $data = $this->request->getData();
-            $partido = $this->Partidos->patchEntity($partido, $data);
-            $partido->data_partido = empty($data['data']) ? NULL : Time::createFromFormat('d-m-Y', $data['data']);
-            $partido->goles_equipa1 = empty($data['goles_equipa1']) ? NULL : $data['goles_equipa1'];
-            $partido->tantos_equipa1 = empty($data['tantos_equipa1']) ? NULL : $data['tantos_equipa1'];
-            $partido->goles_equipa2 = empty($data['goles_equipa2']) ? NULL : $data['goles_equipa2'];
-            $partido->tantos_equipa2 = empty($data['tantos_equipa2']) ? NULL : $data['tantos_equipa2'];
+            $partido = $this->processGameForm($partido, $data);
             if ($this->Partidos->save($partido)) {
                 $this->Flash->success(__('Gardáronse os datos do partido correctamente.'));
                 return $this->redirect(['action'=>'competicion', $data['id_competicion']]);
@@ -116,6 +111,34 @@ class ResultadosController extends AppController {
      */
     private function cmpXornada($a, $b) {
         return ((int)$a->data->toUnixString()) - ((int)$b->data->toUnixString());
+    }
+
+    /**
+     * Procesa o formulario dun partido
+     */
+    private function processGameForm($partido, $data) {
+        $p = $this->Partidos->patchEntity($partido, $data);
+        $p->data_partido = empty($data['data']) ? NULL : Time::createFromFormat('d-m-Y', $data['data']);
+        $p->goles_equipa1 = $this->clean($data['goles_equipa1']);
+        $p->tantos_equipa1 = $this->clean($data['tantos_equipa1']);
+        $p->total_equipa1 = $this->clean($data['total_equipa1']);
+        $p->goles_equipa2 = $this->clean($data['goles_equipa2']);
+        $p->tantos_equipa2 = $this->clean($data['tantos_equipa2']);
+        $p->total_equipa2 = $this->clean($data['total_equipa2']);
+        if(!is_null($p->goles_equipa1) || !is_null($p->tantos_equipa1)) {
+            $p->total_equipa1 = NULL;
+        }
+        if(!is_null($p->goles_equipa2) || !is_null($p->tantos_equipa2)) {
+            $p->total_equipa2 = NULL;
+        }
+        return $p;
+    }
+
+    /**
+     * Forza NULL en caso de cadea baleira
+     */
+    private function clean($str) {
+        return $str==='' ? NULL : $str;
     }
     
 }
