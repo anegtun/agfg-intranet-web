@@ -29,21 +29,26 @@ $this->set('cabeceiraMigas', [
                             <th colspan="14"><?= "Xornada ".$x->data->format('d/m/Y') ?></th>
                         </tr>
                         <?php foreach($x->partidos as $p) : ?>
-                            <tr style="<?= ($p->non_presentado_equipa1 || $p->non_presentado_equipa2)?'color:#bd2130':''?>">
-                                <td style="<?= empty($p->adiado)?'':'color:#c69500'?>"><?= empty($d=$p->formatDataHora()) ? '-' : $d ?></td>
-                                <td><?= $p->categoria ?></td>
-                                <td class="text-center"><?= empty($equipas[$p->id_equipa1]->logo) ? '' : $this->Html->image($equipas[$p->id_equipa1]->logo, ['width'=>30,'height'=>30]) ?></td>
-                                <td><?= $equipas[$p->id_equipa1]->nome ?></td>
-                                <td><?= $p->formatPuntuacionEquipa1() ?></td>
-                                <td><?= empty($p->non_presentado_equipa1) ? '' : "[-{$p->sancion_puntos_equipa1}pt]" ?></td>
-                                <td class="text-center"><?= empty($equipas[$p->id_equipa2]->logo) ? '' : $this->Html->image($equipas[$p->id_equipa2]->logo, ['width'=>30,'height'=>30]) ?></td>
-                                <td><?= $equipas[$p->id_equipa2]->nome ?></td>
-                                <td><?= $p->formatPuntuacionEquipa2() ?></td>
-                                <td><?= empty($p->non_presentado_equipa2) ? '' : "[-{$p->sancion_puntos_equipa2}pt]" ?></td>
-                                <td><?= empty($p->id_campo) ? '-' : $campos[$p->id_campo]->nome ?></td>
-                                <td><?= empty($p->id_arbitro) ? '-' : $arbitros[$p->id_arbitro]->alcume ?></td>
-                                <td><?= $p->getGanador() ?></td>
-                                <td>
+                            <?php
+                                $rowClass = ($p->non_presentado_equipa1 || $p->non_presentado_equipa2 
+                                    || !empty($p->sancion_puntos_equipa1) || !empty($p->sancion_puntos_equipa2))
+                                        ? 'bg-danger text-danger' : '';
+                            ?>
+                            <tr>
+                                <td class="<?= $rowClass ?> <?= $p->adiado?'text-warning':''?>"><?= empty($d=$p->formatDataHora()) ? '-' : $d ?></td>
+                                <td class="<?= $rowClass ?>"><?= $p->categoria ?></td>
+                                <td class="<?= $rowClass ?> text-center"><?= empty($equipas[$p->id_equipa1]->logo) ? '' : $this->Html->image($equipas[$p->id_equipa1]->logo, ['width'=>30,'height'=>30]) ?></td>
+                                <td class="<?= $rowClass ?>"><?= $equipas[$p->id_equipa1]->nome ?></td>
+                                <td class="<?= $rowClass ?>"><?= $p->formatPuntuacionEquipa1() ?></td>
+                                <td class="<?= $rowClass ?>"><?= !empty($p->sancion_puntos_equipa1) ? "[-{$p->sancion_puntos_equipa1}pt]" : '' ?></td>
+                                <td class="<?= $rowClass ?> text-center"><?= empty($equipas[$p->id_equipa2]->logo) ? '' : $this->Html->image($equipas[$p->id_equipa2]->logo, ['width'=>30,'height'=>30]) ?></td>
+                                <td class="<?= $rowClass ?>"><?= $equipas[$p->id_equipa2]->nome ?></td>
+                                <td class="<?= $rowClass ?>"><?= $p->formatPuntuacionEquipa2() ?></td>
+                                <td class="<?= $rowClass ?>"><?= !empty($p->sancion_puntos_equipa2) ? "[-{$p->sancion_puntos_equipa2}pt]" : '' ?></td>
+                                <td class="<?= $rowClass ?>"><?= empty($p->id_campo) ? '-' : $campos[$p->id_campo]->nome ?></td>
+                                <td class="<?= $rowClass ?>"><?= empty($p->id_arbitro) ? '-' : $arbitros[$p->id_arbitro]->alcume ?></td>
+                                <td class="<?= $rowClass ?>"><?= $p->getGanador() ?></td>
+                                <td class="<?= $rowClass ?>">
                                     <?= $this->Html->link('', ['action'=>'partido', $p->id], ['class'=>'glyphicon glyphicon-edit']); ?>
                                 </td>
                             </tr>
