@@ -27,15 +27,24 @@ function wp_agfg_calendario_shortcode($atts) {
         $d = date('d/m/Y', strtotime($x->data));
         $html .= "<h4>Xornada {$x->numero} ({$d})</h4>";
         foreach($x->partidos as $p) {
+            // Resultado
             $resultado1 = $resultado2 = '-';
             if(!empty($p->equipa1->non_presentado)) {
                 $resultado1 = 'N.P.';
             } elseif(!empty($p->equipa2->non_presentado)) {
                 $resultado2 = 'N.P.';
             } elseif(!empty($p->ganador)) {
-                $resultado1 = sprintf('%01d', $p->equipa1->goles)."-".sprintf('%02d', $p->equipa1->tantos)." (".sprintf('%02d', $p->equipa1->total).")";
-                $resultado2 = sprintf('%01d', $p->equipa2->goles)."-".sprintf('%02d', $p->equipa2->tantos)." (".sprintf('%02d', $p->equipa2->total).")";
+                // Para cando o resultado é descoñecido, por convención pomos un "100-0"
+                if($p->equipa1->total===100 && $p->equipa2->total===0) {
+                    $resultado1 = 'V';
+                } elseif($p->equipa2->total===100 && $p->equipa1->total===0) {
+                    $resultado2 = 'V';
+                } else {
+                    $resultado1 = format_resultado($p->equipa1);
+                    $resultado2 = format_resultado($p->equipa2);
+                }
             }
+            // Data
             $dataPartido = 'Pte. data';
             if(!empty($p->data_partido)) {
                 $dataPartidoDate = strtotime($p->data_partido);
@@ -52,7 +61,14 @@ function wp_agfg_calendario_shortcode($atts) {
                 $dataPartido .= ' (adiado)';
                 $dataStyle = 'color:#c54242';
             }
-            $campo = empty($p->campo) ? 'Pte. campo' : ($p->campo->nome.' ('.$p->campo->pobo.')');
+            // Campo
+            $campo = 'Pte. campo';
+            if(!empty($p->campo)) {
+                $campo = "{$p->campo->nome} ({$p->campo->pobo})";
+            } elseif(!empty($p->ganador)) {
+                $campo = 'Campo descoñecido';
+            }
+            // HTML
             $html .= '<div class="partido">';
             $html .= '<table>';
             $html .= "<thead><tr><th colspan='3' style='$dataStyle'>$dataPartido<br>$campo</th></tr><thead>";
@@ -75,6 +91,16 @@ function wp_agfg_calendario_shortcode($atts) {
     }
     $html .= "</div>";
     return $html;
+}
+
+function format_resultado($equipa) {
+    $resultado = "";
+    if(!is_null($equipa->goles) || !is_null($p->equipa1->goles)) {
+        $resultado = sprintf('%01d', $equipa->goles)."-".sprintf('%02d', $equipa->tantos)." (".sprintf('%02d', $equipa->total).")";
+    } else {
+        $resultado = "(".sprintf('%02d', $equipa->total).")";
+    }
+    return $resultado;
 }
 
 add_shortcode('agfg-calendario', 'wp_agfg_calendario_shortcode');
