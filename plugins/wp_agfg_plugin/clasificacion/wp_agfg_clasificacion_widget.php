@@ -35,7 +35,7 @@ class agfg_Clasificacion_Widget extends WP_Widget {
                     "<tr>
                         <td>{$equipa->posicion}</td>
                         <td>
-                            <div>
+                            <div style='text-align:left; padding-left:5px;'>
                                 <img src='{$equipa->logo}' alt='{$equipa->nome}' width='30' style='display: inline-block; height: 100%; vertical-align: middle;'>
                                 <strong style='padding-left:1em'>$equipa->codigo</strong>
                             </div>
