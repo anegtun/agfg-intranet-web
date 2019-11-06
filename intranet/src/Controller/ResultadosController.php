@@ -125,6 +125,8 @@ class ResultadosController extends AppController {
         $p->goles_equipa2 = $this->clean($data['goles_equipa2']);
         $p->tantos_equipa2 = $this->clean($data['tantos_equipa2']);
         $p->total_equipa2 = $this->clean($data['total_equipa2']);
+        $p->sancion_puntos_equipa1 = $this->clean($data['sancion_puntos_equipa1']);
+        $p->sancion_puntos_equipa2 = $this->clean($data['sancion_puntos_equipa2']);
         if(!is_null($p->goles_equipa1) || !is_null($p->tantos_equipa1)) {
             $p->total_equipa1 = NULL;
         }
