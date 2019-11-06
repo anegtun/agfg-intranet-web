@@ -9,6 +9,12 @@ function wp_agfg_calendario_shortcode($atts) {
     }
     $response = wp_remote_get($url);
     $data = json_decode($response['body']);
+    usort($data->xornadas, function($a,$b) {
+        if($a->data===NULL || $b->data===NULL) {
+            return 0;
+        }
+        return strtotime($a->data) - strtotime($b->data);
+    });
 
     $diasSemana = ['Dom','Lun','Mar','Mér','Xov','Ven','Sáb'];
     
