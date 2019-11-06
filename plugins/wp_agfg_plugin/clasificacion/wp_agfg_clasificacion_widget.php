@@ -14,10 +14,7 @@ class agfg_Clasificacion_Widget extends WP_Widget {
         $idCalendario = $instance['id_calendario'];
         $urlResultados = $instance['url_resultados'];
         $categoria = $instance['categoria'];
-        $url = "https://intranet.gaelicogalego.gal/clasificacion/competicion/$idCalendario.json";
-        if(!empty($categoria)) {
-            $url .= "?categoria=$categoria";
-        }
+        $url = "https://intranet.gaelicogalego.gal/clasificacion/competicion/$idCalendario.json?categoria=$categoria";
         $response = wp_remote_get($url);
         $clasificacion = json_decode($response['body']);
         
@@ -26,14 +23,16 @@ class agfg_Clasificacion_Widget extends WP_Widget {
             $html .= $args['before_title'] . $title . $args['after_title'];
         }
         if(!empty($clasificacion)) {
+            $orderSymbol = $categoria==='F' ? 'ª' : 'º';
             $html .=
                 '<div class="tablaClasificacion tablaClasificacion-widget">'.
                 '<table style="width: 100%;">'.
-                    '<thead><tr><th>Pos</th><th>Equipo</th><th>Ptos</th><th>XG</th><th>XE</th><th>XP</th><th>Dif.</th></tr>';
+                    '<thead><tr><th>Pos</th><th>Equipo</th><th>Ptos</th><th>XG</th><th>XE</th><th>XP</th><th>Dif.</th></tr></thead>'.
+                    '</tbody>';
             foreach($clasificacion as $equipa) {
                 $html .=
                     "<tr>
-                        <td>{$equipa->posicion}</td>
+                        <td>{$equipa->posicion}$orderSymbol</td>
                         <td>
                             <div style='text-align:left; padding-left:5px;'>
                                 <img src='{$equipa->logo}' alt='{$equipa->nome}' width='30' style='display: inline-block; height: 100%; vertical-align: middle;'>
