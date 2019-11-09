@@ -17,6 +17,13 @@ class Clasificacion {
         foreach($this->_partidos as $p) {
             $this->_processGame($this->_clasificacion, $p);
         }
+        // Calculamos puntos a partir de sancións (non pode baixar de 0)
+        foreach($this->_clasificacion as $e) {
+            $e->puntos = $e->puntos_sen_sancion - $e->puntos_sancion;
+            if($e->puntos < 0) {
+                $e->puntos = 0;
+            }
+        }
         // Ordeamos por puntos e asignamos posición
         usort($this->_clasificacion, function($a, $b) {
             return $b->puntos - $a->puntos;
@@ -110,32 +117,26 @@ class Clasificacion {
             $clsf[$partido->id_equipa1]->partidosXogados++;
             $clsf[$partido->id_equipa2]->partidosXogados++;
             if($ganador==='L') {
-                $clsf[$partido->id_equipa1]->puntos += 2;
+                $clsf[$partido->id_equipa1]->puntos_sen_sancion += 2;
                 $clsf[$partido->id_equipa1]->partidosGanados++;
                 $clsf[$partido->id_equipa2]->partidosPerdidos++;
             } elseif($ganador==='V') {
-                $clsf[$partido->id_equipa2]->puntos += 2;
+                $clsf[$partido->id_equipa2]->puntos_sen_sancion += 2;
                 $clsf[$partido->id_equipa1]->partidosPerdidos++;
                 $clsf[$partido->id_equipa2]->partidosGanados++;
             } elseif($ganador==='E') {
-                $clsf[$partido->id_equipa1]->puntos++;
-                $clsf[$partido->id_equipa2]->puntos++;
+                $clsf[$partido->id_equipa1]->puntos_sen_sancion++;
+                $clsf[$partido->id_equipa2]->puntos_sen_sancion++;
                 $clsf[$partido->id_equipa1]->partidosEmpatados++;
                 $clsf[$partido->id_equipa2]->partidosEmpatados++;
             }
         }
-        // Puntos de sanción por partido (non pode baixar de 0)
+        // Puntos de sanción por partido
         if(!empty($partido->sancion_puntos_equipa1)) {
-            $clsf[$partido->id_equipa1]->puntos -= $partido->sancion_puntos_equipa1;
-            if($clsf[$partido->id_equipa1]->puntos < 0) {
-                $clsf[$partido->id_equipa1]->puntos = 0;
-            }
+            $clsf[$partido->id_equipa1]->puntos_sancion += $partido->sancion_puntos_equipa1;
         }
         if(!empty($partido->sancion_puntos_equipa2)) {
-            $clsf[$partido->id_equipa2]->puntos -= $partido->sancion_puntos_equipa2;
-            if($clsf[$partido->id_equipa2]->puntos < 0) {
-                $clsf[$partido->id_equipa2]->puntos = 0;
-            }
+            $clsf[$partido->id_equipa2]->puntos_sancion += $partido->sancion_puntos_equipa2;
         }
         return $clsf;
     }
@@ -148,6 +149,8 @@ class Clasificacion {
             'logo' => $this->_equipas[$id]->logo,
             'posicion' => 0,
             'puntos' => 0,
+            'puntos_sen_sancion' => 0,
+            'puntos_sancion' => 0,
             'partidosXogados' => 0,
             'partidosGanados' => 0,
             'partidosEmpatados' => 0,
