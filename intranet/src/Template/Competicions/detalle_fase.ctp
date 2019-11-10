@@ -3,7 +3,7 @@ $this->extend('template');
 $this->set('cabeceiraTitulo', 'Fase competición');
 $this->set('cabeceiraMigas', [
     ['label'=>'Competicións', 'url'=>['controller'=>'Competicions', 'action'=>'index']],
-    ['label'=>'Competición', 'url'=>['controller'=>'Competicions', 'action'=>'detalle', $competicion->id]],
+    ['label'=>$competicion->nome, 'url'=>['controller'=>'Competicions', 'action'=>'detalle', $competicion->id]],
     ['label'=>'Fase']
 ]);
 $emptyTemplates = [
@@ -20,6 +20,7 @@ $emptyTemplates = [
             <fieldset>
                 <legend>Fase</legend>
                 <?= $this->Form->control('categoria', ['options'=>$categorias, 'label'=>'Categoría']) ?>
+                <?= $this->Form->control('codigo', ['label'=>'Codigo']) ?>
                 <?= $this->Form->control('nome', ['label'=>'Nome']) ?>
                 <?= $this->Form->control('id_fase_pai', ['options'=>$this->AgfgForm->objectToKeyValue($outras_fases,'id','nome'), 'label'=>'Fase pai']) ?>
 
