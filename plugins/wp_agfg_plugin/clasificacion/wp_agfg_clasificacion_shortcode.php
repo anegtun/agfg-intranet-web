@@ -19,13 +19,14 @@ function wp_agfg_clasificacion_shortcode($atts) {
                 '<thead><tr><th>Pos</th><th>Equipo</th><th>Ptos</th><th>XG</th><th>XE</th><th>XP</th><th>Dif.</th></tr></thead>'.
                 '</tbody>';
         foreach($clasificacion as $equipa) {
+            $sancions = str_repeat ("*",$equipa->puntos_sancion);
             $html .=
                 "<tr>
                     <td>{$equipa->posicion}$orderSymbol</td>
                     <td>
                         <div style='text-align:left; padding-left:5px;'>
                             <img src='{$equipa->logo}' alt='{$equipa->nome}' width='30' style='display: inline-block; height: 100%; vertical-align: middle;'>
-                            <strong style='padding-left:1em'>$equipa->nome</strong>
+                            <strong style='padding-left:1em'>$equipa->nome $sancions</strong>
                         </div>
                     </td>
                     <td>{$equipa->puntos}</td>

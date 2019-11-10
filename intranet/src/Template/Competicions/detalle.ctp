@@ -3,7 +3,7 @@ $this->extend('template');
 $this->set('cabeceiraTitulo', 'Competición');
 $this->set('cabeceiraMigas', [
     ['label'=>'Competicións', 'url'=>['controller'=>'Competicions', 'action'=>'index']],
-    ['label'=>'Competición']
+    ['label'=>empty($competicion->id) ? 'Competición' : $competicion->nome]
 ]);
 ?>
 
@@ -30,6 +30,7 @@ $this->set('cabeceiraMigas', [
                 <thead>
                     <tr>
                         <th>Categoría</th>
+                        <th>Codigo</th>
                         <th>Nome</th>
                         <th>Fase pai</th>
                         <th></th>
@@ -40,6 +41,7 @@ $this->set('cabeceiraMigas', [
                     <?php foreach($competicion->fases as $f) : ?>
                         <tr>
                             <td><?= empty($f->categoria) ? '' : $categorias[$f->categoria] ?></td>
+                            <td><?= $f->codigo ?></td>
                             <td><?= $f->nome ?></td>
                             <td><?= empty($f->fasePai) ? '' : $f->fasePai->nome ?></td>
                             <td class="text-center"><?= $this->AgfgForm->editButton(['action'=>'detalleFase', $f->id]) ?></td>

@@ -37,6 +37,9 @@ class CompeticionsController extends AppController {
                     $f->fasePai = $this->Fases->get($f->id_fase_pai);
                 }
             }
+            usort($competicion->fases, function ($a, $b) {
+                return strcmp($a->categoria, $b->categoria);
+            });
         }
         $categorias = $this->Categorias->getCategoriasWithEmpty();
         $tempadas = $this->Tempadas->getTempadasWithEmpty();

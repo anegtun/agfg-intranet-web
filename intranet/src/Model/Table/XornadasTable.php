@@ -18,7 +18,10 @@ class XornadasTable extends Table {
     }
 
     public function findWithPartidos($id_fase) {
-        return $this->find()->contain(['Partidos'])->where(['id_fase'=>$id_fase]);
+        return $this->find()
+            ->contain(['Partidos'])
+            ->where(['id_fase'=>$id_fase])
+            ->order('numero');
     }
 
     public function validationDefault(Validator $validator) {
