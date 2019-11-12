@@ -18,10 +18,8 @@ function wp_agfg_calendario_shortcode($atts) {
 
     $diasSemana = ['Dom','Lun','Mar','Mér','Xov','Ven','Sáb'];
     
-    $html = "<style>";
-    $html .= ".calendario-full-new .partido table { border: 0 !important; }";
-    $html .= "</style>";
-    $html .= '<div class="calendario-full-new">';
+    $html = wp_agfg_common_style();
+    $html .= '<div class="agfg-calendario">';
     foreach($data->xornadas as $x) {
         usort($x->partidos, function($a,$b) {
             if($a->data_partido===NULL || $b->data_partido===NULL) {

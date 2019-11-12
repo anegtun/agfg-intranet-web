@@ -7,14 +7,11 @@ function wp_agfg_clasificacion_shortcode($atts) {
     $response = wp_remote_get($url);
     $clasificacion = json_decode($response['body']);
     
+    $html = wp_agfg_common_style();
     if(!empty($clasificacion)) {
         $orderSymbol = $categoria==='F' ? 'ª' : 'º';
-        $html .=
-            '<style>'.
-            '.agfg-clasificacion-page table tr {vertical-align: middle;}'.
-            '.agfg-clasificacion-page table, .agfg-clasificacion-page table tr td, .agfg-clasificacion-page table tr th {border: 0;}'.
-            '</style>'.
-            '<div class="tablaClasificacion tablaClasificacion-widget agfg-clasificacion-page">'.
+        $html .= 
+            '<div class="agfg-clasificacion">'.
             '<table style="width: 100%;">'.
                 '<thead><tr><th>Pos</th><th>Equipo</th><th>Ptos</th><th>XG</th><th>XE</th><th>XP</th><th>Dif.</th></tr></thead>'.
                 '</tbody>';

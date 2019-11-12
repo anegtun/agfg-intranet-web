@@ -24,8 +24,9 @@ class agfg_Clasificacion_Widget extends WP_Widget {
         }
         if(!empty($clasificacion)) {
             $orderSymbol = $categoria==='F' ? 'ª' : 'º';
+            $html .= wp_agfg_common_style();
             $html .=
-                '<div class="tablaClasificacion tablaClasificacion-widget">'.
+                '<div class="agfg-clasificacion">'.
                 '<table style="width: 100%;">'.
                     '<thead><tr><th>Pos</th><th>Equipo</th><th>Ptos</th><th>XG</th><th>XE</th><th>XP</th><th>Dif.</th></tr></thead>'.
                     '</tbody>';

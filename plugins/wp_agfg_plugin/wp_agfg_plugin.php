@@ -10,6 +10,7 @@ Author URI:  https://gaeligogalego.gal/
 
 defined( 'ABSPATH' ) or die( 'Nope, not accessing this' );
 
+include('wp_agfg_common.php');
 include('calendario/wp_agfg_calendario_shortcode.php');
 include('clasificacion/wp_agfg_clasificacion_shortcode.php');
 include('clasificacion/wp_agfg_clasificacion_widget.php');
