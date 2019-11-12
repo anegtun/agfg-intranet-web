@@ -1,9 +1,9 @@
 <?php
 
 function wp_agfg_clasificacion_shortcode($atts) {
-    $idCalendario = $atts['id'];
+    $competicion = $atts['competicion'];
     $categoria = $atts['categoria'];
-    $url = "https://intranet.gaelicogalego.gal/clasificacion/competicion/$idCalendario.json?categoria=$categoria";
+    $url = "https://intranet.gaelicogalego.gal/clasificacion/competicion/$competicion/$categoria.json";
     $response = wp_remote_get($url);
     $clasificacion = json_decode($response['body']);
     

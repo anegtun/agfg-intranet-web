@@ -1,9 +1,9 @@
 <?php
 
 function wp_agfg_calendario_shortcode($atts) {
-    $idCalendario = $atts['id'];
+    $competicion = $atts['competicion'];
     $categoria = $atts['categoria'];
-    $url = "https://intranet.gaelicogalego.gal/calendario/competicion/$idCalendario.json";
+    $url = "https://intranet.gaelicogalego.gal/calendario/competicion/$competicion.json";
     if(!empty($categoria)) {
         $url .= "?categoria=$categoria";
     }

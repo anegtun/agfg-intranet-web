@@ -19,8 +19,8 @@ class CalendarioController extends RestController {
         $this->Xornadas = TableRegistry::get('Xornadas');
     }
 
-    public function competicion($uuid) {
-        $competicion = $this->Competicions->find()->where(['Competicions.uuid'=>$uuid])->first();
+    public function competicion($codigo) {
+        $competicion = $this->Competicions->find()->where(['Competicions.codigo'=>$codigo])->first();
         if(empty($competicion)) {
             throw new Exception("Non existe competición");
         }

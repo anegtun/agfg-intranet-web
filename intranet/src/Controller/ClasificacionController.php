@@ -18,9 +18,8 @@ class ClasificacionController extends RestController {
         $this->Xornadas = TableRegistry::get('Xornadas');
     }
 
-    public function competicion($uuid) {
-        $competicion = $this->Competicions->find()->where(['Competicions.uuid'=>$uuid])->first();
-        $categoria = $this->request->getQuery('categoria');
+    public function competicion($codigo, $categoria) {
+        $competicion = $this->Competicions->find()->where(['Competicions.codigo'=>$codigo])->first();
         if(empty($competicion)) {
             throw new Exception("Non existe competición");
         }
