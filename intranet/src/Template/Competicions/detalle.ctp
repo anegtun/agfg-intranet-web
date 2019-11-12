@@ -14,7 +14,7 @@ $this->set('cabeceiraMigas', [
             <fieldset>
                 <legend>Competición</legend>
                 <?= $this->Form->control('nome', ['label'=>'Nome']) ?>
-                <?= $this->Form->control('uuid', ['label'=>'UUID (uso en WordPress)','disabled'=>true]) ?>
+                <?= $this->Form->control('codigo', ['label'=>'Código (uso en WordPress)']) ?>
                 <?= $this->Form->control('tempada', ['options'=>$tempadas, 'label'=>'Tempada']) ?>
                 <?= $this->Form->control('tipo', ['options'=>$tiposCompeticion, 'label'=>'Tipo competición']) ?>
                 <?= $this->Form->button('Gardar', ['class'=>'btn btn-primary']); ?>
@@ -30,7 +30,7 @@ $this->set('cabeceiraMigas', [
                 <thead>
                     <tr>
                         <th>Categoría</th>
-                        <th>Codigo</th>
+                        <th>Código</th>
                         <th>Nome</th>
                         <th>Fase pai</th>
                         <th></th>

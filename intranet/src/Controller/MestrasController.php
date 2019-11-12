@@ -26,7 +26,7 @@ class MestrasController extends RestController {
         if(!empty($tipo)) {
             $where['Competicions.tipo'] = $tipo;
         }
-        $competicions = $this->Competicions->find()->where($where);
+        $competicions = $this->Competicions->find()->where($where)->order('tempada DESC');
         $categorias = $this->Categorias->getCategorias();
         $tempadas = $this->Tempadas->getTempadas();
         $categorias = $this->Categorias->getCategorias();
@@ -34,7 +34,7 @@ class MestrasController extends RestController {
         $json = [];
         foreach($competicions as $c) {
             $json[] = [
-                'id' => $c->uuid,
+                'codigo' => $c->codigo,
                 'nome' => $c->nome,
                 'tipo' => [
                     'codigo' => $c->tipo,

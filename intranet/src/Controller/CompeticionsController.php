@@ -51,10 +51,6 @@ class CompeticionsController extends AppController {
         $competicion = $this->Competicions->newEntity();
         if ($this->request->is('post') || $this->request->is('put')) {
             $competicion = $this->Competicions->patchEntity($competicion, $this->request->getData());
-            // Asignamos ID único aleatorio
-            if(empty($competicion->id)) {
-                $competicion->uuid = uniqid();
-            }
             if ($this->Competicions->save($competicion)) {
                 $this->Flash->success(__('Gardouse a competición correctamente.'));
                 return $this->redirect(['action'=>'detalle', $competicion->id]);
