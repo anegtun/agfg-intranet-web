@@ -18,26 +18,43 @@ class ClasificacionController extends RestController {
         $this->Xornadas = TableRegistry::get('Xornadas');
     }
 
-    public function competicion($codigo, $categoria) {
-        $competicion = $this->Competicions->find()->where(['Competicions.codigo'=>$codigo])->first();
-        if(empty($competicion)) {
-            throw new Exception("Non existe competición");
-        }
-        if(empty($categoria)) {
-            throw new Exception("Hai que especificar categoría");
-        }
+    public function competicion($codCompeticion, $categoria) {
+        $competicion = $this->_getCompeticion($codCompeticion, $categoria);
         
-        if(!empty($categoria)) {
-            $conditions[] = $categoria;
-        }
         $partidos = $this->Partidos
             ->find()
             ->join(['table'=>'agfg_xornada', 'alias'=>'Xornadas', 'conditions'=>['Xornadas.id = Partidos.id_xornada']])
             ->join(['table'=>'agfg_fase', 'alias'=>'Fases', 'conditions'=>['Fases.id = Xornadas.id_fase']])
             ->where(['Fases.id_competicion'=>$competicion->id, 'Fases.categoria'=>$categoria]);
         
-        $equipas = $this->Equipas->findMap();
+        $this->_render($partidos);
+    }
 
+    public function fase($codCompeticion, $categoria, $codFase) {
+        $competicion = $this->_getCompeticion($codCompeticion, $categoria);
+        
+        $partidos = $this->Partidos
+            ->find()
+            ->join(['table'=>'agfg_xornada', 'alias'=>'Xornadas', 'conditions'=>['Xornadas.id = Partidos.id_xornada']])
+            ->join(['table'=>'agfg_fase', 'alias'=>'Fases', 'conditions'=>['Fases.id = Xornadas.id_fase']])
+            ->where(['Fases.id_competicion'=>$competicion->id, 'Fases.categoria'=>$categoria, 'Fases.codigo'=>$codFase]);
+        
+        $this->_render($partidos);
+    }
+
+    private function _getCompeticion($codCompeticion, $categoria) {
+        $competicion = $this->Competicions->find()->where(['Competicions.codigo'=>$codCompeticion])->first();
+        if(empty($competicion)) {
+            throw new Exception("Non existe competición");
+        }
+        if(empty($categoria)) {
+            throw new Exception("Hai que especificar categoría");
+        }
+        return $competicion;
+    }
+
+    private function _render($partidos) {
+        $equipas = $this->Equipas->findMap();
         $clsf = new Clasificacion($equipas, $partidos);
         $clsf->build();
         $clsf->desempatar();

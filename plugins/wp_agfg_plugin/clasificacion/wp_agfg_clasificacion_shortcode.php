@@ -3,9 +3,8 @@
 function wp_agfg_clasificacion_shortcode($atts) {
     $competicion = $atts['competicion'];
     $categoria = $atts['categoria'];
-    $url = "https://intranet.gaelicogalego.gal/clasificacion/competicion/$competicion/$categoria.json";
-    $response = wp_remote_get($url);
-    $clasificacion = json_decode($response['body']);
+    $fase = empty($atts['fase']) ? null : $atts['fase'];
+    $clasificacion = wp_agfg_clasificacion_get($competicion, $categoria, $fase);
     
     $html = wp_agfg_common_style();
     if(!empty($clasificacion)) {

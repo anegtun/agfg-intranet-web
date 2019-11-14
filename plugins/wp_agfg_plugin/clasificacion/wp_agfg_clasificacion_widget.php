@@ -12,11 +12,11 @@ class agfg_Clasificacion_Widget extends WP_Widget {
     public function widget( $args, $instance ) {
         $title = apply_filters( 'widget_title', $instance[ 'title' ] );
         $competicion = $instance['competicion'];
-        $urlResultados = $instance['url_resultados'];
         $categoria = $instance['categoria'];
-        $url = "https://intranet.gaelicogalego.gal/clasificacion/competicion/$competicion/$categoria.json";
-        $response = wp_remote_get($url);
-        $clasificacion = json_decode($response['body']);
+        $fase = empty($instance['fase']) ? null : $instance['fase'];
+        $urlResultados = $instance['url_resultados'];
+        
+        $clasificacion = wp_agfg_clasificacion_get($competicion, $categoria, $fase);
         
         $html = $args['before_widget'];
         if(!empty($title)) {
@@ -61,6 +61,7 @@ class agfg_Clasificacion_Widget extends WP_Widget {
         $title = ! empty( $instance['title'] ) ? $instance['title'] : '';
         $competicion = ! empty( $instance['competicion'] ) ? $instance['competicion'] : '';
         $categoria = ! empty( $instance['categoria'] ) ? $instance['categoria'] : '';
+        $fase = ! empty( $instance['fase'] ) ? $instance['fase'] : '';
         $urlResultados = ! empty( $instance['url_resultados'] ) ? $instance['url_resultados'] : '';
 
         $competicionsUrl = "https://intranet.gaelicogalego.gal/mestras/competicions.json?tipo=liga";
@@ -91,6 +92,11 @@ class agfg_Clasificacion_Widget extends WP_Widget {
         $html .= "</select></p>";
         $html .=
             "<p>
+                <label for='".$this->get_field_id('fase')."'>URL resultados:</label>
+                <input type='text' id='".$this->get_field_id('fase')."' name='".$this->get_field_name('fase')."' value='".esc_attr( $fase )."' class='widefat' />
+            </p>";
+        $html .=
+            "<p>
                 <label for='".$this->get_field_id('url_resultados')."'>URL resultados:</label>
                 <input type='text' id='".$this->get_field_id('url_resultados')."' name='".$this->get_field_name('url_resultados')."' value='".esc_attr( $urlResultados )."' class='widefat' />
             </p>";
@@ -102,6 +108,7 @@ class agfg_Clasificacion_Widget extends WP_Widget {
         $instance['title'] = strip_tags( $new_instance['title']);
         $instance['competicion'] = $new_instance['competicion'];
         $instance['categoria'] = $new_instance['categoria'];
+        $instance['fase'] = $new_instance['fase'];
         $instance['url_resultados'] = $new_instance['url_resultados'];
         return $instance;
     }
