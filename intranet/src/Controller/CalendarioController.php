@@ -5,6 +5,8 @@ use App\Controller\RestController;
 use App\Model\Categorias;
 use Cake\Core\Exception\Exception;
 use Cake\Event\Event;
+use Cake\I18n\Date;
+use Cake\I18n\FrozenDate;
 use Cake\ORM\TableRegistry;
 
 class CalendarioController extends RestController {
@@ -105,6 +107,25 @@ class CalendarioController extends RestController {
             $conditions['categoria'] = $categoria;
         }
         return $this->Fases->find()->where($conditions);
+    }
+
+    public function seguinteXornada($codigo) {
+        $competicion = $this->Competicions->find()->where(['Competicions.codigo'=>$codigo])->first();
+        if(empty($competicion)) {
+            throw new Exception("Non existe competición");
+        }
+        $currentMonday = new FrozenDate('monday this week');
+        echo "$currentMonday";
+        $seguinteXornada = $this->Xornadas
+            ->find()
+            ->join(['table'=>'agfg_fase', 'alias'=>'Fases', 'conditions'=>['Fases.id = Xornadas.id_fase']])
+            ->where(['id_competicion'=>$competicion->id, 'data >='=>$currentMonday])
+            ->order(['data'])
+            ->first();
+        $lunesXornada = $seguinteXornada->data->modify('monday this week');
+        $domingoXornada = $lunesXornada->modify('sunday this week');
+        print_r($lunesXornada);
+        print_r($domingoXornada);
     }
     
 }
