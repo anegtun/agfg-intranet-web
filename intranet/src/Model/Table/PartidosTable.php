@@ -8,6 +8,16 @@ class PartidosTable extends Table {
 
     public function initialize(array $config) {
         $this->setTable('agfg_partidos');
+        $this->belongsTo('Fases', [
+        	'className' => 'Fases',
+            'foreignKey' => 'id_fase',
+            'propertyName' => 'fase'
+        ]);
+        $this->belongsTo('Xornadas', [
+        	'className' => 'Xornadas',
+            'foreignKey' => 'id_xornada',
+            'propertyName' => 'fase'
+        ]);
     }
 
     public function validationDefault(Validator $validator) {
