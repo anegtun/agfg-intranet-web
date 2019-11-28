@@ -13,6 +13,7 @@ class CalendarioController extends RestController {
     
     public function initialize() {
         parent::initialize();
+        $this->Categorias = new Categorias();
         $this->Campos = TableRegistry::get('Campos');
         $this->Competicions = TableRegistry::get('Competicions');
         $this->Fases = TableRegistry::get('Fases');
@@ -52,43 +53,7 @@ class CalendarioController extends RestController {
                 }
                 $partidos = $this->Partidos->find()->where(['id_xornada'=>$x->id]);
                 foreach($partidos as $p) {
-                    $resP = [
-                        'data_partido' => $p->getDataHora(),
-                        'adiado' => $p->adiado,
-                        'equipa1' => [],
-                        'equipa2' => [],
-                        'ganador' => $p->getGanador(),
-                        'campo' => []
-                    ];
-                    if(!empty($p->id_equipa1)) {
-                        $resP['equipa1'] = [
-                            'codigo' => $equipas[$p->id_equipa1]->codigo,
-                            'nome' => $equipas[$p->id_equipa1]->nome,
-                            'logo' => $equipas[$p->id_equipa1]->logo,
-                            'goles' => $p->goles_equipa1,
-                            'tantos' => $p->tantos_equipa1,
-                            'total' => $p->getPuntuacionTotalEquipa1(),
-                            'non_presentado' => $p->non_presentado_equipa1
-                        ];
-                    }
-                    if(!empty($p->id_equipa2)) {
-                        $resP['equipa2'] = [
-                            'codigo' => $equipas[$p->id_equipa2]->codigo,
-                            'nome' => $equipas[$p->id_equipa2]->nome,
-                            'logo' => $equipas[$p->id_equipa2]->logo,
-                            'goles' => $p->goles_equipa2,
-                            'tantos' => $p->tantos_equipa2,
-                            'total' => $p->getPuntuacionTotalEquipa2(),
-                            'non_presentado' => $p->non_presentado_equipa2
-                        ];
-                    }
-                    if(!empty($p->id_campo)) {
-                        $resP['campo'] = [
-                            'nome' => $campos[$p->id_campo]->nome,
-                            'pobo' => $campos[$p->id_campo]->pobo
-                        ];
-                    }
-                    $resX['partidos'][] = $resP;
+                    $resX['partidos'][] = $this->buildPartidoData($p, $equipas, $campos);
                 }
                 if($index>0) {
                     $res['xornadas'][$index] = $resX;
@@ -114,18 +79,99 @@ class CalendarioController extends RestController {
         if(empty($competicion)) {
             throw new Exception("Non existe competición");
         }
+        $seguinteData = $this->getDataMaisCercanaFutura($competicion);
+        $luns = $seguinteData->modify('monday this week');
+        $domingo = $luns->modify('sunday this week');
+        $lunsYMD = $luns->i18nFormat('yyyy-MM-dd');
+        $domingoYMD = $domingo->i18nFormat('yyyy-MM-dd');
+        $partidos = $this->Partidos
+            ->find()
+            ->contain(['Fases', 'Xornadas'])
+            ->where(['Fases.id_competicion'=>$competicion->id, 'OR' => [
+                ['Xornadas.data >='=>$lunsYMD, 'Xornadas.data <='=>$domingoYMD],
+                ['Partidos.data_partido >='=>$lunsYMD, 'Partidos.data_partido <='=>$domingoYMD]
+            ]])
+            ->order(['data_partido', 'hora_partido']);
+        $campos = $this->Campos->findMap();
+        $equipas = $this->Equipas->findMap();
+        $categorias = $this->Categorias->getCategoriasWithEmpty();
+        $res = [
+            'inicio' => $luns,
+            'fin' => $domingo,
+            'partidos' => []
+        ];
+        foreach($partidos as $p) {
+            $resP = $this->buildPartidoData($p, $equipas, $campos);
+            $resP['fase'] = [
+                'categoria' => $categorias[$p->fase->categoria],
+                'nome' => $p->fase->nome
+            ];
+            $res['partidos'][] = $resP;
+        }
+        $this->set($res);
+    }
+
+    private function getDataMaisCercanaFutura($competicion) {
         $currentMonday = new FrozenDate('monday this week');
-        echo "$currentMonday";
+        $seguintePartido = $this->Partidos
+            ->find()
+            ->join(['table'=>'agfg_fase', 'alias'=>'Fases', 'conditions'=>['Fases.id = Partidos.id_fase']])
+            ->where(['id_competicion'=>$competicion->id, 'data_partido >='=>$currentMonday])
+            ->order(['data_partido'])
+            ->first();
+        if(!empty($seguintePartido)) {
+            return $seguintePartido->data_partido;
+        }
         $seguinteXornada = $this->Xornadas
             ->find()
             ->join(['table'=>'agfg_fase', 'alias'=>'Fases', 'conditions'=>['Fases.id = Xornadas.id_fase']])
             ->where(['id_competicion'=>$competicion->id, 'data >='=>$currentMonday])
             ->order(['data'])
             ->first();
-        $lunesXornada = $seguinteXornada->data->modify('monday this week');
-        $domingoXornada = $lunesXornada->modify('sunday this week');
-        print_r($lunesXornada);
-        print_r($domingoXornada);
+        if(!empty($seguinteXornada)) {
+            return $seguinteXornada->data;
+        }
+        return null;
+    }
+
+    private function buildPartidoData($p, $equipas, $campos) {
+        $resP = [
+            'data_partido' => $p->getDataHora(),
+            'adiado' => $p->adiado,
+            'equipa1' => [],
+            'equipa2' => [],
+            'ganador' => $p->getGanador(),
+            'campo' => []
+        ];
+        if(!empty($p->id_equipa1)) {
+            $resP['equipa1'] = [
+                'codigo' => $equipas[$p->id_equipa1]->codigo,
+                'nome' => $equipas[$p->id_equipa1]->nome,
+                'logo' => $equipas[$p->id_equipa1]->logo,
+                'goles' => $p->goles_equipa1,
+                'tantos' => $p->tantos_equipa1,
+                'total' => $p->getPuntuacionTotalEquipa1(),
+                'non_presentado' => $p->non_presentado_equipa1
+            ];
+        }
+        if(!empty($p->id_equipa2)) {
+            $resP['equipa2'] = [
+                'codigo' => $equipas[$p->id_equipa2]->codigo,
+                'nome' => $equipas[$p->id_equipa2]->nome,
+                'logo' => $equipas[$p->id_equipa2]->logo,
+                'goles' => $p->goles_equipa2,
+                'tantos' => $p->tantos_equipa2,
+                'total' => $p->getPuntuacionTotalEquipa2(),
+                'non_presentado' => $p->non_presentado_equipa2
+            ];
+        }
+        if(!empty($p->id_campo)) {
+            $resP['campo'] = [
+                'nome' => $campos[$p->id_campo]->nome,
+                'pobo' => $campos[$p->id_campo]->pobo
+            ];
+        }
+        return $resP;
     }
     
 }
