@@ -203,7 +203,7 @@ $menu_option = empty($menu_option) ? '' : $menu_option;
                             <ul class="list-inline">
                                 <li>
                                     <i class="glyphicon glyphicon-bookmark" aria-label="Versión"><span class="sr-only">Versión</span></i>
-                                    Ver. <span>1.3.6</span>
+                                    Ver. <span>1.3.7</span>
                                 </li>
                                 <!--li data-toggle="tooltip" title="Ver información de contacto" data-placement="left">
                                     <a href="#" data-toggle="modal" data-target="#modal-contact-info">

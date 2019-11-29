@@ -15,6 +15,7 @@ $this->set('cabeceiraMigas', [
                 <legend>Campo</legend>
                 <?= $this->Form->control('codigo', ['label'=>'Código']) ?>
                 <?= $this->Form->control('nome', ['label'=>'Nome']) ?>
+                <?= $this->Form->control('nome_curto', ['label'=>'Nome curto']) ?>
                 <?= $this->Form->control('pobo', ['label'=>'Poboación']) ?>
                 <?= $this->Form->button('Gardar', ['class'=>'btn btn-primary']); ?>
             </fieldset>
