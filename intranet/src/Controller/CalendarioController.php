@@ -168,6 +168,7 @@ class CalendarioController extends RestController {
         if(!empty($p->id_campo)) {
             $resP['campo'] = [
                 'nome' => $campos[$p->id_campo]->nome,
+                'nome_curto' => $campos[$p->id_campo]->nome_curto,
                 'pobo' => $campos[$p->id_campo]->pobo
             ];
         }
