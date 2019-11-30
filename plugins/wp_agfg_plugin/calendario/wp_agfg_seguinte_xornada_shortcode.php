@@ -10,21 +10,25 @@ function wp_agfg_seguinte_xornada_shortcode($atts) {
     $response = wp_remote_get($url);
     $data = json_decode($response['body']);
 
-    $diasSemana = ['Dom','Lun','Mar','Mér','Xov','Ven','Sáb'];
+    $diasSemana = ['Domingo','Luns','Martes','Mércores','Xoves','Venres','Sábado'];
+    $meses = ['','xaneiro','febreiro','marzo','abril','maio','xuño','xullo','agosto','setembro','outubro','novembro','decembro'];
     
     $html = wp_agfg_common_style();
     $html .= '<div class="agfg-proxima-xornada">';
+    $dataActual = null;
     foreach($data->partidos as $p) {
         // Data
-        $dataPartido = 'Pte. data';
+        $dataPartido = null;
+        $horaPartido = 'Pte. horario';
         if(!empty($p->data_partido)) {
             $dataPartidoDate = strtotime($p->data_partido);
-            $dataStr = date('d/m', $dataPartidoDate);
+            $diaStr = date('d', $dataPartidoDate);
+            $diaSemanaStr = date('w', $dataPartidoDate);
+            $mesStr = date('n', $dataPartidoDate);
+            $dataPartido = "$diasSemana[$diaSemanaStr] $diaStr de $meses[$mesStr]";
             $horaStr = date('H:i', $dataPartidoDate);
-            $diaStr = date('w', $dataPartidoDate);
-            $dataPartido = "$diasSemana[$diaStr] $dataStr";
             if($horaStr!=='00:00') {
-                $dataPartido .= " - $horaStr";
+                $horaPartido = $horaStr;
             }
         }
         $dataStyle = "";
@@ -40,9 +44,14 @@ function wp_agfg_seguinte_xornada_shortcode($atts) {
             $campo = 'Campo descoñecido';
         }
         // HTML
+        if($dataActual !== $dataPartido) {
+            $html .= "<div style='clear:both'></div>";
+            $html .= "<div class='dia-partido'>$dataPartido</div>";
+            $html .= "<div style='clear:both'></div>";
+        }
         $html .= '<div class="partido">';
         $html .= '<table>';
-        $html .= "<thead><tr><th colspan='2' style='$dataStyle'>$dataPartido<br>$campo<br>Cat. {$p->fase->categoria}</th></tr><thead>";
+        $html .= "<thead style='$dataStyle'><tr><th colspan='2'>Cát. {$p->fase->categoria}<span style='float:right'>$horaPartido</span><br>$campo</th></tr></thead>";
         $html .= '<tbody>';
         $html .= '<tr>';
         $html .= "<td><figure><img class='alignnone' src='{$p->equipa1->logo}' alt='{$p->equipa1->nome}' width='18' height='20'></figure></td>";
@@ -55,6 +64,7 @@ function wp_agfg_seguinte_xornada_shortcode($atts) {
         $html .= '</tbody>';
         $html .= '</table>';
         $html .= '</div>';
+        $dataActual = $dataPartido;
     }
     $html .= '</div>';
     $html .= '<div style="clear:both"></div>';
