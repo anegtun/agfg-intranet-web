@@ -29,13 +29,11 @@ function wp_agfg_seguinte_xornada_shortcode($atts) {
             $horaStr = date('H:i', $dataPartidoDate);
             if($horaStr!=='00:00') {
                 $horaPartido = $horaStr;
+            } else if(!empty($p->adiado)) {
+                $horaPartido = 'adiado';
             }
         }
-        $dataStyle = "";
-        if(!empty($p->adiado)) {
-            $dataPartido .= ' (adiado)';
-            $dataStyle = 'color:#c54242';
-        }
+        $dataClass = empty($p->adiado) ? '' : 'adiado';
         // Campo
         $campo = 'Pte. campo';
         if(!empty($p->campo)) {
@@ -51,7 +49,7 @@ function wp_agfg_seguinte_xornada_shortcode($atts) {
         }
         $html .= '<div class="partido">';
         $html .= '<table>';
-        $html .= "<thead style='$dataStyle'><tr><th colspan='2'>Cát. {$p->fase->categoria}<span style='float:right'>$horaPartido</span><br>$campo</th></tr></thead>";
+        $html .= "<thead><tr><th colspan='2' class='$dataClass'>Cát. {$p->fase->categoria}<span style='float:right'>$horaPartido</span><br>$campo</th></tr></thead>";
         $html .= '<tbody>';
         $html .= '<tr>';
         $html .= "<td><figure><img class='alignnone' src='{$p->equipa1->logo}' alt='{$p->equipa1->nome}' width='18' height='20'></figure></td>";

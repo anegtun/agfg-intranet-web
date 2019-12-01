@@ -81,6 +81,10 @@ function wp_agfg_common_style() {
             .agfg-calendario .partido table tr td:nth-child(3) {
                 text-align: right;
                 padding-right: 0.5em !important;
-            } 
+            }
+            .agfg-calendario .partido .adiado,
+            .agfg-proxima-xornada .partido .adiado {
+                color: #c54242;
+            }
         </style>';
 }

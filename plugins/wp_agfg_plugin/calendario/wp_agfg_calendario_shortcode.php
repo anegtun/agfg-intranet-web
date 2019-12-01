@@ -60,10 +60,10 @@ function wp_agfg_calendario_shortcode($atts) {
                     $dataPartido .= " - $horaStr";
                 }
             }
-            $dataStyle = "";
+            $dataClass = "";
             if(!empty($p->adiado)) {
                 $dataPartido .= ' (adiado)';
-                $dataStyle = 'color:#c54242';
+                $dataClass = 'adiado';
             }
             // Campo
             $campo = 'Pte. campo';
@@ -75,7 +75,7 @@ function wp_agfg_calendario_shortcode($atts) {
             // HTML
             $html .= '<div class="partido">';
             $html .= '<table>';
-            $html .= "<thead><tr><th colspan='3' style='$dataStyle'>$dataPartido<br>$campo</th></tr></thead>";
+            $html .= "<thead><tr><th colspan='3' class='$dataClass'>$dataPartido<br>$campo</th></tr></thead>";
             $html .= '<tbody>';
             $html .= '<tr>';
             $html .= "<td><figure><img class='alignnone' src='{$p->equipa1->logo}' alt='{$p->equipa1->nome}' width='18' height='20'></figure></td>";
