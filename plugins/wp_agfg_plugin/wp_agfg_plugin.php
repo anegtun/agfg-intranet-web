@@ -3,7 +3,7 @@
 Plugin Name: Asociacion Galega de Futbol Gaelico - WordPress Plugin
 Plugin URI:  https://gaeligogalego.gal/
 Description: Plugin para visualización do calendario e clasificación das competicións da AGFG.
-Version:     1.4.2
+Version:     1.4.3
 Author:      Asociacion Galega de Futbol Gaelico
 Author URI:  https://gaeligogalego.gal/
 */
