@@ -19,7 +19,7 @@ function wp_agfg_seguinte_xornada_shortcode($atts) {
     foreach($data->partidos as $p) {
         // Data
         $dataPartido = null;
-        $horaPartido = 'Pte. horario';
+        $horaPartido = '(pte. horario)';
         if(!empty($p->data_partido)) {
             $dataPartidoDate = strtotime($p->data_partido);
             $diaStr = date('d', $dataPartidoDate);
@@ -30,7 +30,7 @@ function wp_agfg_seguinte_xornada_shortcode($atts) {
             if($horaStr!=='00:00') {
                 $horaPartido = $horaStr;
             } else if(!empty($p->adiado)) {
-                $horaPartido = 'adiado';
+                $horaPartido = '(adiado)';
             }
         }
         $dataClass = empty($p->adiado) ? '' : 'adiado';
