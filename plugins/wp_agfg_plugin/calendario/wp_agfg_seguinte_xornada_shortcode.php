@@ -44,12 +44,12 @@ function wp_agfg_seguinte_xornada_shortcode($atts) {
         // HTML
         if($dataActual !== $dataPartido) {
             $html .= "<div style='clear:both'></div>";
-            $html .= "<div class='dia-partido'>$dataPartido</div>";
+            $html .= "<div class='dia-partido'>".(empty($dataPartido) ? 'Pendente de data' : $dataPartido)."</div>";
             $html .= "<div style='clear:both'></div>";
         }
         $html .= '<div class="partido">';
         $html .= '<table>';
-        $html .= "<thead><tr><th colspan='2' class='$dataClass'>Cát. {$p->fase->categoria}<span style='float:right'>$horaPartido</span><br>$campo</th></tr></thead>";
+        $html .= "<thead><tr><th colspan='2' class='$dataClass'>C. {$p->fase->categoria}<span style='float:right'>$horaPartido</span><br>$campo</th></tr></thead>";
         $html .= '<tbody>';
         $html .= '<tr>';
         $html .= "<td><figure><img class='alignnone' src='{$p->equipa1->logo}' alt='{$p->equipa1->nome}' width='18' height='20'></figure></td>";
