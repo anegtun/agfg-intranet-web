@@ -1,9 +1,10 @@
 <?php
 
-function wp_agfg_seguinte_xornada_shortcode($atts) {
+function wp_agfg_xornada_seguinte_shortcode($atts) {
     $competicion = $atts['competicion'];
     $categoria = $atts['categoria'];
-    $url = "https://intranet.gaelicogalego.gal/calendario/seguinteXornada/$competicion.json";
+    $titulo = empty($atts['titulo']) ? 'h3' : $atts['titulo'];
+    $url = "https://intranet.gaelicogalego.gal/calendario/xornadaSeguinte/$competicion.json";
     if(!empty($categoria)) {
         $url .= "?categoria=$categoria";
     }
@@ -14,12 +15,22 @@ function wp_agfg_seguinte_xornada_shortcode($atts) {
     $meses = ['','xaneiro','febreiro','marzo','abril','maio','xuño','xullo','agosto','setembro','outubro','novembro','decembro'];
     
     $html = wp_agfg_common_style();
-    $html .= '<div class="agfg-proxima-xornada">';
+    if(!empty($titulo)) {
+        $dataInicio = strtotime($data->inicio);
+        $dataFin = strtotime($data->fin);
+        $diaI = date('d', $dataInicio);
+        $diaF = date('d', $dataFin);
+        $mesI = date('n', $dataInicio);
+        $mesF = date('n', $dataFin);
+        $datasXornada = "$diaI de $meses[$mesI] a $diaF de $meses[$mesF]";
+        $html .= "<$titulo>Próxima xornada ($datasXornada)</$titulo>";
+    }
+    $html .= '<div class="agfg-xornada-proxima">';
     $dataActual = null;
     foreach($data->partidos as $p) {
         // Data
         $dataPartido = null;
-        $horaPartido = '(pte. horario)';
+        $horaPartido = '';
         if(!empty($p->data_partido)) {
             $dataPartidoDate = strtotime($p->data_partido);
             $diaStr = date('d', $dataPartidoDate);
@@ -35,7 +46,7 @@ function wp_agfg_seguinte_xornada_shortcode($atts) {
         }
         $dataClass = empty($p->adiado) ? '' : 'adiado';
         // Campo
-        $campo = 'Pte. campo';
+        $campo = 'Pte. horario/campo';
         if(!empty($p->campo)) {
             $campo = "{$p->campo->nome_curto} ({$p->campo->pobo})";
         } elseif(!empty($p->ganador)) {
@@ -69,4 +80,4 @@ function wp_agfg_seguinte_xornada_shortcode($atts) {
     return $html;
 }
 
-add_shortcode('agfg-seguinte-xornada', 'wp_agfg_seguinte_xornada_shortcode');
+add_shortcode('agfg-xornada-seguinte', 'wp_agfg_xornada_seguinte_shortcode');

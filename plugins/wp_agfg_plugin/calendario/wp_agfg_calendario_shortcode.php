@@ -31,23 +31,8 @@ function wp_agfg_calendario_shortcode($atts) {
         $d = date('d/m/Y', strtotime($x->data));
         $html .= "<h4>Xornada {$x->numero} ({$d})</h4>";
         foreach($x->partidos as $p) {
-            // Resultado
-            $resultado1 = $resultado2 = '-';
-            if(!empty($p->equipa1->non_presentado)) {
-                $resultado1 = 'N.P.';
-            } elseif(!empty($p->equipa2->non_presentado)) {
-                $resultado2 = 'N.P.';
-            } elseif(!empty($p->ganador)) {
-                // Para cando o resultado é descoñecido, por convención pomos un "100-0"
-                if($p->equipa1->total===100 && $p->equipa2->total===0) {
-                    $resultado1 = 'V';
-                } elseif($p->equipa2->total===100 && $p->equipa1->total===0) {
-                    $resultado2 = 'V';
-                } else {
-                    $resultado1 = format_resultado($p->equipa1);
-                    $resultado2 = format_resultado($p->equipa2);
-                }
-            }
+            // Resultados
+            $resultados = format_resultados($p);
             // Data
             $dataPartido = 'Pte. data';
             if(!empty($p->data_partido)) {
@@ -80,12 +65,12 @@ function wp_agfg_calendario_shortcode($atts) {
             $html .= '<tr>';
             $html .= "<td><figure><img class='alignnone' src='{$p->equipa1->logo}' alt='{$p->equipa1->nome}' width='18' height='20'></figure></td>";
             $html .= "<td>{$p->equipa1->nome}</td>";
-            $html .= "<td>$resultado1</td>";
+            $html .= "<td>$resultados[0]</td>";
             $html .= '</tr>';
             $html .= '<tr>';
             $html .= "<td><figure><img class='alignnone' src='{$p->equipa2->logo}' alt='{$p->equipa2->nome}' width='18' height='20'></figure></td>";
             $html .= "<td>{$p->equipa2->nome}</td>";
-            $html .= "<td>$resultado2</td>";
+            $html .= "<td>$resultados[1]</td>";
             $html .= '</tr>';
             $html .= '</tbody>';
             $html .= '</table>';

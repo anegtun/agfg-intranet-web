@@ -31,13 +31,14 @@ function wp_agfg_common_style() {
             .agfg-calendario .xornada h4 {
                 border-bottom: 1px solid #869643;
             }
-            .agfg-proxima-xornada .dia-partido {
+            .agfg-xornada-proxima .dia-partido {
                 margin: 1em 0;
                 font-size: larger;
                 font-weight: bold;
             }
             .agfg-calendario .partido,
-            .agfg-proxima-xornada .partido {
+            .agfg-xornada-proxima .partido,
+            .agfg-xornada-anterior .partido {
                 float: left;
                 border: 1px solid #4187b450;
                 border-radius: 0.5em;
@@ -47,32 +48,40 @@ function wp_agfg_common_style() {
                 width: 250px;
                 height: 130px;
             }
-            .agfg-proxima-xornada .partido {
-                width: 185px;
+            .agfg-xornada-proxima .partido {
+                width: 175px;
                 height: 130px;
+            }
+            .agfg-xornada-anterior .partido {
+                width: 270px;
+                height: 100px;
             }
             .agfg-calendario .partido-big {
                 height: 155px;
             }
             .agfg-calendario .partido table,
-            .agfg-proxima-xornada .partido table {
+            .agfg-xornada-proxima .partido table,
+            .agfg-xornada-anterior .partido table {
                 border: 0;
             }
             .agfg-calendario .partido table th, .agfg-calendario .partido table td,
-            .agfg-proxima-xornada .partido table th, .agfg-proxima-xornada .partido table td {
+            .agfg-xornada-proxima .partido table th, .agfg-xornada-proxima .partido table td,
+            .agfg-xornada-anterior .partido table th, .agfg-xornada-anterior .partido table td {
                 border: 0 !important;
                 padding: 0.25em !important;
                 vertical-align: middle;
             }
             .agfg-calendario .partido table th,
-            .agfg-proxima-xornada .partido table th {
+            .agfg-xornada-proxima .partido table th,
+            .agfg-xornada-anterior .partido table th {
                 font-weight: bold;
                 border-radius: 0.5em 0.5em 0 0;
                 background-color: #4187b450;
                 color: #04395E;
             } 
             .agfg-calendario .partido table tr td:nth-child(1),
-            .agfg-proxima-xornada .partido table tr td:nth-child(1) {
+            .agfg-xornada-proxima .partido table tr td:nth-child(1),
+            .agfg-xornada-anterior .partido table tr td:nth-child(1) {
                 width:20px;
             }
             .agfg-calendario .partido table tr td:nth-child(2) {
@@ -83,7 +92,8 @@ function wp_agfg_common_style() {
                 padding-right: 0.5em !important;
             }
             .agfg-calendario .partido .adiado,
-            .agfg-proxima-xornada .partido .adiado {
+            .agfg-xornada-proxima .partido .adiado,
+            .agfg-xornada-anterior .partido .adiado {
                 color: #c54242;
             }
         </style>';
