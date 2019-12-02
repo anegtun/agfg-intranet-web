@@ -79,7 +79,7 @@ class CalendarioController extends RestController {
         if(empty($competicion)) {
             throw new Exception("Non existe competición");
         }
-        $seguinteData = $this->getDataMaisCercanaFutura($competicion);
+        $dataReferencia = $this->getDataMaisCercanaFutura($competicion);
         $this->set($this->getJsonPartidosSemana($competicion, $dataReferencia));
     }
 
