@@ -113,25 +113,26 @@ class CalendarioController extends RestController {
 
     private function getDataMaisCercanaFutura($competicion) {
         $currentMonday = new FrozenDate('monday this week');
-        $seguintePartido = $this->Partidos
-            ->find()
-            ->join(['table'=>'agfg_fase', 'alias'=>'Fases', 'conditions'=>['Fases.id = Partidos.id_fase']])
-            ->where(['id_competicion'=>$competicion->id, 'data_partido >='=>$currentMonday])
-            ->order(['data_partido'])
-            ->first();
-        if(!empty($seguintePartido)) {
-            return $seguintePartido->data_partido;
-        }
+        // Data da seguinte xornada
         $seguinteXornada = $this->Xornadas
             ->find()
             ->join(['table'=>'agfg_fase', 'alias'=>'Fases', 'conditions'=>['Fases.id = Xornadas.id_fase']])
             ->where(['id_competicion'=>$competicion->id, 'data >='=>$currentMonday])
             ->order(['data'])
             ->first();
-        if(!empty($seguinteXornada)) {
-            return $seguinteXornada->data;
+        $data = empty($seguinteXornada) ? null : $seguinteXornada->data;
+        
+        // Por se hai un partido antes da seguinte xornada
+        $seguintePartido = $this->Partidos
+            ->find()
+            ->join(['table'=>'agfg_fase', 'alias'=>'Fases', 'conditions'=>['Fases.id = Partidos.id_fase']])
+            ->where(['id_competicion'=>$competicion->id, 'data_partido >='=>$currentMonday])
+            ->order(['data_partido'])
+            ->first();
+        if(!empty($seguintePartido) && (empty($data) || $data>$seguintePartido->data_partido)) {
+            $data = $seguintePartido->data_partido;
         }
-        return null;
+        return $data;
     }
 
     private function buildPartidoData($p, $equipas, $campos) {
