@@ -74,7 +74,7 @@ class CalendarioController extends RestController {
         return $this->Fases->find()->where($conditions);
     }
 
-    public function seguinteXornada($codigo) {
+    public function xornadaSeguinte($codigo) {
         $competicion = $this->Competicions->find()->where(['Competicions.codigo'=>$codigo])->first();
         if(empty($competicion)) {
             throw new Exception("Non existe competición");
