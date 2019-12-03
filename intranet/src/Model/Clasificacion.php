@@ -17,6 +17,22 @@ class Clasificacion {
         foreach($this->_partidos as $p) {
             $this->_processGame($this->_clasificacion, $p);
         }
+        $this->_sort();
+    }
+    
+    public function add($clasificacionAnterior) {
+        $clsfAnterior = $clasificacionAnterior->getClasificacion();
+        for($i=0; $i<count($this->_clasificacion); $i++) {
+            for($j=0; $j<count($clsfAnterior); $j++) {
+                if($this->_clasificacion[$i]->id===$clsfAnterior[$j]->id) {
+                    $this->_addTeamData($this->_clasificacion[$i], $clsfAnterior[$j]);
+                }
+            }
+        }
+        $this->_sort();
+    }
+    
+    private function _sort() {
         // Calculamos puntos a partir de sancións (non pode baixar de 0)
         foreach($this->_clasificacion as $e) {
             $e->puntos = $e->puntos_sen_sancion - $e->puntos_sancion;
@@ -139,6 +155,21 @@ class Clasificacion {
             $clsf[$partido->id_equipa2]->puntos_sancion += $partido->sancion_puntos_equipa2;
         }
         return $clsf;
+    }
+
+    private function _addTeamData(&$target, $source) {
+        $target->golesFavor += $source->golesFavor;
+        $target->golesContra += $source->golesContra;
+        $target->tantosFavor += $source->tantosFavor;
+        $target->tantosContra += $source->tantosContra;
+        $target->totalFavor += $source->totalFavor;
+        $target->totalContra += $source->totalContra;
+        $target->partidosXogados += $source->partidosXogados;
+        $target->partidosGanados += $source->partidosGanados;
+        $target->partidosEmpatados += $source->partidosEmpatados;
+        $target->partidosPerdidos += $source->partidosPerdidos;
+        $target->puntos_sen_sancion += $source->puntos_sen_sancion;
+        $target->puntos_sancion += $source->puntos_sancion;
     }
 
     private function _initClasificacion($id) {

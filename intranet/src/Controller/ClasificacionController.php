@@ -12,34 +12,32 @@ class ClasificacionController extends RestController {
     public function initialize() {
         parent::initialize();
         $this->Competicions = TableRegistry::get('Competicions');
-        $this->Fases = TableRegistry::get('Fases');
         $this->Equipas = TableRegistry::get('Equipas');
+        $this->Fases = TableRegistry::get('Fases');
         $this->Partidos = TableRegistry::get('Partidos');
-        $this->Xornadas = TableRegistry::get('Xornadas');
     }
 
     public function competicion($codCompeticion, $categoria) {
         $competicion = $this->_getCompeticion($codCompeticion, $categoria);
-        
         $partidos = $this->Partidos
             ->find()
-            ->join(['table'=>'agfg_xornada', 'alias'=>'Xornadas', 'conditions'=>['Xornadas.id = Partidos.id_xornada']])
-            ->join(['table'=>'agfg_fase', 'alias'=>'Fases', 'conditions'=>['Fases.id = Xornadas.id_fase']])
+            ->contain(['Fases'])
             ->where(['Fases.id_competicion'=>$competicion->id, 'Fases.categoria'=>$categoria]);
-        
-        $this->_render($partidos);
+        $this->set($this->_buildClasificacion($partidos)->getClasificacion());
     }
 
     public function fase($codCompeticion, $categoria, $codFase) {
         $competicion = $this->_getCompeticion($codCompeticion, $categoria);
-        
-        $partidos = $this->Partidos
-            ->find()
-            ->join(['table'=>'agfg_xornada', 'alias'=>'Xornadas', 'conditions'=>['Xornadas.id = Partidos.id_xornada']])
-            ->join(['table'=>'agfg_fase', 'alias'=>'Fases', 'conditions'=>['Fases.id = Xornadas.id_fase']])
-            ->where(['Fases.id_competicion'=>$competicion->id, 'Fases.categoria'=>$categoria, 'Fases.codigo'=>$codFase]);
-        
-        $this->_render($partidos);
+        $fase = $this->Fases->find()->where(['id_competicion'=>$competicion->id, 'categoria'=>$categoria, 'codigo'=>$codFase])->first();
+        $partidos = $this->Partidos->find()->where(['id_fase'=>$fase->id]);
+        $clasificacion = $this->_buildClasificacion($partidos);
+        if(!empty($fase->id_fase_pai)) {
+            $partidos = $this->Partidos->find()->where(['id_fase'=>$fase->id_fase_pai]);
+            $clasificacionAcumulada = $this->_buildClasificacion($partidos);
+            $clasificacion->add($clasificacionAcumulada);
+            $clasificacion->desempatar();
+        }
+        $this->set($clasificacion->getClasificacion());
     }
 
     private function _getCompeticion($codCompeticion, $categoria) {
@@ -53,12 +51,12 @@ class ClasificacionController extends RestController {
         return $competicion;
     }
 
-    private function _render($partidos) {
+    private function _buildClasificacion($partidos) {
         $equipas = $this->Equipas->findMap();
         $clsf = new Clasificacion($equipas, $partidos);
         $clsf->build();
         $clsf->desempatar();
-        $this->set($clsf->getClasificacion());
+        return $clsf;
     }
     
 }
