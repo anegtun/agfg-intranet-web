@@ -26,11 +26,12 @@ function wp_agfg_xornada_seguinte_shortcode($atts) {
         $html .= "<$titulo>Próxima xornada ($datasXornada)</$titulo>";
     }
     $html .= '<div class="agfg-xornada-proxima">';
-    $dataActual = null;
+    $dataActual = '000-00-00';
     foreach($data->partidos as $p) {
         // Data
         $dataPartido = null;
-        $horaPartido = '';
+        $hora  = '';
+        $dataClass = '';
         if(!empty($p->data_partido)) {
             $dataPartidoDate = strtotime($p->data_partido);
             $diaStr = date('d', $dataPartidoDate);
@@ -39,18 +40,28 @@ function wp_agfg_xornada_seguinte_shortcode($atts) {
             $dataPartido = "$diasSemana[$diaSemanaStr] $diaStr de $meses[$mesStr]";
             $horaStr = date('H:i', $dataPartidoDate);
             if($horaStr!=='00:00') {
-                $horaPartido = $horaStr;
-            } else if(!empty($p->adiado)) {
-                $horaPartido = '(adiado)';
+                $hora = $horaStr;
             }
         }
-        $dataClass = empty($p->adiado) ? '' : 'adiado';
         // Campo
         $campo = 'Pte. horario/campo';
         if(!empty($p->campo)) {
             $campo = "{$p->campo->nome_curto} ({$p->campo->pobo})";
         } elseif(!empty($p->ganador)) {
             $campo = 'Campo descoñecido';
+        }
+        // Xestión adiados
+        if(!empty($p->adiado)) {
+            $dataClass = 'adiado';
+            $dataPartido = 'Partidos da xornada adiados a outra data';
+            $hora = '(adiado)';
+            if(!empty($p->data_partido)) {
+                $dataPartidoDate = strtotime($p->data_partido);
+                $diaStr = date('d', $dataPartidoDate);
+                $mesStr = date('m', $dataPartidoDate);
+                $mesStr = date('n', $dataPartidoDate);
+                $campo = "$diaStr de $meses[$mesStr]";
+            }
         }
         // HTML
         if($dataActual !== $dataPartido) {
@@ -60,7 +71,7 @@ function wp_agfg_xornada_seguinte_shortcode($atts) {
         }
         $html .= '<div class="partido">';
         $html .= '<table>';
-        $html .= "<thead><tr><th colspan='2' class='$dataClass'>C. {$p->fase->categoria}<span style='float:right'>$horaPartido</span><br>$campo</th></tr></thead>";
+        $html .= "<thead><tr><th colspan='2' class='$dataClass'>C. {$p->fase->categoria}<span style='float:right'>$hora</span><br>$campo</th></tr></thead>";
         $html .= '<tbody>';
         $html .= '<tr>';
         $html .= "<td><figure><img class='alignnone' src='{$p->equipa1->logo}' alt='{$p->equipa1->nome}' width='18' height='20'></figure></td>";
