@@ -16,7 +16,7 @@ class PartidosTable extends Table {
         $this->belongsTo('Xornadas', [
         	'className' => 'Xornadas',
             'foreignKey' => 'id_xornada',
-            'propertyName' => 'fase'
+            'propertyName' => 'xornada'
         ]);
     }
 
