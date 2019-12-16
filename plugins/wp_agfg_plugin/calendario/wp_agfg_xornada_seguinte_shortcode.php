@@ -37,11 +37,9 @@ function wp_agfg_xornada_seguinte_shortcode($atts) {
             $diaStr = date('d', $dataPartidoDate);
             $diaSemanaStr = date('w', $dataPartidoDate);
             $mesStr = date('n', $dataPartidoDate);
-            $dataPartido = "$diasSemana[$diaSemanaStr] $diaStr de $meses[$mesStr]";
             $horaStr = date('H:i', $dataPartidoDate);
-            if($horaStr!=='00:00') {
-                $hora = $horaStr;
-            }
+            $dataPartido = "$diasSemana[$diaSemanaStr] $diaStr de $meses[$mesStr]";
+            $hora = ($horaStr==='00:00') ? '(pte.hora)' : $horaStr;
         }
         // Campo
         $campo = 'Pte. horario/campo';
