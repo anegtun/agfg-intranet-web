@@ -10,9 +10,10 @@ $this->set('cabeceiraMigas', [['label'=>'Campos']]);
             <table class="table table-striped table-hover">
                 <thead>
                     <tr>
-                        <th class="celda-titulo">Código</th>
-                        <th class="celda-titulo">Nome</th>
                         <th class="celda-titulo">Pobo</th>
+                        <th class="celda-titulo">Nome</th>
+                        <th class="celda-titulo">Nome curto</th>
+                        <th class="celda-titulo">Código</th>
                         <th class="celda-titulo"></th>
                         <th class="celda-titulo"></th>
                     </tr>
@@ -20,9 +21,10 @@ $this->set('cabeceiraMigas', [['label'=>'Campos']]);
                 <tbody>
                     <?php foreach($campos as $c) : ?>
                         <tr>
-                            <td><?= $c->codigo ?></td>
-                            <td><?= $c->nome ?></td>
                             <td><?= $c->pobo ?></td>
+                            <td><?= $c->nome ?></td>
+                            <td><?= $c->nome_curto ?></td>
+                            <td><?= $c->codigo ?></td>
                             <td class="text-center"><?= $this->AgfgForm->editButton(['action'=>'detalle', $c->id]) ?></td>
                             <td class="text-center"><?= $this->AgfgForm->deleteButton(['action'=>'borrar', $c->id]) ?></td>
                         </tr>

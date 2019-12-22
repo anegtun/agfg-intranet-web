@@ -30,16 +30,10 @@ class CompeticionsController extends AppController {
     }
 
     public function detalle($id=null) {
-        $competicion = empty($id) ? $this->Competicions->newEntity() : $this->Competicions->get($id, ['contain'=>['Fases']]);
-        if(!empty($id)) {
-            foreach($competicion->fases as $f) {
-                if(!empty($f->id_fase_pai)) {
-                    $f->fasePai = $this->Fases->get($f->id_fase_pai);
-                }
-            }
-            usort($competicion->fases, function ($a, $b) {
-                return strcmp($a->categoria, $b->categoria);
-            });
+        if(empty($id)) {
+            $competicion = $this->Competicions->newEntity();
+        } else {
+            $competicion = $this->Competicions->get($id, ['contain' => ['Fases' => ['sort'=>['Fases.categoria']], 'Fases.FasePai']]);
         }
         $categorias = $this->Categorias->getCategoriasWithEmpty();
         $tempadas = $this->Tempadas->getTempadasWithEmpty();
