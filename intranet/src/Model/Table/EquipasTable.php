@@ -8,6 +8,11 @@ class EquipasTable extends Table {
 
     public function initialize(array $config) {
         $this->setTable('agfg_equipas');
+        $this->belongsTo('Clube', [
+        	'className' => 'Clubes',
+            'foreignKey' => 'id_clube',
+            'propertyName' => 'clube'
+        ]);
     }
 
     public function findMap() {

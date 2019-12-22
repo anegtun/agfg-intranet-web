@@ -1,7 +1,7 @@
 <?php
 $this->extend('template');
-$this->set('cabeceiraTitulo', 'Equipas');
-$this->set('cabeceiraMigas', [['label'=>'Equipas']]);
+$this->set('cabeceiraTitulo', 'Clubes');
+$this->set('cabeceiraMigas', [['label'=>'Clubes']]);
 ?>
 
 <div class="container-full" style="margin-top:2em;">
@@ -13,20 +13,18 @@ $this->set('cabeceiraMigas', [['label'=>'Equipas']]);
                         <th class="celda-titulo"></th>
                         <th class="celda-titulo">Código</th>
                         <th class="celda-titulo">Nome</th>
-                        <th class="celda-titulo">Categoria</th>
                         <th class="celda-titulo"></th>
                         <th class="celda-titulo"></th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach($equipas as $e) : ?>
+                    <?php foreach($clubes as $c) : ?>
                         <tr>
-                            <td class="text-center"><?= empty($e->logo) ? '' : $this->Html->image($e->logo, ['width'=>30,'height'=>30]) ?></td>
-                            <td><?= $e->codigo ?></td>
-                            <td><?= $e->nome ?></td>
-                            <td><?= $categorias[$e->categoria] ?></td>
-                            <td class="text-center"><?= $this->AgfgForm->editButton(['action'=>'detalle', $e->id]) ?></td>
-                            <td class="text-center"><?= $this->AgfgForm->deleteButton(['action'=>'borrar', $e->id]) ?></td>
+                            <td class="text-center"><?= empty($c->logo) ? '' : $this->Html->image($c->logo, ['width'=>30,'height'=>30]) ?></td>
+                            <td><?= $c->codigo ?></td>
+                            <td><?= $c->nome ?></td>
+                            <td class="text-center"><?= $this->AgfgForm->editButton(['action'=>'detalle', $c->id]) ?></td>
+                            <td class="text-center"><?= $this->AgfgForm->deleteButton(['action'=>'borrar', $c->id]) ?></td>
                         </tr>
                     <?php endforeach ?>
                 </tbody>
