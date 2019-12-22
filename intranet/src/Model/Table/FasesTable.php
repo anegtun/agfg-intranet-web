@@ -8,11 +8,11 @@ class FasesTable extends Table {
 
     public function initialize(array $config) {
         $this->setTable('agfg_fase');
-        /*$this->belongsTo('Competicions', [
-        	'className' => 'Competicions',
-            'foreignKey' => 'id_competicion',
-            'propertyName' => 'competicion'
-        ]);*/
+        $this->belongsTo('FasePai', [
+        	'className' => 'Fases',
+            'foreignKey' => 'id_fase_pai',
+            'propertyName' => 'fasePai'
+        ]);
     }
 
     public function validationDefault(Validator $validator) {

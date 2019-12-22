@@ -119,6 +119,8 @@ class ResultadosController extends AppController {
     private function processGameForm($partido, $data) {
         $p = $this->Partidos->patchEntity($partido, $data);
         $p->data_partido = empty($data['data']) ? NULL : Time::createFromFormat('d-m-Y', $data['data']);
+        $p->id_campo = $this->clean($data['id_campo']);
+        $p->id_arbitro = $this->clean($data['id_arbitro']);
         $p->goles_equipa1 = $this->clean($data['goles_equipa1']);
         $p->tantos_equipa1 = $this->clean($data['tantos_equipa1']);
         $p->total_equipa1 = $this->clean($data['total_equipa1']);

@@ -11,7 +11,7 @@ class CamposController extends AppController {
     }
 
     public function index() {
-        $campos = $this->Campos->find('all', ['order'=>'codigo']);
+        $campos = $this->Campos->find('all', ['order'=>'pobo']);
         $this->set(compact('campos'));
     }
 
