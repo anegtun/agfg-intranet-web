@@ -133,8 +133,8 @@ $menu_option = empty($menu_option) ? '' : $menu_option;
                                 </li>
                                 <li data-toggle="tooltip">
                                     <?= $this->Html->link(
-                                        '<span class="glyphicon glyphicon-user"><span class="sr-only">Equipas</span></span> Equipas',
-                                        array('controller'=>'Equipas', 'action'=>'index'),
+                                        '<span class="glyphicon glyphicon-user"><span class="sr-only">Clubes</span></span> Clubes',
+                                        array('controller'=>'Clubes', 'action'=>'index'),
                                         array('escape'=>false)) ?>
                                 </li>
                                 <li data-toggle="tooltip">
