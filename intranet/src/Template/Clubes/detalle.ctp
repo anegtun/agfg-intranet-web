@@ -15,7 +15,15 @@ $this->set('cabeceiraMigas', [
                 <legend>Clube</legend>
                 <?= $this->Form->control('codigo', ['label'=>'Código']) ?>
                 <?= $this->Form->control('nome', ['label'=>'Nome']) ?>
-                <?= $this->Form->control('logo', ['label'=>'Logo']) ?>
+                <?= $this->Form->control('denominacion', ['label'=>'Denominación oficial']) ?>
+                <?= $this->Form->control('localidade', ['label'=>'Localidade']) ?>
+                <?= $this->Form->control('fundacion', ['label'=>'Ano fundación']) ?>
+                <?= $this->Form->control('debut', ['label'=>'Tempada debut']) ?>
+                <?= $this->Form->control('email', ['label'=>'Email']) ?>
+                <?= $this->Form->control('web', ['label'=>'Web']) ?>
+                <?= $this->Form->control('facebook', ['label'=>'Facebook']) ?>
+                <?= $this->Form->control('instagram', ['label'=>'Instagram']) ?>
+                <?= $this->Form->control('twitter', ['label'=>'Twitter']) ?>
                 <?= $this->Form->button('Gardar', ['class'=>'btn btn-primary']); ?>
             </fieldset>
         <?= $this->Form->end() ?>
