@@ -76,6 +76,8 @@ try {
     exit($e->getMessage() . "\n");
 }
 
+Configure::load('info', 'default');
+
 /*
  * Load an environment local configuration file.
  * You can use a file like app_local.php to provide local overrides to your

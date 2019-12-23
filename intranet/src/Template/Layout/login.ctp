@@ -63,7 +63,7 @@
                                                 <p>Intranet da Asociación Galega de Fútbol Gaélico</p>
                                             </div>
                                             <div class="version">
-                                                Ver. <span>1.3.11</span>
+                                                Ver. <span><?= $this->AgfgConfig->version() ?></span>
                                             </div>
                                         </div>
                                     </div>
