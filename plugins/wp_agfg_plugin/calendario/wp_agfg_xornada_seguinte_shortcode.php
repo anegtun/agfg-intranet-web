@@ -13,11 +13,11 @@ function wp_agfg_xornada_seguinte_shortcode($atts) {
 
     $diasSemana = ['Domingo','Luns','Martes','Mércores','Xoves','Venres','Sábado'];
     $meses = ['','xaneiro','febreiro','marzo','abril','maio','xuño','xullo','agosto','setembro','outubro','novembro','decembro'];
+    $dataInicio = strtotime($data->inicio);
+    $dataFin = strtotime($data->fin);
     
     $html = wp_agfg_common_style();
     if(!empty($titulo)) {
-        $dataInicio = strtotime($data->inicio);
-        $dataFin = strtotime($data->fin);
         $diaI = date('d', $dataInicio);
         $diaF = date('d', $dataFin);
         $mesI = date('n', $dataInicio);
@@ -29,7 +29,7 @@ function wp_agfg_xornada_seguinte_shortcode($atts) {
     $dataActual = '000-00-00';
     foreach($data->partidos as $p) {
         // Data
-        $dataPartido = null;
+        $dataPartido = $dataPartidoDate = null;
         $hora  = '';
         $dataClass = '';
         if(!empty($p->data_partido)) {
@@ -51,14 +51,16 @@ function wp_agfg_xornada_seguinte_shortcode($atts) {
         // Xestión adiados
         if(!empty($p->adiado)) {
             $dataClass = 'adiado';
-            $dataPartido = 'Partidos da xornada adiados a outra data';
-            $hora = '(adiado)';
-            if(!empty($p->data_partido)) {
-                $dataPartidoDate = strtotime($p->data_partido);
-                $diaStr = date('d', $dataPartidoDate);
-                $mesStr = date('m', $dataPartidoDate);
-                $mesStr = date('n', $dataPartidoDate);
-                $campo = "$diaStr de $meses[$mesStr]";
+            if(!empty($dataPartidoDate) && $dataPartidoDate>$dataFin) {
+                $dataPartido = 'Partidos da xornada adiados a outra data';
+                $hora = '(adiado)';
+                if(!empty($p->data_partido)) {
+                    $dataPartidoDate = strtotime($p->data_partido);
+                    $diaStr = date('d', $dataPartidoDate);
+                    $mesStr = date('m', $dataPartidoDate);
+                    $mesStr = date('n', $dataPartidoDate);
+                    $campo = "$diaStr de $meses[$mesStr]";
+                }
             }
         }
         // HTML
