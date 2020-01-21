@@ -40,7 +40,7 @@ $this->set('cabeceiraMigas', [
                         ?>
                         <tr>
                             <td class="<?= $rowClass ?> <?= $p->adiado?'text-warning':''?>"><?= empty($d=$p->formatDataHora()) ? '-' : $d ?></td>
-                            <td class="<?= $rowClass ?>"><?= "{$p->fase->categoria} [X.{$p->xornada->numero}]" ?></td>
+                            <td class="<?= $rowClass ?> <?= $p->adiado?'text-warning':''?>"><?= "{$p->fase->categoria} [X.{$p->xornada->numero}]" ?></td>
                             <td class="<?= $rowClass ?> text-center"><?= empty($equipas[$p->id_equipa1]->logo) ? '' : $this->Html->image($equipas[$p->id_equipa1]->logo, ['width'=>30,'height'=>30]) ?></td>
                             <td class="<?= $rowClass ?>"><?= $equipas[$p->id_equipa1]->nome ?></td>
                             <td class="<?= $rowClass ?>"><?= $p->formatPuntuacionEquipa1() ?></td>
