@@ -76,7 +76,11 @@ class CompeticionsController extends AppController {
             $outras_fases = $this->Fases->find()->where(['id_competicion'=>$fase->id_competicion]);
         } else {
             $fase = $this->Fases->get($id);
-            $fase->equipas = $this->FasesEquipas->find('list', ['keyField'=>'id_equipa','valueField'=>'id_equipa'])->where(['id_fase'=>$fase->id])->toArray();
+            $fase->equipas = [];
+            $fasesEquipas = $this->FasesEquipas->find()->where(['id_fase'=>$fase->id]);
+            foreach($fasesEquipas as $fe) {
+                $fase->equipas[$fe->id_equipa] = $fe;
+            }
             $fase->xornadas = $this->Xornadas->findWithPartidos($fase->id);
             $fase->equipasData = $this->Equipas->findInFase($fase->id);
             $equipas = $this->Equipas->find()->where(['categoria'=>$fase->categoria])->order(['nome']);
@@ -106,6 +110,7 @@ class CompeticionsController extends AppController {
                     $faseEquipa = $this->FasesEquipas->newEntity();
                     $faseEquipa->id_fase = $fase->id;
                     $faseEquipa->id_equipa = $idE;
+                    $faseEquipa->puntos = empty($data['puntos'][$idE]) ? 0 : $data['puntos'][$idE];
                     $this->FasesEquipas->save($faseEquipa);
                 }
             }

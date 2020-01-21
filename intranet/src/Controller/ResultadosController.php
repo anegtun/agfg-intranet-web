@@ -6,6 +6,7 @@ use App\Model\Categorias;
 use App\Model\Tempadas;
 use App\Model\TiposCompeticion;
 use Cake\Event\Event;
+use Cake\I18n\FrozenDate;
 use Cake\I18n\Time;
 use Cake\ORM\TableRegistry;
 
@@ -34,27 +35,23 @@ class ResultadosController extends AppController {
     public function competicion($id) {
         $competicion = $this->Competicions->get($id, ['contain'=>['Fases']]);
         $xornadas = [];
-        foreach($competicion->fases as $f) {
-            $xornadasFase = $this->Xornadas->find()->where(['id_fase'=>$f->id]);
-            foreach($xornadasFase as $x) {
-                $key = $x->data->format('Y-m-d');
-                if(empty($xornadas[$key])) {
-                    $xornadas[$key] = $x;
-                    $xornadas[$key]->partidos = [];
-                }
-                $partidos = $this->Partidos->find()->where(['id_xornada'=>$x->id])->order(['data_partido','hora_partido']);
-                foreach($partidos as $p) {
-                    $p->categoria = $f->categoria;
-                    $xornadas[$key]->partidos[] = $p;
-                }
-                usort($xornadas[$key]->partidos, [$this,'cmpPartido']);
-            }
-        }
-        usort($xornadas, [$this,'cmpXornada']);
+        $partidos = $this->Partidos
+            ->find()
+            ->contain(['Fases', 'Xornadas'])
+            ->select(['data_calendario' => 'COALESCE(Partidos.data_partido, Xornadas.data)'])
+            ->enableAutoFields(true)
+            ->where(['Fases.id_competicion'=>$id])
+            ->order(['data_calendario','hora_partido'])
+            ->formatResults(function (\Cake\Collection\CollectionInterface $results) {
+                return $results->map(function ($row) {
+                    $row['data_calendario'] = FrozenDate::createFromFormat('Y-m-d', $row['data_calendario']);
+                    return $row;
+                });
+            });
         $arbitros = $this->Arbitros->findMap();
         $campos = $this->Campos->findMap();
         $equipas = $this->Equipas->findMap();
-        $this->set(compact('competicion', 'xornadas', 'arbitros', 'campos', 'equipas'));
+        $this->set(compact('competicion', 'partidos', 'arbitros', 'campos', 'equipas'));
     }
 
     public function partido($id) {
@@ -85,32 +82,6 @@ class ResultadosController extends AppController {
         }
         $this->set(compact('partido'));
         $this->render('partido');
-    }
-
-    /**
-     * Ordena os partidos dunha xornada, por data/hora e, senon, por equipa local
-     */
-    private function cmpPartido($a, $b) {
-        $cmp = 0;
-        if(!empty($a->data_partido) && !empty($b->data_partido)) {
-            $cmp = ((int)$a->data_partido->toUnixString()) - ((int)$b->data_partido->toUnixString());
-            if($cmp===0) {
-                $cmp = strcmp($a->hora_partido, $b->hora_partido);
-            }
-        }
-        if(empty($cmp)) {
-            $equipaLocalA = $this->Equipas->get($a->id_equipa1);
-            $equipaLocalB = $this->Equipas->get($b->id_equipa1);
-            $cmp = strcoll($equipaLocalA->nome, $equipaLocalB->nome);
-        }
-        return $cmp;
-    }
-
-    /**
-     * Ordena as xornadas por data
-     */
-    private function cmpXornada($a, $b) {
-        return ((int)$a->data->toUnixString()) - ((int)$b->data->toUnixString());
     }
 
     /**

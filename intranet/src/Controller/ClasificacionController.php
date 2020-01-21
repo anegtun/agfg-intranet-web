@@ -13,6 +13,7 @@ class ClasificacionController extends RestController {
         parent::initialize();
         $this->Competicions = TableRegistry::get('Competicions');
         $this->Equipas = TableRegistry::get('Equipas');
+        $this->FasesEquipas = TableRegistry::get('FasesEquipas');
         $this->Fases = TableRegistry::get('Fases');
         $this->Partidos = TableRegistry::get('Partidos');
     }
@@ -23,7 +24,19 @@ class ClasificacionController extends RestController {
             ->find()
             ->contain(['Fases'])
             ->where(['Fases.id_competicion'=>$competicion->id, 'Fases.categoria'=>$categoria]);
-        $this->set($this->_buildClasificacion($partidos)->getClasificacion());
+        $equipasFases = $this->FasesEquipas->find()->contain(['Fases'])->where(['Fases.id_competicion'=>$competicion->id]);
+        $equipasPuntos = [];
+        foreach($equipasFases as $fe) {
+            if(empty($equipasPuntos[$fe->id_equipa])) {
+                $equipasPuntos[$fe->id_equipa] = Clasificacion::init($fe->id_equipa);
+            }
+            if(!empty($fe->puntos)) {
+                $equipasPuntos[$fe->id_equipa]->puntos_sen_sancion += $fe->puntos;
+            }
+        }
+        $clasificacion = $this->_buildClasificacion($partidos);
+        $clasificacion->addData(array_values($equipasPuntos));
+        $this->set($clasificacion->getClasificacion());
     }
 
     public function fase($codCompeticion, $categoria, $codFase) {
@@ -37,6 +50,17 @@ class ClasificacionController extends RestController {
             $clasificacion->add($clasificacionAcumulada);
             $clasificacion->desempatar();
         }
+        $equipasFase = $this->FasesEquipas->find()->where(['id_fase'=>$fase->id]);
+        $equipasPuntos = [];
+        foreach($equipasFase as $fe) {
+            if(empty($equipasPuntos[$fe->id_equipa])) {
+                $equipasPuntos[$fe->id_equipa] = Clasificacion::init($fe->id_equipa);
+            }
+            if(!empty($fe->puntos)) {
+                $equipasPuntos[$fe->id_equipa]->puntos_sen_sancion += $fe->puntos;
+            }
+        }
+        $clasificacion->addData(array_values($equipasPuntos));
         $this->set($clasificacion->getClasificacion());
     }
 
