@@ -26,15 +26,18 @@ $emptyTemplates = [
 
                 <?php if(!empty($fase->id)) : ?>
                     <label for="equipas">Equipas participantes</label>
-                    <?= $this->Form->control('equipas', [
-                            'label'=>false,
-                            'multiple' => 'checkbox',
-                            'options' => $this->AgfgForm->objectToKeyValue($equipas,'id','nome',false),
-                            'templates'=>[
-                                'checkboxWrapper' => '{{label}}',
-                                'nestingLabel' => '<label{{attrs}}>{{input}} {{text}}</label><br/>']
-                        ]);
-                    ?>
+                    <div class="form-group">
+                        <input type="hidden" name="equipas" class="form-control" value="">
+
+                        <?php foreach($equipas as $e) : ?>
+                            <label for="equipas-<?= $e->id ?>" class="selected">
+                                <input type="checkbox" name="equipas[<?= $e->id ?>]" id="equipas-<?= $e->id ?>" value="<?= $e->id ?>" <?= empty($fase->equipas[$e->id]) ? '' : 'checked="checked"' ?> />
+                                <?= $e->nome ?>
+                                <input type="number" name="puntos[<?= $e->id ?>]" id="puntos-<?= $e->id ?>" value="<?= empty($fase->equipas[$e->id]->puntos) ? '' : $fase->equipas[$e->id]->puntos ?>" />
+                            </label>
+                            <br/>
+                        <?php endforeach ?>
+                    </div>
                 <?php endif ?>
 
                 <?= $this->Form->button('Gardar', ['class'=>'btn btn-primary']); ?>

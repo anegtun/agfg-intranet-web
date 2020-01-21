@@ -21,7 +21,10 @@ class Clasificacion {
     }
     
     public function add($clasificacionAnterior) {
-        $clsfAnterior = $clasificacionAnterior->getClasificacion();
+        $this->addData($clasificacionAnterior->getClasificacion());
+    }
+    
+    public function addData($clsfAnterior) {
         for($i=0; $i<count($this->_clasificacion); $i++) {
             for($j=0; $j<count($clsfAnterior); $j++) {
                 if($this->_clasificacion[$i]->id===$clsfAnterior[$j]->id) {
@@ -197,6 +200,26 @@ class Clasificacion {
 
     public function getClasificacion() {
         return $this->_clasificacion;
+    }
+
+    public static function init($id) {
+        return (object) [
+            'id' => $id,
+            'posicion' => 0,
+            'puntos' => 0,
+            'puntos_sen_sancion' => 0,
+            'puntos_sancion' => 0,
+            'partidosXogados' => 0,
+            'partidosGanados' => 0,
+            'partidosEmpatados' => 0,
+            'partidosPerdidos' => 0,
+            'golesFavor' => 0,
+            'tantosFavor' => 0,
+            'totalFavor' => 0,
+            'golesContra' => 0,
+            'tantosContra' => 0,
+            'totalContra' => 0,
+        ];
     }
 
 }

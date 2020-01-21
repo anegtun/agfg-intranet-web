@@ -24,35 +24,38 @@ $this->set('cabeceiraMigas', [
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach($xornadas as $x) : ?>
-                        <tr>
-                            <th colspan="14"><?= "Xornada ".$x->data->format('d/m/Y') ?></th>
-                        </tr>
-                        <?php foreach($x->partidos as $p) : ?>
-                            <?php
-                                $rowClass = ($p->non_presentado_equipa1 || $p->non_presentado_equipa2 
-                                    || !empty($p->sancion_puntos_equipa1) || !empty($p->sancion_puntos_equipa2))
-                                        ? 'bg-danger text-danger' : '';
-                            ?>
+                    <?php $xornadaActual = NULL ?>
+                    <?php foreach($partidos as $p) : ?>
+                        <?php $seguinteLuns = $p->data_calendario->modify('monday next week') ?>
+                        <?php if(empty($xornadaActual) || $xornadaActual->format('Y-m-d')!==$seguinteLuns->format('Y-m-d')) : ?>
+                            <?php $xornadaActual = $seguinteLuns ?>
                             <tr>
-                                <td class="<?= $rowClass ?> <?= $p->adiado?'text-warning':''?>"><?= empty($d=$p->formatDataHora()) ? '-' : $d ?></td>
-                                <td class="<?= $rowClass ?>"><?= $p->categoria ?></td>
-                                <td class="<?= $rowClass ?> text-center"><?= empty($equipas[$p->id_equipa1]->logo) ? '' : $this->Html->image($equipas[$p->id_equipa1]->logo, ['width'=>30,'height'=>30]) ?></td>
-                                <td class="<?= $rowClass ?>"><?= $equipas[$p->id_equipa1]->nome ?></td>
-                                <td class="<?= $rowClass ?>"><?= $p->formatPuntuacionEquipa1() ?></td>
-                                <td class="<?= $rowClass ?>"><?= !empty($p->sancion_puntos_equipa1) ? "[-{$p->sancion_puntos_equipa1}pt]" : '' ?></td>
-                                <td class="<?= $rowClass ?> text-center"><?= empty($equipas[$p->id_equipa2]->logo) ? '' : $this->Html->image($equipas[$p->id_equipa2]->logo, ['width'=>30,'height'=>30]) ?></td>
-                                <td class="<?= $rowClass ?>"><?= $equipas[$p->id_equipa2]->nome ?></td>
-                                <td class="<?= $rowClass ?>"><?= $p->formatPuntuacionEquipa2() ?></td>
-                                <td class="<?= $rowClass ?>"><?= !empty($p->sancion_puntos_equipa2) ? "[-{$p->sancion_puntos_equipa2}pt]" : '' ?></td>
-                                <td class="<?= $rowClass ?>"><?= empty($p->id_campo) ? '-' : $campos[$p->id_campo]->nome ?></td>
-                                <td class="<?= $rowClass ?>"><?= empty($p->id_arbitro) ? '-' : $arbitros[$p->id_arbitro]->alcume ?></td>
-                                <td class="<?= $rowClass ?>"><?= $p->getGanador() ?></td>
-                                <td class="<?= $rowClass ?>">
-                                    <?= $this->Html->link('', ['action'=>'partido', $p->id], ['class'=>'glyphicon glyphicon-edit']); ?>
-                                </td>
+                                <th colspan="14"><?= $seguinteLuns->modify('previous saturday')->format('Y-m-d') ?></th>
                             </tr>
-                        <?php endforeach ?>
+                        <?php endif ?>
+                        <?php
+                            $rowClass = ($p->non_presentado_equipa1 || $p->non_presentado_equipa2 
+                                || !empty($p->sancion_puntos_equipa1) || !empty($p->sancion_puntos_equipa2))
+                                    ? 'bg-danger text-danger' : '';
+                        ?>
+                        <tr>
+                            <td class="<?= $rowClass ?> <?= $p->adiado?'text-warning':''?>"><?= empty($d=$p->formatDataHora()) ? '-' : $d ?></td>
+                            <td class="<?= $rowClass ?>"><?= $p->categoria ?></td>
+                            <td class="<?= $rowClass ?> text-center"><?= empty($equipas[$p->id_equipa1]->logo) ? '' : $this->Html->image($equipas[$p->id_equipa1]->logo, ['width'=>30,'height'=>30]) ?></td>
+                            <td class="<?= $rowClass ?>"><?= $equipas[$p->id_equipa1]->nome ?></td>
+                            <td class="<?= $rowClass ?>"><?= $p->formatPuntuacionEquipa1() ?></td>
+                            <td class="<?= $rowClass ?>"><?= !empty($p->sancion_puntos_equipa1) ? "[-{$p->sancion_puntos_equipa1}pt]" : '' ?></td>
+                            <td class="<?= $rowClass ?> text-center"><?= empty($equipas[$p->id_equipa2]->logo) ? '' : $this->Html->image($equipas[$p->id_equipa2]->logo, ['width'=>30,'height'=>30]) ?></td>
+                            <td class="<?= $rowClass ?>"><?= $equipas[$p->id_equipa2]->nome ?></td>
+                            <td class="<?= $rowClass ?>"><?= $p->formatPuntuacionEquipa2() ?></td>
+                            <td class="<?= $rowClass ?>"><?= !empty($p->sancion_puntos_equipa2) ? "[-{$p->sancion_puntos_equipa2}pt]" : '' ?></td>
+                            <td class="<?= $rowClass ?>"><?= empty($p->id_campo) ? '-' : $campos[$p->id_campo]->nome ?></td>
+                            <td class="<?= $rowClass ?>"><?= empty($p->id_arbitro) ? '-' : $arbitros[$p->id_arbitro]->alcume ?></td>
+                            <td class="<?= $rowClass ?>"><?= $p->getGanador() ?></td>
+                            <td class="<?= $rowClass ?>">
+                                <?= $this->Html->link('', ['action'=>'partido', $p->id], ['class'=>'glyphicon glyphicon-edit']); ?>
+                            </td>
+                        </tr>
                     <?php endforeach ?>
                 </tbody>
             </table>
