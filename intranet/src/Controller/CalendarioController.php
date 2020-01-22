@@ -28,7 +28,7 @@ class CalendarioController extends RestController {
             throw new Exception("Non existe competición");
         }
         // Obtemos fases
-        $fases = $this->getFases($competicion);
+        $fases = $this->_getFases($competicion);
         $campos = $this->Campos->findMap();
         $equipas = $this->Equipas->findMap();
 
@@ -53,7 +53,7 @@ class CalendarioController extends RestController {
                 }
                 $partidos = $this->Partidos->find()->where(['id_xornada'=>$x->id]);
                 foreach($partidos as $p) {
-                    $resX['partidos'][] = $this->buildPartidoData($p, $equipas, $campos);
+                    $resX['partidos'][] = $this->_buildPartidoData($p, $equipas, $campos);
                 }
                 if($index>0) {
                     $res['xornadas'][$index] = $resX;
@@ -65,7 +65,77 @@ class CalendarioController extends RestController {
         $this->set($res);
     }
 
-    private function getFases($competicion) {
+    public function xornadaSeguinte($codigo) {
+        $competicion = $this->Competicions->find()->where(['Competicions.codigo'=>$codigo])->first();
+        if(empty($competicion)) {
+            throw new Exception("Non existe competición");
+        }
+        $dataReferencia = $this->_getDataMaisCercanaFutura($competicion);
+        $this->set($this->_getJsonPartidosSemana($competicion, $dataReferencia));
+    }
+
+    public function xornadaAnterior($codigo) {
+        $competicion = $this->Competicions->find()->where(['Competicions.codigo'=>$codigo])->first();
+        if(empty($competicion)) {
+            throw new Exception("Non existe competición");
+        }
+        $dataReferencia = $this->_getDataMaisCercanaPasada($competicion);
+        $this->set($this->_getJsonPartidosSemana($competicion, $dataReferencia));
+    }
+
+    public function seguintesPartidosClube($codigo) {
+        $campos = $this->Campos->findMap();
+        $equipas = $this->Equipas->findMap();
+        $xornadaActual = FrozenDate::now()->modify('monday this week');
+        $partidos = $this->Partidos
+            ->find()
+            ->contain(['Xornadas', 'Equipas1', 'Equipas2'])
+            ->select(['data_calendario' => 'COALESCE(Partidos.data_partido, Xornadas.data)'])
+            ->select(['codigo_clube1' => '(SELECT c1.codigo FROM agfg_clubes c1 WHERE c1.id = Equipas1.id_clube)'])
+            ->select(['codigo_clube2' => '(SELECT c2.codigo FROM agfg_clubes c2 WHERE c2.id = Equipas2.id_clube)'])
+            ->enableAutoFields(true)
+            ->where(['OR' => [
+                'Partidos.data_partido >=' => $xornadaActual,
+                'Xornadas.data >=' => $xornadaActual
+            ]])
+            ->having(['OR' => [
+                'codigo_clube1' => $codigo,
+                'codigo_clube2' => $codigo
+            ]])
+            ->order(['data_calendario']);
+        $res = [];
+        foreach($partidos as $p) {
+            $res[] = $this->_buildPartidoData($p, $equipas, $campos);
+        }
+        $this->set($res);
+    }
+
+    public function ultimosPartidosClube($codigo) {
+        $campos = $this->Campos->findMap();
+        $equipas = $this->Equipas->findMap();
+        $xornadaActual = FrozenDate::now()->modify('monday this week');
+        $partidos = $this->Partidos
+            ->find()
+            ->limit(10)
+            ->contain(['Xornadas', 'Equipas1', 'Equipas2'])
+            ->select(['data_calendario' => 'COALESCE(Partidos.data_partido, Xornadas.data)'])
+            ->select(['codigo_clube1' => '(SELECT c1.codigo FROM agfg_clubes c1 WHERE c1.id = Equipas1.id_clube)'])
+            ->select(['codigo_clube2' => '(SELECT c2.codigo FROM agfg_clubes c2 WHERE c2.id = Equipas2.id_clube)'])
+            ->enableAutoFields(true)
+            ->where(['Partidos.data_partido <' => $xornadaActual])
+            ->having(['OR' => [
+                'codigo_clube1' => $codigo,
+                'codigo_clube2' => $codigo
+            ]])
+            ->order(['data_calendario' => 'DESC']);
+        $res = [];
+        foreach($partidos as $p) {
+            $res[] = $this->_buildPartidoData($p, $equipas, $campos);
+        }
+        $this->set($res);
+    }
+
+    private function _getFases($competicion) {
         $conditions = ['id_competicion'=>$competicion->id];
         $categoria = $this->request->getQuery('categoria');
         if(!empty($categoria)) {
@@ -74,25 +144,7 @@ class CalendarioController extends RestController {
         return $this->Fases->find()->where($conditions);
     }
 
-    public function xornadaSeguinte($codigo) {
-        $competicion = $this->Competicions->find()->where(['Competicions.codigo'=>$codigo])->first();
-        if(empty($competicion)) {
-            throw new Exception("Non existe competición");
-        }
-        $dataReferencia = $this->getDataMaisCercanaFutura($competicion);
-        $this->set($this->getJsonPartidosSemana($competicion, $dataReferencia));
-    }
-
-    public function xornadaAnterior($codigo) {
-        $competicion = $this->Competicions->find()->where(['Competicions.codigo'=>$codigo])->first();
-        if(empty($competicion)) {
-            throw new Exception("Non existe competición");
-        }
-        $dataReferencia = $this->getDataMaisCercanaPasada($competicion);
-        $this->set($this->getJsonPartidosSemana($competicion, $dataReferencia));
-    }
-
-    public function getJsonPartidosSemana($competicion, $dataReferencia) {
+    private function _getJsonPartidosSemana($competicion, $dataReferencia) {
         $luns = $dataReferencia->modify('monday this week');
         $domingo = $luns->modify('sunday this week');
         $lunsYMD = $luns->i18nFormat('yyyy-MM-dd');
@@ -114,7 +166,7 @@ class CalendarioController extends RestController {
             'partidos' => []
         ];
         foreach($partidos as $p) {
-            $resP = $this->buildPartidoData($p, $equipas, $campos);
+            $resP = $this->_buildPartidoData($p, $equipas, $campos);
             $resP['fase'] = [
                 'categoria' => $categorias[$p->fase->categoria],
                 'nome' => $p->fase->nome
@@ -128,7 +180,7 @@ class CalendarioController extends RestController {
         return $res;
     }
 
-    private function getDataMaisCercanaFutura($competicion) {
+    private function _getDataMaisCercanaFutura($competicion) {
         $currentMonday = new FrozenDate('monday this week');
         // Data da seguinte xornada
         $seguinteXornada = $this->Xornadas
@@ -152,7 +204,7 @@ class CalendarioController extends RestController {
         return $data;
     }
 
-    private function getDataMaisCercanaPasada($competicion) {
+    private function _getDataMaisCercanaPasada($competicion) {
         $currentMonday = new FrozenDate('monday this week');
         // Data da seguinte xornada
         $anteriorXornada = $this->Xornadas
@@ -176,7 +228,7 @@ class CalendarioController extends RestController {
         return $data;
     }
 
-    private function buildPartidoData($p, $equipas, $campos) {
+    private function _buildPartidoData($p, $equipas, $campos) {
         $resP = [
             'data_partido' => $p->getDataHora(),
             'adiado' => $p->adiado,
@@ -185,6 +237,9 @@ class CalendarioController extends RestController {
             'ganador' => $p->getGanador(),
             'campo' => []
         ];
+        if(!empty($p->data_calendario)) {
+            $resP['data_calendario'] = $p->data_calendario;
+        }
         if(!empty($p->id_equipa1)) {
             $resP['equipa1'] = [
                 'codigo' => $equipas[$p->id_equipa1]->codigo,
