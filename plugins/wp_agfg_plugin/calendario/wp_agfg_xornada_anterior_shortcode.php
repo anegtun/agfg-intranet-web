@@ -10,27 +10,18 @@ function wp_agfg_xornada_anterior_shortcode($atts) {
     }
     $response = wp_remote_get($url);
     $data = json_decode($response['body']);
-
-    $diasSemana = ['Domingo','Luns','Martes','Mércores','Xoves','Venres','Sábado'];
-    $meses = ['','xaneiro','febreiro','marzo','abril','maio','xuño','xullo','agosto','setembro','outubro','novembro','decembro'];
     
     $html = wp_agfg_common_style();
     if(!empty($titulo)) {
         $dataInicio = strtotime($data->inicio);
         $dataFin = strtotime($data->fin);
-        $diaI = date('d', $dataInicio);
-        $diaF = date('d', $dataFin);
-        $mesI = date('n', $dataInicio);
-        $mesF = date('n', $dataFin);
-        $datasXornada = "$diaI de $meses[$mesI] a $diaF de $meses[$mesF]";
+        $datasXornada = date('d',$dataInicio)." de ".mes($dataInicio)." a ".date('d',$dataFin)." de ".mes($dataFin);
         $html .= "<$titulo>Resultados última xornada ($datasXornada)</$titulo>";
     }
     $html .= '<div class="agfg-xornada-anterior">';
     $dataActual = null;
     foreach($data->partidos as $p) {
-        // Resultados
         $resultados = format_resultados($p);
-        // Adiado
         $dataClass = empty($p->adiado) ? '' : 'adiado';
         // HTML
         $html .= '<div class="partido">';
