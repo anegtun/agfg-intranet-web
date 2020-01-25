@@ -1,5 +1,15 @@
 <?php
 
+function mes($data) {
+    $meses = ['','xaneiro','febreiro','marzo','abril','maio','xuño','xullo','agosto','setembro','outubro','novembro','decembro'];
+    return $meses[date('n',$data)];
+}
+
+function diaSemana($data) {
+    $diasSemana = ['Domingo','Luns','Martes','Mércores','Xoves','Venres','Sábado'];
+    return $diasSemana[date('w',$data)];
+}
+
 function format_resultado($equipa) {
     $resultado = "";
     if(!is_null($equipa->goles) || !is_null($p->equipa1->goles)) {
