@@ -37,11 +37,11 @@ class ResultadosController extends AppController {
         $xornadas = [];
         $partidos = $this->Partidos
             ->find()
-            ->contain(['Fases', 'Xornadas'])
+            ->contain(['Fases', 'Xornadas', 'Equipas1'])
             ->select(['data_calendario' => 'COALESCE(Partidos.data_partido, Xornadas.data)'])
             ->enableAutoFields(true)
             ->where(['Fases.id_competicion'=>$id])
-            ->order(['data_calendario','hora_partido'])
+            ->order(['data_calendario','hora_partido', 'Equipas1.nome'])
             ->formatResults(function (\Cake\Collection\CollectionInterface $results) {
                 return $results->map(function ($row) {
                     $row['data_calendario'] = FrozenDate::createFromFormat('Y-m-d', $row['data_calendario']);
