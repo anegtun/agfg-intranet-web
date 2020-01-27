@@ -28,7 +28,7 @@ class agfg_Clasificacion_Widget extends WP_Widget {
             $html .=
                 '<div class="agfg-clasificacion">'.
                 '<table style="width: 100%;">'.
-                    '<thead><tr><th>Pos</th><th>Equipo</th><th>Ptos</th><th>XG</th><th>XE</th><th>XP</th><th>Dif.</th></tr></thead>'.
+                    '<thead><tr><th></th><th>Equipo</th><th>Ptos</th><th>XG</th><th>XE</th><th>XP</th><th>Dif.</th></tr></thead>'.
                     '</tbody>';
             foreach($clasificacion as $equipa) {
                 $sancions = str_repeat ("*",$equipa->puntos_sancion);
@@ -36,8 +36,8 @@ class agfg_Clasificacion_Widget extends WP_Widget {
                     "<tr>
                         <td>{$equipa->posicion}$orderSymbol</td>
                         <td>
-                            <div style='text-align:left; padding-left:5px;'>
-                                <img src='{$equipa->logo}' alt='{$equipa->nome}' width='30' style='display: inline-block; height: 100%; vertical-align: middle;'>
+                            <div style='text-align:left; padding-left:5px; width:100px;'>
+                                <img src='{$equipa->logo}' alt='{$equipa->nome}' width='25' style='display: inline-block; height: 100%; vertical-align: middle;'>
                                 <strong style='padding-left:1em'>$equipa->codigo $sancions</strong>
                             </div>
                         </td>

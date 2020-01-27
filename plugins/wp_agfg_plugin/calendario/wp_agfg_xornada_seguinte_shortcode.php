@@ -57,11 +57,11 @@ function wp_agfg_xornada_seguinte_shortcode($atts) {
         $html .= "<thead><tr><th colspan='2' class='$dataClass'>C. {$p->fase->categoria}<span style='float:right'>$hora</span><br>$segundaLina</th></tr></thead>";
         $html .= '<tbody>';
         $html .= '<tr>';
-        $html .= "<td><figure><img class='alignnone' src='{$p->equipa1->logo}' alt='{$p->equipa1->nome}' width='18' height='20'></figure></td>";
+        $html .= "<td><figure><img class='alignnone' src='{$p->equipa1->logo}' alt='{$p->equipa1->nome}' width='25'></figure></td>";
         $html .= "<td>{$p->equipa1->nome}</td>";
         $html .= '</tr>';
         $html .= '<tr>';
-        $html .= "<td><figure><img class='alignnone' src='{$p->equipa2->logo}' alt='{$p->equipa2->nome}' width='18' height='20'></figure></td>";
+        $html .= "<td><figure><img class='alignnone' src='{$p->equipa2->logo}' alt='{$p->equipa2->nome}' width='25'></figure></td>";
         $html .= "<td>{$p->equipa2->nome}</td>";
         $html .= '</tr>';
         $html .= '</tbody>';
