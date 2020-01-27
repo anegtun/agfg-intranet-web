@@ -22,19 +22,19 @@ function wp_agfg_xornada_anterior_shortcode($atts) {
     $dataActual = null;
     foreach($data->partidos as $p) {
         $resultados = format_resultados($p);
-        $dataClass = empty($p->adiado) ? '' : 'adiado';
+        $estaAdiado = !empty($p->adiado) && empty($p->ganador);
         // HTML
         $html .= '<div class="partido">';
         $html .= '<table>';
-        $html .= "<thead><tr><th colspan='3' class='$dataClass'>C. {$p->fase->categoria}<span style='float:right'>".(empty($p->adiado)?'':'(adiado)')."</span></th></tr></thead>";
+        $html .= "<thead><tr><th colspan='3' class='".($estaAdiado?'adiado':'')."'>C. {$p->fase->categoria}<span style='float:right'>".($estaAdiado?'(adiado)':'')."</span></th></tr></thead>";
         $html .= '<tbody>';
         $html .= '<tr>';
-        $html .= "<td><figure><img class='alignnone' src='{$p->equipa1->logo}' alt='{$p->equipa1->nome}' width='18' height='20'></figure></td>";
+        $html .= "<td><figure><img class='alignnone' src='{$p->equipa1->logo}' alt='{$p->equipa1->nome}' width='25'></figure></td>";
         $html .= "<td>{$p->equipa1->nome}</td>";
         $html .= "<td>$resultados[0]</td>";
         $html .= '</tr>';
         $html .= '<tr>';
-        $html .= "<td><figure><img class='alignnone' src='{$p->equipa2->logo}' alt='{$p->equipa2->nome}' width='18' height='20'></figure></td>";
+        $html .= "<td><figure><img class='alignnone' src='{$p->equipa2->logo}' alt='{$p->equipa2->nome}' width='25'></figure></td>";
         $html .= "<td>{$p->equipa2->nome}</td>";
         $html .= "<td>$resultados[1]</td>";
         $html .= '</tr>';
