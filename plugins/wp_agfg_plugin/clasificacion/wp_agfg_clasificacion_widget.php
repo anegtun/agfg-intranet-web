@@ -34,7 +34,7 @@ class agfg_Clasificacion_Widget extends WP_Widget {
                 $sancions = str_repeat ("*",$equipa->puntos_sancion);
                 $html .=
                     "<tr>
-                        <td>{$equipa->posicion}$orderSymbol</td>
+                        <td style='width:3em;'>{$equipa->posicion}$orderSymbol</td>
                         <td>
                             <div style='text-align:left; padding-left:5px; width:100px;'>
                                 <img src='{$equipa->logo}' alt='{$equipa->nome}' width='25' style='display: inline-block; height: 100%; vertical-align: middle;'>
