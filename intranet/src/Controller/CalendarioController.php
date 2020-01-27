@@ -156,7 +156,7 @@ class CalendarioController extends RestController {
                 ['Xornadas.data >='=>$lunsYMD, 'Xornadas.data <='=>$domingoYMD],
                 ['Partidos.data_partido >='=>$lunsYMD, 'Partidos.data_partido <='=>$domingoYMD]
             ]])
-            ->order(['adiado', '-Partidos.data_partido DESC', 'Partidos.hora_partido']);
+            ->order(['-Partidos.data_partido DESC', 'Partidos.hora_partido']);
         $campos = $this->Campos->findMap();
         $equipas = $this->Equipas->findMap();
         $categorias = $this->Categorias->getCategoriasWithEmpty();
