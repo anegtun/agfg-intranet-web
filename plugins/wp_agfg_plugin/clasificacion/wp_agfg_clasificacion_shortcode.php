@@ -13,7 +13,7 @@ function wp_agfg_clasificacion_shortcode($atts) {
         $html .= 
             '<div class="agfg-clasificacion">'.
             '<table style="width: 100%;">'.
-                '<thead><tr><th>Pos</th><th>Equipo</th><th>Ptos</th>';
+                '<thead><tr><th></th><th>Equipo</th><th>Ptos</th>';
         if($curto) {
             $html .= "<th>XG/XE/XP</th>";
         } else {
@@ -25,9 +25,9 @@ function wp_agfg_clasificacion_shortcode($atts) {
             $nomeEquipa = $curto ? $equipa->codigo : $equipa->nome;
             $html .=
                 "<tr>
-                    <td>{$equipa->posicion}$orderSymbol</td>
+                    <td style='width:3em;'>{$equipa->posicion}$orderSymbol</td>
                     <td>
-                        <div style='text-align:left; padding-left:5px;'>
+                        <div style='text-align:left; padding-left:5px; width:100px;'>
                             <img src='{$equipa->logo}' alt='{$equipa->nome}' width='30' style='display: inline-block; height: 100%; vertical-align: middle;'>
                             <strong style='padding-left:1em'>$nomeEquipa $sancions</strong>
                         </div>
