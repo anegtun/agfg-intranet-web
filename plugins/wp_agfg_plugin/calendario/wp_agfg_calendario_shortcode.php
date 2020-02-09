@@ -28,8 +28,7 @@ function wp_agfg_calendario_shortcode($atts) {
             return strtotime($a->data_partido) - strtotime($b->data_partido);
         });
         $html .= "<div class=\"xornada\">";
-        $d = date('d/m/Y', strtotime($x->data));
-        $html .= "<h4>Xornada {$x->numero} ({$d})</h4>";
+        $html .= "<h4>".date('d/m/Y', strtotime($x->data))."</h4>";
         foreach($x->partidos as $p) {
             // Resultados
             $resultados = format_resultados($p);
