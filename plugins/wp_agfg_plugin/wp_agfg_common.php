@@ -32,7 +32,8 @@ function wp_agfg_common_style() {
                 padding-top: 1em;
             } 
             .agfg-calendario .xornada h4 {
-                border-bottom: 1px solid #869643;
+                text-align: center;
+                margin-top: 2em;
             }
             .agfg-xornada-proxima .dia-partido {
                 margin: 1em 0;
@@ -49,7 +50,7 @@ function wp_agfg_common_style() {
             }
             .agfg-calendario .partido {
                 width: 245px;
-                height: 120px;
+                height: 145px;
             }
             .agfg-xornada-proxima .partido {
                 width: 245px;

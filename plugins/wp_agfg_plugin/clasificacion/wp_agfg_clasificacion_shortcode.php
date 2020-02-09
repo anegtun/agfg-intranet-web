@@ -27,7 +27,7 @@ function wp_agfg_clasificacion_shortcode($atts) {
                 "<tr>
                     <td style='width:3em;'>{$equipa->posicion}$orderSymbol</td>
                     <td>
-                        <div style='text-align:left; padding-left:5px; width:100px;'>
+                        <div style='text-align:left; padding-left:5px; min-width:100px;'>
                             <img src='{$equipa->logo}' alt='{$equipa->nome}' width='30' style='display: inline-block; height: 100%; vertical-align: middle;'>
                             <strong style='padding-left:1em'>$nomeEquipa $sancions</strong>
                         </div>
