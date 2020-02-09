@@ -22,6 +22,9 @@ class Clasificacion {
     
     public function add($clasificacionAnterior) {
         $this->addData($clasificacionAnterior->getClasificacion());
+        foreach($clasificacionAnterior->getPartidos() as $p) {
+            $this->_partidos[] = $p;
+        }
     }
     
     public function addData($clsfAnterior) {
@@ -200,6 +203,10 @@ class Clasificacion {
 
     public function getClasificacion() {
         return $this->_clasificacion;
+    }
+
+    public function getPartidos() {
+        return $this->_partidos;
     }
 
     public static function init($id) {

@@ -23,7 +23,8 @@ class ClasificacionController extends RestController {
         $partidos = $this->Partidos
             ->find()
             ->contain(['Fases'])
-            ->where(['Fases.id_competicion'=>$competicion->id, 'Fases.categoria'=>$categoria]);
+            ->where(['Fases.id_competicion'=>$competicion->id, 'Fases.categoria'=>$categoria])
+            ->toArray();
         $equipasFases = $this->FasesEquipas->find()->contain(['Fases'])->where(['Fases.id_competicion'=>$competicion->id]);
         $equipasPuntos = [];
         foreach($equipasFases as $fe) {
@@ -42,10 +43,10 @@ class ClasificacionController extends RestController {
     public function fase($codCompeticion, $categoria, $codFase) {
         $competicion = $this->_getCompeticion($codCompeticion, $categoria);
         $fase = $this->Fases->find()->where(['id_competicion'=>$competicion->id, 'categoria'=>$categoria, 'codigo'=>$codFase])->first();
-        $partidos = $this->Partidos->find()->where(['id_fase'=>$fase->id]);
+        $partidos = $this->Partidos->find()->where(['id_fase'=>$fase->id])->toArray();
         $clasificacion = $this->_buildClasificacion($partidos);
         if(!empty($fase->id_fase_pai)) {
-            $partidos = $this->Partidos->find()->where(['id_fase'=>$fase->id_fase_pai]);
+            $partidos = $this->Partidos->find()->where(['id_fase'=>$fase->id_fase_pai])->toArray();
             $clasificacionAcumulada = $this->_buildClasificacion($partidos);
             $clasificacion->add($clasificacionAcumulada);
             $clasificacion->desempatar();
@@ -61,6 +62,7 @@ class ClasificacionController extends RestController {
             }
         }
         $clasificacion->addData(array_values($equipasPuntos));
+        $clasificacion->desempatar();
         $this->set($clasificacion->getClasificacion());
     }
 
