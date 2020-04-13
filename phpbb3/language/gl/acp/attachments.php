@@ -62,15 +62,12 @@ $lang = array_merge($lang, array(
 	'ATTACH_MAX_PM_FILESIZE_EXPLAIN'	=> 'Espazo máximo de cada arquivo para adxuntos en mensaxes privadas. 0 significa sen limite.',
 	'ATTACH_ORPHAN_URL'					=> 'Anexos orfos',
 	'ATTACH_POST_ID'					=> 'ID da mensaxe',
+	'ATTACH_POST_TYPE'					=> 'Tipo da mensaxe',
 	'ATTACH_QUOTA'						=> 'Cota total para adxuntos',
 	'ATTACH_QUOTA_EXPLAIN'				=> 'Espazo máximo dispoñíbel no disco para adxuntos, 0 significa sen límite.',
 	'ATTACH_TO_POST'					=> 'Engadir arquivo anexo á mensaxe',
 
-	'CAT_FLASH_FILES'			=> 'Arquivos Flash',
 	'CAT_IMAGES'				=> 'Imaxes',
-	'CAT_QUICKTIME_FILES'		=> 'Medio Quicktime',
-	'CAT_RM_FILES'				=> 'Fluxos de Real Media',
-	'CAT_WM_FILES'				=> 'Fluxos de Win Media',
 	'CHECK_CONTENT'				=> 'Comprobar arquivos adxuntos',
 	'CHECK_CONTENT_EXPLAIN'		=> 'Algúns navegadores poden ser enganados para que asuman un tipo mime incorrecto para os arquivos subidos. Esta opción asegura que os devanditos arquivos causantes de tal situación sexan rexeitados.',
 	'CREATE_GROUP'				=> 'Crear novo grupo',
@@ -100,19 +97,17 @@ $lang = array_merge($lang, array(
 	'EXT_GROUP_ARCHIVES'			=> 'Arquivos',
 	'EXT_GROUP_DOCUMENTS'			=> 'Documentos',
 	'EXT_GROUP_DOWNLOADABLE_FILES'	=> 'Ficheiros Descargábeis',
-	'EXT_GROUP_FLASH_FILES'			=> 'Ficheiros Flash',
 	'EXT_GROUP_IMAGES'				=> 'Imaxes',
 	'EXT_GROUP_PLAIN_TEXT'			=> 'Texto Plano',
-	'EXT_GROUP_QUICKTIME_MEDIA'		=> 'Quicktime Media',
-	'EXT_GROUP_REAL_MEDIA'			=> 'Real Media',
-	'EXT_GROUP_WINDOWS_MEDIA'		=> 'Windows Media',
+
+	'FILES_GONE'			=> 'Algúns dos adxuntos que queres eliminar non existen. Pode ser que xa foran eliminados. En todo caso elimináronse os adxuntos que aínda existían.',
+	'FILES_STATS_WRONG'		=> 'As estatísticas de ficheiros semellan ser incorrectas e precisan ser resincronizadas. Os valores actuáis son: número de adxuntos = %1$d, tamaño total dos adxuntos = %2$s.<br />Preme %3$saquí%4$s para resincronizar.',
+
 	'GO_TO_EXTENSIONS'		=> 'Ir á Pantalla de Xestión de Extensións',
 	'GROUP_NAME'			=> 'Nome do grupo',
 
 	'IMAGE_LINK_SIZE'			=> 'Dimensións da Imaxe Ligada',
 	'IMAGE_LINK_SIZE_EXPLAIN'	=> 'Amosar imaxes adxuntas coma ligazóns se a imaxe é maior que isto. Pono a 0x0 píxeles para desactivalo.',
-	'IMAGICK_PATH'				=> 'Ruta do ImageMagick',
-	'IMAGICK_PATH_EXPLAIN'		=> 'Ruta completa á aplicación de conversión ImageMagick, p.e. /usr/bin',
 
 	'MAX_ATTACHMENTS'				=> 'Numero máximo de adxuntos por mensaxe publicada',
 	'MAX_ATTACHMENTS_PM'			=> 'Numero máximo de adxuntos por mensaxe privada',
@@ -129,12 +124,12 @@ $lang = array_merge($lang, array(
 	'NOT_ALLOWED_IN_PM'			=> 'Non permitido en mensaxes privadas',
 	'NOT_ALLOWED_IN_PM_POST'	=> 'Non permitido',
 	'NOT_ASSIGNED'				=> 'Sen asignar',
+	'NO_ATTACHMENTS'			=> 'Non hai adxuntos para o período de tempo indicado.',
 	'NO_EXT_GROUP'				=> 'Ningún',
 	'NO_EXT_GROUP_NAME'			=> 'Non se inseriu Nome de Grupo ningún',
 	'NO_EXT_GROUP_SPECIFIED'	=> 'Non se especificou Grupo de Extensións ningún.',
 	'NO_FILE_CAT'				=> 'Ningún',
 	'NO_IMAGE'					=> 'Sen Imaxes',
-	'NO_THUMBNAIL_SUPPORT'		=> 'Desactivouse o soporte de miniaturas xa que non se atopou ningunha libraría GD permitida e tampouco se puido atopar o executábel do ImageMagick.',
 	'NO_UPLOAD_DIR'				=> 'O directorio de subida especificado non existe.',
 	'NO_WRITE_UPLOAD'			=> 'Non se pode escribir no directorio de subida especificado. Múdalle os permisos para que o servidor web poida escribir nel.',
 
@@ -144,8 +139,8 @@ $lang = array_merge($lang, array(
 
 	'REMOVE_ALLOWED_IPS'		=> 'Eliminar ou retirar exclusión de IPs/Nomes de Host permitidos',
 	'REMOVE_DISALLOWED_IPS'		=> 'Eliminar ou retirar exclusión de IPs/Nomes de Host non permitidos',
+	'RESYNC_FILES_STATS_CONFIRM'	=> 'Estás seguro de quereres resincronizar as estatísticas dos adxuntos?',
 
-	'SEARCH_IMAGICK'				=> 'Procurar o ImageMagick',
 	'SECURE_ALLOW_DENY'				=> 'Lista de Permitidos/Denegados',
 	'SECURE_ALLOW_DENY_EXPLAIN'		=> 'Permitir ou Denegar a lista de enderezos, este axuste só se aplica para descargar arquivos',
 	'SECURE_DOWNLOADS'				=> 'Habilitar descargas seguras',
@@ -169,5 +164,3 @@ $lang = array_merge($lang, array(
 	'UPLOAD_ICON'					=> 'Icona de Subida',
 	'UPLOAD_NOT_DIR'				=> 'A ubicación de subida que especificaches non semella ser un directorio.',
 ));
-
-?>
