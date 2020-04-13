@@ -183,7 +183,6 @@ $lang = array_merge($lang, array(
 	'ROLE_USER_STANDARD'		=> 'Características Estándar',
 	'ROLE_USER_NEW_MEMBER'		=> 'Características do Usuario Recentemente Rexistrado',
 
-
 	'ROLE_DESCRIPTION_ADMIN_FORUM'			=> 'Pode acceder á xestión do foro e ás configuracións de permisos do foro.',
 	'ROLE_DESCRIPTION_ADMIN_FULL'			=> 'Ten acceso a todas as funcións administrativas deste foro.<br />Non recomendada.',
 	'ROLE_DESCRIPTION_ADMIN_STANDARD'		=> 'Ten acceso á maior parte das posibilidades de administrador mais non lle esta permitido o uso de ferramentas de servidor ou relacionadas co sistema.',
@@ -207,7 +206,7 @@ $lang = array_merge($lang, array(
 	'ROLE_DESCRIPTION_USER_NOAVATAR'		=> 'Ten un grupo de características limitadas e non se lle permite usar a característica de representación dixital (avatar).',
 	'ROLE_DESCRIPTION_USER_NOPM'			=> 'Ten un grupo limitado de características e non se lle permite usar mensaxes privadas.',
 	'ROLE_DESCRIPTION_USER_STANDARD'		=> 'Pode acceder á maior parte das características do usuario. Pero por exemplo non pode cambiar o nome de usuario nin ignorar o límite de fluxo.',
-		'ROLE_DESCRIPTION_USER_NEW_MEMBER'		=> 'Un rol para os membros do grupo especial de usuarios recentemente rexistrados; contén permisos <samp>NUNCA</samp> para bloquear características para os novos usuarios.',
+	'ROLE_DESCRIPTION_USER_NEW_MEMBER'		=> 'Un rol para os membros do grupo especial de usuarios recentemente rexistrados; contén permisos <samp>NUNCA</samp> para bloquear características para os novos usuarios.',
 
 	'ROLE_DESCRIPTION_EXPLAIN'		=> 'Podes introducir unha curta explicación do que o rol  está a facer ou do que significa. O texto que introduzas aquí visualizarase tamén nas pantallas de permisos.',
 	'ROLE_DESCRIPTION_LONG'			=> 'A descrición do rol é longa de máis, limítaa a 4000 caracteres.',
@@ -285,5 +284,3 @@ $lang = array_merge($lang, array(
 	'WRONG_PERMISSION_TYPE'	=> 'Seleccionouse un tipo de permiso incorrecto.',
 	'WRONG_PERMISSION_SETTING_FORMAT'	=> 'A configuración de permisos está nun formato incorrecto, polo que o phpBB non é quen de procesalo axeitadamente.',
 ));
-
-?>

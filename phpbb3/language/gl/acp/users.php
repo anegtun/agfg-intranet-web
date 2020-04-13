@@ -52,8 +52,9 @@ $lang = array_merge($lang, array(
 	'CANNOT_FORCE_REACT_FOUNDER'	=> 'Non podes forzar a reactivación nas contas de fundador.',
 	'CANNOT_FORCE_REACT_YOURSELF'	=> 'Non podes forzar a reactivación da túa propia conta.',
 	'CANNOT_REMOVE_ANONYMOUS'		=> 'Non podes eliminar a conta de usuario convidado.',
+	'CANNOT_REMOVE_FOUNDER'			=> 'Non podes elimianr contas fundacionáis.',
 	'CANNOT_REMOVE_YOURSELF'		=> 'Non podes eliminar a túa propia conta de usuario.',
-	'CANNOT_SET_FOUNDER_IGNORED'		=> 'Non podes estabelecer usuarios ignorados coma fundadores.',
+	'CANNOT_SET_FOUNDER_IGNORED'	=> 'Non podes estabelecer usuarios ignorados coma fundadores.',
 	'CANNOT_SET_FOUNDER_INACTIVE'	=> 'Precisas activar usuario antes de estabelecelos coma fundadores, só usuario activados poden ser estabelecidos.',
 	'CONFIRM_EMAIL_EXPLAIN'			=> 'Só debes especificar isto se estás a mudar o enderezo de correo-e dos usuarios.',
 
@@ -139,5 +140,3 @@ $lang = array_merge($lang, array(
 	'USER_WARNING_LOG_DELETED'		=> 'Non hai información ningunha dispoñíbel. Pode que fose eliminada a entrada do rexistro (log).',
 	'USER_TOOLS'					=> 'Ferramentas básicas',
 ));
-
-?>

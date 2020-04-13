@@ -23,7 +23,7 @@ if (empty($lang) || !is_array($lang))
 	$lang = array();
 }
 
-// DEVELOPERS PLEASE NOTE 
+// DEVELOPERS PLEASE NOTE
 //
 // All language files should use UTF-8 as their encoding and the files must not contain a BOM.
 //
@@ -403,8 +403,8 @@ $lang = array_merge($lang, array(
 	'LOAD_USER_ACTIVITY_LIMIT_EXPLAIN'	=> 'O tema/foro non se amosará aos usuarios se se supera este número de mensaxes. Establecer a 0 para desactivar o límite.',
 	'READ_NOTIFICATION_EXPIRE_DAYS'	=> 'Tempo de caducidade das notificacións',
 	'READ_NOTIFICATION_EXPIRE_DAYS_EXPLAIN' => 'Días tras o cales unha notificación caducará e se eliminará automaticamente. Establecer a 0 para que as notificacións sexan permanentes.',
-	'RECOMPILE_STYLES'			=> 'Recompilar sobreplantas antigas',
-	'RECOMPILE_STYLES_EXPLAIN'	=> 'Verificar para actualizar ficheiros de sobreplantas ou ficheiros de sistema e recompilar.',
+	'RECOMPILE_STYLES'				=> 'Recompilar sobreplantas antigas',
+	'RECOMPILE_STYLES_EXPLAIN'		=> 'Verificar para actualizar ficheiros de sobreplantas ou ficheiros de sistema e recompilar.',
 	'YES_ACCURATE_PM_BUTTON'			=> 'Activar botón de MP nas páxinas do tema',
 	'YES_ACCURATE_PM_BUTTON_EXPLAIN'	=> 'Se se activa, só se engadirá o botón de "enviar MP" nos usuarios que teñen permisos para ler mensaxes privadas.',
 	'YES_ANON_READ_MARKING'			=> 'Permitir marcado de de temas aos convidados',

@@ -15,5 +15,4 @@ Por favor, visita a seguinte ligazón para reactivar a túa conta:
 
 {U_ACTIVATE}
 
-
 {EMAIL_SIG}

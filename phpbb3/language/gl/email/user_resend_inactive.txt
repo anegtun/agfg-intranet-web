@@ -14,7 +14,6 @@ Por favor, visita a seguinte ligazón para activares a túa conta:
 
 {U_ACTIVATE}
 
-
 Moitas grazas por te rexistrares.
 
 {EMAIL_SIG}

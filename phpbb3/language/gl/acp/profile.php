@@ -38,8 +38,11 @@ if (empty($lang) || !is_array($lang))
 // Custom profile fields
 $lang = array_merge($lang, array(
 	'ADDED_PROFILE_FIELD'	=> 'Campo de perfil á medida engadido de xeito correcto.',
+	'ALPHA_DOTS'			=> 'Alfanuméricos e puntos',
 	'ALPHA_ONLY'			=> 'Só alfanuméricos',
 	'ALPHA_SPACERS'			=> 'Alfanuméricos e espazos',
+	'ALPHA_UNDERSCORE'		=> 'Alfanuméricos e guións baixos',
+	'ALPHA_PUNCTUATION'		=> 'Alfanuméricos con comas, puntos, guións baixos e guións medios, comezando cunha letra',
 	'ALWAYS_TODAY'			=> 'Sempre a data actual',
 
 	'BOOL_ENTRIES_EXPLAIN'	=> 'Introduce as túas opcións agora',
@@ -66,6 +69,10 @@ $lang = array_merge($lang, array(
 	'DISPLAY_AT_PROFILE_EXPLAIN'	=> 'O usuario pode cambiar este campo de perfil dentro do panel de control de usuario.',
 	'DISPLAY_AT_REGISTER'			=> 'Visualizar na pantalla de rexistro',
 	'DISPLAY_AT_REGISTER_EXPLAIN'	=> 'Se esta opción está activada, o campo será visualizado no rexistro.',
+	'DISPLAY_ON_MEMBERLIST'			=> 'Amosar na pantalla de membros',
+	'DISPLAY_ON_MEMBERLIST_EXPLAIN'	=> 'Se se habilita esta opción, o campo amosarase en cada fila de usuario na pantalla de listado de membros.',
+	'DISPLAY_ON_PM'					=> 'Amosar na pantalla de mensaxes privadas',
+	'DISPLAY_ON_PM_EXPLAIN'			=> 'Se se habilita esta opción, o campo amosarase no mini-perfil que aparece na pantalla de mensaxe privado.',
 	'DISPLAY_ON_VT'					=> 'Amosar na pantalla de vista de tema',
 	'DISPLAY_ON_VT_EXPLAIN'			=> 'Se esta opción estiver activada, o campo será amosado no mini-perfil da pantalla de tema.',
 	'DISPLAY_PROFILE_FIELD'			=> 'Amosar publicamente campo do perfil',
@@ -79,20 +86,26 @@ $lang = array_merge($lang, array(
 	'EVERYTHING_OK'					=> 'Todo ben',
 
 	'FIELD_BOOL'				=> 'Booleano (Si/Non)',
+	'FIELD_CONTACT_DESC'		=> 'Descrición do contacto',
+	'FIELD_CONTACT_URL'			=> 'Enlace do contacto',
 	'FIELD_DATE'				=> 'Data',
 	'FIELD_DESCRIPTION'			=> 'Descrición do Campo',
 	'FIELD_DESCRIPTION_EXPLAIN'	=> 'Explicación para este campo que se amosa ao usuario',
 	'FIELD_DROPDOWN'			=> 'Caixa despregábel',
+	'FIELD_GOOGLEPLUS'			=> 'Google+',
 	'FIELD_IDENT'				=> 'Nome do Campo',
 	'FIELD_IDENT_ALREADY_EXIST'	=> 'A identificación de campo escollida xa existe. Escolle outro nome.',
 	'FIELD_IDENT_EXPLAIN'		=> 'O campo identificación é un nome para identificar o campo de perfil dentro da base de datos e nas sobreplantas.',
 	'FIELD_INT'					=> 'Números',
+	'FIELD_IS_CONTACT'			=> 'Amosar campo como campo de contacto',
+	'FIELD_IS_CONTACT_EXPLAIN'	=> 'Os campos de contacto amósanse na sección de contacto no perfil de usuario, e tamén no mini-perfil ao lado das mensaxes e mensaxes privadas. Podes empregar <samp>%s</samp> como referencia que será substituída polo valor inserido polo usuario.',
 	'FIELD_LENGTH'				=> 'Lonxitude da caixa de entrada',
 	'FIELD_NOT_FOUND'			=> 'Campo de perfil non atopado.',
 	'FIELD_STRING'				=> 'Campo de texto simple',
 	'FIELD_TEXT'				=> 'Área de texto',
 	'FIELD_TYPE'				=> 'Tipo de campo',
 	'FIELD_TYPE_EXPLAIN'		=> 'Non poderás cambiar o tipo de campo máis tarde',
+	'FIELD_URL'					=> 'URL (enlace)',
 	'FIELD_VALIDATION'			=> 'Validación de campo',
 	'FIRST_OPTION'				=> 'Primeira opción',
 
@@ -104,6 +117,12 @@ $lang = array_merge($lang, array(
 	'ISO_LANGUAGE'				=> 'Idioma [%s]',
 
 	'LANG_SPECIFIC_OPTIONS'		=> 'Opcións específicas de idioma [<strong>%s</strong>]',
+
+	'LETTER_NUM_DOTS'			=> 'Calqueira letra, número ou puntos',
+	'LETTER_NUM_ONLY'			=> 'Calqueira letra ou número',
+	'LETTER_NUM_PUNCTUATION'	=> 'Calqueira letra, número, comas, puntos, guións baixos ou medios; comezando cunha letra',
+	'LETTER_NUM_SPACERS'		=> 'Calqueira letra, número ou espazos',
+	'LETTER_NUM_UNDERSCORE'		=> 'Calqueira letra, número ou guións baixos',
 
 	'MAX_FIELD_CHARS'		=> 'Número máximo de caracteres',
 	'MAX_FIELD_NUMBER'		=> 'Número máis alto permitido',
@@ -154,5 +173,3 @@ $lang = array_merge($lang, array(
 
 	'VISIBILITY_OPTION'				=> 'Opción de visibilidade',
 ));
-
-?>

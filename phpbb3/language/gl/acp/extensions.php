@@ -35,99 +35,99 @@ if (empty($lang) || !is_array($lang))
 // in a url you again do not need to specify an order e.g., 'Click %sHERE%s' is fine
 
 $lang = array_merge($lang, array(
-	'EXTENSION'					=> 'Extension',
-	'EXTENSIONS'				=> 'Extensions',
-	'EXTENSIONS_ADMIN'			=> 'Extensions Manager',
-	'EXTENSIONS_EXPLAIN'		=> 'The Extensions Manager is a tool in your phpBB Board which allows you to manage all of your extensions statuses and view information about them.',
-	'EXTENSION_INVALID_LIST'	=> 'The “%s” extension is not valid.<br />%s<br /><br />',
-	'EXTENSION_NOT_AVAILABLE'	=> 'The selected extension is not available for this board, please verify your phpBB and PHP versions are allowed (see the details page).',
-	'EXTENSION_DIR_INVALID'		=> 'The selected extension has an invalid directory structure and cannot be enabled.',
-	'EXTENSION_NOT_ENABLEABLE'	=> 'The selected extension cannot be enabled, please verify the extension’s requirements.',
-	'EXTENSION_NOT_INSTALLED'	=> 'The extension %s is not available. Please check that you have installed it correctly.',
+	'EXTENSION'					=> 'Estansión',
+	'EXTENSIONS'				=> 'Estansións',
+	'EXTENSIONS_ADMIN'			=> 'Xestor de Extensións',
+	'EXTENSIONS_EXPLAIN'		=> 'O Xestor de Extensións é unha ferramenta que che permite xestionar todas as extensións (estado, información, etc.).',
+	'EXTENSION_INVALID_LIST'	=> 'A extensión “%s” non é válida.<br />%s<br /><br />',
+	'EXTENSION_NOT_AVAILABLE'	=> 'A extensión escollida non está dispoñible para este foro. Verifica a tua versión de phpBB e PHP (ver páxina de detalles).',
+	'EXTENSION_DIR_INVALID'		=> 'A extensión escollida ten unha estrutura de directorios inválida e non se pode habilitar.',
+	'EXTENSION_NOT_ENABLEABLE'	=> 'Non se pode habilitar a extensión escollida, por favor verifica os requerimentos da extensión.',
+	'EXTENSION_NOT_INSTALLED'	=> 'A extensión %s non está dispoñible. Por favor comproba que a instalaches correctamente.',
 
-	'DETAILS'				=> 'Details',
+	'DETAILS'				=> 'Detalles',
 
-	'EXTENSIONS_DISABLED'	=> 'Disabled Extensions',
-	'EXTENSIONS_ENABLED'	=> 'Enabled Extensions',
+	'EXTENSIONS_DISABLED'	=> 'Extensións Deshabilitadas',
+	'EXTENSIONS_ENABLED'	=> 'Extensións Habilitadas',
 
-	'EXTENSION_DELETE_DATA'	=> 'Delete data',
-	'EXTENSION_DISABLE'		=> 'Disable',
-	'EXTENSION_ENABLE'		=> 'Enable',
+	'EXTENSION_DELETE_DATA'	=> 'Eliminar datos',
+	'EXTENSION_DISABLE'		=> 'Deshabilitar',
+	'EXTENSION_ENABLE'		=> 'Habilitar',
 
-	'EXTENSION_DELETE_DATA_EXPLAIN'	=> 'Deleting an extension’s data removes all of its data and settings. The extension files are retained so it can be enabled again.',
-	'EXTENSION_DISABLE_EXPLAIN'		=> 'Disabling an extension retains its files, data and settings but removes any functionality added by the extension.',
-	'EXTENSION_ENABLE_EXPLAIN'		=> 'Enabling an extension allows you to use it on your board.',
+	'EXTENSION_DELETE_DATA_EXPLAIN'	=> 'Eliminar os datos dunha extensión elimina todos os datos incluíndo os axustes. Os ficheiros da extensión conservaranse para que se poida habilitar outra vez.',
+	'EXTENSION_DISABLE_EXPLAIN'		=> 'Deshabilitar una extensión mantén os seus ficheiros, datos e axustes pero elimina calqueira funcionalidade engadida pola extensión.',
+	'EXTENSION_ENABLE_EXPLAIN'		=> 'Habilitar unha extensión permite empregala no foro.',
 
-	'EXTENSION_DELETE_DATA_IN_PROGRESS'	=> 'The extension’s data is currently being deleted. Please do not leave or refresh this page until it is completed.',
-	'EXTENSION_DISABLE_IN_PROGRESS'	=> 'The extension is currently being disabled. Please do not leave or refresh this page until it is completed.',
-	'EXTENSION_ENABLE_IN_PROGRESS'	=> 'The extension is currently being enabled. Please do not leave or refresh this page until it is completed.',
+	'EXTENSION_DELETE_DATA_IN_PROGRESS'	=> 'Estanse a eliminar os datos da extensión. Por favor non saias ou actualices a páxina ata que remate.',
+	'EXTENSION_DISABLE_IN_PROGRESS'	=> 'Estase a deshabilitar a extensión. Por favor non saias ou actualices a páxina ata que remate.',
+	'EXTENSION_ENABLE_IN_PROGRESS'	=> 'Estase a habilitar a extensión. Por favor non saias ou actualices a páxina ata que remate.',
 
-	'EXTENSION_DELETE_DATA_SUCCESS'	=> 'The extension’s data was deleted successfully',
-	'EXTENSION_DISABLE_SUCCESS'		=> 'The extension was disabled successfully',
-	'EXTENSION_ENABLE_SUCCESS'		=> 'The extension was enabled successfully',
+	'EXTENSION_DELETE_DATA_SUCCESS'	=> 'Eliminaronse correctamente os datos da extensión',
+	'EXTENSION_DISABLE_SUCCESS'		=> 'Deshabilitouse a extensión',
+	'EXTENSION_ENABLE_SUCCESS'		=> 'Habilitouse a extensión',
 
-	'EXTENSION_NAME'			=> 'Extension Name',
-	'EXTENSION_ACTIONS'			=> 'Actions',
-	'EXTENSION_OPTIONS'			=> 'Options',
-	'EXTENSION_INSTALL_HEADLINE'=> 'Installing an extension',
+	'EXTENSION_NAME'			=> 'Nome da Extensión',
+	'EXTENSION_ACTIONS'			=> 'Accións',
+	'EXTENSION_OPTIONS'			=> 'Opcións',
+	'EXTENSION_INSTALL_HEADLINE'=> 'Instalando unha extensión',
 	'EXTENSION_INSTALL_EXPLAIN'	=> '<ol>
-			<li>Download an extension from phpBB’s extensions database</li>
-			<li>Unzip the extension and upload it to the <samp>ext/</samp> directory of your phpBB board</li>
-			<li>Enable the extension, here in the Extensions manager</li>
+			<li>Descargar unha extensión da base de datos de extensións de phpBB</li>
+			<li>Descomprimir a extensión e subila ao directorio <samp>ext/</samp> de phpBB</li>
+			<li>Habilitar a extensión no Xestor de Extensións (aquí)</li>
 		</ol>',
-	'EXTENSION_UPDATE_HEADLINE'	=> 'Updating an extension',
+	'EXTENSION_UPDATE_HEADLINE'	=> 'Actualizando unha extensión',
 	'EXTENSION_UPDATE_EXPLAIN'	=> '<ol>
-			<li>Disable the extension</li>
-			<li>Delete the extension’s files from the filesystem</li>
-			<li>Upload the new files</li>
-			<li>Enable the extension</li>
+			<li>Deshabilitar a extensión</li>
+			<li>Eliminar os ficheiros da extensión do sistema de ficheiros</li>
+			<li>Subir novos ficheiros</li>
+			<li>Habilitar a extensión</li>
 		</ol>',
-	'EXTENSION_REMOVE_HEADLINE'	=> 'Completely removing an extension from your board',
+	'EXTENSION_REMOVE_HEADLINE'	=> 'Eliminar completamente unha extensión',
 	'EXTENSION_REMOVE_EXPLAIN'	=> '<ol>
-			<li>Disable the extension</li>
-			<li>Delete the extension’s data</li>
-			<li>Delete the extension’s files from the filesystem</li>
+			<li>Deshabilitar a extensión</li>
+			<li>Eliminar os datos da extensión</li>
+			<li>Eliminar os ficheiros da extensión do sistema de ficheiros</li>
 		</ol>',
 
-	'EXTENSION_DELETE_DATA_CONFIRM'	=> 'Are you sure that you wish to delete the data associated with “%s”?<br /><br />This removes all of its data and settings and cannot be undone!',
-	'EXTENSION_DISABLE_CONFIRM'		=> 'Are you sure that you wish to disable the “%s” extension?',
-	'EXTENSION_ENABLE_CONFIRM'		=> 'Are you sure that you wish to enable the “%s” extension?',
-	'EXTENSION_FORCE_UNSTABLE_CONFIRM'	=> 'Are you sure that you wish to force the use of unstable version?',
+	'EXTENSION_DELETE_DATA_CONFIRM'	=> 'Estás seguro de quereres eliminar os datos asociados a “%s”?<br /><br />Isto eliminará todos os datos e non se pode volver atrás!',
+	'EXTENSION_DISABLE_CONFIRM'		=> 'Estás seguro de quereres deshabilitar a extensión “%s”?',
+	'EXTENSION_ENABLE_CONFIRM'		=> 'Estás seguro de quereres habilitar a extensión “%s”?',
+	'EXTENSION_FORCE_UNSTABLE_CONFIRM'	=> 'Estás seguro de quereres forzar o uso dunha extensión inestable?',
 
-	'RETURN_TO_EXTENSION_LIST'	=> 'Return to the extension list',
+	'RETURN_TO_EXTENSION_LIST'	=> 'Volve ao listado de extensións',
 
-	'EXT_DETAILS'			=> 'Extension Details',
-	'DISPLAY_NAME'			=> 'Display Name',
-	'CLEAN_NAME'			=> 'Clean Name',
-	'TYPE'					=> 'Type',
-	'DESCRIPTION'			=> 'Description',
-	'VERSION'				=> 'Version',
-	'HOMEPAGE'				=> 'Homepage',
-	'PATH'					=> 'File Path',
-	'TIME'					=> 'Release Time',
-	'LICENSE'				=> 'Licence',
+	'EXT_DETAILS'			=> 'Detalles da Extensión',
+	'DISPLAY_NAME'			=> 'Nome a Amosar',
+	'CLEAN_NAME'			=> 'Nome Limpo',
+	'TYPE'					=> 'Tipo',
+	'DESCRIPTION'			=> 'Descrición',
+	'VERSION'				=> 'Versión',
+	'HOMEPAGE'				=> 'Páxina web',
+	'PATH'					=> 'Ruta',
+	'TIME'					=> 'Data de Publicación',
+	'LICENSE'				=> 'Licenza',
 
-	'REQUIREMENTS'			=> 'Requirements',
-	'PHPBB_VERSION'			=> 'phpBB Version',
-	'PHP_VERSION'			=> 'PHP Version',
-	'AUTHOR_INFORMATION'	=> 'Author Information',
-	'AUTHOR_NAME'			=> 'Name',
-	'AUTHOR_EMAIL'			=> 'Email',
-	'AUTHOR_HOMEPAGE'		=> 'Homepage',
-	'AUTHOR_ROLE'			=> 'Role',
+	'REQUIREMENTS'			=> 'Requerimentos',
+	'PHPBB_VERSION'			=> 'Versión phpBB',
+	'PHP_VERSION'			=> 'Versión PHP',
+	'AUTHOR_INFORMATION'	=> 'Información do Autor',
+	'AUTHOR_NAME'			=> 'Nome',
+	'AUTHOR_EMAIL'			=> 'Correo-e',
+	'AUTHOR_HOMEPAGE'		=> 'Páxina web',
+	'AUTHOR_ROLE'			=> 'Rol',
 
-	'NOT_UP_TO_DATE'		=> '%s is not up to date',
-	'UP_TO_DATE'			=> '%s is up to date',
-	'ANNOUNCEMENT_TOPIC'	=> 'Release Announcement',
-	'DOWNLOAD_LATEST'		=> 'Download Version',
-	'NO_VERSIONCHECK'		=> 'No version check information given.',
+	'NOT_UP_TO_DATE'		=> '%s está desactualizado',
+	'UP_TO_DATE'			=> '%s está ao día',
+	'ANNOUNCEMENT_TOPIC'	=> 'Anuncio de Publicación',
+	'DOWNLOAD_LATEST'		=> 'Descargar Versión',
+	'NO_VERSIONCHECK'		=> 'Non se atopou información de comprobación de versión.',
 
-	'VERSIONCHECK_FORCE_UPDATE_ALL'		=> 'Re-Check all versions',
-	'FORCE_UNSTABLE'					=> 'Always check for unstable versions',
-	'EXTENSIONS_VERSION_CHECK_SETTINGS'	=> 'Version check settings',
+	'VERSIONCHECK_FORCE_UPDATE_ALL'		=> 'Volver a comprobar todas as versións',
+	'FORCE_UNSTABLE'					=> 'Comprobar sempre versións inestables',
+	'EXTENSIONS_VERSION_CHECK_SETTINGS'	=> 'Axustes de comprobación de versión',
 
-	'BROWSE_EXTENSIONS_DATABASE'		=> 'Browse extensions database',
+	'BROWSE_EXTENSIONS_DATABASE'		=> 'Consultar base de datos de extensións',
 
-	'META_FIELD_NOT_SET'	=> 'Required meta field %s has not been set.',
-	'META_FIELD_INVALID'	=> 'Meta field %s is invalid.',
+	'META_FIELD_NOT_SET'	=> 'Non se estableceu o campo meta requirido %s.',
+	'META_FIELD_INVALID'	=> 'O campo meta %s é inválido.',
 ));

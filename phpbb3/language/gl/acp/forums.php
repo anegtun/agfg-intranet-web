@@ -43,6 +43,10 @@ $lang = array_merge($lang, array(
 	'AUTO_PRUNE_FREQ_EXPLAIN'	=> 'Tempo en días entre eventos de purgado.',
 	'AUTO_PRUNE_VIEWED'			=> 'Antigüidade no Auto-purgado de Mensaxes Publicadas Vistas',
 	'AUTO_PRUNE_VIEWED_EXPLAIN'	=> 'Número de días dende que o tema foi visto a partir dos cales é eliminado.',
+	'AUTO_PRUNE_SHADOW_FREQ'	=> 'Frecuencia de auto-cortado de temas ocultos',
+	'AUTO_PRUNE_SHADOW_DAYS'	=> 'Antigüidade de auto-cortado de temas ocultos',
+	'AUTO_PRUNE_SHADOW_DAYS_EXPLAIN'	=> 'Número de días para que o tema oculto se elimine.',
+	'AUTO_PRUNE_SHADOW_FREQ_EXPLAIN'	=> 'Tempo en días entre os eventos de cortado.',
 
 	'CONTINUE'						=> 'Seguir',
 	'COPY_PERMISSIONS'				=> 'Copiar permisos dende',
@@ -92,6 +96,7 @@ $lang = array_merge($lang, array(
 	'FORUM_LINK_TRACK_EXPLAIN'			=> 'Rexistra o número de veces que a ligazón a un foro foi premida.',
 	'FORUM_NAME'						=> 'Nome do Foro',
 	'FORUM_NAME_EMPTY'					=> 'Debes inserir un nome para este foro.',
+	'FORUM_NAME_EMOJI'					=> 'O nome do foro que inseriches non é válido.<br>Contén os seguintes caracteres non válidos:<br>%s',
 	'FORUM_PARENT'						=> 'Foro principal',
 	'FORUM_PASSWORD'					=> 'Contrasinal de foro',
 	'FORUM_PASSWORD_CONFIRM'			=> 'Confirmar contrasinal do foro',
@@ -102,6 +107,8 @@ $lang = array_merge($lang, array(
 	'FORUM_PASSWORD_OLD'				=> 'O contrasinal do foro emprega un método antigo de escurecemento e debe ser mudado.',
 	'FORUM_PASSWORD_MISMATCH'			=> 'Os contrasinais que inseriches non coinciden.',
 	'FORUM_PRUNE_SETTINGS'				=> 'Axustes do purgado de foro',
+	'FORUM_PRUNE_SHADOW'				=> 'Activar auto-cortado de temas ocultos',
+	'FORUM_PRUNE_SHADOW_EXPLAIN'			=> 'Elimina do foro os temas ocultos, establecendo embaixo os parámetros de frecuencia e antigüidade.',
 	'FORUM_RESYNCED'					=> 'Foro "%s" correctamente sincronizado',
 	'FORUM_RULES_EXPLAIN'				=> 'As regras do foro serán despregadas en todas as páxinas de dito foro.',
 	'FORUM_RULES_LINK'					=> 'Ligazón ás Regras do Foro',
@@ -120,16 +127,18 @@ $lang = array_merge($lang, array(
 
 	'GENERAL_FORUM_SETTINGS'	=> 'Configuración Xeral do Foro',
 
-	'LINK'					=> 'Ligazón',
-	'LIST_INDEX'			=> 'Listar o foro nos listados dos subforos',
-	'LIST_INDEX_EXPLAIN'	=> 'Visualiza unha ligazón a este foro segundo a listaxe de subforos de foros matriz, se existe algunha.',
+	'LINK'						=> 'Ligazón',
+	'LIMIT_SUBFORUMS'			=> 'Limita a lenda directa a subforos-fillo',
+	'LIMIT_SUBFORUMS_EXPLAIN'	=> 'Limita a visualización dos subforos só os descendentes directos (fillos) do foro actual. Deshabiltiando esta opción amosaranse todos os subforos.',
+	'LIST_INDEX'				=> 'Listar o foro nos listados dos subforos',
+	'LIST_INDEX_EXPLAIN'		=> 'Visualiza unha ligazón a este foro segundo a listaxe de subforos de foros matriz, se existe algunha.',
 	'LIST_SUBFORUMS'			=> 'Listar subforos na lenda',
 	'LIST_SUBFORUMS_EXPLAIN'	=> 'Amosa os subforos deste foro no índice e calquera outro lugar como unha ligazón dentro da lenda se a súa opción “Listar subforo na lenda no foro-pai” está activada.',
-	'LOCKED'				=> 'Pechado',
+	'LOCKED'					=> 'Pechado',
 
 	'MOVE_POSTS_NO_POSTABLE_FORUM'	=> 'Non se poden publicar mensaxes no foro que seleccionaches para mover as mensaxes. Selecciona un foro que si permita publicar mensaxes.',
-	'MOVE_POSTS_TO'		=> 'Mover mensaxes publicadas',
-	'MOVE_SUBFORUMS_TO'	=> 'Mover subforos',
+	'MOVE_POSTS_TO'					=> 'Mover mensaxes publicadas',
+	'MOVE_SUBFORUMS_TO'				=> 'Mover subforos',
 
 	'NO_DESTINATION_FORUM'			=> 'Non especificaches un foro ao que mover o contido',
 	'NO_FORUM_ACTION'				=> 'Non hai acción definida para realizar co contido do foro.',
@@ -156,5 +165,3 @@ $lang = array_merge($lang, array(
 
 	'UNLOCKED'			=> 'Desbloqueado',
 ));
-
-?>

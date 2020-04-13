@@ -39,6 +39,8 @@ if (empty($lang) || !is_array($lang))
 $lang = array_merge($lang, array(
 	'ACP_PRUNE_USERS_EXPLAIN'	=> 'Esta sección permitirache eliminar ou desactivar usuarios do teu taboleiro. As contas poden filtrarse de varias formas; por cantidade de mensaxes publicadas, actividade máis recente etc. Podes combinar todos estes criterios para restrinxires que contas serán afectadas. Por poñer un caso, podes purgar usuarios que non entraran nos foros dende o 01-01-2002 con menos de 10 mensaxes publicadas. De xeito alternativo, podes inserir unha listaxe de usuarios directamente na caixa de texto (un deles en cada liña), de forma que calquera criterio de selección indicado será ignorado. Ten coidado con esta funcionalidade! Cando eliminas un usuario non hai volta atrás.',
 
+	'CRITERIA'				=> 'Criterios',
+
 	'DEACTIVATE_DELETE'			=> 'Desactivar ou eliminar',
 	'DEACTIVATE_DELETE_EXPLAIN'	=> 'Escolle entre desactivar usuarios ou eliminalos completamente. Ten en conta que os usuarios eliminados non poden restaurarse logo!',
 	'DELETE_USERS'				=> 'Eliminar',
@@ -49,6 +51,9 @@ $lang = array_merge($lang, array(
 
 	'LAST_ACTIVE_EXPLAIN'		=> 'Insire unha data co formato <kbd>AAAA-MM-DD</kbd>. Insire <kbd>0000-00-00</kbd> para purgares os usuarios que nunca iniciaron unha sesión, as condicións <em>Antes</em> e <em>Despois</em> ignoraranse.',
 
+	'POSTS_ON_QUEUE'			=> 'Mensaxes Esperando Aprobación',
+	'PRUNE_USERS_GROUP_EXPLAIN'	=> 'Limitar a usuarios dentro do grupo.',
+	'PRUNE_USERS_GROUP_NONE'	=> 'Todos os grupos',
 	'PRUNE_USERS_LIST'				=> 'Usuarios a purgar',
 	'PRUNE_USERS_LIST_DELETE'		=> 'Cos criterios de selección escollidos para o purgado de usuarios eliminaranse as seguintes contas.',
 	'PRUNE_USERS_LIST_DEACTIVATE'	=> 'Cos criterios de selección escollidos para o purgado de usuarios desactivaranse as seguintes contas.',
@@ -87,5 +92,3 @@ $lang = array_merge($lang, array(
 
 	'TOPICS_PRUNED'		=> 'Temas purgados',
 ));
-
-?>

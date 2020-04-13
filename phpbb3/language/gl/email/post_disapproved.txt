@@ -8,5 +8,4 @@ A razón indicada para a desaprobación foi a seguinte:
 
 {REASON}
 
-
 {EMAIL_SIG}

@@ -1,9 +1,9 @@
-Subject: phpBB is correctly configured to send emails
+Subject: phpBB está correctamente configurado para mandar correos
 
-Hello {USERNAME},
+Ola {USERNAME},
 
-Congratulations. If you received this email, phpBB is correctly configured to send emails.
+Parabéns! Se recibiches este correo é que phpBB está correctamente configurado para enviar correos.
 
-In case you require assistance, please visit the phpBB support forums - https://www.phpbb.com/community/
+En caso de que precises axuda, visita os foros de soporte de phpBB - https://www.phpbb.com/community/
 
 {EMAIL_SIG}
