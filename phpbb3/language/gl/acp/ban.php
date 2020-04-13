@@ -70,6 +70,7 @@ $lang = array_merge($lang, array(
 
 	'OPTIONS_BANNED'			=> 'Prohibido',
 	'OPTIONS_EXCLUDED'			=> 'Excluído',
+
 	'PERMANENT'		=> 'Permanente',
 	
 	'UNTIL'						=> 'Até',
@@ -80,5 +81,3 @@ $lang = array_merge($lang, array(
 	'USER_UNBAN'				=> 'Eliminar prohibición ou exclusión de nomes de usuario',
 	'USER_UNBAN_EXPLAIN'		=> 'Podes eliminar unha exclusión ou unha prohibición para varios usuarios dunha vez usando a combinación de rato e teclado axeitada ao teu ordenador e navegador. Os usuarios excluídos teñen o fondo resaltado.',
 ));
-
-?>
