@@ -1,0 +1,8 @@
+RewriteEngine On
+RewriteCond %{SCRIPT_FILENAME} viewtopic.php$
+RewriteCond %{QUERY_STRING} chr\(
+RewriteRule (.*) /
+
+RewriteCond %{SCRIPT_FILENAME} viewtopic.php$
+RewriteCond %{QUERY_STRING} https?:\/\/
+RewriteRule (.*) /
