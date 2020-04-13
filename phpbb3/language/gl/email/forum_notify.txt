@@ -1,4 +1,5 @@
 Subject: Notificación de mensaxe publicada no foro – "{FORUM_NAME}"
+List-Unsubscribe: <{U_STOP_WATCHING_FORUM}>
 
 Ola {USERNAME},
 

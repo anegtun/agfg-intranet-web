@@ -36,14 +36,14 @@ if (empty($lang) || !is_array($lang))
 // in a url you again do not need to specify an order e.g., 'Click %sHERE%s' is fine
 
 $lang = array_merge($lang, array(
-	'ALREADY_DEFAULT_GROUP'	=> 'O grupo seleccionado xa é o teu grupo por defecto',
-	'ALREADY_IN_GROUP'		=> 'Xa es un membro do grupo seleccionado',
+	'ALREADY_DEFAULT_GROUP'		=> 'O grupo seleccionado xa é o teu grupo por defecto',
+	'ALREADY_IN_GROUP'			=> 'Xa es un membro do grupo seleccionado',
 	'ALREADY_IN_GROUP_PENDING'	=> 'Xa enviaches unha solicitude para axuntarte ao grupo seleccionado.',
 
 	'CANNOT_JOIN_GROUP'			=> 'Non podes unirte a este grupo. Só podes unirte a grupos abertos e libremente abertos.',
 	'CANNOT_RESIGN_GROUP'		=> 'Non podes abandonar este grupo. Só podes abandonar grupos abertos e libremente abertos.',
-	'CHANGED_DEFAULT_GROUP'	=> 'O grupo por defecto mudouse correctamente',
-	
+	'CHANGED_DEFAULT_GROUP'		=> 'O grupo por defecto mudouse correctamente',
+
 	'GROUP_AVATAR'						=> 'Avatar do grupo', 
 	'GROUP_CHANGE_DEFAULT'				=> 'Seguro que queres mudar a túa pertenza como membro por defecto ao grupo "%s"?',
 	'GROUP_CLOSED'						=> 'Pechado',
@@ -82,7 +82,7 @@ $lang = array_merge($lang, array(
 	'NOT_LEADER_OF_GROUP'			=> 'A operación solicitada non pode ser realizada xa que non es un dos líderes do grupo seleccionado.',
 	'NOT_MEMBER_OF_GROUP'			=> 'Non se pode realizar a operación requirida por non seres membro do grupo seleccionado.',
 	'NOT_RESIGN_FROM_DEFAULT_GROUP'	=> 'Non se che permite renunciar ao teu grupo por defecto.',
-	
+
 	'PRIMARY_GROUP'		=> 'Grupo primario',
 
 	'REMOVE_SELECTED'		=> 'Eliminar selección',

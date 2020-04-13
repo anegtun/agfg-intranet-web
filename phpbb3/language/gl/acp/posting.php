@@ -46,6 +46,7 @@ $lang = array_merge($lang, array(
 
 	'BBCODE_ADDED'				=> 'BBCode engadido de xeito correcto.',
 	'BBCODE_EDITED'				=> 'BBCode editado de xeito correcto.',
+	'BBCODE_DELETED'			=> 'O BBCode eliminado correctamente.',
 	'BBCODE_NOT_EXIST'			=> 'O BBCode que seleccionaches non existe.',
 	'BBCODE_HELPLINE'			=> 'Axuda en liña',
 	'BBCODE_HELPLINE_EXPLAIN'	=> 'Este campo contén o texto "mouseover" do BBCode',
@@ -54,7 +55,7 @@ $lang = array_merge($lang, array(
 
 	'BBCODE_INVALID_TAG_NAME'	=> 'O nome da etiqueta BBCode que seleccionaches xa existe.',
 	'BBCODE_INVALID'			=> 'O teu BBCode está definido dun xeito incorrecto.',
-	'BBCODE_OPEN_ENDED_TAG'		=> 'O seu BBCode personalizado debe conter as etiquetas de apertura e peche.',
+	'BBCODE_INVALID_TEMPLATE'	=> 'A túa plantilal de BBCode’s non é válida.',
 	'BBCODE_TAG'				=> 'Etiqueta',
 	'BBCODE_TAG_TOO_LONG'		=> 'A definición da etiqueta BBCode que inseriches é demasiado longa, reduce a súa lonxitude.',
 	'BBCODE_TAG_DEF_TOO_LONG'	=> 'A definición de etiqueta que inseriches é longa de máis, reduce a súa lonxitude.',
@@ -84,8 +85,9 @@ $lang = array_merge($lang, array(
 		'EMAIL'			=> 'Un enderezo de correo-e válido',
 		'URL'			=> 'Unha URL válida usando calquera protocolo (http, ftp etc. non pode ser usado por exploits de javascript). Se non se proporciona ningún, engadirase “http://” por defecto na cadea.',
 		'LOCAL_URL'		=> 'Un URL local. O URL debe ser relativo á páxina do tema e non debe conter un nome de servidor ou protocolo',
+		'RELATIVE_URL'	=> 'URL relativa. Podes usala para facer coincidir partes dunha URL, pero ollo: unha URL absoluta é unha URL relativa válida. Cando queiras usar URLs relativas no teu foro, usa o token "LOCAL_URL".',
 		'COLOR'			=> 'Unha cor HTML pode ser inserida ou ben de xeito numérico <samp>#FF1234</samp> ou ben mediante unha <a href="http://www.w3.org/TR/CSS21/syndata.html#value-def-color">CSS nome estándar de cor</a> como <samp>fuchsia</samp> ou <samp>InactiveBorder</samp>'
-	)
+	),
 ));
 
 // Smilies and topic icons
@@ -104,11 +106,9 @@ $lang = array_merge($lang, array(
 	'CURRENT_SMILIES'			=> 'Cariñas actuais',
 	'CURRENT_SMILIES_EXPLAIN'	=> 'Elixe que facer cos risoños instalados actualmente',
 
-	'DISPLAY_ON_POSTING'	=> 'Amosar durante a publicación',
+	'DISPLAY_ON_POSTING'		=> 'Amosar durante a publicación',
 	'DISPLAY_POSTING'			=> 'Na páxina de publicación',
 	'DISPLAY_POSTING_NO'		=> 'Non na páxina de publicación',
-
-
 
 	'EDIT_ICONS'				=> 'Editar iconas.',
 	'EDIT_SMILIES'				=> 'Editar risoños',
@@ -121,15 +121,19 @@ $lang = array_merge($lang, array(
 	'FIRST'			=> 'Primeiro',
 
 	'ICONS_ADD'				=> 'Engadir unha nova icona',
-	'ICONS_NONE_ADDED'		=> 'Non se engadiron iconas.',
-	'ICONS_ONE_ADDED'		=> 'A icona foi engadida correctamente.',
-	'ICONS_ADDED'			=> 'As iconas foron engadidas correctamente.',
+	'ICONS_ADDED'			=> array(
+		0	=> 'Non se engadiron iconas.',
+		1	=> 'A icona foi engadida correctamente.',
+		2	=> 'As iconas foron engadidas correctamente.',
+	),
 	'ICONS_CONFIG'			=> 'Configuración das iconas',
 	'ICONS_DELETED'			=> 'A icona foi eliminada correctamente.',
 	'ICONS_EDIT'			=> 'Editar a icona',
-	'ICONS_ONE_EDITED'		=> 'A icona foi actualizada correctamente.',
-	'ICONS_NONE_EDITED'		=> 'Non se actualizou icona ningunha.',
-	'ICONS_EDITED'			=> 'As iconas foron actualizadas correctamente.',
+	'ICONS_EDITED'			=> array(
+		0	=> 'Non se actualizou icona ningunha.',
+		1	=> 'A icona foi actualizada correctamente.',
+		2	=> 'As iconas foron actualizadas correctamente.',
+	),
 	'ICONS_HEIGHT'			=> 'Altura da icona',
 	'ICONS_IMAGE'			=> 'Imaxe da icona',
 	'ICONS_IMPORTED'		=> 'O paquete de iconas foi instalado correctamente.',
@@ -161,9 +165,11 @@ $lang = array_merge($lang, array(
 
 	'SELECT_PACKAGE'			=> 'Seleccionar un ficheiro de paquete',
 	'SMILIES_ADD'				=> 'Engadir un risoño novo',
-	'SMILIES_NONE_ADDED'		=> 'Non se engadiron risoños.',
-	'SMILIES_ONE_ADDED'			=> 'O risoño foi engadido correctamente.',
-	'SMILIES_ADDED'				=> 'Os risoños foron engadidos correctamente.',
+	'SMILIES_ADDED'				=> array(
+		0	=> 'Non se engadiron risoños.',
+		1	=> 'O risoño foi engadido correctamente.',
+		2	=> 'Os risoños foron engadidos correctamente.',
+	),
 	'SMILIES_CODE'				=> 'Código de risoño',
 	'SMILIES_CONFIG'			=> 'Configuración de risoños',
 	'SMILIES_DELETED'			=> 'O risoño foi eliminada correctamente.',
@@ -171,9 +177,11 @@ $lang = array_merge($lang, array(
 	'SMILIE_NO_CODE'			=> 'Ignorouse o risoño “%s”, xa que non se inseriu código ningún.',
 	'SMILIE_NO_EMOTION'			=> 'Ignorouse o risoño “%s”, xa que non se inseriu sentimento ningún.',
 	'SMILIE_NO_FILE'			=> 'Ignorouse o risoño “%s”, xa que non se atopou o arquivo.',
-	'SMILIES_NONE_EDITED'		=> 'Non se actualizou risoño ningún.',
-	'SMILIES_ONE_EDITED'		=> 'O risoño actualizouse correctamente.',
-	'SMILIES_EDITED'			=> 'Os risoños foron actualizados correctamente',
+	'SMILIES_EDITED'			=> array(
+		0	=> 'Non se actualizou risoño ningún.',
+		1	=> 'O risoño actualizouse correctamente.',
+		2	=> 'Os risoños foron actualizados correctamente.',
+	),
 	'SMILIES_EMOTION'			=> 'Emoción',
 	'SMILIES_HEIGHT'			=> 'Altura do risoño',
 	'SMILIES_IMAGE'				=> 'Imaxe do risoño',
@@ -185,7 +193,10 @@ $lang = array_merge($lang, array(
 	'SMILIES_URL'				=> 'Ficheiro de imaxe do risoño',
 	'SMILIES_WIDTH'				=> 'Largo do risoño',
 
-	'TOO_MANY_SMILIES'			=> 'Acadouse o límite de %d risoños.',
+	'TOO_MANY_SMILIES'			=> array(
+		1	=> 'Acadouse o límite de %d risoño.',
+		2	=> 'Acadouse o límite de %d risoños.',
+	),
 
 	'WRONG_PAK_TYPE'	=> 'O paquete especificado non contén os datos axeitados.',
 ));
@@ -216,7 +227,7 @@ $lang = array_merge($lang, array(
 	'ADD_RANK'				=> 'Engadir novo rango',
 
 	'MUST_SELECT_RANK'		=> 'Debes seleccionar un rango',
-	
+
 	'NO_ASSIGNED_RANK'		=> 'Sen rango especial asignado',
 	'NO_RANK_TITLE'			=> 'Non especificaches un título para o rango.',
 	'NO_UPDATE_RANKS'		=> 'O rango foi eliminado correctamente. Porén as contas de usuario que usen este rango non foron actualizadas. Terás que reiniciar o rango nesas contas.',
@@ -277,5 +288,3 @@ $lang = array_merge($lang, array(
 
 	'USED_IN_REPORTS'		=> 'Usado/a nos informes',
 ));
-
-?>

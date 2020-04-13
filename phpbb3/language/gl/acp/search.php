@@ -52,15 +52,38 @@ $lang = array_merge($lang, array(
 	'DELETING_INDEX_IN_PROGRESS'			=> 'Borrado de índice en proceso',
 	'DELETING_INDEX_IN_PROGRESS_EXPLAIN'	=> 'O servidor buscado está actualmente limpando o seu índice. Isto pode levar varios minutos.',
 
-	'FULLTEXT_MYSQL_INCOMPATIBLE_VERSION'	=> 'O servidor de texto completo MySQL só pode ser usado con MySQL4 ou superior.',
-	'FULLTEXT_MYSQL_NOT_MYISAM'				=> 'Os índices de texto completo MySQL só poden ser usados con táboas MyISAM.',
+	'FULLTEXT_MYSQL_INCOMPATIBLE_DATABASE'	=> 'O servidor de texto completo MySQL só pode ser usado con MySQL4 ou superior.',
+	'FULLTEXT_MYSQL_NOT_SUPPORTED'			=> 'Os índices de texto completo só se poden empregar con táboas MyISAM ou InnoDB. Precísase MySQL 5.6.8 ou superior para procuras de texto completo en táboas InnoDB',
 	'FULLTEXT_MYSQL_TOTAL_POSTS'			=> 'Número total de mensaxes indexados',
-	'FULLTEXT_MYSQL_MBSTRING'				=> 'Soporte para caracteres UTF-8 non latinos utilizando mbstring:',
-	'FULLTEXT_MYSQL_PCRE'				=> 'Soporte para caracteres UTF-8 non latinos utilizando PCRE:',
-	'FULLTEXT_MYSQL_MBSTRING_EXPLAIN'		=> 'Se o PCRE non ten propiedades de caracteres unicode, o backend de procura tentará usar o motor de expresións regulares de mbstring.',
-	'FULLTEXT_MYSQL_PCRE_EXPLAIN'		=> 'Este backend de procura require propiedades de carácter PCRE unicode, só dispoñíbel no PHP 4.4, 5.1 e superiores, se queres buscar caracteres non latinos.',
 	'FULLTEXT_MYSQL_MIN_SEARCH_CHARS_EXPLAIN'	=> 'As palabras con, polo menos, esta cantidade de caracteres serán indexadas para as procuras. Ti ou o teu host só podedes mudar esta configuración mudando a configuración mysql.',
 	'FULLTEXT_MYSQL_MAX_SEARCH_CHARS_EXPLAIN'	=> 'As palabras con menos ou con esta cantidade de caracteres serán indexadas para as procuras. Ti ou o teu host só podedes mudar esta configuración mudando a configuración mysql.',
+
+	'FULLTEXT_POSTGRES_INCOMPATIBLE_DATABASE'	=> 'O servidor de texto completo PostgreSQL só pode ser usado con PostgreSQL.',
+	'FULLTEXT_POSTGRES_TOTAL_POSTS'			=> 'Número total de mensaxes indexadas',
+	'FULLTEXT_POSTGRES_VERSION_CHECK'		=> 'Versión de PostgreSQL',
+	'FULLTEXT_POSTGRES_TS_NAME'				=> 'Perfil de configuración de procura de texto completo:',
+	'FULLTEXT_POSTGRES_MIN_WORD_LEN'			=> 'Tamaño de palabra mínimo para as palabras clave',
+	'FULLTEXT_POSTGRES_MAX_WORD_LEN'			=> 'Tamaño de palabra máximo para as palabras clave',
+	'FULLTEXT_POSTGRES_VERSION_CHECK_EXPLAIN'		=> 'Este servidor de texto completo precisa PostgreSQL 8.3 ou superior.',
+	'FULLTEXT_POSTGRES_TS_NAME_EXPLAIN'				=> 'O perfil de configuración empregado para determinar o parser e o diccionario.',
+	'FULLTEXT_POSTGRES_MIN_WORD_LEN_EXPLAIN'			=> 'Palabras con al menos estes caracteres incluiranse na consulta á base de datos.',
+	'FULLTEXT_POSTGRES_MAX_WORD_LEN_EXPLAIN'			=> 'Palabras con non máis destes caracteres incluiranse na consulta á base de datos.',
+
+	'FULLTEXT_SPHINX_CONFIGURE'				=> 'Configura os seguintes axustes para xerar un ficheiro de configuración Sphinx',
+	'FULLTEXT_SPHINX_DATA_PATH'				=> 'Ruta ao directorio de datos',
+	'FULLTEXT_SPHINX_DATA_PATH_EXPLAIN'		=> 'Usarase para almacenar os índices e os ficheiros de rexistro. Deberías ubicar este directorio fóra dunha ruta accesible por web, e debería ter unha barra / ao final.',
+	'FULLTEXT_SPHINX_DELTA_POSTS'			=> 'Número de mensaxes no índice delta',
+	'FULLTEXT_SPHINX_HOST'					=> 'Host do demonio Sphinx',
+	'FULLTEXT_SPHINX_HOST_EXPLAIN'			=> 'Host no que o demonio de procuras de Sphinx (searchd) está escoitando. Déixao baleiro para empregar "localhost".',
+	'FULLTEXT_SPHINX_INDEXER_MEM_LIMIT'		=> 'Límite de memoria do indexador',
+	'FULLTEXT_SPHINX_INDEXER_MEM_LIMIT_EXPLAIN'	=> 'Este número debería ser sempre menor á RAM do servidor. Se experimentas problemas de rendemento quizáis sexa porque o indexador consume demasiados recursos. Podería axudar que baixaras a memoria asignada ao indexador.',
+	'FULLTEXT_SPHINX_MAIN_POSTS'			=> 'Número de mensaxes no índice principal',
+	'FULLTEXT_SPHINX_PORT'					=> 'Porto do demonio Sphinx',
+	'FULLTEXT_SPHINX_PORT_EXPLAIN'			=> 'Porto no que o demonio de procuras de Sphinx (searchd) está escoitando. Déixao en branco para empregar o porto por defecto "9312"',
+	'FULLTEXT_SPHINX_WRONG_DATABASE'		=> 'A procura con Sphinx para phpBB só soporta MySQL e PostgreSQL.',
+	'FULLTEXT_SPHINX_CONFIG_FILE'			=> 'Ficheiro de configuración de Sphinx',
+	'FULLTEXT_SPHINX_CONFIG_FILE_EXPLAIN'	=> 'O contido xerado do ficheiro de configuración de Sphinx. É preciso pegar estes datos no "sphinx.conf". Reempraza [dbuser] e [dbpassword] coas túas credenciáis de base de datos.',
+	'FULLTEXT_SPHINX_NO_CONFIG_DATA'		=> 'Non se definiu a ruta ao directorio de datos de Sphinx. Por favor define a ruta e xera o ficheiro de configuración.',
 
 	'GENERAL_SEARCH_SETTINGS'				=> 'Configuración xeral da procura',
 	'GO_TO_SEARCH_INDEX'					=> 'Ir á páxina de índices de procura',
@@ -85,8 +108,18 @@ $lang = array_merge($lang, array(
 
 	'SEARCH_GUEST_INTERVAL'					=> 'Intervalo de saturación (flood) de procuras dos convidados',
 	'SEARCH_GUEST_INTERVAL_EXPLAIN'			=> 'Número de segundos que os convidados deben agardar entre dúas procuras. Se un invitado fixo unha procura, os demais deberán agardar até que remate o intervalo de tempo.',
-	'SEARCH_INDEX_CREATE_REDIRECT'			=> 'Indexáronse todas as mensaxes publicadas ata a que ten id %1$d , das cales %2$d foron procesadas neste chanzo.<br />A media actual de indexado é aproximadamente de %3$.1f mensaxes por segundo.<br />Indexado en proceso…',
-	'SEARCH_INDEX_DELETE_REDIRECT'			=> 'Todas as mensaxes publicadas ata a que ten id %1$d foron eliminadas do índice de procura.<br />Borrado en proceso…',
+	'SEARCH_INDEX_CREATE_REDIRECT'			=> array(
+		2	=> 'Indexáronse todas as mensaxes publicadas ata a que ten id %1$d , das cales %2$d foron procesadas neste chanzo.<br />A media actual de indexado é aproximadamente de %3$.1f mensaxes por segundo.<br />Indexado en proceso…',
+	),
+	'SEARCH_INDEX_CREATE_REDIRECT_RATE'		=> array(
+		2	=> 'O ratio de indexación é de aproximadamente %1$.1f mensaxes por segundo.<br />Indexación en proceso…',
+	),
+	'SEARCH_INDEX_DELETE_REDIRECT'			=> array(
+		2	=> 'Todas as mensaxes publicadas ata a que ten id %1$d foron eliminadas do índice de procura.<br />Borrado en proceso…',
+	),
+	'SEARCH_INDEX_DELETE_REDIRECT_RATE'		=> array(
+		2	=> 'O ratio de borrado é de aproximadamente %1$.1f mensaxes por segundo.<br />Borrado en progreso…',
+	),
 	'SEARCH_INDEX_CREATED'					=> 'Indexadas correctamente todas as mensaxes na base de datos do board.',
 	'SEARCH_INDEX_REMOVED'					=> 'Eliminado correctamente o índice de procura deste servidor.',
 	'SEARCH_INTERVAL'						=> 'Intervalo de saturación (flood) para procuras de usuarios',
@@ -105,5 +138,3 @@ $lang = array_merge($lang, array(
 	'YES_SEARCH_UPDATE'						=> 'Activar actualización de texto completo',
 	'YES_SEARCH_UPDATE_EXPLAIN'				=> 'Actualización de índices de texto completo ao enviar mensaxes, anular se a procura está desactivada.',
 ));
-
-?>

@@ -10,5 +10,4 @@ Se queres ver a mensaxe, preme na seguinte ligazón:
 Se queres ver o tema, preme nesta outra:
 {U_VIEW_TOPIC}
 
-
 {EMAIL_SIG}

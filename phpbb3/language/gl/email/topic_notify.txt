@@ -1,4 +1,5 @@
 Subject: Notificación de resposta ao tema – "{TOPIC_TITLE}"
+List-Unsubscribe: <{U_STOP_WATCHING_TOPIC}>
 
 Ola {USERNAME},
 
@@ -14,7 +15,6 @@ Se queres ver o foro, preme na seguinte ligazón:
 {U_FORUM}
 
 Se non desexas seguir subscrito a este tema podes premer na ligazón "Deixar de seguir este tema" que se atopa no fondo do tema indicado enriba, ou premendo na seguinte ligazón:
-
 {U_STOP_WATCHING_TOPIC}
 
 {EMAIL_SIG}
