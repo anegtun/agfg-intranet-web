@@ -1,12 +1,12 @@
-Subject: New topic notification - "{FORUM_NAME}"
+Subject: Notificación de novo tema - "{FORUM_NAME}"
 
-Hello {USERNAME},
+Ola {USERNAME},
 
-You are receiving this notification because you are watching the forum "{FORUM_NAME}" at "{SITENAME}". This forum has received a new topic<!-- IF AUTHOR_NAME != '' --> by {AUTHOR_NAME}<!-- ENDIF --> since your last visit, "{TOPIC_TITLE}". You can use the following link to view the forum, no more notifications will be sent until you visit the forum.
+Estás a recibir esta notificación poque estás subscrito a "{FORUM_NAME}" en "{SITENAME}". Neste foro publicouse "{TOPIC_TITLE}"<!-- IF AUTHOR_NAME != '' --> (por {AUTHOR_NAME})<!-- ENDIF --> dende a túa última visita. Podes empregar as seguintes ligazóns para ver o tema. Non se che enviarán máis notificacións até que visites o tema.
 
 {U_FORUM}
 
-If you no longer wish to watch this forum you can either click the "Unsubscribe forum" link found in the forum above, or by clicking the following link:
+Se non queres seguir vendo este tipo de notificacións, podes premer na seguinte ligazón, ou na ligazón "Desusbscribirte do foro" que aparecerá ao comezo do foro.
 
 {U_STOP_WATCHING_FORUM}
 

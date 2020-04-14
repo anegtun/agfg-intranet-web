@@ -1,19 +1,19 @@
-Subject: Topic reply notification - "{TOPIC_TITLE}"
+Subject: Notificación de resposta en tema - "{TOPIC_TITLE}"
 
-Hello {USERNAME},
+Ola {USERNAME},
 
-You are receiving this notification because you are watching the topic "{TOPIC_TITLE}" at "{SITENAME}". This topic has received a reply<!-- IF AUTHOR_NAME != '' --> by {AUTHOR_NAME}<!-- ENDIF --> since your last visit. You can use the following link to view the replies made, no more notifications will be sent until you visit the topic.
+Estás a recibir esta notificación porque estás subscrito ao tema "{TOPIC_TITLE}" en "{SITENAME}". Este tema recibiu unha resposta<!-- IF AUTHOR_NAME != '' --> de {AUTHOR_NAME}<!-- ENDIF --> dende a túa última visita. Podes empregar as seguintes ligazóns para ver as respostas. Non se che enviarán máis notificacións até que visites o tema.
 
-If you want to view the newest post made since your last visit, click the following link:
+Se queres ver as últimas mensaxes:
 {U_NEWEST_POST}
 
-If you want to view the topic, click the following link:
+Se queres ver o tema:
 {U_TOPIC}
 
-If you want to view the forum, click the following link:
+Se queres ver o foro:
 {U_FORUM}
 
-If you no longer wish to watch this topic you can either click the "Unsubscribe topic" link found at the bottom of the topic above, or by clicking the following link:
+Se non queres seguir vendo este tipo de notificacións, podes premer na seguinte ligazón, ou na ligazón "Desusbscribirte do tema" que aparecerá ao fondo do tema.
 
 {U_STOP_WATCHING_TOPIC}
 

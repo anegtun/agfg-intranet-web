@@ -1,23 +1,23 @@
 
-Hello {TO_USERNAME},
+Ola {TO_USERNAME},
 
-The following is an e-mail sent to you through the administration contact page on "{SITENAME}".
+Enviouseche este correo a través da páxina de contacto de "{SITENAME}".
 
 <!-- IF S_IS_REGISTERED -->
-The message has been sent from an account on the site.
-Username: {FROM_USERNAME}
-E-mail address: {FROM_EMAIL_ADDRESS}
-IP Address: {FROM_IP_ADDRESS}
-Profile: {U_FROM_PROFILE}
+A mensaxe foi enviada polo usuario:
+- Nome de usuario: {FROM_USERNAME}
+- Correo: {FROM_EMAIL_ADDRESS}
+- IP: {FROM_IP_ADDRESS}
+- Perfil: {U_FROM_PROFILE}
 <!-- ELSE -->
-The message was sent from a guest who specified the following contact information:
-Name: {FROM_USERNAME}
-E-mail address: {FROM_EMAIL_ADDRESS}
-IP Address: {FROM_IP_ADDRESS}
+A mensaxe foi enviada por un convidadoque aportou os seguintes datos:
+- Nome de usuario: {FROM_USERNAME}
+- Correo: {FROM_EMAIL_ADDRESS}
+- IP: {FROM_IP_ADDRESS}
 <!-- ENDIF -->
 
 
-Message sent to you follows
+A mensaxe que enviou
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 {MESSAGE}

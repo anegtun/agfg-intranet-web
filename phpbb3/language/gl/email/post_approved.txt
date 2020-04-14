@@ -1,4 +1,4 @@
-Subject: Mensaxe aprobada – "POST_SUBJECT}"
+Subject: Mensaxe aprobada – "{POST_SUBJECT}"
 
 Ola {USERNAME},
 
