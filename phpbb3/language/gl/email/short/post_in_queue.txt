@@ -1,13 +1,13 @@
-Subject: Post moderation notification - "{TOPIC_TITLE}"
+Subject: Notificación de moderación de mensaxe - "{TOPIC_TITLE}"
 
 Hello {USERNAME},
 
-You are receiving this notification because the post "{POST_SUBJECT}" at "{SITENAME}" needs approval.
+Estás a recibir esta mensaxe por se require aprobación para a mensaxe "{POST_SUBJECT}" en "{SITENAME}".
 
-If you want to view the post, click the following link:
+Se queres ver a mensaxe:
 {U_VIEW_POST}
 
-If you want to view the topic, click the following link:
+Se queres ver o tema:
 {U_TOPIC}
 
 {EMAIL_SIG}

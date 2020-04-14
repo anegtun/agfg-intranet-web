@@ -1,10 +1,10 @@
-Subject: Topic disapproved - "{TOPIC_TITLE}"
+Subject: Tema rexeitado - "{TOPIC_TITLE}"
 
-Hello {USERNAME},
+Ola {USERNAME},
 
-You are receiving this notification because your topic "{TOPIC_TITLE}" at "{SITENAME}" was disapproved by a moderator or administrator.
+Estás a recibir esta notificación porque un moderador ou administrador rexeitou o teu tema "{TOPIC_TITLE}" en "{SITENAME}".
 
-The following reason was given for the disapproval:
+A razón do rexeitamento foi:
 
 {REASON}
 

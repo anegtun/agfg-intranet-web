@@ -10,5 +10,4 @@ Usa esta ligazón para ver o perfil do usuario:
 Usa esta ligazón para activar a conta:
 {U_ACTIVATE}
 
-
 {EMAIL_SIG}

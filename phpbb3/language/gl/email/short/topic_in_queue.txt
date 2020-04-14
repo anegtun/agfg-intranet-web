@@ -1,13 +1,13 @@
-Subject: Topic moderation notification - "{TOPIC_TITLE}"
+Subject: Notificación de moderación de tema - "{TOPIC_TITLE}"
 
-Hello {USERNAME},
+Ola {USERNAME},
 
-You are receiving this notification because the topic "{TOPIC_TITLE}" at "{SITENAME}" needs approval.
+Estás a recibir esta notificación porque se require aprobación do tema "{TOPIC_TITLE}" en "{SITENAME}".
 
-If you want to view the topic, click the following link:
+Se queres ver o tema:
 {U_VIEW_TOPIC}
 
-If you want to view the forum, click the following link:
+Se queres ver o foro:
 {U_FORUM}
 
 {EMAIL_SIG}
