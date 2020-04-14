@@ -148,7 +148,7 @@ $lang = array_merge($lang, array(
 	'ACL_M_SOFTDELETE'	=> 'Podes eliminar mensaxes de xeito brando<br /><em>Os moderadores, que poden aprobar mensaxes, poden restaurar mensaxes eliminadas de xeito brando.</em>',
 	'ACL_M_APPROVE'		=> 'Podes aprobar mensaxes publicadas',
 	'ACL_M_REPORT'		=> 'Podes pechar e eliminar informes',
-	'ACL_M_CHGPOSTER'	=> 'Podes mudar o autor da mensaxe publicada'
+	'ACL_M_CHGPOSTER'	=> 'Podes mudar o autor da mensaxe publicada',
 
 	'ACL_M_MOVE'	=> 'Podes mover temas',
 	'ACL_M_LOCK'	=> 'Podes bloquear temas',
