@@ -1,9 +1,9 @@
 
-O seguinte é un correo-e que che enviou un administrador de "{SITENAME}". Se esta mensaxe é spam, contén insultos ou outros comentarios que che parecen ofensivos, por favor contacta co xestor do sitio do taboleiro no seguinte enderezo:
+Un administrador de "{SITENAME}" enviouche un correo. Se cres que esta mensaxe é spam, contén insultos ou outros comentarios que che parecen ofensivos, por favor contacta co xestor do sitio no seguinte enderezo:
 
 {CONTACT_EMAIL}
 
-Inclúe este correo-e completo (incluídas especialmente as cabeceiras).
+Inclúe este correo completo (incluídas as cabeceiras).
 
 A mensaxe que che enviaron é a seguinte:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
