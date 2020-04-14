@@ -1,13 +1,13 @@
 Subject: Activar conta de usuario 
 
-Ola,
+Ola.
 
 A conta a nome do usuario "{USERNAME}" foi desactivada ou creada de novo, deberías verificar os detalles deste usuario (se é preciso) e xestionalos axeitadamente.
 
-Usa esta ligazón para ver o perfil do usuario:
+Para ver o perfil do usuario:
 {U_USER_DETAILS}
 
-Usa esta ligazón para activar a conta:
+Para activar a conta preme nesta ligazón:
 {U_ACTIVATE}
 
 {EMAIL_SIG}
