@@ -41,7 +41,7 @@ $lang = array_merge($lang, array(
 	'30_MINS'		=> '30 minutos',
 	'6_HOURS'		=> '6 horas',
 
-	'ACP_BAN_EXPLAIN'	=> 'Aquí podes prohibir o acceso a usuarios segundo o seu nome, IP ou correo electrónico, evitando que poidan acceder a calquera parte dos foros. Podes incluír unha breve explicación (255 caracteres) da prohibición, que se amosará no rexistro (log) de administración. Tamén podes especificar a duración da prohibición. Se queres manter unha prohibición ata unha data concreta no canto dun período de tempo determinado, selecciona <u>Ata</u> para a duración e insire a data en formato aaaa-mm-dd.',
+	'ACP_BAN_EXPLAIN'	=> 'Aquí podes prohibir o acceso a usuarios segundo o seu nome, IP ou correo electrónico, evitando que poidan acceder a calquera parte dos foros. Podes incluír unha breve explicación (255 caracteres) da prohibición, que se amosará no rexistro (log) de administración. Tamén podes especificar a duración da prohibición. Se queres manter unha prohibición até unha data concreta no canto dun período de tempo determinado, selecciona <u>Até</u> para a duración e insire a data en formato aaaa-mm-dd.',
 
 	'BAN_EXCLUDE'			=> 'Excluír das prohibicións',
 	'BAN_LENGTH'			=> 'Duración da prohibición',
