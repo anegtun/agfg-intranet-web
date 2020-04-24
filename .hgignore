@@ -1,8 +1,0 @@
-syntax: glob
-.settings/**
-**/.project
-*/tmp/cache/**
-*/tmp/logs/*
-.project
-*/tmp/**
-*/logs/**
