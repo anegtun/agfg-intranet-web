@@ -1,3 +1,7 @@
+# App  files #
+##############
+/app/config/app.pro.php
+
 # CakePHP specific files #
 ##########################
 /app/tmp/**
