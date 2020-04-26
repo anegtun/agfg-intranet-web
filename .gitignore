@@ -4,8 +4,8 @@
 
 # CakePHP specific files #
 ##########################
-#/app/tmp/**
-#/app/logs/**
+/app/tmp/**
+/app/logs/**
 
 # Tool specific files #
 #######################
