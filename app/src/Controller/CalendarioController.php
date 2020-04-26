@@ -232,6 +232,7 @@ class CalendarioController extends RestController {
         $resP = [
             'data_partido' => $p->getDataHora(),
             'adiado' => $p->adiado,
+            'cancelado' => $p->cancelado,
             'equipa1' => [],
             'equipa2' => [],
             'ganador' => $p->getGanador(),

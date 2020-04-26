@@ -34,7 +34,7 @@ $this->set('cabeceiraMigas', [
                             </tr>
                         <?php endif ?>
                         <?php
-                            $rowClass = ($p->non_presentado_equipa1 || $p->non_presentado_equipa2 
+                            $rowClass = ($p->cancelado || $p->non_presentado_equipa1 || $p->non_presentado_equipa2 
                                 || !empty($p->sancion_puntos_equipa1) || !empty($p->sancion_puntos_equipa2))
                                     ? 'bg-danger text-danger' : '';
                         ?>

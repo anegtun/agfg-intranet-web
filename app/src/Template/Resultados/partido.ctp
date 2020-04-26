@@ -38,6 +38,12 @@ $emptyTemplates = [
                     <label for="adiado">Adiado (marcar en caso de que o partido se xogue nunha semana diferente)</label>
                 </div>
             </div>
+            <div class="row">
+                <div class="form-group col-lg-8">
+                    <?= $this->Form->checkbox('cancelado', ['id'=>'cancelado','templates'=>$emptyTemplates]) ?>
+                    <label for="cancelado">Cancelado (marcar en caso de que o partido non se vaia xogar, sen gañador)</label>
+                </div>
+            </div>
             <div class="clearfix">
                 <div class="col-lg-6">
                     <div class="row">
