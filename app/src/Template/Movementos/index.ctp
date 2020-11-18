@@ -16,6 +16,7 @@ $this->set('cabeceiraMigas', [['label'=>'Movementos']]);
                         <th class="celda-titulo">Conta</th>
                         <th class="celda-titulo">Área</th>
                         <th class="celda-titulo">Subárea</th>
+                        <th class="celda-titulo">Clube</th>
                         <th class="celda-titulo">Observacións</th>
                         <th class="celda-titulo"></th>
                         <th class="celda-titulo"></th>
@@ -30,6 +31,7 @@ $this->set('cabeceiraMigas', [['label'=>'Movementos']]);
                             <td><?= $contas[$m->conta] ?></td>
                             <td><?= $m->subarea->area->nome ?></td>
                             <td><?= $m->subarea->nome ?></td>
+                            <td><?= $m->clube ? ($this->Html->image($m->clube->logo, ['width'=>25,'height'=>25]) . ' ' . $m->clube->codigo) : '-' ?></td>
                             <td><?= $m->descricion ?></td>
                             <td class="text-center"><?= $this->AgfgForm->editButton(['action'=>'detalle', $m->id]) ?></td>
                             <td class="text-center"><?= $this->AgfgForm->deleteButton(['action'=>'borrar', $m->id]) ?></td>

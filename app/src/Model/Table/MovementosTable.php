@@ -13,6 +13,11 @@ class MovementosTable extends Table {
             'foreignKey' => 'id_subarea',
             'propertyName' => 'subarea'
         ]);
+        $this->belongsTo('Clube', [
+        	'className' => 'Clubes',
+            'foreignKey' => 'id_clube',
+            'propertyName' => 'clube'
+        ]);
     }
 
     public function validationDefault(Validator $validator) {

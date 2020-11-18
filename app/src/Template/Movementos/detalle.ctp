@@ -36,6 +36,9 @@ $emptyTemplates = [
                 <div class="form-group col-lg-3">
                     <?= $this->Form->control('id_subarea', ['options'=>$this->AgfgForm->objectToKeyValue($subareas,'id','{$e->area->nome} - {$e->nome}'), 'label'=>'Subárea', 'templates'=>$emptyTemplates]) ?>
                 </div>
+                <div class="form-group col-lg-3">
+                    <?= $this->Form->control('id_clube', ['options'=>$this->AgfgForm->objectToKeyValue($clubes,'id','{$e->nome}'), 'label'=>'Clube', 'templates'=>$emptyTemplates]) ?>
+                </div>
             </div>
 
             <div class="row">

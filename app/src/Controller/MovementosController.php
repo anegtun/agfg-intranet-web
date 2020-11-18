@@ -13,6 +13,7 @@ class MovementosController extends AppController {
         parent::initialize();
         $this->Contas = new Contas();
         $this->Tempadas = new Tempadas();
+        $this->Clubes = TableRegistry::get('Clubes');
         $this->Subareas = TableRegistry::get('MovementosSubarea');
     }
 
@@ -20,8 +21,8 @@ class MovementosController extends AppController {
         $contas = $this->Contas->getAll();
         $tempadas = $this->Tempadas->getTempadas();
         $movementos = $this->Movementos
-            ->find('all', ['order'=>'data'])
-            ->contain(['Subarea' => ['Area']]);
+            ->find('all', ['order'=>'data desc'])
+            ->contain(['Subarea' => ['Area'], 'Clube']);
         $this->set(compact('movementos', 'contas', 'tempadas'));
     }
 
@@ -35,8 +36,9 @@ class MovementosController extends AppController {
         $movemento->data_str = empty($movemento->data) ? NULL : $movemento->data->format('d-m-Y');
         $contas = $this->Contas->getAllWithEmpty();
         $tempadas = $this->Tempadas->getTempadasWithEmpty();
+        $clubes = $this->Clubes->find('all', ['order'=>'nome']);
         $subareas = $this->Subareas->find('all', ['order'=>'Area.nome'])->contain(['Area']);
-        $this->set(compact('movemento', 'contas', 'tempadas', 'subareas'));
+        $this->set(compact('movemento', 'contas', 'tempadas', 'clubes', 'subareas'));
     }
 
     public function gardar() {
