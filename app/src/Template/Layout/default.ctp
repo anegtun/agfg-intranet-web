@@ -149,6 +149,18 @@ $menu_option = empty($menu_option) ? '' : $menu_option;
                                         array('controller'=>'Campos', 'action'=>'index'),
                                         array('escape'=>false)) ?>
                                 </li>
+                                <li data-toggle="tooltip">
+                                    <?= $this->Html->link(
+                                        '<span class="glyphicon glyphicon-indent-left"><span class="sr-only">Áreas movementos</span></span>Áreas movementos',
+                                        array('controller'=>'Economico', 'action'=>'areas'),
+                                        array('escape'=>false)) ?>
+                                </li>
+                                <li data-toggle="tooltip">
+                                    <?= $this->Html->link(
+                                        '<span class="glyphicon glyphicon-transfer"><span class="sr-only">Movementos</span></span> Movementos',
+                                        array('controller'=>'Movementos', 'action'=>'index'),
+                                        array('escape'=>false)) ?>
+                                </li>
                             <?php endif ?>
                         </ul>
                     </div>

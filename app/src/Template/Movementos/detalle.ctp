@@ -1,0 +1,50 @@
+<?php
+$this->extend('template');
+$this->set('cabeceiraTitulo', empty($movemento->id) ? 'Novo movemento' : $movemento->data->format('Y-m-d'));
+$this->set('cabeceiraMigas', [
+    ['label'=>'Movementos', 'url'=>['controller'=>'Movementos', 'action'=>'index']],
+    ['label'=>empty($movemento->id) ? 'Novo movemento' : $movemento->data->format('Y-m-d')]
+]);
+$emptyTemplates = [
+    'inputContainer' => '{{content}}',
+    'input' => '<input type="{{type}}" name="{{name}}" {{attrs}}/>',
+];
+?>
+
+<div class="container-full" style="margin-top:2em;">
+    <?= $this->Form->create($movemento, ['type'=>'post', 'url'=>['action'=>'gardar']]) ?>
+        <?= $this->Form->hidden('id') ?>
+        <fieldset>
+            <legend>Movemento</legend>
+
+            <div class="row">
+                <div class="form-group col-lg-3">
+                    <?= $this->Form->control('data', ['type'=>'text', 'class'=>'form-control fld-date', 'label'=>'Data', 'value'=>$movemento->data_str, 'templates'=>$emptyTemplates]) ?>
+                </div>
+                <div class="form-group col-lg-3">
+                    <?= $this->Form->control('importe', ['type'=>'number', 'label'=>'Importe']) ?>
+                </div>
+                <div class="form-group col-lg-3">
+                    <?= $this->Form->control('conta', ['options'=>$contas, 'label'=>'Conta', 'templates'=>$emptyTemplates]) ?>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-lg-3">
+                    <?= $this->Form->control('tempada', ['options'=>$tempadas, 'label'=>'Tempada', 'templates'=>$emptyTemplates]) ?>
+                </div>
+                <div class="form-group col-lg-3">
+                    <?= $this->Form->control('id_subarea', ['options'=>$this->AgfgForm->objectToKeyValue($subareas,'id','{$e->area->nome} - {$e->nome}'), 'label'=>'Subárea', 'templates'=>$emptyTemplates]) ?>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-lg-1">
+                    <?= $this->Form->control('descricion', ['type'=>'textarea', 'label'=>'Observacions']) ?>
+                </div>
+            </div>
+
+            <?= $this->Form->button('Gardar', ['class'=>'btn btn-primary glyphicon glyphicon-saved']); ?>
+        </fieldset>
+    <?= $this->Form->end() ?>
+</div>
