@@ -27,11 +27,7 @@ class MovementosController extends AppController {
     }
 
     public function detalle($id=null) {
-        if(empty($id)) {
-            $movemento = $this->Movementos->newEntity();
-        } else {
-            $movemento = $this->Movementos->get($id /*, ['contain' => ['Fases' => ['sort'=>['Fases.categoria']], 'Fases.FasePai']]*/);
-        }
+        $movemento = empty($id) ? $this->Movementos->newEntity() : $this->Movementos->get($id);
         // Hack para que o datepicker non a líe formateando a data (alterna dia/mes). Asi forzamos o noso formato.
         $movemento->data_str = empty($movemento->data) ? NULL : $movemento->data->format('d-m-Y');
         $contas = $this->Contas->getAllWithEmpty();
@@ -39,6 +35,19 @@ class MovementosController extends AppController {
         $clubes = $this->Clubes->find('all', ['order'=>'nome']);
         $subareas = $this->Subareas->find('all', ['order'=>'Area.nome'])->contain(['Area']);
         $this->set(compact('movemento', 'contas', 'tempadas', 'clubes', 'subareas'));
+    }
+
+    public function clonar($id) {
+        $movemento = $this->Movementos->get($id);
+        $movemento->id = NULL;
+        // Hack para que o datepicker non a líe formateando a data (alterna dia/mes). Asi forzamos o noso formato.
+        $movemento->data_str = empty($movemento->data) ? NULL : $movemento->data->format('d-m-Y');
+        $contas = $this->Contas->getAllWithEmpty();
+        $tempadas = $this->Tempadas->getTempadasWithEmpty();
+        $clubes = $this->Clubes->find('all', ['order'=>'nome']);
+        $subareas = $this->Subareas->find('all', ['order'=>'Area.nome'])->contain(['Area']);
+        $this->set(compact('movemento', 'contas', 'tempadas', 'clubes', 'subareas'));
+        $this->render('detalle');
     }
 
     public function gardar() {

@@ -10,14 +10,15 @@ $this->set('cabeceiraMigas', [['label'=>'Movementos']]);
             <table class="table table-striped table-hover">
                 <thead>
                     <tr>
-                        <th class="celda-titulo">Data</th>
-                        <th class="celda-titulo">Importe</th>
-                        <th class="celda-titulo">Tempada</th>
-                        <th class="celda-titulo">Conta</th>
-                        <th class="celda-titulo">Área</th>
-                        <th class="celda-titulo">Subárea</th>
-                        <th class="celda-titulo">Clube</th>
+                        <th class="celda-titulo text-center">Data</th>
+                        <th class="celda-titulo text-center">Importe</th>
+                        <th class="celda-titulo text-center">Tempada</th>
+                        <th class="celda-titulo text-center">Conta</th>
+                        <th class="celda-titulo text-center">Área</th>
+                        <th class="celda-titulo text-center">Subárea</th>
+                        <th class="celda-titulo text-center">Clube</th>
                         <th class="celda-titulo">Observacións</th>
+                        <th class="celda-titulo"></th>
                         <th class="celda-titulo"></th>
                         <th class="celda-titulo"></th>
                     </tr>
@@ -25,15 +26,16 @@ $this->set('cabeceiraMigas', [['label'=>'Movementos']]);
                 <tbody>
                     <?php foreach($movementos as $m) : ?>
                         <tr>
-                            <td><?= $m->data->format('Y-m-d') ?></td>
-                            <td><?= $this->Number->currency($m->importe, 'EUR') ?></td>
-                            <td><?= $tempadas[$m->tempada] ?></td>
-                            <td><?= $contas[$m->conta] ?></td>
-                            <td><?= $m->subarea->area->nome ?></td>
-                            <td><?= $m->subarea->nome ?></td>
-                            <td><?= $m->clube ? ($this->Html->image($m->clube->logo, ['width'=>25,'height'=>25]) . ' ' . $m->clube->codigo) : '-' ?></td>
+                            <td class="text-center"><?= $m->data->format('Y-m-d') ?></td>
+                            <td class="text-right <?= $m->importe<0 ? 'text-danger' : ''?>"><?= $this->Number->currency($m->importe, 'EUR') ?></td>
+                            <td class="text-center"><?= $tempadas[$m->tempada] ?></td>
+                            <td class="text-center"><?= $contas[$m->conta] ?></td>
+                            <td class="text-center"><?= $m->subarea->area->nome ?></td>
+                            <td class="text-center"><?= $m->subarea->nome ?></td>
+                            <td class="text-center"><?= $m->clube ? ($this->Html->image($m->clube->logo, ['width'=>25,'height'=>25]) . ' ' . $m->clube->codigo) : '-' ?></td>
                             <td><?= $m->descricion ?></td>
                             <td class="text-center"><?= $this->AgfgForm->editButton(['action'=>'detalle', $m->id]) ?></td>
+                            <td class="text-center"><?= $this->Html->link('', ['action'=>'clonar', $m->id], ['class'=>'glyphicon glyphicon-duplicate']) ?></td>
                             <td class="text-center"><?= $this->AgfgForm->deleteButton(['action'=>'borrar', $m->id]) ?></td>
                         </tr>
                     <?php endforeach ?>
