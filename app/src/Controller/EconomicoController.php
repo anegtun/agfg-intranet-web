@@ -2,16 +2,24 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
-use App\Model\Categorias;
-use Cake\Event\Event;
+use App\Model\Contas;
 use Cake\ORM\TableRegistry;
 
 class EconomicoController extends AppController {
     
     public function initialize() {
         parent::initialize();
+        $this->Contas = new Contas();
         $this->Areas = TableRegistry::get('MovementosArea');
         $this->Subareas = TableRegistry::get('MovementosSubarea');
+        $this->Movementos = TableRegistry::get('Movementos');
+    }
+
+    public function index() {
+        $contas = $this->Contas->getAll();
+        $query = $this->Movementos->find();
+        $resumo_balance = $query->select(['conta', 'balance' => $query->func()->sum('importe')])->group(['conta'])->toArray();
+        $this->set(compact('contas', 'resumo_balance'));
     }
 
     public function areas() {

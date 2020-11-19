@@ -151,6 +151,12 @@ $menu_option = empty($menu_option) ? '' : $menu_option;
                                 </li>
                                 <li data-toggle="tooltip">
                                     <?= $this->Html->link(
+                                        '<span class="glyphicon glyphicon-euro"><span class="sr-only">Xestión Económica</span></span>Xestión Económica',
+                                        array('controller'=>'Economico', 'action'=>'index'),
+                                        array('escape'=>false)) ?>
+                                </li>
+                                <li data-toggle="tooltip">
+                                    <?= $this->Html->link(
                                         '<span class="glyphicon glyphicon-indent-left"><span class="sr-only">Áreas movementos</span></span>Áreas movementos',
                                         array('controller'=>'Economico', 'action'=>'areas'),
                                         array('escape'=>false)) ?>
