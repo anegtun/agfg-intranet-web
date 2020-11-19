@@ -21,7 +21,7 @@ class MovementosController extends AppController {
         $contas = $this->Contas->getAll();
         $tempadas = $this->Tempadas->getTempadas();
         $movementos = $this->Movementos
-            ->find('all', ['order'=>'data desc'])
+            ->find('all', ['order'=>['data desc', 'Movementos.id desc']])
             ->contain(['Subarea' => ['Area'], 'Clube']);
         $this->set(compact('movementos', 'contas', 'tempadas'));
     }

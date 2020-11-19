@@ -29,7 +29,7 @@ $this->set('cabeceiraMigas', [['label'=>'Movementos']]);
                             <td class="text-center"><?= $m->data->format('Y-m-d') ?></td>
                             <td class="text-right <?= $m->importe<0 ? 'text-danger' : ''?>"><?= $this->Number->currency($m->importe, 'EUR') ?></td>
                             <td class="text-center"><?= $tempadas[$m->tempada] ?></td>
-                            <td class="text-center"><?= $contas[$m->conta] ?></td>
+                            <td class="text-center"><?= $this->Html->image("/images/conta-{$m->conta}-logo.png", ['width'=>30,'height'=>30]) ?></td>
                             <td class="text-center"><?= $m->subarea->area->nome ?></td>
                             <td class="text-center"><?= $m->subarea->nome ?></td>
                             <td class="text-center"><?= $m->clube ? ($this->Html->image($m->clube->logo, ['width'=>25,'height'=>25]) . ' ' . $m->clube->codigo) : '-' ?></td>
