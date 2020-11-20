@@ -1,7 +1,10 @@
 <?php
 $this->extend('template');
 $this->set('cabeceiraTitulo', 'Áreas');
-$this->set('cabeceiraMigas', [['label'=>'Áreas']]);
+$this->set('cabeceiraMigas', [
+    ['label'=>'Xestión Económica', 'url'=>['controller'=>'Economico', 'action'=>'index']],
+    ['label'=>'Áreas']
+]);
 ?>
 
 <div class="container-full" style="margin-top:2em;">

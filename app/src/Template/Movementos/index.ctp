@@ -1,11 +1,37 @@
 <?php
 $this->extend('template');
 $this->set('cabeceiraTitulo', 'Movementos');
-$this->set('cabeceiraMigas', [['label'=>'Movementos']]);
+$this->set('cabeceiraMigas', [
+    ['label'=>'Xestión Económica', 'url'=>['controller'=>'Economico', 'action'=>'index']],
+    ['label'=>'Movementos']
+]);
 ?>
 
 <div class="container-full" style="margin-top:2em;">
-    <div class="row">
+
+    <div class="col-xs-12 form-group">
+        <div class="row">
+            <div class="form-group col-xs-12 col-md-8 has-feedback-left">
+                <div class="input-group">
+                    <?= $this->Form->setValueSources(['query','context'])->create(null, ['type'=>'get']) ?>
+
+                        <div class="row">
+                            <?= $this->Form->control('conta', ['options'=>$contas, 'label'=>'Conta']) ?>
+                        </div>
+
+                        <div class="row" style="margin-top:1em">
+                            <?= $this->Form->button('Buscar', ['class'=>'btn btn-primary']); ?>
+                            <?= $this->Html->link(__('Novo movemento'), ['action'=>'detalle'], ['class'=>'btn btn-success']) ?>
+                        </div>
+
+                    <?= $this->Form->end() ?>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row" style="margin-top:2em">
         <div class="col-xs-12 table-responsive">
             <table class="table table-striped table-hover">
                 <thead>
@@ -41,8 +67,6 @@ $this->set('cabeceiraMigas', [['label'=>'Movementos']]);
                     <?php endforeach ?>
                 </tbody>
             </table>
-
-            <?= $this->Html->link(__('Novo movemento'), ['action'=>'detalle'], ['class'=>'btn btn-primary']) ?>
         </div>
     </div>
 </div>

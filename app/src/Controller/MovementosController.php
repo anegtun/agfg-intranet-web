@@ -18,11 +18,17 @@ class MovementosController extends AppController {
     }
 
     public function index() {
-        $contas = $this->Contas->getAll();
+        $contas = $this->Contas->getAllWithEmpty();
         $tempadas = $this->Tempadas->getTempadas();
+
         $movementos = $this->Movementos
             ->find('all', ['order'=>['data desc', 'Movementos.id desc']])
             ->contain(['Subarea' => ['Area'], 'Clube']);
+
+        if(!empty($this->request->query['conta'])) {
+            $movementos->where(['conta' => $this->request->query('conta')]);
+        }
+
         $this->set(compact('movementos', 'contas', 'tempadas'));
     }
 
@@ -55,6 +61,9 @@ class MovementosController extends AppController {
         if ($this->request->is('post') || $this->request->is('put')) {
             $data = $this->request->getData();
             $movemento = $this->Movementos->patchEntity($movemento, $data);
+            if(empty($data['id_clube'])) {
+                $movemento->id_clube = NULL;
+            }
             $movemento->data = empty($data['data']) ? NULL : Time::createFromFormat('d-m-Y', $data['data']);
             if ($this->Movementos->save($movemento)) {
                 $this->Flash->success(__('Gardáronse os datos do movemento correctamente.'));
