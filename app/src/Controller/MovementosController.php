@@ -25,8 +25,8 @@ class MovementosController extends AppController {
             ->find('all', ['order'=>['data desc', 'Movementos.id desc']])
             ->contain(['Subarea' => ['Area'], 'Clube']);
 
-        if(!empty($this->request->query['conta'])) {
-            $movementos->where(['conta' => $this->request->query('conta')]);
+        if(!empty($this->request->getQuery('conta'))) {
+            $movementos->where(['conta' => $this->request->getQuery('conta')]);
         }
 
         $this->set(compact('movementos', 'contas', 'tempadas'));
