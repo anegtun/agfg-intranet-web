@@ -4,6 +4,7 @@ namespace App\Controller;
 use App\Controller\AppController;
 use App\Model\Contas;
 use App\Model\Tempadas;
+use Cake\I18n\FrozenDate;
 use Cake\I18n\Time;
 use Cake\ORM\TableRegistry;
 
@@ -19,17 +20,45 @@ class MovementosController extends AppController {
 
     public function index() {
         $contas = $this->Contas->getAllWithEmpty();
-        $tempadas = $this->Tempadas->getTempadas();
+        $tempadas = $this->Tempadas->getTempadasWithEmpty();
+        $subareas = $this->Subareas->find('all', ['order'=>'Area.nome'])->contain(['Area']);
+        $movementos = $this->movementosFiltrados();
+        $this->set(compact('movementos', 'contas', 'subareas', 'tempadas'));
+    }
 
-        $movementos = $this->Movementos
-            ->find('all', ['order'=>['data desc', 'Movementos.id desc']])
-            ->contain(['Subarea' => ['Area'], 'Clube']);
+    public function resumo() {
+        $tempadas = $this->Tempadas->getTempadasWithEmpty();
+        $movementos = $this->movementosFiltrados();
 
-        if(!empty($this->request->getQuery('conta'))) {
-            $movementos->where(['conta' => $this->request->getQuery('conta')]);
+        $resumo = [];
+        foreach($movementos as $m) {
+            $item = (object) [
+                'subarea' => $m->subarea,
+                'tempada' => $m->tempada,
+                'ingresos' => $m->importe>0 ? $m->importe : 0,
+                'gastos' => $m->importe<0 ? $m->importe : 0,
+                'balance' => $m->importe
+            ];
+            $existent = $this->findResumo($resumo, $item);
+            if($existent) {
+                $existent->ingresos += $item->ingresos;
+                $existent->gastos += $item->gastos;
+                $existent->balance += $item->balance;
+            } else {
+                $resumo[] = $item;
+            }
         }
 
-        $this->set(compact('movementos', 'contas', 'tempadas'));
+        $this->set(compact('resumo', 'tempadas'));
+    }
+
+    private function findResumo($list, $item) {
+        foreach($list as $e) {
+            if($e->subarea->id===$item->subarea->id && $e->tempada===$item->tempada) {
+                return $e;
+            }
+        }
+        return null;
     }
 
     public function detalle($id=null) {
@@ -83,6 +112,28 @@ class MovementosController extends AppController {
             $this->Flash->error(__('Erro ao eliminar o movemento.'));
         }
         return $this->redirect(['action'=>'index']);
+    }
+
+    private function movementosFiltrados() {
+        $movementos = $this->Movementos
+            ->find('all', ['order'=>['data desc', 'Movementos.id desc']])
+            ->contain(['Subarea' => ['Area'], 'Clube']);
+        if(!empty($this->request->getQuery('data_ini'))) {
+            $movementos->where(['data >=' => FrozenDate::createFromFormat('d-m-Y', $this->request->getQuery('data_ini'))]);
+        }
+        if(!empty($this->request->getQuery('data_fin'))) {
+            $movementos->where(['data <=' => FrozenDate::createFromFormat('d-m-Y', $this->request->getQuery('data_fin'))]);
+        }
+        if(!empty($this->request->getQuery('conta'))) {
+            $movementos->where(['conta' => $this->request->getQuery('conta')]);
+        }
+        if(!empty($this->request->getQuery('tempada'))) {
+            $movementos->where(['tempada' => $this->request->getQuery('tempada')]);
+        }
+        if(!empty($this->request->getQuery('id_subarea'))) {
+            $movementos->where(['id_subarea' => $this->request->getQuery('id_subarea')]);
+        }
+        return $movementos;
     }
 
 }

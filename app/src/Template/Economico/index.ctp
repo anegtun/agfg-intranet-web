@@ -28,7 +28,8 @@ foreach($resumo_balance as $r) {
                     </div>
                     <div class="panel-body">
                         <p><strong>Balance:</strong> <?= $this->Number->currency($total->total, 'EUR') ?></p>
-                        <?= $this->Html->link(__('Movementos'), ['controller'=>'Movementos'], ['class'=>'btn btn-default']) ?>
+                        <?= $this->Html->link(__('Movementos'), ['controller'=>'Movementos', 'action'=>'index'], ['class'=>'btn btn-default']) ?>
+                        <?= $this->Html->link(__('Resumo'), ['controller'=>'Movementos', 'action'=>'resumo'], ['class'=>'btn btn-default']) ?>
                     </div>
                 </div>
             </div>
@@ -46,8 +47,9 @@ foreach($resumo_balance as $r) {
                         </div>
                         <div class="panel-body">
                             <p><strong>Balance:</strong> <?= $this->Number->currency($datos_conta[$key]['total'], 'EUR') ?></p>
-                            <?= $this->Html->link(__('Movementos'), ['controller'=>'Movementos', '?' => ['conta'=>$key]], ['class'=>'btn btn-default']) ?>
-                        </div>
+                            <?= $this->Html->link(__('Movementos'), ['controller'=>'Movementos', 'action'=>'index', '?' => ['conta'=>$key]], ['class'=>'btn btn-default']) ?>
+                            <?= $this->Html->link(__('Resumo'), ['controller'=>'Movementos', 'action'=>'resumo', '?' => ['conta'=>$key]], ['class'=>'btn btn-default']) ?>
+                       </div>
                     </div>
                 </div>
             <?php endforeach ?>

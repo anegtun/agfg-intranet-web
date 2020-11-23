@@ -5,29 +5,41 @@ $this->set('cabeceiraMigas', [
     ['label'=>'Xestión Económica', 'url'=>['controller'=>'Economico', 'action'=>'index']],
     ['label'=>'Movementos']
 ]);
+$emptyTemplates = [
+    'inputContainer' => '{{content}}',
+    'input' => '<input type="{{type}}" name="{{name}}" {{attrs}}/>',
+];
 ?>
 
 <div class="container-full" style="margin-top:2em;">
 
-    <div class="col-xs-12 form-group">
-        <div class="row">
-            <div class="form-group col-xs-12 col-md-8 has-feedback-left">
-                <div class="input-group">
-                    <?= $this->Form->setValueSources(['query','context'])->create(null, ['type'=>'get']) ?>
+    <div class="row form-group">
+        <?= $this->Form->setValueSources(['query','context'])->create(null, ['type'=>'get']) ?>
 
-                        <div class="row">
-                            <?= $this->Form->control('conta', ['options'=>$contas, 'label'=>'Conta']) ?>
-                        </div>
-
-                        <div class="row" style="margin-top:1em">
-                            <?= $this->Form->button('Buscar', ['class'=>'btn btn-primary']); ?>
-                            <?= $this->Html->link(__('Novo movemento'), ['action'=>'detalle'], ['class'=>'btn btn-success']) ?>
-                        </div>
-
-                    <?= $this->Form->end() ?>
+            <div class="row">
+                <div class="col-lg-2">
+                    <?= $this->Form->control('data_ini', ['type'=>'text', 'class'=>'form-control fld-date', 'label'=>'Data inicio', 'templates'=>$emptyTemplates]) ?>
+                </div>
+                <div class="col-lg-2">
+                    <?= $this->Form->control('data_fin', ['type'=>'text', 'class'=>'form-control fld-date', 'label'=>'Data fin', 'templates'=>$emptyTemplates]) ?>
+                </div>
+                <div class="col-lg-2">
+                    <?= $this->Form->control('conta', ['options'=>$contas, 'label'=>'Conta', 'class'=>'form-control']) ?>
+                </div>
+                <div class="col-lg-2">
+                    <?= $this->Form->control('tempada', ['options'=>$tempadas, 'label'=>'Tempada', 'class'=>'form-control']) ?>
+                </div>
+                <div class="col-lg-2">
+                    <?= $this->Form->control('id_subarea', ['options'=>$this->AgfgForm->objectToKeyValue($subareas,'id','{$e->area->nome} - {$e->nome}'), 'label'=>'Subárea', 'templates'=>$emptyTemplates]) ?>
                 </div>
             </div>
-        </div>
+
+            <div style="margin-top:1em">
+                <?= $this->Form->button('Buscar', ['class'=>'btn btn-primary']); ?>
+                <?= $this->Html->link(__('Novo movemento'), ['action'=>'detalle'], ['class'=>'btn btn-success']) ?>
+            </div>
+
+        <?= $this->Form->end() ?>
     </div>
 
 
