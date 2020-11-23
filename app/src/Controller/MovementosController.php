@@ -75,4 +75,14 @@ class MovementosController extends AppController {
         $this->render('detalle');
     }
 
+    public function borrar($id) {
+        $movemento = $this->Movementos->get($id);
+        if($this->Movementos->delete($movemento)) {
+            $this->Flash->success(__('Eliminouse o movemento correctamente.'));
+        } else {
+            $this->Flash->error(__('Erro ao eliminar o movemento.'));
+        }
+        return $this->redirect(['action'=>'index']);
+    }
+
 }
