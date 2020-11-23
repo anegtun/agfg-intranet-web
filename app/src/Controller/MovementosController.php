@@ -48,6 +48,7 @@ class MovementosController extends AppController {
                 $resumo[] = $item;
             }
         }
+        usort($resumo, ["self", "cmpResumo"]);
 
         $this->set(compact('resumo', 'tempadas'));
     }
@@ -134,6 +135,17 @@ class MovementosController extends AppController {
             $movementos->where(['id_subarea' => $this->request->getQuery('id_subarea')]);
         }
         return $movementos;
+    }
+
+    private static function cmpResumo($a, $b) {
+        $cmp = strcmp($a->subarea->area->nome, $b->subarea->area->nome);
+        if($cmp===0) {
+            $cmp = strcmp($a->subarea->nome, $b->subarea->nome);
+        }
+        if($cmp===0) {
+            $cmp = strcmp($b->tempada, $a->tempada);
+        }
+        return $cmp;
     }
 
 }

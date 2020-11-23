@@ -48,7 +48,6 @@ foreach($resumo_balance as $r) {
                         <div class="panel-body">
                             <p><strong>Balance:</strong> <?= $this->Number->currency($datos_conta[$key]['total'], 'EUR') ?></p>
                             <?= $this->Html->link(__('Movementos'), ['controller'=>'Movementos', 'action'=>'index', '?' => ['conta'=>$key]], ['class'=>'btn btn-default']) ?>
-                            <?= $this->Html->link(__('Resumo'), ['controller'=>'Movementos', 'action'=>'resumo', '?' => ['conta'=>$key]], ['class'=>'btn btn-default']) ?>
                        </div>
                     </div>
                 </div>

@@ -9,6 +9,8 @@ $emptyTemplates = [
     'inputContainer' => '{{content}}',
     'input' => '<input type="{{type}}" name="{{name}}" {{attrs}}/>',
 ];
+
+$total = (object) ['ingresos' => 0, 'gastos' => 0, 'balance' => 0];
 ?>
 
 <div class="container-full" style="margin-top:2em;">
@@ -51,16 +53,29 @@ $emptyTemplates = [
                 </thead>
                 <tbody>
                     <?php foreach($resumo as $r) : ?>
+                        <?php
+                        $total->ingresos += $r->ingresos;
+                        $total->gastos += $r->gastos;
+                        $total->balance += $r->balance;
+                        ?>
                         <tr>
                             <td class="text-center"><?= $r->subarea->area->nome ?></td>
                             <td class="text-center"><?= $r->subarea->nome ?></td>
                             <td class="text-center"><?= $tempadas[$r->tempada] ?></td>
                             <td class="text-right"><?= $this->Number->currency($r->ingresos, 'EUR') ?></td>
                             <td class="text-right text-danger"><?= $this->Number->currency($r->gastos, 'EUR') ?></td>
-                            <td class="text-right <?= $r->balance<0 ? 'text-danger' : ''?>"><?= $this->Number->currency($r->balance, 'EUR') ?></td>
+                            <td class="text-right <?= $r->balance<0 ? 'text-danger' : ''?>"><strong><?= $this->Number->currency($r->balance, 'EUR') ?></strong></td>
                         </tr>
                     <?php endforeach ?>
                 </tbody>
+                <tfooter>
+                    <tr>
+                        <td colspan="3"><strong>TOTAL</strong></td>
+                        <td class="text-right"><strong><?= $this->Number->currency($total->ingresos, 'EUR') ?></strong></td>
+                        <td class="text-right text-danger"><strong><?= $this->Number->currency($total->gastos, 'EUR') ?></strong></td>
+                        <td class="text-right <?= $total->balance<0 ? 'text-danger' : ''?>"><strong><?= $this->Number->currency($total->balance, 'EUR') ?></strong></td>
+                    </tr>
+                </tfooter>
             </table>
         </div>
     </div>
