@@ -52,7 +52,7 @@ class MovementosController extends AppController {
         }
         usort($resumo, ["self", "cmpResumo"]);
 
-        $this->set(compact('resumo', 'tempadas'));
+        $this->set(compact('movementos', 'resumo', 'tempadas'));
     }
 
     private function findResumo($list, $item) {

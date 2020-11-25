@@ -11,6 +11,14 @@ $emptyTemplates = [
 ];
 
 $total = (object) ['ingresos' => 0, 'gastos' => 0, 'comision' => 0, 'balance' => 0];
+
+$info_subarea = [];
+foreach($movementos as $m) {
+    if(empty($info_subarea[$m->subarea->id])) {
+        $info_subarea[$m->subarea->id] = (object) ['id' => $m->subarea->id, 'nome' => $m->subarea->nome, 'movementos' => []];
+    }
+    $info_subarea[$m->subarea->id]->movementos[] = $m;
+}
 ?>
 
 <div class="container-full" style="margin-top:2em;">
@@ -49,6 +57,7 @@ $total = (object) ['ingresos' => 0, 'gastos' => 0, 'comision' => 0, 'balance' =>
                         <th class="celda-titulo text-center">Gastos</th>
                         <th class="celda-titulo text-center">Comisión</th>
                         <th class="celda-titulo text-center">Balance</th>
+                        <th class="celda-titulo"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -58,10 +67,10 @@ $total = (object) ['ingresos' => 0, 'gastos' => 0, 'comision' => 0, 'balance' =>
 
                         <?php if($area_actual->nome !== $r->subarea->area->nome) : ?>
                             <tr>
-                                <th colspan="6">&nbsp;</th>
+                                <th colspan="7">&nbsp;</th>
                             </tr>
                             <tr style="background-color: #f9f9f9;">
-                                <th class="celda-titulo text-center" colspan="6"><?= $r->subarea->area->nome ?></th>
+                                <th class="celda-titulo text-center" colspan="7"><?= $r->subarea->area->nome ?></th>
                             </tr>
                             <?php $area_actual = (object) ['ingresos' => 0, 'gastos' => 0, 'comision' => 0, 'balance' => 0, 'nome' => $r->subarea->area->nome]; ?>
                         <?php endif ?>
@@ -84,6 +93,7 @@ $total = (object) ['ingresos' => 0, 'gastos' => 0, 'comision' => 0, 'balance' =>
                             <td class="text-right text-danger"><?= empty($r->gastos) ? '-' : $this->Number->currency($r->gastos, 'EUR') ?></td>
                             <td class="text-right <?= $r->comision<0 ? 'text-danger' : ''?>"><?= empty($r->comision) ? '-' : $this->Number->currency($r->comision, 'EUR') ?></td>
                             <td class="text-right <?= $r->balance<0 ? 'text-danger' : ''?>"><strong><?= empty($r->balance) ? '-' : $this->Number->currency($r->balance, 'EUR') ?></strong></td>
+                            <td class="text-center"><a href="javascript:void(0)"><em class="glyphicon glyphicon-info-sign" data-toggle="modal" data-target="#modal-subarea-<?= $r->subarea->id ?>"></em></a></td>
                         </tr>
 
                         <?php if(empty($resumo[$i+1]) || $area_actual->nome !== $resumo[$i+1]->subarea->area->nome) : ?>
@@ -94,6 +104,7 @@ $total = (object) ['ingresos' => 0, 'gastos' => 0, 'comision' => 0, 'balance' =>
                                 <th class="celda-titulo text-right text-danger"><?= $this->Number->currency($area_actual->gastos, 'EUR') ?></th>
                                 <th class="celda-titulo text-right <?= $area_actual->comision<0 ? 'text-danger' : ''?>"><?= $this->Number->currency($area_actual->comision, 'EUR') ?></th>
                                 <th class="celda-titulo text-right <?= $area_actual->balance<0 ? 'text-danger' : ''?>"><strong><?= $this->Number->currency($area_actual->balance, 'EUR') ?></strong></th>
+                                <th class="celda-titulo"></th>
                             </tr>
                         <?php endif ?>
                     <?php endforeach ?>
@@ -109,9 +120,56 @@ $total = (object) ['ingresos' => 0, 'gastos' => 0, 'comision' => 0, 'balance' =>
                         <td class="text-right text-danger"><strong><?= $this->Number->currency($total->gastos, 'EUR') ?></strong></td>
                         <td class="text-right <?= $total->comision<0 ? 'text-danger' : ''?>"><strong><?= $this->Number->currency($total->comision, 'EUR') ?></strong></td>
                         <td class="text-right <?= $total->balance<0 ? 'text-danger' : ''?>"><strong><?= $this->Number->currency($total->balance, 'EUR') ?></strong></td>
+                        <td></td>
                     </tr>
                 </tfoot>
             </table>
         </div>
     </div>
+
+    <?php foreach($info_subarea as $sa) : ?>
+
+        <div id="modal-subarea-<?= $sa->id ?>" class="modal fade" role="dialog">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title"><?= $sa->nome ?></h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th class="celda-titulo text-center">Data</th>
+                                        <th class="celda-titulo text-center">Importe</th>
+                                        <th class="celda-titulo text-center">Comisión</th>
+                                        <th class="celda-titulo text-center">Conta</th>
+                                        <th class="celda-titulo text-center">Clube</th>
+                                        <th class="celda-titulo text-center">Observacións</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach($sa->movementos as $m) : ?>
+                                        <tr>
+                                            <td class="text-center"><?= $m->data->format('Y-m-d') ?></td>
+                                            <td class="text-right <?= $m->importe<0 ? 'text-danger' : ''?>"><?= $this->Number->currency($m->importe, 'EUR') ?></td>
+                                            <td class="text-right <?= $m->comision<0 ? 'text-danger' : ''?>"><?= empty($m->comision) ? '' : $this->Number->currency($m->comision, 'EUR') ?></td>
+                                            <td class="text-center"><?= $this->Html->image("/images/conta-{$m->conta}-logo.png", ['width'=>30,'height'=>30]) ?></td>
+                                            <td class="text-center"><?= $m->clube ? ($this->Html->image($m->clube->logo, ['width'=>25,'height'=>25]) . ' ' . $m->clube->codigo) : '-' ?></td>
+                                            <td><?= $m->descricion ?></td>
+                                        </tr>
+                                    <?php endforeach ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <?php endforeach ?>
+
 </div>
