@@ -40,10 +40,9 @@ $total = (object) ['ingresos' => 0, 'gastos' => 0, 'balance' => 0];
 
     <div class="row" style="margin-top:2em">
         <div class="col-xs-12 table-responsive">
-            <table class="table table-striped table-hover">
+            <table class="table table-hover">
                 <thead>
                     <tr>
-                        <th class="celda-titulo text-center">Area</th>
                         <th class="celda-titulo text-center">Subarea</th>
                         <th class="celda-titulo text-center">Tempada</th>
                         <th class="celda-titulo text-center">Ingresos</th>
@@ -52,30 +51,60 @@ $total = (object) ['ingresos' => 0, 'gastos' => 0, 'balance' => 0];
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach($resumo as $r) : ?>
+                    <?php $area_actual = (object) ['ingresos' => 0, 'gastos' => 0, 'balance' => 0, 'nome' => '']; ?>
+
+                    <?php foreach($resumo as $i=>$r) : ?>
+
+                        <?php if($area_actual->nome !== $r->subarea->area->nome) : ?>
+                            <tr>
+                                <th colspan="5">&nbsp;</th>
+                            </tr>
+                            <tr style="background-color: #f9f9f9;">
+                                <th class="celda-titulo text-center" colspan="5"><?= $r->subarea->area->nome ?></th>
+                            </tr>
+                            <?php $area_actual = (object) ['ingresos' => 0, 'gastos' => 0, 'balance' => 0, 'nome' => $r->subarea->area->nome]; ?>
+                        <?php endif ?>
+
                         <?php
                         $total->ingresos += $r->ingresos;
                         $total->gastos += $r->gastos;
                         $total->balance += $r->balance;
+                        $area_actual->ingresos += $r->ingresos;
+                        $area_actual->gastos += $r->gastos;
+                        $area_actual->balance += $r->balance;
                         ?>
+
                         <tr>
-                            <td class="text-center"><?= $r->subarea->area->nome ?></td>
                             <td class="text-center"><?= $r->subarea->nome ?></td>
                             <td class="text-center"><?= $tempadas[$r->tempada] ?></td>
                             <td class="text-right"><?= $this->Number->currency($r->ingresos, 'EUR') ?></td>
                             <td class="text-right text-danger"><?= $this->Number->currency($r->gastos, 'EUR') ?></td>
                             <td class="text-right <?= $r->balance<0 ? 'text-danger' : ''?>"><strong><?= $this->Number->currency($r->balance, 'EUR') ?></strong></td>
                         </tr>
+
+                        <?php if(empty($resumo[$i+1]) || $area_actual->nome !== $resumo[$i+1]->subarea->area->nome) : ?>
+                            <tr>
+                                <th class="celda-titulo text-center">Subtotal</th>
+                                <th></th>
+                                <th class="celda-titulo text-right"><?= $this->Number->currency($area_actual->ingresos, 'EUR') ?></th>
+                                <th class="celda-titulo text-right text-danger"><?= $this->Number->currency($area_actual->gastos, 'EUR') ?></th>
+                                <th class="celda-titulo text-right <?= $area_actual->balance<0 ? 'text-danger' : ''?>"><strong><?= $this->Number->currency($area_actual->balance, 'EUR') ?></strong></th>
+                            </tr>
+                        <?php endif ?>
                     <?php endforeach ?>
                 </tbody>
-                <tfooter>
+                <tfoot>
                     <tr>
-                        <td colspan="3"><strong>TOTAL</strong></td>
+                        <td colspan="5">&nbsp;</td>
+                    </tr>
+                    <tr style="background-color: #f9f9f9;">
+                        <td class="text-center"><strong>TOTAL</strong></td>
+                        <td></td>
                         <td class="text-right"><strong><?= $this->Number->currency($total->ingresos, 'EUR') ?></strong></td>
                         <td class="text-right text-danger"><strong><?= $this->Number->currency($total->gastos, 'EUR') ?></strong></td>
                         <td class="text-right <?= $total->balance<0 ? 'text-danger' : ''?>"><strong><?= $this->Number->currency($total->balance, 'EUR') ?></strong></td>
                     </tr>
-                </tfooter>
+                </tfoot>
             </table>
         </div>
     </div>
