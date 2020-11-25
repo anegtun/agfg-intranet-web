@@ -18,8 +18,11 @@ class EconomicoController extends AppController {
     public function index() {
         $contas = $this->Contas->getAll();
         $query = $this->Movementos->find();
-        $total = $query->select(['total' => $query->func()->sum('importe')])->toArray()[0];
-        $resumo_balance = $query->select(['conta', 'balance' => $query->func()->sum('importe')])->group(['conta'])->toArray();
+        $total = $query->select(['balance' => $query->func()->sum('importe'), 'comision' => $query->func()->sum('comision')])->toArray()[0];
+        $resumo_balance = $query
+            ->select(['conta', 'balance' => $query->func()->sum('importe'), 'comision' => $query->func()->sum('comision')])
+            ->group(['conta'])
+            ->toArray();
         $this->set(compact('contas', 'total', 'resumo_balance'));
     }
 

@@ -10,7 +10,7 @@ foreach($contas as $k=>$v) {
     ];
 }
 foreach($resumo_balance as $r) {
-    $datos_conta[$r->conta]['total'] = $r->balance;
+    $datos_conta[$r->conta]['total'] = $r->balance + $r->comision;
 }
 ?>
 
@@ -27,7 +27,7 @@ foreach($resumo_balance as $r) {
                         </h3>
                     </div>
                     <div class="panel-body">
-                        <p><strong>Balance:</strong> <?= $this->Number->currency($total->total, 'EUR') ?></p>
+                        <p><strong>Balance:</strong> <?= $this->Number->currency($total->balance + $total->comision, 'EUR') ?></p>
                         <?= $this->Html->link(__('Movementos'), ['controller'=>'Movementos', 'action'=>'index'], ['class'=>'btn btn-default']) ?>
                         <?= $this->Html->link(__('Resumo'), ['controller'=>'Movementos', 'action'=>'resumo'], ['class'=>'btn btn-default']) ?>
                     </div>

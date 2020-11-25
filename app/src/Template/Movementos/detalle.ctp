@@ -25,7 +25,7 @@ $emptyTemplates = [
                     <?= $this->Form->control('importe', ['type'=>'number', 'label'=>'Importe']) ?>
                 </div>
                 <div class="form-group col-lg-3">
-                    <?= $this->Form->control('conta', ['options'=>$contas, 'label'=>'Conta', 'templates'=>$emptyTemplates]) ?>
+                    <?= $this->Form->control('comision', ['type'=>'number', 'label'=>'Comisión']) ?>
                 </div>
             </div>
 
@@ -37,13 +37,16 @@ $emptyTemplates = [
                     <?= $this->Form->control('id_subarea', ['options'=>$this->AgfgForm->objectToKeyValue($subareas,'id','{$e->area->nome} - {$e->nome}'), 'label'=>'Subárea', 'templates'=>$emptyTemplates]) ?>
                 </div>
                 <div class="form-group col-lg-3">
+                    <?= $this->Form->control('conta', ['options'=>$contas, 'label'=>'Conta', 'templates'=>$emptyTemplates]) ?>
+                </div>
+                <div class="form-group col-lg-3">
                     <?= $this->Form->control('id_clube', ['options'=>$this->AgfgForm->objectToKeyValue($clubes,'id','{$e->nome}'), 'label'=>'Clube', 'templates'=>$emptyTemplates]) ?>
                 </div>
             </div>
 
             <div class="row">
-                <div class="form-group col-lg-1">
-                    <?= $this->Form->control('descricion', ['type'=>'textarea', 'label'=>'Observacions']) ?>
+                <div class="form-group col-lg-12">
+                    <?= $this->Form->control('descricion', ['label'=>'Observacións']) ?>
                 </div>
             </div>
 

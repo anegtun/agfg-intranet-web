@@ -37,12 +37,14 @@ class MovementosController extends AppController {
                 'tempada' => $m->tempada,
                 'ingresos' => $m->importe>0 ? $m->importe : 0,
                 'gastos' => $m->importe<0 ? $m->importe : 0,
-                'balance' => $m->importe
+                'comision' => $m->comision,
+                'balance' => $m->importe + $m->comision
             ];
             $existent = $this->findResumo($resumo, $item);
             if($existent) {
                 $existent->ingresos += $item->ingresos;
                 $existent->gastos += $item->gastos;
+                $existent->comision += $item->comision;
                 $existent->balance += $item->balance;
             } else {
                 $resumo[] = $item;

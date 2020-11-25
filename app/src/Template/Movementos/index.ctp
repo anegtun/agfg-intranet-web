@@ -50,6 +50,7 @@ $emptyTemplates = [
                     <tr>
                         <th class="celda-titulo text-center">Data</th>
                         <th class="celda-titulo text-center">Importe</th>
+                        <th class="celda-titulo text-center">Comisión</th>
                         <th class="celda-titulo text-center">Tempada</th>
                         <th class="celda-titulo text-center">Conta</th>
                         <th class="celda-titulo text-center">Área</th>
@@ -66,6 +67,7 @@ $emptyTemplates = [
                         <tr>
                             <td class="text-center"><?= $m->data->format('Y-m-d') ?></td>
                             <td class="text-right <?= $m->importe<0 ? 'text-danger' : ''?>"><?= $this->Number->currency($m->importe, 'EUR') ?></td>
+                            <td class="text-right <?= $m->comision<0 ? 'text-danger' : ''?>"><?= empty($m->comision) ? '' : $this->Number->currency($m->comision, 'EUR') ?></td>
                             <td class="text-center"><?= $tempadas[$m->tempada] ?></td>
                             <td class="text-center"><?= $this->Html->image("/images/conta-{$m->conta}-logo.png", ['width'=>30,'height'=>30]) ?></td>
                             <td class="text-center"><?= $m->subarea->area->nome ?></td>
