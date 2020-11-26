@@ -30,6 +30,7 @@ foreach($resumo_balance as $r) {
                         <p><strong>Balance:</strong> <?= $this->Number->currency($total->balance + $total->comision, 'EUR') ?></p>
                         <?= $this->Html->link(__('Movementos'), ['controller'=>'Movementos', 'action'=>'index'], ['class'=>'btn btn-default']) ?>
                         <?= $this->Html->link(__('Resumo'), ['controller'=>'Movementos', 'action'=>'resumo'], ['class'=>'btn btn-default']) ?>
+                        <?= $this->Html->link(__('Resumo clubes'), ['controller'=>'Movementos', 'action'=>'resumoClubes'], ['class'=>'btn btn-default']) ?>
                     </div>
                 </div>
             </div>

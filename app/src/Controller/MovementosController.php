@@ -55,6 +55,31 @@ class MovementosController extends AppController {
         $this->set(compact('movementos', 'resumo', 'tempadas'));
     }
 
+    public function resumoClubes() {
+        $tempadas = $this->Tempadas->getTempadasWithEmpty();
+        $movementos = $this->movementosFiltrados();
+
+        $resumo = [];
+        $ids_subareas = [];
+        foreach($movementos as $m) {
+            if(!empty($m->clube)) {
+                if(empty($resumo[$m->clube->id])) {
+                    $resumo[$m->clube->id] = [];
+                }
+                if(empty($resumo[$m->clube->id][$m->subarea->id])) {
+                    $resumo[$m->clube->id][$m->subarea->id] = 0;
+                }
+                $resumo[$m->clube->id][$m->subarea->id] += $m->importe;
+                $ids_subareas[] = $m->subarea->id;
+            }
+        }
+
+        $subareas = $this->Subareas->find('all', ['order'=>'nome'])->where(['id IN' => $ids_subareas]);
+        $clubes = $this->Clubes->find('all', ['order'=>'nome'])->where(['id IN' => array_keys($resumo)]);
+
+        $this->set(compact('movementos', 'resumo', 'clubes', 'subareas', 'tempadas'));
+    }
+
     private function findResumo($list, $item) {
         foreach($list as $e) {
             if($e->subarea->id===$item->subarea->id && $e->tempada===$item->tempada) {
