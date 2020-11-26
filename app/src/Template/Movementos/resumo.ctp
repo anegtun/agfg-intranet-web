@@ -15,14 +15,16 @@ $total = (object) ['ingresos' => 0, 'gastos' => 0, 'comision' => 0, 'balance' =>
 $info_area = [];
 $info_subarea = [];
 foreach($movementos as $m) {
-    if(empty($info_area[$m->subarea->area->id])) {
-        $info_area[$m->subarea->area->id] = (object) ['id' => $m->subarea->area->id, 'nome' => $m->subarea->area->nome, 'movementos' => []];
+    $area_key = $m->subarea->area->id;
+    $subarea_key = $m->tempada.'_'.$m->subarea->id;
+    if(empty($info_area[$area_key])) {
+        $info_area[$area_key] = (object) ['id' => $m->subarea->area->id, 'nome' => $m->subarea->area->nome, 'movementos' => []];
     }
-    if(empty($info_subarea[$m->subarea->id])) {
-        $info_subarea[$m->subarea->id] = (object) ['id' => $m->subarea->id, 'nome' => $m->subarea->nome, 'movementos' => []];
+    if(empty($info_subarea[$subarea_key])) {
+        $info_subarea[$subarea_key] = (object) ['id' => $m->subarea->id, 'nome' => $m->subarea->nome, 'tempada' => $m->tempada, 'movementos' => []];
     }
-    $info_area[$m->subarea->area->id]->movementos[] = $m;
-    $info_subarea[$m->subarea->id]->movementos[] = $m;
+    $info_area[$area_key]->movementos[] = $m;
+    $info_subarea[$subarea_key]->movementos[] = $m;
 }
 ?>
 
@@ -98,7 +100,7 @@ foreach($movementos as $m) {
                             <td class="text-right text-danger"><?= empty($r->gastos) ? '-' : $this->Number->currency($r->gastos, 'EUR') ?></td>
                             <td class="text-right <?= $r->comision<0 ? 'text-danger' : ''?>"><?= empty($r->comision) ? '-' : $this->Number->currency($r->comision, 'EUR') ?></td>
                             <td class="text-right <?= $r->balance<0 ? 'text-danger' : ''?>"><strong><?= empty($r->balance) ? '-' : $this->Number->currency($r->balance, 'EUR') ?></strong></td>
-                            <td class="text-center"><a href="javascript:void(0)"><em class="glyphicon glyphicon-info-sign" data-toggle="modal" data-target="#modal-subarea-<?= $r->subarea->id ?>"></em></a></td>
+                            <td class="text-center"><a href="javascript:void(0)"><em class="glyphicon glyphicon-info-sign" data-toggle="modal" data-target="#modal-subarea-<?= $r->tempada.'_'.$r->subarea->id ?>"></em></a></td>
                         </tr>
 
                         <?php if(empty($resumo[$i+1]) || $area_actual->id !== $resumo[$i+1]->subarea->area->id) : ?>
@@ -150,6 +152,7 @@ foreach($movementos as $m) {
                                         <th class="celda-titulo text-center">Importe</th>
                                         <th class="celda-titulo text-center">Comisión</th>
                                         <th class="celda-titulo text-center">Subarea</th>
+                                        <th class="celda-titulo text-center">Tempada</th>
                                         <th class="celda-titulo text-center">Conta</th>
                                         <th class="celda-titulo text-center">Clube</th>
                                         <th class="celda-titulo text-center">Observacións</th>
@@ -162,6 +165,7 @@ foreach($movementos as $m) {
                                             <td class="text-right <?= $m->importe<0 ? 'text-danger' : ''?>"><?= $this->Number->currency($m->importe, 'EUR') ?></td>
                                             <td class="text-right <?= $m->comision<0 ? 'text-danger' : ''?>"><?= empty($m->comision) ? '' : $this->Number->currency($m->comision, 'EUR') ?></td>
                                             <td class="text-center"><?= $m->subarea->nome ?></td>
+                                            <td class="text-center"><?= $tempadas[$m->tempada] ?></td>
                                             <td class="text-center"><?= $this->Html->image("/images/conta-{$m->conta}-logo.png", ['width'=>30,'height'=>30]) ?></td>
                                             <td class="text-center"><?= $m->clube ? ($this->Html->image($m->clube->logo, ['width'=>25,'height'=>25]) . ' ' . $m->clube->codigo) : '-' ?></td>
                                             <td><?= $m->descricion ?></td>
@@ -179,14 +183,14 @@ foreach($movementos as $m) {
         </div>
     <?php endforeach ?>
 
-    <?php foreach($info_subarea as $sa) : ?>
+    <?php foreach($info_subarea as $k=>$sa) : ?>
 
-        <div id="modal-subarea-<?= $sa->id ?>" class="modal fade" role="dialog">
+        <div id="modal-subarea-<?= $k ?>" class="modal fade" role="dialog">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title"><?= $sa->nome ?></h4>
+                        <h4 class="modal-title"><?= $sa->nome ?> (<?= $tempadas[$sa->tempada] ?>)</h4>
                     </div>
                     <div class="modal-body">
                         <div class="table-responsive">
