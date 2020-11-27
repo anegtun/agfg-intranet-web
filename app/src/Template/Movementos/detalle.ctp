@@ -1,10 +1,18 @@
 <?php
 $this->extend('template');
-$this->set('cabeceiraTitulo', empty($movemento->id) ? 'Novo movemento' : $movemento->data->format('Y-m-d'));
-$this->set('cabeceiraMigas', [
-    ['label'=>'Movementos', 'url'=>['controller'=>'Movementos', 'action'=>'index']],
-    ['label'=>empty($movemento->id) ? 'Novo movemento' : $movemento->data->format('Y-m-d')]
-]);
+if($movemento->prevision) {
+    $this->set('cabeceiraTitulo', empty($movemento->id) ? 'Nova previsión' : $movemento->data->format('Y-m-d'));
+    $this->set('cabeceiraMigas', [
+        ['label'=>'Previsións', 'url'=>['controller'=>'Movementos', 'action'=>'previsions']],
+        ['label'=>empty($movemento->id) ? 'Nova previsión' : $movemento->data->format('Y-m-d')]
+    ]);
+} else {
+    $this->set('cabeceiraTitulo', empty($movemento->id) ? 'Novo movemento' : $movemento->data->format('Y-m-d'));
+    $this->set('cabeceiraMigas', [
+        ['label'=>'Movementos', 'url'=>['controller'=>'Movementos', 'action'=>'index']],
+        ['label'=>empty($movemento->id) ? 'Novo movemento' : $movemento->data->format('Y-m-d')]
+    ]);
+}
 $emptyTemplates = [
     'inputContainer' => '{{content}}',
     'input' => '<input type="{{type}}" name="{{name}}" {{attrs}}/>',
@@ -14,6 +22,7 @@ $emptyTemplates = [
 <div class="container-full" style="margin-top:2em;">
     <?= $this->Form->create($movemento, ['type'=>'post', 'url'=>['action'=>'gardar']]) ?>
         <?= $this->Form->hidden('id') ?>
+        <?= $this->Form->hidden('prevision') ?>
         <fieldset>
             <legend>Movemento</legend>
 

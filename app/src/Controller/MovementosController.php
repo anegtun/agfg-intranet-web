@@ -19,16 +19,26 @@ class MovementosController extends AppController {
     }
 
     public function index() {
+        $this->listarMovementos(false);
+    }
+
+    public function previsions() {
+        $this->listarMovementos(true);
+        $this->render('index');
+    }
+
+    private function listarMovementos($prevision) {
         $contas = $this->Contas->getAllWithEmpty();
         $tempadas = $this->Tempadas->getTempadasWithEmpty();
         $subareas = $this->Subareas->find('all', ['order'=>'Area.nome'])->contain(['Area']);
-        $movementos = $this->movementosFiltrados();
-        $this->set(compact('movementos', 'contas', 'subareas', 'tempadas'));
+        $movementos = $this->movementosFiltrados($prevision);
+        $this->set(compact('prevision', 'movementos', 'contas', 'subareas', 'tempadas'));
     }
 
     public function resumo() {
         $tempadas = $this->Tempadas->getTempadasWithEmpty();
-        $movementos = $this->movementosFiltrados();
+        $movementos = $this->movementosFiltrados(false);
+        $previsions = $this->movementosFiltrados(true);
 
         $resumo = [];
         foreach($movementos as $m) {
@@ -50,9 +60,31 @@ class MovementosController extends AppController {
                 $resumo[] = $item;
             }
         }
+
+        foreach($previsions as $p) {
+            $item = (object) [
+                'subarea' => $p->subarea,
+                'tempada' => $p->tempada,
+                'ingresos_previstos' => $p->importe>0 ? $p->importe : 0,
+                'gastos_previstos' => $p->importe<0 ? $p->importe : 0
+            ];
+            $existent = $this->findResumo($resumo, $item);
+            if($existent) {
+                if(empty($existent->ingresos_previstos)) {
+                    $existent->ingresos_previstos = 0;
+                }
+                if(empty($existent->gastos_previstos)) {
+                    $existent->gastos_previstos = 0;
+                }
+                $existent->ingresos_previstos += $item->ingresos_previstos;
+                $existent->gastos_previstos += $item->gastos_previstos;
+            } else {
+                $resumo[] = $item;
+            }
+        }
         usort($resumo, ["self", "cmpResumo"]);
 
-        $this->set(compact('movementos', 'resumo', 'tempadas'));
+        $this->set(compact('movementos', 'previsions', 'resumo', 'tempadas'));
     }
 
     public function resumoClubes() {
@@ -90,7 +122,12 @@ class MovementosController extends AppController {
     }
 
     public function detalle($id=null) {
-        $movemento = empty($id) ? $this->Movementos->newEntity() : $this->Movementos->get($id);
+        if(empty($id)) {
+            $movemento = $this->Movementos->newEntity();
+            $movemento->prevision = $this->request->getQuery('prevision', false);
+        } else {
+            $movemento = $this->Movementos->get($id);
+        }
         // Hack para que o datepicker non a líe formateando a data (alterna dia/mes). Asi forzamos o noso formato.
         $movemento->data_str = empty($movemento->data) ? NULL : $movemento->data->format('d-m-Y');
         $contas = $this->Contas->getAllWithEmpty();
@@ -124,7 +161,7 @@ class MovementosController extends AppController {
             $movemento->data = empty($data['data']) ? NULL : Time::createFromFormat('d-m-Y', $data['data']);
             if ($this->Movementos->save($movemento)) {
                 $this->Flash->success(__('Gardáronse os datos do movemento correctamente.'));
-                return $this->redirect(['action'=>'index']);
+                return $this->redirect(['action' => $movemento->prevision ? 'previsions' : 'index']);
             }
             $this->Flash->error(__('Erro ao gardar os datos do movemento.'));
         }
@@ -139,13 +176,15 @@ class MovementosController extends AppController {
         } else {
             $this->Flash->error(__('Erro ao eliminar o movemento.'));
         }
-        return $this->redirect(['action'=>'index']);
+        return $this->redirect(['action' => $movemento->prevision ? 'previsions' : 'index']);
     }
 
-    private function movementosFiltrados() {
+    private function movementosFiltrados($prevision = false) {
+        $sort = $prevision ? 'asc' : 'desc';
         $movementos = $this->Movementos
-            ->find('all', ['order'=>['data desc', 'Movementos.id desc']])
-            ->contain(['Subarea' => ['Area'], 'Clube']);
+            ->find('all', ['order'=>["data $sort", "Movementos.id $sort"]])
+            ->contain(['Subarea' => ['Area'], 'Clube'])
+            ->where(['prevision' => $prevision]);
         if(!empty($this->request->getQuery('data_ini'))) {
             $movementos->where(['data >=' => FrozenDate::createFromFormat('d-m-Y', $this->request->getQuery('data_ini'))]);
         }

@@ -17,13 +17,22 @@ class EconomicoController extends AppController {
 
     public function index() {
         $contas = $this->Contas->getAll();
-        $query = $this->Movementos->find();
-        $total = $query->select(['balance' => $query->func()->sum('importe'), 'comision' => $query->func()->sum('comision')])->toArray()[0];
-        $resumo_balance = $query
-            ->select(['conta', 'balance' => $query->func()->sum('importe'), 'comision' => $query->func()->sum('comision')])
+        $movementos_query = $this->Movementos->find()->where(['prevision'=>false]);
+        $prevision_query = $this->Movementos->find()->where(['prevision'=>true]);
+        $total = $movementos_query
+            ->select([
+                'balance' => $movementos_query->func()->sum('importe'),
+                'comision' => $movementos_query->func()->sum('comision')
+            ])->toArray()[0];
+        $prevision = (object) [
+            'ingresos' => $prevision_query->select(['ingresos' => $prevision_query->func()->sum('importe')])->where(['importe >' => 0])->toArray()[0]->ingresos,
+            'gastos' => $prevision_query->select(['ingresos' => $prevision_query->func()->sum('importe')])->where(['importe <' => 0])->toArray()[0]->gastos
+        ];
+        $resumo_balance = $movementos_query
+            ->select(['conta', 'balance' => $movementos_query->func()->sum('importe'), 'comision' => $movementos_query->func()->sum('comision')])
             ->group(['conta'])
             ->toArray();
-        $this->set(compact('contas', 'total', 'resumo_balance'));
+        $this->set(compact('contas', 'total', 'prevision', 'resumo_balance'));
     }
 
     public function areas() {

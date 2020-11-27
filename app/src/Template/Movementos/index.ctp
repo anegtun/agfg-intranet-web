@@ -1,10 +1,18 @@
 <?php
 $this->extend('template');
-$this->set('cabeceiraTitulo', 'Movementos');
-$this->set('cabeceiraMigas', [
-    ['label'=>'Xestión Económica', 'url'=>['controller'=>'Economico', 'action'=>'index']],
-    ['label'=>'Movementos']
-]);
+if($prevision) {
+    $this->set('cabeceiraTitulo', 'Previsións');
+    $this->set('cabeceiraMigas', [
+        ['label'=>'Xestión Económica', 'url'=>['controller'=>'Economico', 'action'=>'index']],
+        ['label'=>'Previsións']
+    ]);
+} else {
+    $this->set('cabeceiraTitulo', 'Movementos');
+    $this->set('cabeceiraMigas', [
+        ['label'=>'Xestión Económica', 'url'=>['controller'=>'Economico', 'action'=>'index']],
+        ['label'=>'Movementos']
+    ]);
+}
 $emptyTemplates = [
     'inputContainer' => '{{content}}',
     'input' => '<input type="{{type}}" name="{{name}}" {{attrs}}/>',
@@ -36,7 +44,7 @@ $emptyTemplates = [
 
             <div style="margin-top:1em">
                 <?= $this->Form->button('Buscar', ['class'=>'btn btn-primary']); ?>
-                <?= $this->Html->link(__('Novo movemento'), ['action'=>'detalle'], ['class'=>'btn btn-success']) ?>
+                <?= $this->Html->link(__($prevision ? 'Nova previsión' : 'Novo movemento'), ['action'=>'detalle', '?'=>['prevision'=>$prevision]], ['class'=>'btn btn-success']) ?>
             </div>
 
         <?= $this->Form->end() ?>
