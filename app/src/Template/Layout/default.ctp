@@ -118,12 +118,16 @@ $menu_option = empty($menu_option) ? '' : $menu_option;
                                     array('controller'=>'Main', 'action'=>'index'),
                                     array('escape'=>false)) ?>
                             </li>
-                            <li data-toggle="tooltip">
-                                <?= $this->Html->link(
-                                    '<span class="glyphicon glyphicon-check"><span class="sr-only">Horarios e resultados</span></span> Horarios e resultados',
-                                    array('controller'=>'Resultados', 'action'=>'index'),
-                                    array('escape'=>false)) ?>
-                            </li>
+
+                            <?php if(in_array($authUser['rol'], ['admin','comp'])) : ?>
+                                <li data-toggle="tooltip">
+                                    <?= $this->Html->link(
+                                        '<span class="glyphicon glyphicon-check"><span class="sr-only">Horarios e resultados</span></span> Horarios e resultados',
+                                        array('controller'=>'Resultados', 'action'=>'index'),
+                                        array('escape'=>false)) ?>
+                                </li>
+                            <?php endif ?>
+
                             <?php if($authUser['rol']==='admin') : ?>
                                 <li data-toggle="tooltip">
                                     <?= $this->Html->link(
@@ -149,6 +153,9 @@ $menu_option = empty($menu_option) ? '' : $menu_option;
                                         array('controller'=>'Campos', 'action'=>'index'),
                                         array('escape'=>false)) ?>
                                 </li>
+                            <?php endif ?>
+
+                            <?php if(in_array($authUser['rol'], ['admin','tesour'])) : ?>
                                 <li data-toggle="tooltip">
                                     <?= $this->Html->link(
                                         '<span class="glyphicon glyphicon-euro"><span class="sr-only">Xestión Económica</span></span>Xestión Económica',

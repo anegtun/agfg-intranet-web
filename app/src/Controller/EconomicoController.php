@@ -18,15 +18,16 @@ class EconomicoController extends AppController {
     public function index() {
         $contas = $this->Contas->getAll();
         $movementos_query = $this->Movementos->find()->where(['prevision'=>false]);
-        $prevision_query = $this->Movementos->find()->where(['prevision'=>true]);
+        $prevision_ingresos_query = $this->Movementos->find()->where(['prevision'=>true, 'importe >' => 0]);
+        $prevision_gastos_query = $this->Movementos->find()->where(['prevision'=>true, 'importe <' => 0]);
         $total = $movementos_query
             ->select([
                 'balance' => $movementos_query->func()->sum('importe'),
                 'comision' => $movementos_query->func()->sum('comision')
             ])->toArray()[0];
         $prevision = (object) [
-            'ingresos' => $prevision_query->select(['ingresos' => $prevision_query->func()->sum('importe')])->where(['importe >' => 0])->toArray()[0]->ingresos,
-            'gastos' => $prevision_query->select(['ingresos' => $prevision_query->func()->sum('importe')])->where(['importe <' => 0])->toArray()[0]->gastos
+            'ingresos' => $prevision_ingresos_query->select(['suma' => $prevision_ingresos_query->func()->sum('importe')])->toArray()[0]->suma,
+            'gastos' => $prevision_gastos_query->select(['suma' => $prevision_gastos_query->func()->sum('importe')])->toArray()[0]->suma
         ];
         $resumo_balance = $movementos_query
             ->select(['conta', 'balance' => $movementos_query->func()->sum('importe'), 'comision' => $movementos_query->func()->sum('comision')])
