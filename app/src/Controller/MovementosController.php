@@ -106,8 +106,8 @@ class MovementosController extends AppController {
             }
         }
 
-        $subareas = $this->Subareas->find('all', ['order'=>'nome'])->where(['id IN' => $ids_subareas]);
-        $clubes = $this->Clubes->find('all', ['order'=>'nome'])->where(['id IN' => array_keys($resumo)]);
+        $subareas = empty($ids_subareas) ? [] : $this->Subareas->find('all', ['order'=>'nome'])->where(['id IN' => $ids_subareas]);
+        $clubes = empty($resumo) ? [] : $this->Clubes->find('all', ['order'=>'nome'])->where(['id IN' => array_keys($resumo)]);
 
         $this->set(compact('movementos', 'resumo', 'clubes', 'subareas', 'tempadas'));
     }
