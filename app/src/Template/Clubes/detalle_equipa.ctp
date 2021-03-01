@@ -17,6 +17,7 @@ $this->set('cabeceiraMigas', [
                 <legend><?= empty($equipa->id) ? "Nova equipa de {$equipa->clube->nome}" : $equipa->nome ?></legend>
                 <?= $this->Form->control('codigo', ['label'=>'Código']) ?>
                 <?= $this->Form->control('nome', ['label'=>'Nome']) ?>
+                <?= $this->Form->control('nome_curto', ['label'=>'Nome curto']) ?>
                 <?= $this->Form->control('categoria', ['options'=>$categorias, 'label'=>'Categoría']) ?>
                 <?= $this->Form->control('logo', ['label'=>'Logo']) ?>
                 <?= $this->Form->button('Gardar', ['class'=>'btn btn-primary']); ?>

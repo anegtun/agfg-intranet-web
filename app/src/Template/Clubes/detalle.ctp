@@ -51,6 +51,7 @@ $this->set('cabeceiraMigas', [
                             <td class="text-center"><?= empty($e->logo) ? '' : $this->Html->image($e->logo, ['width'=>30,'height'=>30]) ?></td>
                             <td><?= $e->codigo ?></td>
                             <td><?= $e->nome ?></td>
+                            <td><?= $e->nome_curto ?></td>
                             <td><?= $categorias[$e->categoria] ?></td>
                             <td class="text-center"><?= $this->AgfgForm->editButton(['action'=>'detalleEquipa', $e->id]) ?></td>
                             <td class="text-center"><?= $this->AgfgForm->deleteButton(['action'=>'borrarEquipa', $e->id]) ?></td>

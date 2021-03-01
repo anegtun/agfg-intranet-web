@@ -55,7 +55,7 @@ class CalendarioController extends RestController {
                 foreach($partidos as $p) {
                     $resX['partidos'][] = $this->_buildPartidoData($p, $equipas, $campos);
                 }
-                if($index>0) {
+                if($index>=0) {
                     $res['xornadas'][$index] = $resX;
                 } else {
                     $res['xornadas'][] = $resX;
@@ -145,6 +145,9 @@ class CalendarioController extends RestController {
     }
 
     private function _getJsonPartidosSemana($competicion, $dataReferencia) {
+        if(empty($dataReferencia)) {
+            return ['partidos' => []];
+        }
         $luns = $dataReferencia->modify('monday this week');
         $domingo = $luns->modify('sunday this week');
         $lunsYMD = $luns->i18nFormat('yyyy-MM-dd');
@@ -245,6 +248,7 @@ class CalendarioController extends RestController {
             $resP['equipa1'] = [
                 'codigo' => $equipas[$p->id_equipa1]->codigo,
                 'nome' => $equipas[$p->id_equipa1]->nome,
+                'nome_curto' => $equipas[$p->id_equipa1]->nome_curto,
                 'logo' => $equipas[$p->id_equipa1]->logo,
                 'goles' => $p->goles_equipa1,
                 'tantos' => $p->tantos_equipa1,
@@ -256,6 +260,7 @@ class CalendarioController extends RestController {
             $resP['equipa2'] = [
                 'codigo' => $equipas[$p->id_equipa2]->codigo,
                 'nome' => $equipas[$p->id_equipa2]->nome,
+                'nome_curto' => $equipas[$p->id_equipa2]->nome_curto,
                 'logo' => $equipas[$p->id_equipa2]->logo,
                 'goles' => $p->goles_equipa2,
                 'tantos' => $p->tantos_equipa2,
