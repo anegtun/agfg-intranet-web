@@ -183,6 +183,7 @@ class Clasificacion {
             'id' => $this->_equipas[$id]->id,
             'codigo' => $this->_equipas[$id]->codigo,
             'nome' => $this->_equipas[$id]->nome,
+            'nome_curto' => $this->_equipas[$id]->nome_curto,
             'logo' => $this->_equipas[$id]->logo,
             'posicion' => 0,
             'puntos' => 0,
