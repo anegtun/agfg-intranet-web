@@ -154,7 +154,7 @@ $submenu_option = empty($submenu_option) ? '' : $submenu_option;
                                     <span class="caret caret-right"></span>
                                 </a>
                                 <ul id="configuracion-entries" class="nav nav-pills nav-stacked left-submenu collapse <?=$menu_option==='configuracion'?'in':''?>"  <?=$menu_option==='configuracion'?'aria-expanded="true"':''?>>
-                                    <?php if($authUser['rol']==='admin') : ?>
+                                    <?php if(in_array($authUser['rol'], ['admin','comp'])) : ?>
                                         <li <?=$submenu_option==='arbitros'?'class="active"':''?>>
                                             <?= $this->Html->link('Árbitros', ['controller'=>'Arbitros', 'action'=>'index']) ?>
                                         </li>
@@ -164,10 +164,12 @@ $submenu_option = empty($submenu_option) ? '' : $submenu_option;
                                             <?= $this->Html->link('Áreas económicas', ['controller'=>'Economico', 'action'=>'areas']) ?>
                                         </li>
                                     <?php endif ?>
-                                    <?php if($authUser['rol']==='admin') : ?>
+                                    <?php if(in_array($authUser['rol'], ['admin','comp'])) : ?>
                                         <li <?=$submenu_option==='campos'?'class="active"':''?>>
                                             <?= $this->Html->link('Campos', ['controller'=>'Campos', 'action'=>'index']) ?>
                                         </li>
+                                    <?php endif ?>
+                                    <?php if($authUser['rol']==='admin') : ?>
                                         <li <?=$submenu_option==='clubes'?'class="active"':''?>>
                                             <?= $this->Html->link('Clubes', ['controller'=>'Clubes', 'action'=>'index']) ?>
                                         </li>
