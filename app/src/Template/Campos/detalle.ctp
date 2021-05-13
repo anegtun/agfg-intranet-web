@@ -2,6 +2,7 @@
 $this->extend('template');
 $this->set('cabeceiraTitulo', 'Detalle');
 $this->set('cabeceiraMigas', [
+    ['label'=>'Configuración'],
     ['label'=>'Campos', 'url'=>['controller'=>'Campos', 'action'=>'index']],
     ['label'=>'Detalle']
 ]);

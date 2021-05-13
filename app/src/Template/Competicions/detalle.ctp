@@ -2,7 +2,8 @@
 $this->extend('template');
 $this->set('cabeceiraTitulo', 'Competición');
 $this->set('cabeceiraMigas', [
-    ['label'=>'Competicións', 'url'=>['controller'=>'Competicions', 'action'=>'index']],
+    ['label'=>'Competicións'],
+    ['label'=>'Administrar', 'url'=>['controller'=>'Competicions', 'action'=>'index']],
     ['label'=>empty($competicion->id) ? 'Competición' : $competicion->nome]
 ]);
 ?>

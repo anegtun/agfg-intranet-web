@@ -1,7 +1,10 @@
 <?php
 $this->extend('template');
 $this->set('cabeceiraTitulo', 'Árbitros');
-$this->set('cabeceiraMigas', [['label'=>'Árbitros']]);
+$this->set('cabeceiraMigas', [
+    ['label'=>'Configuración'],
+    ['label'=>'Árbitros']
+]);
 ?>
 
 <div class="container-full" style="margin-top:2em;">

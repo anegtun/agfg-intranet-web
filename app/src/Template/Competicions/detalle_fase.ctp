@@ -2,7 +2,8 @@
 $this->extend('template');
 $this->set('cabeceiraTitulo', 'Fase competición');
 $this->set('cabeceiraMigas', [
-    ['label'=>'Competicións', 'url'=>['controller'=>'Competicions', 'action'=>'index']],
+    ['label'=>'Competicións'],
+    ['label'=>'Administrar', 'url'=>['controller'=>'Competicions', 'action'=>'index']],
     ['label'=>$competicion->nome, 'url'=>['controller'=>'Competicions', 'action'=>'detalle', $competicion->id]],
     ['label'=>'Fase']
 ]);

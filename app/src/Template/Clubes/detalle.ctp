@@ -2,6 +2,7 @@
 $this->extend('template');
 $this->set('cabeceiraTitulo', 'Clube');
 $this->set('cabeceiraMigas', [
+    ['label'=>'Configuración'],
     ['label'=>'Clubes', 'url'=>['controller'=>'Clubes', 'action'=>'index']],
     ['label'=>empty($clube->id) ? 'Novo clube' : $clube->nome]
 ]);

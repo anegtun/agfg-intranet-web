@@ -1,7 +1,10 @@
 <?php
 $this->extend('template');
 $this->set('cabeceiraTitulo', 'Campos');
-$this->set('cabeceiraMigas', [['label'=>'Campos']]);
+$this->set('cabeceiraMigas', [
+    ['label'=>'Configuración'],
+    ['label'=>'Campos']
+]);
 ?>
 
 <div class="container-full" style="margin-top:2em;">

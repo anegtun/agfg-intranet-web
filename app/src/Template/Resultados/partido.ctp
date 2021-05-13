@@ -2,6 +2,7 @@
 $this->extend('template');
 $this->set('cabeceiraTitulo', $partido->competicion->nome);
 $this->set('cabeceiraMigas', [
+    ['label'=>'Competicións'],
     ['label'=>'Horarios e resultados', 'url'=>['controller'=>'Resultados', 'action'=>'index']],
     ['label'=>$partido->competicion->nome, 'url'=>['controller'=>'Resultados', 'action'=>'competicion', $partido->competicion->id]],
     ['label'=>$equipas[$partido->id_equipa1]->nome.' - '.$equipas[$partido->id_equipa2]->nome]

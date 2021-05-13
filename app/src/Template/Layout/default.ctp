@@ -1,6 +1,7 @@
 <?php
 $authUser = $this->request->getSession()->read('Auth.User');
 $menu_option = empty($menu_option) ? '' : $menu_option;
+$submenu_option = empty($submenu_option) ? '' : $submenu_option;
 ?>
 
 <!DOCTYPE html>
@@ -114,55 +115,65 @@ $menu_option = empty($menu_option) ? '' : $menu_option;
                         <ul class="nav nav-pills nav-stacked" id="left-menu-content" role="navigation">
                             <li data-toggle="tooltip">
                                 <?= $this->Html->link(
-                                    '<span class="glyphicon glyphicon-home"><span class="sr-only">Inicio</span></span> Inicio',
+                                    "<span class='glyphicon glyphicon-home'><span class='sr-only'>Inicio</span></span> Inicio",
                                     array('controller'=>'Main', 'action'=>'index'),
                                     array('escape'=>false)) ?>
                             </li>
 
                             <?php if(in_array($authUser['rol'], ['admin','comp'])) : ?>
                                 <li data-toggle="tooltip">
-                                    <?= $this->Html->link(
-                                        '<span class="glyphicon glyphicon-check"><span class="sr-only">Horarios e resultados</span></span> Horarios e resultados',
-                                        array('controller'=>'Resultados', 'action'=>'index'),
-                                        array('escape'=>false)) ?>
-                                </li>
-                            <?php endif ?>
-
-                            <?php if($authUser['rol']==='admin') : ?>
-                                <li data-toggle="tooltip">
-                                    <?= $this->Html->link(
-                                        '<span class="glyphicon glyphicon-calendar"><span class="sr-only">Competicións</span></span> Competicións',
-                                        array('controller'=>'Competicions', 'action'=>'index'),
-                                        array('escape'=>false)) ?>
-                                </li>
-                                <li data-toggle="tooltip">
-                                    <?= $this->Html->link(
-                                        '<span class="glyphicon glyphicon-user"><span class="sr-only">Clubes</span></span> Clubes',
-                                        array('controller'=>'Clubes', 'action'=>'index'),
-                                        array('escape'=>false)) ?>
-                                </li>
-                                <li data-toggle="tooltip">
-                                    <?= $this->Html->link(
-                                        '<span class="glyphicon glyphicon-education"><span class="sr-only">Árbitros</span></span> Árbitros',
-                                        array('controller'=>'Arbitros', 'action'=>'index'),
-                                        array('escape'=>false)) ?>
-                                </li>
-                                <li data-toggle="tooltip">
-                                    <?= $this->Html->link(
-                                        '<span class="glyphicon glyphicon-flag"><span class="sr-only">Campos</span></span> Campos',
-                                        array('controller'=>'Campos', 'action'=>'index'),
-                                        array('escape'=>false)) ?>
+                                    <a href="#" data-toggle="collapse" data-target="#competicion-entries" data-parent="#left-menu-content" <?=$menu_option==='competicions'?'aria-expanded="true"':''?>>
+                                        <span class="glyphicon glyphicon-calendar"><span class="sr-only">Competicións</span></span>Competicións
+                                        <span class="caret caret-right"></span>
+                                    </a>
+                                    <ul id="competicion-entries" class="nav nav-pills nav-stacked left-submenu collapse <?=$menu_option==='competicions'?'in':''?>" <?=$menu_option==='competicions'?'aria-expanded="true"':''?>>
+                                        <li <?=$submenu_option==='resultados'?'class="active"':''?>>
+                                            <?= $this->Html->link('Horarios e resultados', ['controller'=>'Resultados', 'action'=>'index']) ?>
+                                        </li>
+                                        <?php if($authUser['rol']==='admin') : ?>
+                                            <li <?=$submenu_option==='administracion'?'class="active"':''?>>
+                                                <?= $this->Html->link('Administrar competicións', ['controller'=>'Competicions', 'action'=>'index']) ?>
+                                            </li>
+                                        <?php endif; ?>
+                                    </ul>
                                 </li>
                             <?php endif ?>
 
                             <?php if(in_array($authUser['rol'], ['admin','tesour'])) : ?>
-                                <li data-toggle="tooltip">
+                                <li data-toggle="tooltip" <?=$menu_option==='economico'?'class="active"':''?>>
                                     <?= $this->Html->link(
                                         '<span class="glyphicon glyphicon-euro"><span class="sr-only">Xestión Económica</span></span>Xestión Económica',
                                         array('controller'=>'Economico', 'action'=>'index'),
                                         array('escape'=>false)) ?>
                                 </li>
                             <?php endif ?>
+
+                            <li data-toggle="tooltip">
+                                <a href="#" data-toggle="collapse" data-target="#configuracion-entries" data-parent="#left-menu-content" <?=$menu_option==='configuracion'?'aria-expanded="true"':''?>>
+                                    <span class="glyphicon glyphicon-cog"><span class="sr-only">Configuración</span></span>Configuración
+                                    <span class="caret caret-right"></span>
+                                </a>
+                                <ul id="configuracion-entries" class="nav nav-pills nav-stacked left-submenu collapse <?=$menu_option==='configuracion'?'in':''?>"  <?=$menu_option==='configuracion'?'aria-expanded="true"':''?>>
+                                    <?php if($authUser['rol']==='admin') : ?>
+                                        <li <?=$submenu_option==='arbitros'?'class="active"':''?>>
+                                            <?= $this->Html->link('Árbitros', ['controller'=>'Arbitros', 'action'=>'index']) ?>
+                                        </li>
+                                    <?php endif ?>    
+                                    <?php if(in_array($authUser['rol'], ['admin','tesour'])) : ?>
+                                        <li <?=$submenu_option==='areas_economicas'?'class="active"':''?>>
+                                            <?= $this->Html->link('Áreas económicas', ['controller'=>'Economico', 'action'=>'areas']) ?>
+                                        </li>
+                                    <?php endif ?>
+                                    <?php if($authUser['rol']==='admin') : ?>
+                                        <li <?=$submenu_option==='campos'?'class="active"':''?>>
+                                            <?= $this->Html->link('Campos', ['controller'=>'Campos', 'action'=>'index']) ?>
+                                        </li>
+                                        <li <?=$submenu_option==='clubes'?'class="active"':''?>>
+                                            <?= $this->Html->link('Clubes', ['controller'=>'Clubes', 'action'=>'index']) ?>
+                                        </li>
+                                    <?php endif ?>
+                                </ul>
+                            </li>
                         </ul>
                     </div>
                 </aside>

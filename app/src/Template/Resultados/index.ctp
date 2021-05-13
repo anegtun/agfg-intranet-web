@@ -1,7 +1,10 @@
 <?php
 $this->extend('template');
 $this->set('cabeceiraTitulo', 'Horarios e resultados');
-$this->set('cabeceiraMigas', [['label'=>'Horarios e resultados']]);
+$this->set('cabeceiraMigas', [
+    ['label'=>'Competicións'],
+    ['label'=>'Horarios e resultados']
+]);
 ?>
 
 <div class="container-full" style="margin-top:2em;">

@@ -1,5 +1,6 @@
 <?php
-$this->set('menu_option', 'arbitros');
+$this->set('menu_option', 'configuracion');
+$this->set('submenu_option', 'arbitros');
 $this->set('cabeceiraTitulo', empty($cabeceiraTitulo) ? null : $cabeceiraTitulo);
 $this->set('cabeceiraMigas', empty($cabeceiraMigas) ? null : $cabeceiraMigas);
 

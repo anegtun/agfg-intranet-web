@@ -1,9 +1,9 @@
 <?php
-$this->extend('template');
+$this->extend('template_areas');
 $this->set('cabeceiraTitulo', empty($area->id) ? 'Nova área' : $area->nome);
 $this->set('cabeceiraMigas', [
-    ['label'=>'Xestión Económica', 'url'=>['controller'=>'Economico', 'action'=>'index']],
-    ['label'=>'Áreas', 'url'=>['controller'=>'Economico', 'action'=>'areas']],
+    ['label'=>'Configuración'],
+    ['label'=>'Áreas económicas', 'url'=>['controller'=>'Economico', 'action'=>'areas']],
     ['label'=>empty($area->id) ? 'Nova área' : $area->nome]
 ]);
 ?>
