@@ -141,6 +141,10 @@ class CalendarioController extends RestController {
         if(!empty($categoria)) {
             $conditions['categoria'] = $categoria;
         }
+        $fase = $this->request->getQuery('fase');
+        if(!empty($fase)) {
+            $conditions['codigo'] = $fase;
+        }
         return $this->Fases->find()->where($conditions);
     }
 
