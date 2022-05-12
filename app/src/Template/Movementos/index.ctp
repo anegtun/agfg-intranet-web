@@ -17,7 +17,15 @@ $emptyTemplates = [
     'inputContainer' => '{{content}}',
     'input' => '<input type="{{type}}" name="{{name}}" {{attrs}}/>',
 ];
+
+$acumulado = 0;
+foreach($movementos as $m) {
+    $acumulado += $m->getImporteConComision();
+}
 ?>
+
+
+<?php  ?>
 
 <div class="container-full" style="margin-top:2em;">
 
@@ -26,19 +34,19 @@ $emptyTemplates = [
 
             <div class="row">
                 <div class="col-lg-2">
-                    <?= $this->Form->control('data_ini', ['type'=>'text', 'class'=>'form-control fld-date', 'label'=>'Data inicio', 'templates'=>$emptyTemplates]) ?>
-                </div>
-                <div class="col-lg-2">
-                    <?= $this->Form->control('data_fin', ['type'=>'text', 'class'=>'form-control fld-date', 'label'=>'Data fin', 'templates'=>$emptyTemplates]) ?>
-                </div>
-                <div class="col-lg-2">
                     <?= $this->Form->control('conta', ['options'=>$contas, 'label'=>'Conta', 'class'=>'form-control']) ?>
+                </div>
+                <div class="col-lg-2">
+                    <?= $this->Form->control('id_subarea', ['options'=>$this->AgfgForm->objectToKeyValue($subareas,'id','{$e->area->nome} - {$e->nome}'), 'label'=>'Subárea', 'templates'=>$emptyTemplates]) ?>
                 </div>
                 <div class="col-lg-2">
                     <?= $this->Form->control('tempada', ['options'=>$tempadas, 'label'=>'Tempada', 'class'=>'form-control']) ?>
                 </div>
                 <div class="col-lg-2">
-                    <?= $this->Form->control('id_subarea', ['options'=>$this->AgfgForm->objectToKeyValue($subareas,'id','{$e->area->nome} - {$e->nome}'), 'label'=>'Subárea', 'templates'=>$emptyTemplates]) ?>
+                    <?= $this->Form->control('data_ini', ['type'=>'text', 'class'=>'form-control fld-date', 'label'=>'Data inicio', 'templates'=>$emptyTemplates]) ?>
+                </div>
+                <div class="col-lg-2">
+                    <?= $this->Form->control('data_fin', ['type'=>'text', 'class'=>'form-control fld-date', 'label'=>'Data fin', 'templates'=>$emptyTemplates]) ?>
                 </div>
             </div>
 
@@ -59,6 +67,7 @@ $emptyTemplates = [
                         <th class="celda-titulo text-center">Data</th>
                         <th class="celda-titulo text-center">Importe</th>
                         <th class="celda-titulo text-center">Comisión</th>
+                        <th class="celda-titulo text-center">Acumulado</th>
                         <th class="celda-titulo text-center">Tempada</th>
                         <th class="celda-titulo text-center">Conta</th>
                         <th class="celda-titulo text-center">Área</th>
@@ -76,6 +85,7 @@ $emptyTemplates = [
                             <td class="text-center"><?= $m->data->format('Y-m-d') ?></td>
                             <td class="text-right <?= $m->importe<0 ? 'text-danger' : ''?>"><?= $this->Number->currency($m->importe, 'EUR') ?></td>
                             <td class="text-right <?= $m->comision<0 ? 'text-danger' : ''?>"><?= empty($m->comision) ? '' : $this->Number->currency($m->comision, 'EUR') ?></td>
+                            <td class="text-right"><?= $this->Number->currency($acumulado, 'EUR') ?></td>
                             <td class="text-center"><?= $tempadas[$m->tempada] ?></td>
                             <td class="text-center"><?= $this->Html->image("/images/conta-{$m->conta}-logo.png", ['width'=>30,'height'=>30]) ?></td>
                             <td class="text-center"><?= $m->subarea->area->nome ?></td>
@@ -86,6 +96,7 @@ $emptyTemplates = [
                             <td class="text-center"><?= $this->Html->link('', ['action'=>'clonar', $m->id], ['class'=>'glyphicon glyphicon-duplicate']) ?></td>
                             <td class="text-center"><?= $this->AgfgForm->deleteButton(['action'=>'borrar', $m->id]) ?></td>
                         </tr>
+                        <?php $acumulado -= $m->getImporteConComision() ?>
                     <?php endforeach ?>
                 </tbody>
             </table>
