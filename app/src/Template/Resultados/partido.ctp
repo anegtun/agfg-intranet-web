@@ -5,12 +5,15 @@ $this->set('cabeceiraMigas', [
     ['label'=>'Competicións'],
     ['label'=>'Horarios e resultados', 'url'=>['controller'=>'Resultados', 'action'=>'index']],
     ['label'=>$partido->competicion->nome, 'url'=>['controller'=>'Resultados', 'action'=>'competicion', $partido->competicion->id]],
-    ['label'=>$equipas[$partido->id_equipa1]->nome.' - '.$equipas[$partido->id_equipa2]->nome]
+    ['label'=>$equipas_map[$partido->id_equipa1]->nome.' - '.$equipas_map[$partido->id_equipa2]->nome]
 ]);
 $emptyTemplates = [
     'inputContainer' => '{{content}}',
     'input' => '<input type="{{type}}" name="{{name}}" {{attrs}}/>',
 ];
+?>
+
+<?php ;
 ?>
 
 <div class="container-full" style="margin-top:2em;">
@@ -20,10 +23,10 @@ $emptyTemplates = [
         <fieldset>
             <legend><?=$partido->competicion->nome?> - <?=$categorias[$partido->fase->categoria]?> - Xornada <?=$partido->xornada->numero?> (<?=$partido->xornada->data?>)</legend>
             <div class="row">
-                <div class="form-group col-lg-3">
+                <div class="form-group col-lg-1">
                     <?= $this->Form->control('data', ['class'=>'form-control fld-date', 'label'=>'Data', 'value'=>$partido->data_partido_str, 'templates'=>$emptyTemplates]) ?>
                 </div>
-                <div class="form-group col-lg-3">
+                <div class="form-group col-lg-1">
                     <?= $this->Form->control('hora_partido', ['class'=>'form-control fld-time', 'label'=>'Hora', 'templates'=>$emptyTemplates]) ?>
                 </div>
                 <div class="form-group col-lg-3">
@@ -32,6 +35,11 @@ $emptyTemplates = [
                 <div class="form-group col-lg-3">
                     <?= $this->Form->control('id_arbitro', ['options'=>$this->AgfgForm->objectToKeyValue($arbitros,'id','$e->alcume ($e->nome)'), 'label'=>'Árbitro', 'templates'=>$emptyTemplates]) ?>
                 </div>
+                <?php if ($partido->competicion === 'torneo') : ?>
+                    <div class="form-group col-lg-3">
+                        <?= $this->Form->control('id_umpire', ['options'=>$this->AgfgForm->objectToKeyValue($equipas,'id','$e->nome ($e->categoria)'), 'label'=>'Umpires', 'templates'=>$emptyTemplates]) ?>
+                    </div>
+                <?php endif ?>
             </div>
             <div class="row">
                 <div class="form-group col-lg-8">
@@ -49,10 +57,10 @@ $emptyTemplates = [
                 <div class="col-lg-6">
                     <div class="row">
                         <h3>
-                            <?php if(!empty($equipas[$partido->id_equipa1]->logo)) : ?>
-                                <?= $this->Html->image($equipas[$partido->id_equipa1]->logo, ['width'=>30]) ?>&nbsp;
+                            <?php if(!empty($equipas_map[$partido->id_equipa1]->logo)) : ?>
+                                <?= $this->Html->image($equipas_map[$partido->id_equipa1]->logo, ['width'=>30]) ?>&nbsp;
                             <?php endif ?>
-                            <?= $equipas[$partido->id_equipa1]->nome ?>
+                            <?= $equipas_map[$partido->id_equipa1]->nome ?>
                         </h3>
                     </div>
                     <div class="row">
@@ -85,10 +93,10 @@ $emptyTemplates = [
                 <div class="col-lg-6">
                     <div class="row">
                         <h3>
-                            <?php if(!empty($equipas[$partido->id_equipa2]->logo)) : ?>
-                                <?= $this->Html->image($equipas[$partido->id_equipa2]->logo, ['width'=>30]) ?>&nbsp;
+                            <?php if(!empty($equipas_map[$partido->id_equipa2]->logo)) : ?>
+                                <?= $this->Html->image($equipas_map[$partido->id_equipa2]->logo, ['width'=>30]) ?>&nbsp;
                             <?php endif ?>
-                            <?= $equipas[$partido->id_equipa2]->nome ?>
+                            <?= $equipas_map[$partido->id_equipa2]->nome ?>
                         </h3>
                     </div>
                     <div class="row">

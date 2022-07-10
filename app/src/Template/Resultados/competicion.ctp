@@ -20,6 +20,9 @@ $this->set('cabeceiraMigas', [
                         <th class="celda-titulo" colspan="4">Visitante</th>
                         <th class="celda-titulo">Campo</th>
                         <th class="celda-titulo">Árbitro</th>
+                        <?php if ($competicion->tipo === 'torneo') : ?>
+                            <th class="celda-titulo">Umpires</th>
+                        <?php endif ?>
                         <th class="celda-titulo">Gañador</th>
                         <th class="celda-titulo"></th>
                     </tr>
@@ -52,6 +55,7 @@ $this->set('cabeceiraMigas', [
                             <td class="<?= $rowClass ?>"><?= !empty($p->sancion_puntos_equipa2) ? "[-{$p->sancion_puntos_equipa2}pt]" : '' ?></td>
                             <td class="<?= $rowClass ?>"><?= empty($p->id_campo) ? '-' : $campos[$p->id_campo]->nome ?></td>
                             <td class="<?= $rowClass ?>"><?= empty($p->id_arbitro) ? '-' : $arbitros[$p->id_arbitro]->alcume ?></td>
+                            <td class="<?= $rowClass ?>"><?= empty($p->id_umpire) ? '-' : "{$equipas[$p->id_umpire]->nome} ({$equipas[$p->id_umpire]->categoria})" ?></td>
                             <td class="<?= $rowClass ?>"><?= $p->getGanador() ?></td>
                             <td class="<?= $rowClass ?>">
                                 <?= $this->Html->link('', ['action'=>'partido', $p->id], ['class'=>'glyphicon glyphicon-edit']); ?>

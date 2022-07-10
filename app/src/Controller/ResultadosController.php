@@ -62,11 +62,18 @@ class ResultadosController extends AppController {
         // Hack para que o datepicker non a líe formateando a data (alterna dia/mes). Asi forzamos o noso formato.
         $partido->data_partido_str = empty($partido->data_partido) ? NULL : $partido->data_partido->format('d-m-Y');
 
+        $fases_competicion = $this->Fases->find()->where(['id_competicion' => $partido->fase->id_competicion]);
+        $ids_fases = [];
+        foreach($fases_competicion as $f) {
+            $ids_fases[] = $f->id;
+        }
+
         $arbitros = $this->Arbitros->findMap();
         $campos = $this->Campos->findMap();
-        $equipas = $this->Equipas->findMap();
+        $equipas_map = $this->Equipas->findMap();
+        $equipas = $this->Equipas->findInFases($ids_fases);
         $categorias = $this->Categorias->getCategorias();
-        $this->set(compact('partido', 'arbitros', 'campos', 'equipas', 'categorias'));
+        $this->set(compact('partido', 'arbitros', 'campos', 'equipas', 'equipas_map', 'categorias'));
     }
 
     public function gardar() {
@@ -94,10 +101,14 @@ class ResultadosController extends AppController {
         $p->id_arbitro = $this->clean($data['id_arbitro']);
         $p->goles_equipa1 = $this->clean($data['goles_equipa1']);
         $p->tantos_equipa1 = $this->clean($data['tantos_equipa1']);
-        $p->total_equipa1 = $this->clean($data['total_equipa1']);
+        if(isset($data['total_equipa1'])) {
+            $p->total_equipa1 = $this->clean($data['total_equipa1']);
+        }
         $p->goles_equipa2 = $this->clean($data['goles_equipa2']);
         $p->tantos_equipa2 = $this->clean($data['tantos_equipa2']);
-        $p->total_equipa2 = $this->clean($data['total_equipa2']);
+        if(isset($data['total_equipa2'])) {
+            $p->total_equipa2 = $this->clean($data['total_equipa2']);
+        }
         $p->sancion_puntos_equipa1 = $this->clean($data['sancion_puntos_equipa1']);
         $p->sancion_puntos_equipa2 = $this->clean($data['sancion_puntos_equipa2']);
         if(!is_null($p->goles_equipa1) || !is_null($p->tantos_equipa1)) {
