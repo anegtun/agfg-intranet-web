@@ -86,7 +86,7 @@ $menu_option = empty($menu_option) ? '' : $menu_option;
                             <li>
                                 <?= $this->Html->link(
                                     '<span class="glyphicon glyphicon-log-out"></span> Saír',
-                                    array('controller'=>'Main', 'action'=>'logout'),
+                                    array('controller'=>'Users', 'action'=>'logout'),
                                     array('escape'=>false)
                                 ) ?>
                             </li>
@@ -94,7 +94,7 @@ $menu_option = empty($menu_option) ? '' : $menu_option;
                             <li>
                                 <?= $this->Html->link(
                                     '<span class="glyphicon glyphicon-log-in"></span> Entrar',
-                                    array('controller'=>'Main', 'action'=>'login'),
+                                    array('controller'=>'Users', 'action'=>'login'),
                                     array('escape'=>false)
                                 ) ?>
                             </li>

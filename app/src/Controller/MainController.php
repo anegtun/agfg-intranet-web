@@ -15,22 +15,4 @@ class MainController extends AppController {
             return $this->redirect(array('action'=>'login'));
         }
     }
-    
-    public function login() {
-        if ($this->request->is('post')) {
-            $user = $this->Auth->identify();
-            if ($user) {
-                $this->Auth->setUser($user);
-                return $this->redirect($this->Auth->redirectUrl());
-            }
-            $this->Flash->error(__('Invalid username or password, try again'));
-        }
-        // Pantalla login (peticion GET)
-        $this->viewBuilder()->setLayout('login');
-    }
-
-    public function logout() {
-        return $this->redirect($this->Auth->logout());
-    }
-
 }

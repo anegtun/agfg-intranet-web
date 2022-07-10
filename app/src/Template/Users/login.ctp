@@ -1,4 +1,4 @@
-<div class="col-xs-12 login-form">
+<div class="login-form">
     <h2>Identifíquese</h2>
     <?= $this->Form->create() ?>
         <div class="form-group">
