@@ -7,8 +7,9 @@ class AgfgFormHelper extends Helper {
     
     public $helpers = ['Html'];
     
-    public function editButton($url) {
-        return $this->Html->link('', $url, ['class'=>'glyphicon glyphicon-pencil']);
+    public function editButton($url, $options = []) {
+        $opts = array_merge($options, ['class'=>'glyphicon glyphicon-pencil']);
+        return $this->Html->link('', $url, $opts);
     }
     
     public function deleteButton($url) {

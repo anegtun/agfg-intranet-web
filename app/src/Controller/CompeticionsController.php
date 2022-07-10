@@ -133,7 +133,7 @@ class CompeticionsController extends AppController {
 
     public function gardarXornada() {
         $data = $this->request->getData();
-        $xornada = $this->Xornadas->newEntity();
+        $xornada = empty($data['id']) ? $this->Xornadas->newEntity() : $this->Xornadas->get($data['id']);
         if ($this->request->is('post') || $this->request->is('put')) {
             $xornada = $this->Xornadas->patchEntity($xornada, $data);
             $xornada->data = empty($data['data_xornada']) ? NULL : Time::createFromFormat('d-m-Y', $data['data_xornada']);
@@ -159,7 +159,8 @@ class CompeticionsController extends AppController {
 
 
     public function gardarPartido() {
-        $partido = $this->Partidos->newEntity();
+        $data = $this->request->getData();
+        $partido = empty($data['id']) ? $this->Partidos->newEntity() : $this->Partidos->get($data['id']);
         if ($this->request->is('post') || $this->request->is('put')) {
             $partido = $this->Xornadas->patchEntity($partido, $this->request->getData());
             if ($this->Partidos->save($partido)) {

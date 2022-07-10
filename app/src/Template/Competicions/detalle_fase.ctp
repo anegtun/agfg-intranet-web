@@ -11,6 +11,7 @@ $emptyTemplates = [
     'inputContainer' => '{{content}}',
     'input' => '<input type="{{type}}" name="{{name}}" {{attrs}}/>',
 ];
+$this->Html->script('detalle-fase', ['block' => 'script']);
 ?>
 
 <div class="container-full" style="margin-top:2em;">
@@ -54,8 +55,21 @@ $emptyTemplates = [
                 <tbody>
                     <?php foreach($fase->xornadas as $x) : ?>
                         <tr>
-                            <td colspan="3"><?= "Xornada $x->numero ({$x->data->format('Y-m-d')})" ?></td>
-                            <td class="text-center"><?= $this->AgfgForm->deleteButton(['action'=>'borrarXornada', $x->id]) ?></td>
+                            <td colspan="3">
+                                <?= empty($x->descricion) ? "Xornada $x->numero" : $x->descricion ?>
+                                <?= " ({$x->data->format('Y-m-d')})" ?>
+                            </td>
+                            <td class="text-center">
+                                <?= $this->AgfgForm->editButton('#', [
+                                    'data-xornada-id' => $x->id,
+                                    'data-xornada-data' => $x->data->format('d-m-Y'),
+                                    'data-xornada-numero' => $x->numero,
+                                    'data-xornada-descricion' => $x->descricion
+                                ]) ?>
+                            </td>
+                            <td class="text-center">
+                                <?= $this->AgfgForm->deleteButton(['action'=>'borrarXornada', $x->id]) ?>
+                            </td>
                         </tr>
                         <?php if(!empty($x->partidos)) : ?>
                             <?php foreach($x->partidos as $p) : ?>
@@ -63,15 +77,25 @@ $emptyTemplates = [
                                     <td>&nbsp;</td>
                                     <td><?= $equipas_map[$p->id_equipa1] ?></td>
                                     <td><?= $equipas_map[$p->id_equipa2] ?></td>
-                                    <td class="text-center"><?= $this->AgfgForm->deleteButton(['action'=>'borrarPartido', $p->id]) ?></td>
+                                    <td class="text-center">
+                                        <?= $this->AgfgForm->editButton('#', [
+                                            'data-partido-id'=>$p->id,
+                                            'data-partido-id-xornada'=>$p->id_xornada,
+                                            'data-partido-id-equipo1'=>$p->id_equipa1,
+                                            'data-partido-id-equipo2'=>$p->id_equipa2
+                                        ]) ?>
+                                    </td>
+                                    <td class="text-center">
+                                        <?= $this->AgfgForm->deleteButton(['action'=>'borrarPartido', $p->id]) ?>
+                                    </td>
                                 </tr>
                             <?php endforeach ?>
                         <?php endif ?>
                     <?php endforeach ?>
                 <tbody>
             </table>
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalXornada">Engadir xornada</button>
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalPartido">Engadir partido</button>
+            <button id="modal-xornada-button" type="button" class="btn btn-primary">Engadir xornada</button>
+            <button id="modal-partido-button" type="button" class="btn btn-primary">Engadir partido</button>
         </div>
     <?php endif ?>
 </div>
@@ -80,6 +104,7 @@ $emptyTemplates = [
 <div id="modalXornada" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <?= $this->Form->create($fase, array('type'=>'post', 'url'=>array('action'=>'gardarXornada'))) ?>
         <?= $this->Form->hidden('id_fase', ['value'=>$fase->id]) ?>
+        <?= $this->Form->hidden('id') ?>
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -91,6 +116,7 @@ $emptyTemplates = [
                 <div class="modal-body">
                     <fieldset>
                         <?= $this->Form->control('numero', ['label'=>'Número']) ?>
+                        <?= $this->Form->control('descricion', ['label'=>'Descricion']) ?>
                         <?= $this->Form->control('data_xornada', ['class'=>'form-control fld-date', 'label'=>'Data', 'templates'=>$emptyTemplates]) ?>
                     </fieldset>
                 </div>
@@ -108,6 +134,7 @@ $emptyTemplates = [
 <div id="modalPartido" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <?= $this->Form->create($fase, array('type'=>'post', 'url'=>array('action'=>'gardarPartido'))) ?>
         <?= $this->Form->hidden('id_fase', ['value'=>$fase->id]) ?>
+        <?= $this->Form->hidden('id') ?>
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
