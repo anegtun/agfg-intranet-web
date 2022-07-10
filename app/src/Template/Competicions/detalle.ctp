@@ -18,6 +18,7 @@ $this->set('cabeceiraMigas', [
                 <?= $this->Form->control('codigo', ['label'=>'Código (uso en WordPress)']) ?>
                 <?= $this->Form->control('tempada', ['options'=>$tempadas, 'label'=>'Tempada']) ?>
                 <?= $this->Form->control('tipo', ['options'=>$tiposCompeticion, 'label'=>'Tipo competición']) ?>
+                <?= $this->Form->control('id_clube_virtual', ['options'=>$this->AgfgForm->objectToKeyValue($clubes,'id','nome'), 'label'=>'Clube virtual vinculado']) ?>
                 <?= $this->Form->button('Gardar', ['class'=>'btn btn-primary']); ?>
             </fieldset>
         <?= $this->Form->end() ?>

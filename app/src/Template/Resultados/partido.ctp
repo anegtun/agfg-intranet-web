@@ -5,7 +5,7 @@ $this->set('cabeceiraMigas', [
     ['label'=>'Competicións'],
     ['label'=>'Horarios e resultados', 'url'=>['controller'=>'Resultados', 'action'=>'index']],
     ['label'=>$partido->competicion->nome, 'url'=>['controller'=>'Resultados', 'action'=>'competicion', $partido->competicion->id]],
-    ['label'=>$equipas_map[$partido->id_equipa1]->nome.' - '.$equipas_map[$partido->id_equipa2]->nome]
+    ['label'=>$equipas[$partido->id_equipa1]->nome.' - '.$equipas[$partido->id_equipa2]->nome]
 ]);
 $emptyTemplates = [
     'inputContainer' => '{{content}}',
@@ -32,14 +32,14 @@ $emptyTemplates = [
                 <div class="form-group col-lg-3">
                     <?= $this->Form->control('id_campo', ['options'=>$this->AgfgForm->objectToKeyValue($campos,'id','$e->pobo - $e->nome'), 'label'=>'Campo', 'templates'=>$emptyTemplates]) ?>
                 </div>
+                <?php if ($partido->competicion->tipo === 'torneo') : ?>
+                    <div class="form-group col-lg-3">
+                        <?= $this->Form->control('id_umpire', ['options'=>$this->AgfgForm->objectToKeyValue($umpires,'id','$e->nome ($e->categoria)'), 'label'=>'Umpires', 'templates'=>$emptyTemplates]) ?>
+                    </div>
+                <?php endif ?>
                 <div class="form-group col-lg-3">
                     <?= $this->Form->control('id_arbitro', ['options'=>$this->AgfgForm->objectToKeyValue($arbitros,'id','$e->alcume ($e->nome)'), 'label'=>'Árbitro', 'templates'=>$emptyTemplates]) ?>
                 </div>
-                <?php if ($partido->competicion === 'torneo') : ?>
-                    <div class="form-group col-lg-3">
-                        <?= $this->Form->control('id_umpire', ['options'=>$this->AgfgForm->objectToKeyValue($equipas,'id','$e->nome ($e->categoria)'), 'label'=>'Umpires', 'templates'=>$emptyTemplates]) ?>
-                    </div>
-                <?php endif ?>
             </div>
             <div class="row">
                 <div class="form-group col-lg-8">
@@ -57,10 +57,10 @@ $emptyTemplates = [
                 <div class="col-lg-6">
                     <div class="row">
                         <h3>
-                            <?php if(!empty($equipas_map[$partido->id_equipa1]->logo)) : ?>
-                                <?= $this->Html->image($equipas_map[$partido->id_equipa1]->logo, ['width'=>30]) ?>&nbsp;
+                            <?php if(!empty($equipas[$partido->id_equipa1]->logo)) : ?>
+                                <?= $this->Html->image($equipas[$partido->id_equipa1]->logo, ['width'=>30]) ?>&nbsp;
                             <?php endif ?>
-                            <?= $equipas_map[$partido->id_equipa1]->nome ?>
+                            <?= $equipas[$partido->id_equipa1]->nome ?>
                         </h3>
                     </div>
                     <div class="row">
@@ -93,10 +93,10 @@ $emptyTemplates = [
                 <div class="col-lg-6">
                     <div class="row">
                         <h3>
-                            <?php if(!empty($equipas_map[$partido->id_equipa2]->logo)) : ?>
-                                <?= $this->Html->image($equipas_map[$partido->id_equipa2]->logo, ['width'=>30]) ?>&nbsp;
+                            <?php if(!empty($equipas[$partido->id_equipa2]->logo)) : ?>
+                                <?= $this->Html->image($equipas[$partido->id_equipa2]->logo, ['width'=>30]) ?>&nbsp;
                             <?php endif ?>
-                            <?= $equipas_map[$partido->id_equipa2]->nome ?>
+                            <?= $equipas[$partido->id_equipa2]->nome ?>
                         </h3>
                     </div>
                     <div class="row">

@@ -16,6 +16,7 @@ class CompeticionsController extends AppController {
         $this->Categorias = new Categorias();
         $this->Tempadas = new Tempadas();
         $this->TiposCompeticion = new TiposCompeticion();
+        $this->Clubes = TableRegistry::get('Clubes');
         $this->Fases = TableRegistry::get('Fases');
         $this->Equipas = TableRegistry::get('Equipas');
         $this->FasesEquipas = TableRegistry::get('FasesEquipas');
@@ -38,7 +39,8 @@ class CompeticionsController extends AppController {
         $categorias = $this->Categorias->getCategoriasWithEmpty();
         $tempadas = $this->Tempadas->getTempadasWithEmpty();
         $tiposCompeticion = $this->TiposCompeticion->getTiposWithEmpty();
-        $this->set(compact('competicion', 'categorias', 'tempadas', 'tiposCompeticion'));
+        $clubes = $this->Clubes->find();
+        $this->set(compact('competicion', 'categorias', 'tempadas', 'tiposCompeticion', 'clubes'));
     }
 
     public function gardar() {

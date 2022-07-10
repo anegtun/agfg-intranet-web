@@ -5,7 +5,7 @@ $this->set('cabeceiraMigas', [
     ['label'=>'Competicións'],
     ['label'=>'Administrar', 'url'=>['controller'=>'Competicions', 'action'=>'index']],
     ['label'=>$competicion->nome, 'url'=>['controller'=>'Competicions', 'action'=>'detalle', $competicion->id]],
-    ['label'=>'Fase']
+    ['label'=>empty($fase->id) ? 'Fase' : $fase->nome]
 ]);
 $emptyTemplates = [
     'inputContainer' => '{{content}}',

@@ -51,13 +51,26 @@ class ResultadosController extends AppController {
         if(!empty($this->request->getQuery('id_fase'))) {
             $partidos->where(['Partidos.id_fase' => $this->request->getQuery('id_fase')]);
         }
+        if(!empty($this->request->getQuery('id_campo'))) {
+            $partidos->where(['Partidos.id_campo' => $this->request->getQuery('id_campo')]);
+        }
 
-        $fases = $this->Fases
-            ->find()
+        $fases = $this->Fases->find()
             ->where(['id_competicion'=>$id]);
         $arbitros = $this->Arbitros->findMap();
-        $campos = $this->Campos->findMap();
+        $campos_map = $this->Campos->findMap();
         $equipas = $this->Equipas->findMap();
+
+        $all_partidos = $this->Partidos->find()
+            ->contain(['Fases'])
+            ->where(['Fases.id_competicion'=>$id]);
+        $campos = [];
+        foreach($all_partidos as $p) {
+            if(!empty($p->id_campo)) {
+                $campos[$p->id_campo] = $campos_map[$p->id_campo];
+            }
+        }
+
         $this->set(compact('competicion', 'partidos', 'arbitros', 'campos', 'equipas', 'fases'));
     }
 
@@ -69,18 +82,16 @@ class ResultadosController extends AppController {
         // Hack para que o datepicker non a líe formateando a data (alterna dia/mes). Asi forzamos o noso formato.
         $partido->data_partido_str = empty($partido->data_partido) ? NULL : $partido->data_partido->format('d-m-Y');
 
-        $fases_competicion = $this->Fases->find()->where(['id_competicion' => $partido->fase->id_competicion]);
-        $ids_fases = [];
-        foreach($fases_competicion as $f) {
-            $ids_fases[] = $f->id;
+        $umpires = [];
+        if(!empty($partido->competicion->id_clube_virtual)) {
+            $umpires = $this->Equipas->find()->where(['id_clube' => $partido->competicion->id_clube_virtual]);
         }
 
         $arbitros = $this->Arbitros->findMap();
         $campos = $this->Campos->findMap();
-        $equipas_map = $this->Equipas->findMap();
-        $equipas = $this->Equipas->findInFases($ids_fases);
+        $equipas = $this->Equipas->findMap();
         $categorias = $this->Categorias->getCategorias();
-        $this->set(compact('partido', 'arbitros', 'campos', 'equipas', 'equipas_map', 'categorias'));
+        $this->set(compact('partido', 'arbitros', 'campos', 'equipas', 'umpires', 'categorias'));
     }
 
     public function gardar() {
