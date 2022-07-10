@@ -7,7 +7,7 @@ use Cake\Event\Event;
 class UsersController extends AppController {
 
     public function beforeFilter(Event $event) {
-        $this->Auth->allow(array('login','logout'));
+        $this->Auth->allow(['login','logout']);
     }
     
     public function login() {

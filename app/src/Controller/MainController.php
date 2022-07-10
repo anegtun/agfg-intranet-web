@@ -7,12 +7,12 @@ use Cake\Event\Event;
 class MainController extends AppController {
 
     public function beforeFilter(Event $event) {
-        $this->Auth->allow(array('index','login','logout'));
+        $this->Auth->allow(['index']);
     }
 
     public function index() {
         if(!$this->Auth->user()) {
-            return $this->redirect(array('action'=>'login'));
+            return $this->redirect(['controller'=>'users', 'action'=>'login']);
         }
     }
 }
