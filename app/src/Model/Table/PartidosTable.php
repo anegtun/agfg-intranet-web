@@ -28,6 +28,11 @@ class PartidosTable extends Table {
             'foreignKey' => 'id_equipa2',
             'propertyName' => 'equipa2'
         ]);
+        $this->belongsTo('Campos', [
+        	'className' => 'Campos',
+            'foreignKey' => 'id_campo',
+            'propertyName' => 'campo'
+        ]);
     }
 
     public function validationDefault(Validator $validator) {

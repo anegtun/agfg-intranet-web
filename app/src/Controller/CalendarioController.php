@@ -34,6 +34,8 @@ class CalendarioController extends RestController {
         $equipas = $this->Equipas->findMap();
         $arbitros = $this->Arbitros->findMap();
 
+        $campo_request = $this->request->getQuery('campo');
+
         $res = [
             'competicion' => ['nome' => $competicion->nome],
             'xornadas' => []
@@ -53,7 +55,13 @@ class CalendarioController extends RestController {
                         break;
                     }
                 }
-                $partidos = $this->Partidos->find()->where(['id_xornada'=>$x->id]);
+                $conditions_partido = ['id_xornada'=>$x->id];
+                if(!empty($campo_request)) {
+                    $conditions_partido['Campos.codigo'] = $campo_request;
+                }
+                $partidos = $this->Partidos->find()
+                    ->contain('Campos')
+                    ->where($conditions_partido);
                 foreach($partidos as $p) {
                     $resX['partidos'][] = $this->_buildPartidoData($p, $equipas, $campos, $arbitros);
                 }
