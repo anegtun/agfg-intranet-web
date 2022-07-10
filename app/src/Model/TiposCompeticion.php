@@ -7,7 +7,7 @@ class TiposCompeticion {
         return array(
             'liga' => 'Liga',
             'eliminatoria' => 'Eliminatoria',
-            'torneo'  => 'Torneo 1 día'
+            'torneo'  => 'Torneo'
         );
     }
     

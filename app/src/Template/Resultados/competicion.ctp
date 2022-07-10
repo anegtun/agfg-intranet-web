@@ -6,6 +6,8 @@ $this->set('cabeceiraMigas', [
     ['label'=>'Horarios e resultados', 'url'=>['controller'=>'Resultados', 'action'=>'index']],
     ['label'=>$competicion->nome]
 ]);
+
+$is_torneo = $competicion->tipo === 'torneo';
 ?>
 
 <div class="container-full" style="margin-top:2em;">
@@ -20,7 +22,7 @@ $this->set('cabeceiraMigas', [
                         <th class="celda-titulo" colspan="4">Visitante</th>
                         <th class="celda-titulo">Campo</th>
                         <th class="celda-titulo">Árbitro</th>
-                        <?php if ($competicion->tipo === 'torneo') : ?>
+                        <?php if ($is_torneo) : ?>
                             <th class="celda-titulo">Umpires</th>
                         <?php endif ?>
                         <th class="celda-titulo">Gañador</th>
@@ -34,7 +36,7 @@ $this->set('cabeceiraMigas', [
                         <?php if(empty($xornadaActual) || $xornadaActual->format('Y-m-d')!==$seguinteLuns->format('Y-m-d')) : ?>
                             <?php $xornadaActual = $seguinteLuns ?>
                             <tr>
-                                <th colspan="14"><?= $seguinteLuns->modify('previous saturday')->format('Y-m-d') ?></th>
+                                <th colspan="<?= $is_torneo ? '15' : '14'?>"><?= $seguinteLuns->modify('previous saturday')->format('Y-m-d') ?></th>
                             </tr>
                         <?php endif ?>
                         <?php
@@ -55,7 +57,9 @@ $this->set('cabeceiraMigas', [
                             <td class="<?= $rowClass ?>"><?= !empty($p->sancion_puntos_equipa2) ? "[-{$p->sancion_puntos_equipa2}pt]" : '' ?></td>
                             <td class="<?= $rowClass ?>"><?= empty($p->id_campo) ? '-' : $campos[$p->id_campo]->nome ?></td>
                             <td class="<?= $rowClass ?>"><?= empty($p->id_arbitro) ? '-' : $arbitros[$p->id_arbitro]->alcume ?></td>
-                            <td class="<?= $rowClass ?>"><?= empty($p->id_umpire) ? '-' : "{$equipas[$p->id_umpire]->nome} ({$equipas[$p->id_umpire]->categoria})" ?></td>
+                            <?php if ($is_torneo) : ?>
+                                <td class="<?= $rowClass ?>"><?= empty($p->id_umpire) ? '-' : "{$equipas[$p->id_umpire]->nome} ({$equipas[$p->id_umpire]->categoria})" ?></td>
+                            <?php endif ?>
                             <td class="<?= $rowClass ?>"><?= $p->getGanador() ?></td>
                             <td class="<?= $rowClass ?>">
                                 <?= $this->Html->link('', ['action'=>'partido', $p->id], ['class'=>'glyphicon glyphicon-edit']); ?>

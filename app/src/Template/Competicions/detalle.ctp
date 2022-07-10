@@ -31,10 +31,9 @@ $this->set('cabeceiraMigas', [
                 <thead>
                     <tr>
                         <th>Categoría</th>
-                        <th>Código</th>
                         <th>Nome</th>
+                        <th>Código</th>
                         <th>Fase pai</th>
-                        <th></th>
                         <th></th>
                     </tr>
                 </thead>
@@ -42,10 +41,9 @@ $this->set('cabeceiraMigas', [
                     <?php foreach($competicion->fases as $f) : ?>
                         <tr>
                             <td><?= empty($f->categoria) ? '' : $categorias[$f->categoria] ?></td>
+                            <td><?= $this->Html->link($f->nome, ['action'=>'detalleFase', $f->id]) ?></td>
                             <td><?= $f->codigo ?></td>
-                            <td><?= $f->nome ?></td>
                             <td><?= empty($f->fasePai) ? '' : $f->fasePai->nome ?></td>
-                            <td class="text-center"><?= $this->AgfgForm->editButton(['action'=>'detalleFase', $f->id]) ?></td>
                             <td class="text-center"><?= $this->AgfgForm->deleteButton(['action'=>'borrarFase', $f->id]) ?></td>
                         </tr>
                     <?php endforeach ?>
