@@ -11,6 +11,21 @@ $is_torneo = $competicion->tipo === 'torneo';
 ?>
 
 <div class="container-full" style="margin-top:2em;">
+
+    <div class="row form-group">
+        <?= $this->Form->setValueSources(['query','context'])->create(null, ['type'=>'get']) ?>
+            <div class="row">
+                <div class="col-lg-2">
+                    <?= $this->Form->control('id_fase', ['options'=>$this->AgfgForm->objectToKeyValue($fases,'id','nome'), 'label'=>'Fase']) ?>
+
+                </div>
+            </div>
+            <div style="margin-top:1em">
+                <?= $this->Form->button('Buscar', ['class'=>'btn btn-primary']); ?>
+            </div>
+        <?= $this->Form->end() ?>
+    </div>
+
     <div class="row">
         <div class="col-xs-12 table-responsive">
             <table class="table table-striped table-hover">
@@ -32,12 +47,21 @@ $is_torneo = $competicion->tipo === 'torneo';
                 <tbody>
                     <?php $xornadaActual = NULL ?>
                     <?php foreach($partidos as $p) : ?>
-                        <?php $seguinteLuns = $p->data_calendario->modify('monday next week') ?>
-                        <?php if(empty($xornadaActual) || $xornadaActual->format('Y-m-d')!==$seguinteLuns->format('Y-m-d')) : ?>
-                            <?php $xornadaActual = $seguinteLuns ?>
-                            <tr>
-                                <th colspan="<?= $is_torneo ? '15' : '14'?>"><?= $seguinteLuns->modify('previous saturday')->format('Y-m-d') ?></th>
-                            </tr>
+                        <?php if($is_torneo) : ?>
+                            <?php if(empty($xornadaActual) || $xornadaActual->format('Y-m-d')!==$p->data_calendario->format('Y-m-d')) : ?>
+                                <?php $xornadaActual = $p->data_calendario ?>
+                                <tr>
+                                    <th colspan="<?= $is_torneo ? '15' : '14'?>"><?= $p->data_calendario->format('Y-m-d') ?></th>
+                                </tr>
+                            <?php endif ?>
+                        <?php else : ?>
+                            <?php $seguinteLuns = $p->data_calendario->modify('monday next week') ?>
+                            <?php if(empty($xornadaActual) || $xornadaActual->format('Y-m-d')!==$seguinteLuns->format('Y-m-d')) : ?>
+                                <?php $xornadaActual = $seguinteLuns ?>
+                                <tr>
+                                    <th colspan="<?= $is_torneo ? '15' : '14'?>"><?= $seguinteLuns->modify('previous saturday')->format('Y-m-d') ?></th>
+                                </tr>
+                            <?php endif ?>
                         <?php endif ?>
                         <?php
                             $rowClass = ($p->cancelado || $p->non_presentado_equipa1 || $p->non_presentado_equipa2 
@@ -45,8 +69,17 @@ $is_torneo = $competicion->tipo === 'torneo';
                                     ? 'bg-danger text-danger' : '';
                         ?>
                         <tr>
-                            <td class="<?= $rowClass ?> <?= $p->adiado?'text-warning':''?>"><?= empty($d=$p->formatDataHora()) ? '-' : $d ?></td>
-                            <td class="<?= $rowClass ?> <?= $p->adiado?'text-warning':''?>"><?= "{$p->fase->categoria} [X.{$p->xornada->numero}]" ?></td>
+                            <td class="<?= $rowClass ?> <?= $p->adiado?'text-warning':''?>">
+                                <?php $d = $is_torneo ? $p->formatHora() : $p->formatDataHora(); ?>
+                                <?= empty($d) ? '-' : $d ?>
+                            </td>
+                            <td class="<?= $rowClass ?> <?= $p->adiado?'text-warning':''?>">
+                                <?php if($is_torneo) : ?>
+                                    <?= empty($p->xornada->descricion) ? $p->fase->nome : $p->xornada->descricion ?>
+                                <?php else : ?>
+                                    <?= "{$p->fase->categoria} [X.{$p->xornada->numero}]" ?>
+                                <?php endif ?>
+                            </td>
                             <td class="<?= $rowClass ?> text-center"><?= empty($equipas[$p->id_equipa1]->logo) ? '' : $this->Html->image($equipas[$p->id_equipa1]->logo, ['width'=>30,'height'=>30]) ?></td>
                             <td class="<?= $rowClass ?>"><?= $equipas[$p->id_equipa1]->nome ?></td>
                             <td class="<?= $rowClass ?>"><?= $p->formatPuntuacionEquipa1() ?></td>

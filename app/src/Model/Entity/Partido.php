@@ -20,6 +20,13 @@ class Partido extends Entity {
         return $this->data_partido->format('Y-m-d').' '.$this->hora_partido;
     }
 
+    public function formatHora() {
+        if(empty($this->hora_partido)) {
+            return NULL;
+        }
+        return $this->hora_partido;
+    }
+
     public function getDataHora() {
         if(empty($this->data_partido)) {
             return NULL;

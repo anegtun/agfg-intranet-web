@@ -48,10 +48,17 @@ class ResultadosController extends AppController {
                     return $row;
                 });
             });
+        if(!empty($this->request->getQuery('id_fase'))) {
+            $partidos->where(['Partidos.id_fase' => $this->request->getQuery('id_fase')]);
+        }
+
+        $fases = $this->Fases
+            ->find()
+            ->where(['id_competicion'=>$id]);
         $arbitros = $this->Arbitros->findMap();
         $campos = $this->Campos->findMap();
         $equipas = $this->Equipas->findMap();
-        $this->set(compact('competicion', 'partidos', 'arbitros', 'campos', 'equipas'));
+        $this->set(compact('competicion', 'partidos', 'arbitros', 'campos', 'equipas', 'fases'));
     }
 
     public function partido($id) {
