@@ -48,7 +48,6 @@ class CalendarioController extends RestController {
             foreach($xornadasFase as $x) {
                 $resX = [
                     'data' => $x->data,
-                    'fase' => ['nome' => $f->nome],
                     'numero' => $x->numero,
                     'descricion' => $x->descricion,
                     'partidos' => []
@@ -69,7 +68,7 @@ class CalendarioController extends RestController {
                     ->contain('Campos')
                     ->where($conditions_partido);
                 foreach($partidos as $p) {
-                    $resX['partidos'][] = $this->_buildPartidoData($p, $equipas, $campos, $arbitros);
+                    $resX['partidos'][] = $this->_buildPartidoData($p, $f, $x, $equipas, $campos, $arbitros);
                 }
                 if($index>=0) {
                     $res['xornadas'][$index] = $resX;
@@ -122,7 +121,7 @@ class CalendarioController extends RestController {
             ->order(['data_calendario']);
         $res = [];
         foreach($partidos as $p) {
-            $res[] = $this->_buildPartidoData($p, $equipas, $campos, $arbitros);
+            $res[] = $this->_buildPartidoData($p, null, null, $equipas, $campos, $arbitros);
         }
         $this->set($res);
     }
@@ -148,7 +147,7 @@ class CalendarioController extends RestController {
             ->order(['data_calendario' => 'DESC']);
         $res = [];
         foreach($partidos as $p) {
-            $res[] = $this->_buildPartidoData($p, $equipas, $campos, $arbitros);
+            $res[] = $this->_buildPartidoData($p, null, null, $equipas, $campos, $arbitros);
         }
         $this->set($res);
     }
@@ -162,6 +161,10 @@ class CalendarioController extends RestController {
         $fase = $this->request->getQuery('fase');
         if(!empty($fase)) {
             $conditions['codigo'] = $fase;
+        }
+        $fases = $this->request->getQuery('fases');
+        if(!empty($fases)) {
+            $conditions['codigo IN'] = explode(",", $fases);
         }
         return $this->Fases->find()->where($conditions);
     }
@@ -192,7 +195,7 @@ class CalendarioController extends RestController {
             'partidos' => []
         ];
         foreach($partidos as $p) {
-            $resP = $this->_buildPartidoData($p, $equipas, $campos, $arbitros);
+            $resP = $this->_buildPartidoData($p, null, null, $equipas, $campos, $arbitros);
             $resP['fase'] = [
                 'categoria' => $categorias[$p->fase->categoria],
                 'nome' => $p->fase->nome
@@ -254,7 +257,7 @@ class CalendarioController extends RestController {
         return $data;
     }
 
-    private function _buildPartidoData($p, $equipas, $campos, $arbitros) {
+    private function _buildPartidoData($p, $f, $x, $equipas, $campos, $arbitros) {
         $resP = [
             'data_partido' => $p->getDataHora(),
             'adiado' => $p->adiado,
@@ -286,6 +289,12 @@ class CalendarioController extends RestController {
                 'tantos' => $p->tantos_equipa2,
                 'total' => $p->getPuntuacionTotalEquipa2(),
                 'non_presentado' => $p->non_presentado_equipa2
+            ];
+        }
+        if(!empty($f) || !empty($x)) {
+            $resP['fase'] = [
+                'fase' => empty($f->nome) ? null : $f->nome,
+                'subfase' => empty($x->descricion) ? null : $x->descricion
             ];
         }
         if(!empty($p->id_campo)) {
