@@ -37,7 +37,10 @@ class CalendarioController extends RestController {
         $campo_request = $this->request->getQuery('campo');
 
         $res = [
-            'competicion' => ['nome' => $competicion->nome],
+            'competicion' => [
+                'nome' => $competicion->nome,
+                'tipo' => $competicion->tipo
+            ],
             'xornadas' => []
         ];
         foreach($fases as $f) {
@@ -45,6 +48,9 @@ class CalendarioController extends RestController {
             foreach($xornadasFase as $x) {
                 $resX = [
                     'data' => $x->data,
+                    'fase' => ['nome' => $f->nome],
+                    'numero' => $x->numero,
+                    'descricion' => $x->descricion,
                     'partidos' => []
                 ];
                 $index = -1;
@@ -248,7 +254,7 @@ class CalendarioController extends RestController {
         return $data;
     }
 
-    private function _buildPartidoData($p, $equipas, $campos, $atrbitros) {
+    private function _buildPartidoData($p, $equipas, $campos, $arbitros) {
         $resP = [
             'data_partido' => $p->getDataHora(),
             'adiado' => $p->adiado,
@@ -290,9 +296,9 @@ class CalendarioController extends RestController {
             ];
         }
         if(!empty($p->id_arbitro)) {
-            $resP['atrbitro'] = [
-                'alcume' => $atrbitros[$p->id_arbitro]->alcume,
-                'nome' => $atrbitros[$p->id_arbitro]->nome
+            $resP['arbitro'] = [
+                'alcume' => $arbitros[$p->id_arbitro]->alcume,
+                'nome' => $arbitros[$p->id_arbitro]->nome
             ];
         }
         if(!empty($p->id_umpire)) {
