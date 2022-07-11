@@ -13,13 +13,13 @@ $submenu_option = empty($submenu_option) ? '' : $submenu_option;
         <meta name="theme-color" content="#ffffff">
         <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
         <!-- Favicon -->
-        <?= $this->Html->meta('favicon.ico', '/images/favicon/agfg-icon.png', array('type' => 'icon')) ?>
+        <?= $this->Html->meta('favicon.ico', '/images/favicon/agfg-icon.png', ['type' => 'icon']) ?>
         <!-- custom:css -->
-        <?= $this->Html->css(array("/maqint/maqint", "basic-page", "custom")) ?>
+        <?= $this->Html->css(["/maqint/maqint", "basic-page", "custom"]) ?>
         <!-- libs:js -->
         <?= $this->Html->script("/libs/ckeditor/ckeditor") ?>
         <!-- custom:js -->
-        <?= $this->Html->script(array("/maqint/maqint-config", "/maqint/maqint", "/maqint/support")) ?>
+        <?= $this->Html->script(["/maqint/maqint-config", "/maqint/maqint", "/maqint/support"]) ?>
         <!-- outros -->
         <?= $this->fetch('meta') ?>
         <?= $this->fetch('css') ?>
@@ -36,14 +36,6 @@ $submenu_option = empty($submenu_option) ? '' : $submenu_option;
         </div>
         <!-- Main Container -->
         <div id="main-wrapper">
-            <!-- Environment Display -->
-            <!--div id="env-display-top" class="env-display-red row">
-                <div class="hc-exception" id="env-display-content-top">
-                    <i class="fa fa-cogs"><span class="sr-only"></span></i><span class="env-display-name"></span>
-                </div>
-            </div-->
-
-            
             <header id="main-header" class="row">
                 <div id="header-controls">
                     <?= $this->Html->link(
@@ -66,7 +58,7 @@ $submenu_option = empty($submenu_option) ? '' : $submenu_option;
                                     <a href="#"><i class="glyphicon glyphicon-envelope" data-toggle="tooltip" data-placement="bottom" title="Mensaxes"><span class="notification danger">20</span><span class="sr-only">Mensaxes</span></i></a>
                                     <a href="#"><i class="glyphicon glyphicon-cog" data-toggle="tooltip" data-placement="bottom" title="Axustes"><span class="sr-only">Axustes</span></i></a>
                                     <a href="#"><i class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="bottom" title="Axuda"><span class="sr-only">Axuda</span></i></a-->
-                                </div>
+                                    </div>
                                 <div id="header-profile" class="col-xs-12 col-sm-2 col-md-5">
                                     <!-- Profile data -->
                                     <div class="dropdown" id="header-profile-data">
@@ -86,9 +78,9 @@ $submenu_option = empty($submenu_option) ? '' : $submenu_option;
                                             <li class="divider visible-xs"></li>
                                             <li class="hidden-from-md">
                                                 <?= $this->Html->link(
-                                                    '<span class="text-danger"><i class="glyphicon glyphicon-log-out p-r-5"><span class="sr-only">Saír</span></i> <strong >Saír</strong></span>',
-                                                    array('controller'=>'Users', 'action'=>'logout'),
-                                                    array('escape'=>false)
+                                                    '<span class="text-danger"><i class="glyphicon glyphicon-log-out p-r-5"><span class="sr-only">Saír</span></i> <strong>Saír</strong></span>',
+                                                    ['controller'=>'Users', 'action'=>'logout'],
+                                                    ['escape'=>false]
                                                 ) ?>
                                             </li>
                                         </ul>
@@ -96,8 +88,8 @@ $submenu_option = empty($submenu_option) ? '' : $submenu_option;
                                     <div id="header-logout" class="hidden-xs hidden-sm">
                                         <?= $this->Html->link(
                                             '<span class="text-danger"><i class="glyphicon glyphicon-off p-r-5" data-toggle="tooltip" title="Saír"  data-placement="bottom"><span class="sr-only">Saír</span></i></span>',
-                                            array('controller'=>'Users', 'action'=>'logout'),
-                                            array('escape'=>false)
+                                            ['controller'=>'Users', 'action'=>'logout'],
+                                            ['escape'=>false]
                                         ) ?>
                                     </div>
                                 </div>
@@ -112,7 +104,7 @@ $submenu_option = empty($submenu_option) ? '' : $submenu_option;
             <div id="main-content" class="row" role="main"><section id="basic-page" class="page">
                 <aside id="left-menu" class="no-selectable">
                     <div class="content-wrapper">
-                        <ul class="nav nav-pills nav-stacked" id="left-menu-content" role="navigation">
+                    <ul class="nav nav-pills nav-stacked" id="left-menu-content" role="navigation">
                             <li data-toggle="tooltip">
                                 <?= $this->Html->link(
                                     "<span class='glyphicon glyphicon-home'><span class='sr-only'>Inicio</span></span> Inicio",
@@ -181,21 +173,19 @@ $submenu_option = empty($submenu_option) ? '' : $submenu_option;
                 </aside>
 
                 <div class="page-content">
-                    <?= $this->Flash->render(); ?>
-
                     <div class="container-full gray-bg">
                         <div class="row page-header">
                             <div class="col-xs-12 m-b-15">
-                                <?php if(!empty($cabeceiraTitulo)) : ?>
-                                    <h1><?= $cabeceiraTitulo ?></h1>
+                                <?php if(isset($cabeceiraTitulo)) : ?>
+                                    <h1 class="hidden-xs hidden-sm"><?= $cabeceiraTitulo ?></h1>
                                 <?php endif ?>
-                                <?php if(!empty($cabeceiraMigas)) : ?>
+                                <?php if(isset($cabeceiraMigas)) : ?>
                                     <ol class="breadcrumb">
                                         <li>
-                                            <?= $this->Html->link(
+                                        <?= $this->Html->link(
                                                 '<i class="glyphicon glyphicon-home"><span class="sr-only">Inicio</span></i>',
                                                 ['controller'=>'Main', 'action'=>'index'],
-                                                ['escape'=>false]) ?>    
+                                                ['escape'=>false]) ?>
                                         </li>
                                         <?php foreach($cabeceiraMigas as $c) : ?>
                                             <?php if(!empty($c['url'])) : ?>
@@ -209,14 +199,17 @@ $submenu_option = empty($submenu_option) ? '' : $submenu_option;
                             </div>
                         </div>
                     </div>
-                    
-                    <?= $this->fetch('content'); ?>
+
+                    <div class="container-full" style="margin-top:2em;">
+                        <?= $this->Flash->render(); ?>
+                        <?= $this->fetch('content'); ?>
+                    </div>
                 </div>
             </div>
 
             <footer id="main-footer" class="row">
                 <div id="footer-logo">
-                    <a href="https://gaelicogalego.gal">
+                <a href="https://gaelicogalego.gal">
                         <?= $this->Html->image('/images/agfg-logo-footer.png', array('width'=>'150')) ?>
                     </a>
                 </div>
@@ -231,18 +224,12 @@ $submenu_option = empty($submenu_option) ? '' : $submenu_option;
                                     <i class="glyphicon glyphicon-bookmark" aria-label="Versión"><span class="sr-only">Versión</span></i>
                                     Ver. <span><?= $this->AgfgConfig->version() ?></span>
                                 </li>
-                                <!--li data-toggle="tooltip" title="Ver información de contacto" data-placement="left">
-                                    <a href="#" data-toggle="modal" data-target="#modal-contact-info">
-                                        <i class="glyphicon glyphicon-envelope" aria-label="Contacto"><span class="sr-only">Contacto</span></i>
-                                        Contacto
-                                    </a>
-                                </li-->
                             </ul>
                         </div>
                     </div>
                 </div>
             </footer>
-    </div>
+        </div>
 
-</body>
+    </body>
 </html>
