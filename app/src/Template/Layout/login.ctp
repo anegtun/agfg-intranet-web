@@ -7,13 +7,13 @@
         <meta name="theme-color" content="#ffffff">
         <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
         <!-- Favicon -->
-        <?= $this->Html->meta('favicon.ico', '/images/favicon/agfg-icon.png', array('type' => 'icon')) ?>
+        <?= $this->Html->meta('favicon.ico', '/images/favicon/agfg-icon.png', ['type' => 'icon']) ?>
         <!-- custom:css -->
-        <?= $this->Html->css(array("/maqint/maqint", "login-page")) ?>
+        <?= $this->Html->css(["/maqint/maqint", "login-page"]) ?>
         <!-- libs:js -->
         <?= $this->Html->script("/libs/ckeditor/ckeditor") ?>
         <!-- custom:js -->
-        <?= $this->Html->script(array("/maqint/maqint-config", "/maqint/maqint", "/maqint/support")) ?>
+        <?= $this->Html->script(["/maqint/maqint-config", "/maqint/maqint", "/maqint/support"]) ?>
     </head>
 
     <body>
@@ -31,9 +31,9 @@
                             <div class="panel-body">
                                 <div class="row">
                                     <div class="col-xs-12 col-md-6 login-left">
-                                        <div class="row">
-                                            <!-- Logo -->
-                                            <div class="col-xs-12 text-center login-logo">
+                                        <div class="col-xs-7 col-md-12 row">
+                                            <!-- Login logo -->
+                                            <div class="text-center login-logo">
                                                 <?= $this->Html->image("/images/agfg-logo.png", array('alt'=>'AGFG')); ?>
                                             </div>
 
@@ -46,21 +46,15 @@
                                         </div>
                                     </div>
                                     <div class="hidden-xs hidden-sm col-md-6 col-sm-8 login-right">
-                                        <!-- MAQINT logo -->
+                                        <!-- Main logo -->
                                         <div class="col-xs-12 text-center login-right-content">
                                             <?= $this->Html->image("/images/agfg-logo-main.png", array('alt'=>'AGFG', 'style'=>'width:200px; margin-bottom:200px')); ?>
                                         </div>
 
                                         <!-- Disclaimer -->
                                         <div class="xunta-disclaimer">
-                                            <!--div class="xunta-logo">
-                                                <a href="https://gaelicogalego.gal/">
-                                                    <span class="sr-only">Ir á páxina da Xunta</span>
-                                                    <img alt="Logo da Xunta" src="images/xunta-galicia-logo-medium.png" class="img-responsive">
-                                                </a>
-                                            </div-->
                                             <div class="xunta-disclaimer-text">
-                                                <p>Intranet da Asociación Galega de Fútbol Gaélico</p>
+                                            <p>Intranet da Asociación Galega de Fútbol Gaélico</p>
                                             </div>
                                             <div class="version">
                                                 Ver. <span><?= $this->AgfgConfig->version() ?></span>
