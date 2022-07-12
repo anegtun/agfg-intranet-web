@@ -5,6 +5,8 @@ $this->set('cabeceiraMigas', [
     ['label'=>'Competicións'],
     ['label'=>'Horarios e resultados']
 ]);
+
+$authUser = $this->request->getSession()->read('Auth.User');
 ?>
 
 <div class="row">
@@ -21,10 +23,12 @@ $this->set('cabeceiraMigas', [
             <tbody>
                 <?php foreach($competicions as $c) : ?>
                     <tr>
-                        <td><?= $this->Html->link($c->nome, ['action'=>'competicion', $c->id]) ?></td>
-                        <td><?= $tempadas[$c->tempada] ?></td>
-                        <td><?= empty($c->tipo) ? '' : $tiposCompeticion[$c->tipo] ?></td>
-                        <td><?= $c->codigo ?></td>
+                        <?php if($authUser['rol'] !== 'euro22' || $c->codigo === 'euro22') : ?>
+                            <td><?= $this->Html->link($c->nome, ['action'=>'competicion', $c->id]) ?></td>
+                            <td><?= $tempadas[$c->tempada] ?></td>
+                            <td><?= empty($c->tipo) ? '' : $tiposCompeticion[$c->tipo] ?></td>
+                            <td><?= $c->codigo ?></td>
+                        <?php endif ?>
                     </tr>
                 <?php endforeach ?>
             </tbody>
