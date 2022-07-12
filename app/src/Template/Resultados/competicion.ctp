@@ -99,8 +99,15 @@ $is_torneo = $competicion->tipo === 'torneo';
                 </div>
             </div>
 
-            <div class='agfg-partido-edit'>
-                <?= $this->Html->link('Editar', ['action'=>'partido', $p->id], ['class'=>'glyphicon glyphicon-edit']); ?>
+            <div class='agfg-partido-botons'>
+                <div class='agfg-partido-edit'>
+                    <?= $this->Html->link('Editar', ['action'=>'partido', $p->id], ['class'=>'glyphicon glyphicon-edit']); ?>
+                </div>
+                <?php if(!empty($p->observacions)) : ?>
+                    <div class="agfg-partido-observacions">
+                        <?= $this->Html->link('Ver observacións', '#', ['onclick'=>'return alert("'.$p->observacions.'")', 'class'=>'glyphicon glyphicon-exclamation-sign']); ?>
+                    </div>
+                <?php endif ?>
             </div>
 
         </div>

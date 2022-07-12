@@ -124,6 +124,12 @@ $emptyTemplates = [
                 </div>
             </div>
         </div>
+        <div class="row">
+            <div class="form-group col-lg-8">
+                <label>Observacións</label>
+            <?= $this->Form->textarea('observacions', ['class'=>'form-control', 'width'=>'100%']) ?>
+            </div>
+        </div>
         <?= $this->Form->button('Gardar', ['class'=>'btn btn-primary glyphicon glyphicon-saved']); ?>
     </fieldset>
 <?= $this->Form->end() ?>

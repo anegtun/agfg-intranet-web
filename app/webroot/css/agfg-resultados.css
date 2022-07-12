@@ -84,6 +84,15 @@
   margin-right: .5em;
 }
 
+.agfg-partido-botons {
+  display: flex;
+  justify-content: space-between;
+}
+
 .agfg-partido-edit {
   margin-top: .5em;
+}
+
+.agfg-partido-observacions {
+  text-align: right;
 }
