@@ -13,6 +13,9 @@ class Partido extends Entity {
         'id' => false
     );
 
+    protected $diasSemana = ['Dom','Lun','Mar','Mér','Xov','Ven','Sáb'];
+
+
     public function formatDataHora() {
         if(empty($this->data_partido)) {
             return NULL;
@@ -20,11 +23,11 @@ class Partido extends Entity {
         return $this->data_partido->format('Y-m-d').' '.$this->hora_partido;
     }
 
-    public function formatHora() {
+    public function formatDiaHora() {
         if(empty($this->hora_partido)) {
             return NULL;
         }
-        return $this->hora_partido;
+        return $this->diasSemana[$this->data_partido->format('w')].' '.$this->hora_partido;
     }
 
     public function getDataHora() {

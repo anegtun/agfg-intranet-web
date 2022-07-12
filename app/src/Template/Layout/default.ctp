@@ -15,7 +15,7 @@ $submenu_option = empty($submenu_option) ? '' : $submenu_option;
         <!-- Favicon -->
         <?= $this->Html->meta('favicon.ico', '/images/favicon/agfg-icon.png', ['type' => 'icon']) ?>
         <!-- custom:css -->
-        <?= $this->Html->css(["/maqint/maqint", "basic-page", "custom"]) ?>
+        <?= $this->Html->css(["/maqint/maqint", "basic-page", "agfg-resultados", "custom"]) ?>
         <!-- libs:js -->
         <?= $this->Html->script("/libs/ckeditor/ckeditor") ?>
         <!-- custom:js -->
