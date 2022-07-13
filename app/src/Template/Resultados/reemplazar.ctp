@@ -7,30 +7,23 @@ $this->set('cabeceiraMigas', [
     ['label'=>$competicion->nome]
 ]);
 
+$this->Html->script('reemplazar-equipos', ['block' => 'script']);
+
 $is_torneo = $competicion->tipo === 'torneo';
 ?>
 
 <div class="row form-group">
-    <?= $this->Form->setValueSources(['query','context'])->create(null, ['type'=>'get']) ?>
+    <?= $this->Form->create(null, ['type'=>'post', 'url'=>['action'=>'gardarReemplazo']]) ?>
+        <?= $this->Form->hidden('id_competicion', ['value'=>$competicion->id]) ?>
         <div class="row">
             <div class="col-lg-3">
-                <?= $this->Form->control('id_fase', ['options'=>$this->AgfgForm->objectToKeyValue($fases,'id','nome'), 'label'=>'Fase']) ?>
+                <?= $this->Form->control('id_orixinal', ['options'=>$this->AgfgForm->objectToKeyValue($equipas_competicion,'id','$e->nome ($e->categoria)'), 'label'=>'Equipa orixinal']) ?>
             </div>
             <div class="col-lg-3">
-                <?= $this->Form->control('id_campo', ['options'=>$this->AgfgForm->objectToKeyValue($campos,'id','nome'), 'label'=>'Campo']) ?>
-            </div>
-            <div class="col-lg-3">
-                <?= $this->Form->button('Buscar', ['class'=>'btn btn-primary', 'style'=> ['margin-top: 1.7em']]); ?>
+            <?= $this->Form->control('id_nova', ['options'=>$this->AgfgForm->objectToKeyValue($equipas_competicion,'id','$e->nome ($e->categoria)'), 'label'=>'Equipa nova']) ?>
             </div>
         </div>
-
-        <?php if($is_torneo) : ?>
-            <div class="row">
-                <div class="col-lg-3">
-                    <?= $this->Html->link('Reemplazar equipos', ['action'=>'reemplazar', $competicion->id], ['class'=>'btn btn-success']) ?>
-                </div>
-            </div>
-        <?php endif ?>
+        <?= $this->Form->button('Gardar', ['class'=>'btn btn-primary glyphicon glyphicon-saved', 'onclick'=>'return confirm(\'Estas seguro? Isto non se pode desfacer.\')']); ?>
     <?= $this->Form->end() ?>
 </div>
 
@@ -54,12 +47,10 @@ $is_torneo = $competicion->tipo === 'torneo';
             $desglose1 = (!is_null($p->goles_equipa1) || !is_null($p->goles_equipa2)) ? sprintf('%01d', $p->goles_equipa1)."-".sprintf('%02d', $p->tantos_equipa1) : '';
             $desglose2 = (!is_null($p->goles_equipa1) || !is_null($p->goles_equipa2)) ? sprintf('%01d', $p->goles_equipa2)."-".sprintf('%02d', $p->tantos_equipa2) : '';
 
-            $campo = empty($p->id_campo) ? '-' : $campos[$p->id_campo]->nome;
-            $arbitro = empty($p->id_arbitro) ? '-' : $arbitros[$p->id_arbitro]->alcume;
             $umpires = empty($p->id_umpire) ? '-' : "{$equipas[$p->id_umpire]->nome} ({$equipas[$p->id_umpire]->categoria})";
         ?>
 
-        <div class="agfg-partido">
+        <div class="agfg-partido" data-equipa1="<?= $p->id_equipa1 ?>" data-equipa2="<?= $p->id_equipa2 ?>" data-umpire="<?= $p->id_umpire ?>">
             
             <div class='agfg-partido-top'>
                 <div class='agfg-partido-top-data'><?= $hora ?></div>
@@ -92,32 +83,10 @@ $is_torneo = $competicion->tipo === 'torneo';
 
             <div class='agfg-partido-bottom'>
                 <div class='agfg-partido-bottom-detalle'>
-                    <figure><img class='alignnone' src='https://gaelicogalego.gal/wp-content/uploads/2022/07/icono-estadio.jpg' alt='Campo' width='15'></figure>
-                    <?= $campo ?>
-                </div>
-                <?php if($is_torneo) : ?>
-                    <div class='agfg-partido-bottom-detalle'>
-                        <figure><img class='alignnone' src='https://gaelicogalego.gal/wp-content/uploads/2022/07/icono-umpire.jpg' alt='Umpires' width='15'></figure>
-                        <?= $umpires ?>
-                    </div>
-                <?php endif ?>
-                <div class='agfg-partido-bottom-detalle'>
-                    <figure><img class='alignnone' src='https://gaelicogalego.gal/wp-content/uploads/2022/07/icono-silbato.jpg' alt='Árbitro' width='15'></figure>
-                    <?= $arbitro ?>
+                    <figure><img class='alignnone' src='https://gaelicogalego.gal/wp-content/uploads/2022/07/icono-umpire.jpg' alt='Umpires' width='15'></figure>
+                    <?= $umpires ?>
                 </div>
             </div>
-
-            <div class='agfg-partido-botons'>
-                <div class='agfg-partido-edit'>
-                    <?= $this->Html->link('Editar', ['action'=>'partido', $p->id], ['class'=>'glyphicon glyphicon-edit']); ?>
-                </div>
-                <?php if(!empty($p->observacions)) : ?>
-                    <div class="agfg-partido-observacions">
-                        <?= $this->Html->link('Ver observacións', '#', ['onclick'=>'return alert("'.$p->observacions.'")', 'class'=>'glyphicon glyphicon-exclamation-sign']); ?>
-                    </div>
-                <?php endif ?>
-            </div>
-
         </div>
 
     <?php endforeach ?>

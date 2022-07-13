@@ -74,6 +74,44 @@ class ResultadosController extends AppController {
         $this->set(compact('competicion', 'partidos', 'arbitros', 'campos', 'equipas', 'fases'));
     }
 
+    public function reemplazar($id) {
+        $this->competicion($id);
+        $competicion = $this->Competicions->get($id);
+        $equipas_competicion = $this->Equipas->find()->where(['id_clube' => $competicion->id_clube_virtual]);
+        $this->set(compact('equipas_competicion'));
+    }
+
+    public function gardarReemplazo() {
+        $data = $this->request->getData();
+        if(!empty($data['id_competicion']) && !empty($data['id_orixinal']) && !empty($data['id_nova'])) {
+            $partidos = $this->Partidos
+                ->find()
+                ->contain(['Fases'])
+                ->where(['Fases.id_competicion' => $data['id_competicion'], 'id_equipa1' => $data['id_orixinal']]);
+            foreach($partidos as $p) {
+                $p->id_equipa1 = $data['id_nova'];
+                $this->Partidos->save($p);
+            }
+            $partidos = $this->Partidos
+                ->find()
+                ->contain(['Fases'])
+                ->where(['Fases.id_competicion' => $data['id_competicion'], 'id_equipa2' => $data['id_orixinal']]);
+            foreach($partidos as $p) {
+                $p->id_equipa2 = $data['id_nova'];
+                $this->Partidos->save($p);
+            }
+            $partidos = $this->Partidos
+                ->find()
+                ->contain(['Fases'])
+                ->where(['Fases.id_competicion' => $data['id_competicion'], 'id_umpire' => $data['id_orixinal']]);
+            foreach($partidos as $p) {
+                $p->id_umpire = $data['id_nova'];
+                $this->Partidos->save($p);
+            }
+        }
+        return $this->redirect(['action'=>'competicion', $data['id_competicion']]);
+    }
+
     public function partido($id) {
         $partido = $this->Partidos->get($id);
         $partido->xornada = $this->Xornadas->get($partido->id_xornada);
