@@ -46,7 +46,7 @@ $this->set('cabeceiraMigas', [
                 </tr>
             </thead>
             <tbody>
-                <?php foreach($equipas as $e) : ?>
+                <?php foreach($clube->equipas as $e) : ?>
                     <tr>
                         <td class="text-center"><?= empty($e->logo) ? '' : $this->Html->image($e->logo, ['width'=>30,'height'=>30]) ?></td>
                         <td><?= $e->codigo ?></td>
@@ -60,5 +60,39 @@ $this->set('cabeceiraMigas', [
             <tbody>
         </table>
         <?= $this->Html->link('Crear', ['action'=>'detalleEquipa', 'idClube'=>$clube->id], ['class'=>'btn btn-primary']) ?>
+    </div>
+
+    <div class="row" style="margin-top:2em;">
+        <h3>Federacions</h3>
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th class="celda-titulo"></th>
+                    <th class="celda-titulo">Código</th>
+                    <th class="celda-titulo">Nome</th>
+                    <th class="celda-titulo">Pertence</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach($federacions as $f) : ?>
+                    <?php
+                    $belongs = false;
+                    foreach($clube->federacions as $fc) {
+                        if($fc->id == $f->id) {
+                            $belongs = true;
+                        }
+                    }
+                    ?>
+                    <tr>
+                        <td class="text-center"><?= empty($f->logo) ? '' : $this->Html->image($f->logo, ['width'=>30,'height'=>30]) ?></td>
+                        <td><?= $f->codigo ?></td>
+                        <td><?= $f->nome ?></td>
+                        <td class="text-center">
+                            <?= $belongs ? 'OK' : '' ?>
+                        </td>
+                    </tr>
+                <?php endforeach ?>
+            <tbody>
+        </table>
     </div>
 <?php endif ?>

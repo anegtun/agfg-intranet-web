@@ -4,20 +4,16 @@ namespace App\Model\Table;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
-class ClubesTable extends Table {
+class FederacionsTable extends Table {
 
     public function initialize(array $config) {
-        $this->setTable('agfg_clubes');
+        $this->setTable('agfg_federacions');
 
-        $this->hasMany('Equipas', [
+        $this->belongsToMany('Clubes', [
             'joinTable' => 'agfg_federacion_clubes',
-            'foreignKey' => 'id_clube'
-        ]);
-
-        $this->belongsToMany('Federacions', [
-            'joinTable' => 'agfg_federacion_clubes',
-            'foreignKey' => 'id_clube',
-            'targetForeignKey' => 'id_federacion'
+            'foreignKey' => 'id_federacion',
+            'targetForeignKey' => 'id_clube',
+            'propertyName' => 'clubes'
         ]);
     }
 

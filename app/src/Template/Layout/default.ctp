@@ -167,6 +167,11 @@ $submenu_option = empty($submenu_option) ? '' : $submenu_option;
                                                 <?= $this->Html->link('Clubes', ['controller'=>'Clubes', 'action'=>'index']) ?>
                                             </li>
                                         <?php endif ?>
+                                        <?php if($authUser['rol']==='admin') : ?>
+                                            <li <?=$submenu_option==='federacions'?'class="active"':''?>>
+                                                <?= $this->Html->link('Federacións', ['controller'=>'Federacions', 'action'=>'index']) ?>
+                                            </li>
+                                        <?php endif ?>
                                     </ul>
                                 </li>
                             <?php endif ?>

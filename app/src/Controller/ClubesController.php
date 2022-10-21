@@ -12,6 +12,7 @@ class ClubesController extends AppController {
         parent::initialize();
         $this->Categorias = new Categorias();
         $this->Equipas = TableRegistry::get('Equipas');
+        $this->Federacions = TableRegistry::get('Federacions');
     }
 
     public function index() {
@@ -22,13 +23,12 @@ class ClubesController extends AppController {
     public function detalle($id=null) {
         if(empty($id)) {
             $clube =  $this->Clubes->newEntity();
-            $equipas = [];
         } else {
-            $clube = $this->Clubes->get($id);
-            $equipas = $this->Equipas->find()->where(['id_clube'=>$id]);
+            $clube = $this->Clubes->get($id, [ 'contain' => ['Equipas', 'Federacions'] ]);
         }
         $categorias = $this->Categorias->getCategoriasWithEmpty();
-        $this->set(compact('clube', 'equipas', 'categorias'));
+        $federacions = $this->Federacions->find('all', ['order'=>'codigo']);
+        $this->set(compact('clube', 'categorias', 'federacions'));
     }
 
     public function gardar() {
