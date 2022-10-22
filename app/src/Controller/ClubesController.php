@@ -34,7 +34,12 @@ class ClubesController extends AppController {
     public function gardar() {
         $clube = $this->Clubes->newEntity();
         if ($this->request->is('post') || $this->request->is('put')) {
-            $clube = $this->Clubes->patchEntity($clube, $this->request->getData());
+            $data = $this->request->getData();
+            $clube = $this->Clubes->patchEntity($clube, $data);
+            $clube->federacions = $this->Federacions->find()
+                ->where(['id IN' => $data['federacions']])
+                ->toArray();
+            $clube->setDirty('federacions', true);
             if ($this->Clubes->save($clube)) {
                 $this->Flash->success(__('Gardouse o clube correctamente.'));
                 return $this->redirect(['action'=>'index']);
