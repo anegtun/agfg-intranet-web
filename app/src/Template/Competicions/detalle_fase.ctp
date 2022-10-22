@@ -31,10 +31,20 @@ $this->Html->script('detalle-fase', ['block' => 'script']);
                     <input type="hidden" name="equipas" class="form-control" value="">
 
                     <?php foreach($equipas as $e) : ?>
+                        <?php
+                            $equipa = null;
+                            if(!empty($fase->equipas)) {
+                                foreach($fase->equipas as $fe) {
+                                    if($fe->id == $e->id) {
+                                        $equipa = $fe;
+                                    }
+                                }
+                            }
+                        ?>
                         <label for="equipas-<?= $e->id ?>" class="selected">
-                            <input type="checkbox" name="equipas[<?= $e->id ?>]" id="equipas-<?= $e->id ?>" value="<?= $e->id ?>" <?= empty($fase->equipas[$e->id]) ? '' : 'checked="checked"' ?> />
+                            <input type="checkbox" name="equipas[<?= $e->id ?>]" id="equipas-<?= $e->id ?>" value="<?= $e->id ?>" <?= empty($equipa) ? '' : 'checked="checked"' ?> />
                             <?= $e->nome ?>
-                            <input type="number" name="puntos[<?= $e->id ?>]" id="puntos-<?= $e->id ?>" value="<?= empty($fase->equipas[$e->id]->puntos) ? '' : $fase->equipas[$e->id]->puntos ?>" />
+                            <input type="number" name="puntos[<?= $e->id ?>]" id="puntos-<?= $e->id ?>" value="<?= empty($equipa->_joinData->puntos) ? '' : $equipa->_joinData->puntos ?>" />
                         </label>
                         <br/>
                     <?php endforeach ?>

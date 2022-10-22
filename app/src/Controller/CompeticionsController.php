@@ -28,7 +28,7 @@ class CompeticionsController extends AppController {
     public function index() {
         $competicions = $this->Competicions->find()
             ->contain('Federacion')
-            ->order(['Competicions.tempada DESC','Competicions.nome']);
+            ->order(['Competicions.tempada DESC','Competicions.id DESC']);
 
         $tempadas = $this->Tempadas->getTempadas();
         $tiposCompeticion = $this->TiposCompeticion->getTipos();
@@ -45,9 +45,8 @@ class CompeticionsController extends AppController {
         $categorias = $this->Categorias->getCategoriasWithEmpty();
         $tempadas = $this->Tempadas->getTempadasWithEmpty();
         $tiposCompeticion = $this->TiposCompeticion->getTiposWithEmpty();
-        $clubes = $this->Clubes->find();
         $federacions = $this->Federacions->find();
-        $this->set(compact('competicion', 'categorias', 'federacions', 'tempadas', 'tiposCompeticion', 'clubes'));
+        $this->set(compact('competicion', 'categorias', 'federacions', 'tempadas', 'tiposCompeticion'));
     }
 
     public function gardar() {
@@ -84,15 +83,17 @@ class CompeticionsController extends AppController {
             $equipas = [];
             $outras_fases = $this->Fases->find()->where(['id_competicion'=>$fase->id_competicion]);
         } else {
-            $fase = $this->Fases->get($id);
-            $fase->equipas = [];
-            $fasesEquipas = $this->FasesEquipas->find()->where(['id_fase'=>$fase->id]);
-            foreach($fasesEquipas as $fe) {
-                $fase->equipas[$fe->id_equipa] = $fe;
-            }
+            $fase = $this->Fases->get($id, [ 'contain' => [ 'Competicion', 'Equipas' ] ]);
             $fase->xornadas = $this->Xornadas->findWithPartidos($fase->id);
             $fase->equipasData = $this->Equipas->findInFase($fase->id);
-            $equipas = $this->Equipas->find()->where(['categoria'=>$fase->categoria])->order(['nome']);
+
+            $id_clubes = $this->Clubes->findInFederacion($fase->competicion->id_federacion)
+                ->extract('id')
+                ->toList();
+
+            $equipas = $this->Equipas->find()
+                ->where(['Equipas.id_clube IN' => $id_clubes, 'Equipas.categoria' => $fase->categoria])
+                ->order(['Equipas.nome']);
             $outras_fases = $this->Fases->find()->where(['id_competicion'=>$fase->id_competicion, 'id !='=>$id]);
         }
         $categorias = $this->Categorias->getCategoriasWithEmpty();
