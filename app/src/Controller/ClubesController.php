@@ -16,18 +16,33 @@ class ClubesController extends AppController {
     }
 
     public function index() {
-        $clubes = $this->Clubes->find('all', ['order'=>'codigo']);
-        $this->set(compact('clubes'));
+        $clubes = $this->Clubes->find()
+            ->contain('Federacions')
+            ->order('Clubes.codigo');
+
+        if (!empty($this->request->getQuery('id_federacion'))) {
+            $clubes->matching('Federacions', function ($q) {
+                return $q->where(['Federacions.id' => $this->request->getQuery('id_federacion')]);
+            });
+        }
+
+        $federacions = $this->Federacions->find()
+            ->order('codigo');
+        
+        $this->set(compact('clubes', 'federacions'));
     }
 
     public function detalle($id=null) {
         if(empty($id)) {
             $clube =  $this->Clubes->newEntity();
         } else {
-            $clube = $this->Clubes->get($id, [ 'contain' => ['Equipas', 'Federacions'] ]);
+            $clube = $this->Clubes->get($id, [
+                'contain' => ['Equipas' => ['sort' => 'Equipas.codigo'], 'Federacions']
+            ]);
         }
         $categorias = $this->Categorias->getCategoriasWithEmpty();
-        $federacions = $this->Federacions->find('all', ['order'=>'codigo']);
+        $federacions = $this->Federacions->find()
+            ->order('codigo');
         $this->set(compact('clube', 'categorias', 'federacions'));
     }
 

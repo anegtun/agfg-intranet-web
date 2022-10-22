@@ -20,14 +20,20 @@ class CompeticionsController extends AppController {
         $this->Fases = TableRegistry::get('Fases');
         $this->Equipas = TableRegistry::get('Equipas');
         $this->FasesEquipas = TableRegistry::get('FasesEquipas');
+        $this->Federacions = TableRegistry::get('Federacions');
         $this->Partidos = TableRegistry::get('Partidos');
         $this->Xornadas = TableRegistry::get('Xornadas');
     }
 
     public function index() {
-        $this->set('tempadas', $this->Tempadas->getTempadas());
-        $this->set('tiposCompeticion', $this->TiposCompeticion->getTipos());
-        $this->set('competicions', $this->Competicions->find('all', ['order'=>'tempada DESC','nome']));
+        $competicions = $this->Competicions->find()
+            ->contain('Federacion')
+            ->order(['Competicions.tempada DESC','Competicions.nome']);
+
+        $tempadas = $this->Tempadas->getTempadas();
+        $tiposCompeticion = $this->TiposCompeticion->getTipos();
+
+        $this->set(compact('competicions', 'tempadas', 'tiposCompeticion'));
     }
 
     public function detalle($id=null) {
@@ -40,7 +46,8 @@ class CompeticionsController extends AppController {
         $tempadas = $this->Tempadas->getTempadasWithEmpty();
         $tiposCompeticion = $this->TiposCompeticion->getTiposWithEmpty();
         $clubes = $this->Clubes->find();
-        $this->set(compact('competicion', 'categorias', 'tempadas', 'tiposCompeticion', 'clubes'));
+        $federacions = $this->Federacions->find();
+        $this->set(compact('competicion', 'categorias', 'federacions', 'tempadas', 'tiposCompeticion', 'clubes'));
     }
 
     public function gardar() {

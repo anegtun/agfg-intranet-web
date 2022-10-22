@@ -31,9 +31,11 @@ $this->set('cabeceiraMigas', [
                     <?php foreach($federacions as $f) : ?>
                         <?php
                         $belongs = false;
-                        foreach($clube->federacions as $fc) {
-                            if($fc->id == $f->id) {
-                                $belongs = true;
+                        if(!empty($clube->federacions)) {
+                            foreach($clube->federacions as $fc) {
+                                if($fc->id == $f->id) {
+                                    $belongs = true;
+                                }
                             }
                         }
                         ?>
