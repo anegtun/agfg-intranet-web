@@ -4,7 +4,8 @@ namespace App\Model;
 class Tempadas {
     
     public function getTempadas() {
-        return array(
+        return [
+            '2022-23' => '2022/23',
             '2021-22' => '2021/22',
             '2020-21' => '2020/21',
             '2019-20' => '2019/20',
@@ -15,7 +16,7 @@ class Tempadas {
             '2014-15' => '2014/15',
             '2013-14' => '2013/14',
             '2012-13' => '2012/13'
-        );
+        ];
     }
     
     public function getTempadasWithEmpty() {
