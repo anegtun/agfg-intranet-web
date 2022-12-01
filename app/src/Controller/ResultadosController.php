@@ -136,7 +136,10 @@ class ResultadosController extends AppController {
             ->where(['id_clube IN' => $id_clubes])
             ->order('nome');
 
-        $arbitros = $this->Arbitros->findMap();
+        $arbitros = $this->Arbitros->findMap(true);
+        if ($partido->id_arbitro) {
+            $arbitros[$partido->id_arbitro] = $this->Arbitros->get($partido->id_arbitro);
+        }
         $campos = $this->Campos->findMap();
         $equipas = $this->Equipas->findMap();
         $categorias = $this->Categorias->getCategorias();

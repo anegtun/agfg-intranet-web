@@ -22,10 +22,14 @@ $this->set('cabeceiraMigas', [
             <tbody>
                 <?php foreach($arbitros as $a) : ?>
                     <tr>
-                        <td><?= $a->alcume ?></td>
+                        <td><?= $this->Html->link($a->alcume, ['action'=>'detalle', $a->id]) ?></td>
                         <td><?= $a->nif ?></td>
                         <td><?= $a->nome ?></td>
-                        <td class="text-center"><?= $this->AgfgForm->editButton(['action'=>'detalle', $a->id]) ?></td>
+                        <td class="text-center">
+                            <?php if($a->activo) : ?>
+                                <a href="javascript:void(0)"><em class="glyphicon glyphicon-user"></em></a>
+                            <?php endif ?>
+                        </td>
                         <td class="text-center"><?= $this->AgfgForm->deleteButton(['action'=>'borrar', $a->id]) ?></td>
                     </tr>
                 <?php endforeach ?>

@@ -6,6 +6,10 @@ $this->set('cabeceiraMigas', [
     ['label'=>'Árbitros', 'url'=>['controller'=>'Arbitros', 'action'=>'index']],
     ['label'=>'Detalle']
 ]);
+$emptyTemplates = [
+    'inputContainer' => '{{content}}',
+    'input' => '<input type="{{type}}" name="{{name}}" {{attrs}}/>',
+];
 ?>
 
 <div class="row">
@@ -16,6 +20,10 @@ $this->set('cabeceiraMigas', [
             <?= $this->Form->control('alcume', ['label'=>'Alcume']) ?>
             <?= $this->Form->control('nif', ['label'=>'NIF']) ?>
             <?= $this->Form->control('nome', ['label'=>'Nome completo']) ?>
+            <div class="form-group">
+                <?= $this->Form->checkbox('activo', ['id'=>'activo','templates'=>$emptyTemplates]) ?>
+                <label for="activo">Activo</label>
+            </div>
             <?= $this->Form->button('Gardar', ['class'=>'btn btn-primary']); ?>
         </fieldset>
     <?= $this->Form->end() ?>
