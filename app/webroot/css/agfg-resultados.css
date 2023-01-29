@@ -1,17 +1,16 @@
 .agfg-competicion {
   display: flex;
   flex-wrap: wrap;
-  gap: 5em;
+  gap: 2em 5em;
   justify-content: flex-start;
   align-content: center;
 }
 
 .agfg-xornada {
-  padding-top: 1em;
-}
-.agfg-xornada h4 {
+  flex-basis: 100%;
   text-align: center;
-  margin-top: 2em;
+  font-weight: bold;
+  color: #134876;
 }
 
 .agfg-partido {

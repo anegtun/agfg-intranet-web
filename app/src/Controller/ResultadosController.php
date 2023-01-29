@@ -40,6 +40,7 @@ class ResultadosController extends AppController {
 
     public function competicion($id) {
         $competicion = $this->Competicions->get($id, ['contain'=>['Fases']]);
+  
         $xornadas = [];
         $partidos = $this->Partidos
             ->find()
