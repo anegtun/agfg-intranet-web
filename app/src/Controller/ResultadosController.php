@@ -28,9 +28,14 @@ class ResultadosController extends AppController {
     }
 
     public function index() {
-        $this->set('tempadas', $this->Tempadas->getTempadas());
-        $this->set('tiposCompeticion', $this->TiposCompeticion->getTipos());
-        $this->set('competicions', $this->Competicions->find('all', ['order'=>'tempada DESC','nome']));
+        $competicions = $this->Competicions->find()
+            ->contain('Federacion')
+            ->order(['Competicions.tempada DESC','Competicions.nome ASC']);
+
+        $tempadas = $this->Tempadas->getTempadas();
+        $tiposCompeticion = $this->TiposCompeticion->getTipos();
+
+        $this->set(compact('competicions', 'tempadas', 'tiposCompeticion'));
     }
 
     public function competicion($id) {

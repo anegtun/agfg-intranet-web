@@ -14,7 +14,7 @@ $is_torneo = $competicion->tipo === 'torneo';
     <?= $this->Form->setValueSources(['query','context'])->create(null, ['type'=>'get']) ?>
         <div class="row">
             <div class="col-lg-3">
-                <?= $this->Form->control('id_fase', ['options'=>$this->AgfgForm->objectToKeyValue($fases,'id','nome'), 'label'=>'Fase']) ?>
+                <?= $this->Form->control('id_fase', ['options'=>$this->AgfgForm->objectToKeyValue($fases,'id','$e->categoria - $e->nome'), 'label'=>'Fase']) ?>
             </div>
             <div class="col-lg-3">
                 <?= $this->Form->control('id_campo', ['options'=>$this->AgfgForm->objectToKeyValue($campos,'id','nome'), 'label'=>'Campo']) ?>
@@ -36,6 +36,8 @@ $is_torneo = $competicion->tipo === 'torneo';
 
 <div class="agfg-competicion">
 
+    <?php $data_xornada = "" ?>
+
     <?php foreach($partidos as $p) : ?>
         <?php
             $fase = "";
@@ -45,6 +47,9 @@ $is_torneo = $competicion->tipo === 'torneo';
                 $fase = "{$p->fase->categoria} [X.{$p->xornada->numero}]";
             }
             $hora = $is_torneo ? $p->formatDiaHora() : $p->formatDataHora();
+
+            $data_referencia = $p->data_partido ? $p->data_partido : $p->xornada->data;
+            $sabado = $data_referencia->modify('next monday')->modify('previous saturday')->format('Y-m-d');
 
             $logo1 = empty($equipas[$p->id_equipa1]->logo) ? '' : $this->Html->image($equipas[$p->id_equipa1]->logo, ['width'=>25]);
             $logo2 = empty($equipas[$p->id_equipa2]->logo) ? '' : $this->Html->image($equipas[$p->id_equipa2]->logo, ['width'=>25]);
@@ -58,6 +63,11 @@ $is_torneo = $competicion->tipo === 'torneo';
             $arbitro = empty($p->id_arbitro) ? '-' : $arbitros[$p->id_arbitro]->alcume;
             $umpires = empty($p->id_umpire) ? '-' : "{$equipas[$p->id_umpire]->nome} ({$equipas[$p->id_umpire]->categoria})";
         ?>
+
+        <?php if($data_xornada !== $sabado) : ?>
+            <?php $data_xornada = $sabado; ?>
+            <div class="agfg-xornada"><?= $data_xornada ?></div>
+        <?php endif?>
 
         <div class="agfg-partido">
             

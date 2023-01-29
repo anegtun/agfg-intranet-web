@@ -28,7 +28,7 @@ class CompeticionsController extends AppController {
     public function index() {
         $competicions = $this->Competicions->find()
             ->contain('Federacion')
-            ->order(['Competicions.tempada DESC','Competicions.id DESC']);
+            ->order(['Competicions.tempada DESC','Competicions.nome ASC']);
 
         $tempadas = $this->Tempadas->getTempadas();
         $tiposCompeticion = $this->TiposCompeticion->getTipos();
