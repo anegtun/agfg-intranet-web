@@ -45,13 +45,16 @@ foreach($previsions as $p) {
 
         <div class="row">
             <div class="col-lg-2">
+                <?= $this->Form->control('id_area', ['options'=>$this->AgfgForm->objectToKeyValue($areas,'id','nome'), 'label'=>'Area', 'class'=>'form-control']) ?>
+            </div>
+            <div class="col-lg-2">
+                <?= $this->Form->control('tempada', ['options'=>$tempadas, 'label'=>'Tempada', 'class'=>'form-control']) ?>
+            </div>
+            <div class="col-lg-2">
                 <?= $this->Form->control('data_ini', ['type'=>'text', 'class'=>'form-control fld-date', 'label'=>'Data inicio', 'templates'=>$emptyTemplates]) ?>
             </div>
             <div class="col-lg-2">
                 <?= $this->Form->control('data_fin', ['type'=>'text', 'class'=>'form-control fld-date', 'label'=>'Data fin', 'templates'=>$emptyTemplates]) ?>
-            </div>
-            <div class="col-lg-2">
-                <?= $this->Form->control('tempada', ['options'=>$tempadas, 'label'=>'Tempada', 'class'=>'form-control']) ?>
             </div>
         </div>
 

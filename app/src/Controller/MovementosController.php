@@ -12,6 +12,7 @@ class MovementosController extends AppController {
     
     public function initialize() {
         parent::initialize();
+        $this->Areas = TableRegistry::get('MovementosArea');
         $this->Contas = new Contas();
         $this->Tempadas = new Tempadas();
         $this->Clubes = TableRegistry::get('Clubes');
@@ -39,6 +40,7 @@ class MovementosController extends AppController {
         $tempadas = $this->Tempadas->getTempadasWithEmpty();
         $movementos = $this->movementosFiltrados(false);
         $previsions = $this->movementosFiltrados(true);
+        $areas = $this->Areas->find('all', ['order'=>'nome']);
 
         $resumo = [];
         foreach($movementos as $m) {
@@ -84,7 +86,7 @@ class MovementosController extends AppController {
         }
         usort($resumo, ["self", "cmpResumo"]);
 
-        $this->set(compact('movementos', 'previsions', 'resumo', 'tempadas'));
+        $this->set(compact('areas', 'movementos', 'previsions', 'resumo', 'tempadas'));
     }
 
     public function resumoClubes() {
@@ -185,6 +187,7 @@ class MovementosController extends AppController {
             ->find('all', ['order'=>["data $sort", "Movementos.id $sort"]])
             ->contain(['Subarea' => ['Area'], 'Clube'])
             ->where(['prevision' => $prevision]);
+
         if(!empty($this->request->getQuery('data_ini'))) {
             $movementos->where(['data >=' => FrozenDate::createFromFormat('d-m-Y', $this->request->getQuery('data_ini'))]);
         }
@@ -196,6 +199,9 @@ class MovementosController extends AppController {
         }
         if(!empty($this->request->getQuery('tempada'))) {
             $movementos->where(['tempada' => $this->request->getQuery('tempada')]);
+        }
+        if(!empty($this->request->getQuery('id_area'))) {
+            $movementos->where(['Subarea.id_area' => $this->request->getQuery('id_area')]);
         }
         if(!empty($this->request->getQuery('id_subarea'))) {
             $movementos->where(['id_subarea' => $this->request->getQuery('id_subarea')]);
