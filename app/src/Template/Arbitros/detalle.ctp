@@ -20,6 +20,7 @@ $emptyTemplates = [
             <?= $this->Form->control('alcume', ['label'=>'Alcume']) ?>
             <?= $this->Form->control('nif', ['label'=>'NIF']) ?>
             <?= $this->Form->control('nome', ['label'=>'Nome completo']) ?>
+            <?= $this->Form->control('nome_publico', ['label'=>'Nome público']) ?>
             <div class="form-group">
                 <?= $this->Form->checkbox('activo', ['id'=>'activo','templates'=>$emptyTemplates]) ?>
                 <label for="activo">Activo</label>

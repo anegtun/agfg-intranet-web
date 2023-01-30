@@ -307,7 +307,7 @@ class CalendarioController extends RestController {
         if(!empty($p->id_arbitro)) {
             $resP['arbitro'] = [
                 'alcume' => $arbitros[$p->id_arbitro]->alcume,
-                'nome' => $arbitros[$p->id_arbitro]->nome
+                'nome' => $arbitros[$p->id_arbitro]->nome_publico
             ];
         }
         if(!empty($p->id_umpire)) {

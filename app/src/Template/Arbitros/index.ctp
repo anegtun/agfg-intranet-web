@@ -15,6 +15,7 @@ $this->set('cabeceiraMigas', [
                     <th class="celda-titulo">Alcume</th>
                     <th class="celda-titulo">NIF</th>
                     <th class="celda-titulo">Nome</th>
+                    <th class="celda-titulo">Nome público</th>
                     <th class="celda-titulo"></th>
                     <th class="celda-titulo"></th>
                 </tr>
@@ -25,6 +26,7 @@ $this->set('cabeceiraMigas', [
                         <td><?= $this->Html->link($a->alcume, ['action'=>'detalle', $a->id]) ?></td>
                         <td><?= $a->nif ?></td>
                         <td><?= $a->nome ?></td>
+                        <td><?= $a->nome_publico ?></td>
                         <td class="text-center">
                             <?php if($a->activo) : ?>
                                 <a href="javascript:void(0)"><em class="glyphicon glyphicon-user"></em></a>

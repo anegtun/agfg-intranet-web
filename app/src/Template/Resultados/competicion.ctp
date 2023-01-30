@@ -59,7 +59,7 @@ $is_torneo = $competicion->tipo === 'torneo';
             $desglose1 = (!is_null($p->goles_equipa1) || !is_null($p->goles_equipa2)) ? sprintf('%01d', $p->goles_equipa1)."-".sprintf('%02d', $p->tantos_equipa1) : '';
             $desglose2 = (!is_null($p->goles_equipa1) || !is_null($p->goles_equipa2)) ? sprintf('%01d', $p->goles_equipa2)."-".sprintf('%02d', $p->tantos_equipa2) : '';
 
-            $campo = empty($p->id_campo) ? '-' : $campos[$p->id_campo]->nome;
+            $campo = empty($p->id_campo) ? '-' : $campos[$p->id_campo]->nome_curto;
             $arbitro = empty($p->id_arbitro) ? '-' : $arbitros[$p->id_arbitro]->alcume;
             $umpires = empty($p->id_umpire) ? '-' : "{$equipas[$p->id_umpire]->nome} ({$equipas[$p->id_umpire]->categoria})";
         ?>
@@ -79,7 +79,7 @@ $is_torneo = $competicion->tipo === 'torneo';
             <div class="agfg-partido-equipas">
                 <div class='agfg-partido-equipa'>
                     <div><figure><?= $logo1 ?></figure></div>
-                    <div class='agfg-partido-equipa-nome'><?= $equipas[$p->id_equipa1]->nome ?></div>
+                    <div class='agfg-partido-equipa-nome'><?= $equipas[$p->id_equipa1]->nome_curto ?></div>
                     <div class='agfg-partido-resultado-equipa1 <?= $p->getGanador()==='L'?'agfg-partido-resultado-ganador':'' ?>'>
                         <div><?= $total1 ?></div>
                         <?php if(!empty($desglose1)) : ?>
@@ -89,7 +89,7 @@ $is_torneo = $competicion->tipo === 'torneo';
                 </div>
                 <div class='agfg-partido-equipa'>
                     <div><figure><?= $logo2 ?></figure></div>
-                    <div class='agfg-partido-equipa-nome'><?= $equipas[$p->id_equipa2]->nome ?></div>
+                    <div class='agfg-partido-equipa-nome'><?= $equipas[$p->id_equipa2]->nome_curto ?></div>
                     <div class='agfg-partido-resultado-equipa2 <?= $p->getGanador()==='V'?'agfg-partido-resultado-ganador':'' ?>'>
                         <div><?= $total2 ?></div>
                         <?php if(!empty($desglose2)) : ?>
