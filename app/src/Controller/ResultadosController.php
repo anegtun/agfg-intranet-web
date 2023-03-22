@@ -146,7 +146,10 @@ class ResultadosController extends AppController {
         if ($partido->id_arbitro) {
             $arbitros[$partido->id_arbitro] = $this->Arbitros->get($partido->id_arbitro);
         }
-        $campos = $this->Campos->findMap();
+        $campos = $this->Campos->findMap(true);
+        if ($partido->id_campo) {
+            $campos[$partido->id_campo] = $this->Campos->get($partido->id_campo);
+        }
         $equipas = $this->Equipas->findMap();
         $categorias = $this->Categorias->getCategorias();
         $this->set(compact('partido', 'arbitros', 'campos', 'equipas', 'umpires', 'categorias'));

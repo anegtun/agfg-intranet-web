@@ -10,8 +10,11 @@ class CamposTable extends Table {
         $this->setTable('agfg_campos');
     }
 
-    public function findMap() {
+    public function findMap($soloActivo = false) {
         $bd = $this->find()->order('nome');
+        if  ($soloActivo) {
+            $bd->where(['activo' => 1]);
+        }
         $res = [];
         foreach($bd as $e) {
             $res[$e->id] = $e;

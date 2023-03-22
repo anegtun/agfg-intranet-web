@@ -24,10 +24,14 @@ $this->set('cabeceiraMigas', [
                 <?php foreach($campos as $c) : ?>
                     <tr>
                         <td><?= $c->pobo ?></td>
-                        <td><?= $c->nome ?></td>
+                        <td><?= $this->Html->link($c->nome, ['action'=>'detalle', $c->id]) ?></td>
                         <td><?= $c->nome_curto ?></td>
                         <td><?= $c->codigo ?></td>
-                        <td class="text-center"><?= $this->AgfgForm->editButton(['action'=>'detalle', $c->id]) ?></td>
+                        <td class="text-center">
+                            <?php if($c->activo) : ?>
+                                <a href="javascript:void(0)"><em class="glyphicon glyphicon-flag"></em></a>
+                            <?php endif ?>
+                        </td>
                         <td class="text-center"><?= $this->AgfgForm->deleteButton(['action'=>'borrar', $c->id]) ?></td>
                     </tr>
                 <?php endforeach ?>
