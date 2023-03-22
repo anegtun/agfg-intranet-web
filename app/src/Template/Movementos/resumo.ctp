@@ -45,6 +45,9 @@ foreach($previsions as $p) {
 
         <div class="row">
             <div class="col-lg-2">
+                <?= $this->Form->control('id_partida_orzamentaria', ['options'=>$this->AgfgForm->objectToKeyValue($partidasOrzamentarias,'id','nome'), 'label'=>'Partida orzamentaria', 'class'=>'form-control']) ?>
+            </div>
+            <div class="col-lg-2">
                 <?= $this->Form->control('id_area', ['options'=>$this->AgfgForm->objectToKeyValue($areas,'id','nome'), 'label'=>'Area', 'class'=>'form-control']) ?>
             </div>
             <div class="col-lg-2">

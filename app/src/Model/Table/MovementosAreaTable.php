@@ -9,6 +9,12 @@ class MovementosAreaTable extends Table {
     public function initialize(array $config) {
         $this->setTable('agfg_movemento_areas');
 
+        $this->belongsTo('PartidaOrzamentaria', [
+        	'className' => 'MovementosPartidaOrzamentaria',
+            'foreignKey' => 'id_partida_orzamentaria',
+            'propertyName' => 'partidaOrzamentaria'
+        ]);
+
         $this->hasMany('Subareas', array(
         	'className' => 'MovementosSubarea',
             'foreignKey' => 'id_area',

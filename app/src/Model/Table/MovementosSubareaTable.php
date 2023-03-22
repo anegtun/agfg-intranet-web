@@ -8,6 +8,7 @@ class MovementosSubareaTable extends Table {
 
     public function initialize(array $config) {
         $this->setTable('agfg_movemento_subarea');
+        
         $this->belongsTo('Area', [
         	'className' => 'MovementosArea',
             'foreignKey' => 'id_area',

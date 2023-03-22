@@ -16,6 +16,7 @@ class MovementosController extends AppController {
         $this->Contas = new Contas();
         $this->Tempadas = new Tempadas();
         $this->Clubes = TableRegistry::get('Clubes');
+        $this->PartidasOrzamentarias = TableRegistry::get('MovementosPartidaOrzamentaria');
         $this->Subareas = TableRegistry::get('MovementosSubarea');
     }
 
@@ -40,7 +41,15 @@ class MovementosController extends AppController {
         $tempadas = $this->Tempadas->getTempadasWithEmpty();
         $movementos = $this->movementosFiltrados(false);
         $previsions = $this->movementosFiltrados(true);
-        $areas = $this->Areas->find('all', ['order'=>'nome']);
+        
+        $partidasOrzamentarias = $this->PartidasOrzamentarias
+            ->find()
+            ->order('nome');
+
+
+        $areas = $this->Areas
+            ->find()
+            ->order('nome');
 
         $resumo = [];
         foreach($movementos as $m) {
@@ -86,7 +95,7 @@ class MovementosController extends AppController {
         }
         usort($resumo, ["self", "cmpResumo"]);
 
-        $this->set(compact('areas', 'movementos', 'previsions', 'resumo', 'tempadas'));
+        $this->set(compact('areas', 'movementos', 'partidasOrzamentarias', 'previsions', 'resumo', 'tempadas'));
     }
 
     public function resumoClubes() {
@@ -185,7 +194,7 @@ class MovementosController extends AppController {
         $sort = $prevision ? 'asc' : 'desc';
         $movementos = $this->Movementos
             ->find('all', ['order'=>["data $sort", "Movementos.id $sort"]])
-            ->contain(['Subarea' => ['Area'], 'Clube'])
+            ->contain(['Subarea' => ['Area' => ['PartidaOrzamentaria']], 'Clube'])
             ->where(['prevision' => $prevision]);
 
         if(!empty($this->request->getQuery('data_ini'))) {
@@ -199,6 +208,9 @@ class MovementosController extends AppController {
         }
         if(!empty($this->request->getQuery('tempada'))) {
             $movementos->where(['tempada' => $this->request->getQuery('tempada')]);
+        }
+        if(!empty($this->request->getQuery('id_partida_orzamentaria'))) {
+            $movementos->where(['Area.id_partida_orzamentaria' => $this->request->getQuery('id_partida_orzamentaria')]);
         }
         if(!empty($this->request->getQuery('id_area'))) {
             $movementos->where(['Subarea.id_area' => $this->request->getQuery('id_area')]);
