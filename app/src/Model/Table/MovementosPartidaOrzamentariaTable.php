@@ -4,15 +4,15 @@ namespace App\Model\Table;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
-class MovementosAreaTable extends Table {
+class MovementosPartidaOrzamentariaTable extends Table {
 
     public function initialize(array $config) {
-        $this->setTable('agfg_movemento_areas');
+        $this->setTable('agfg_movemento_partida_orzamentaria');
 
-        $this->hasMany('Subareas', array(
-        	'className' => 'MovementosSubarea',
-            'foreignKey' => 'id_area',
-            'propertyName' => 'subareas'
+        $this->hasMany('Areas', array(
+        	'className' => 'MovementosArea',
+            'foreignKey' => 'id_partida_orzamentaria',
+            'propertyName' => 'areas'
         ));
     }
 

@@ -3,7 +3,7 @@ $this->extend('template_areas');
 $this->set('cabeceiraTitulo', empty($subarea->id) ? 'Nova subárea' : $subarea->nome);
 $this->set('cabeceiraMigas', [
     ['label'=>'Configuración'],
-    ['label'=>'Áreas económicas', 'url'=>['controller'=>'Economico', 'action'=>'areas']],
+    ['label'=>'Partidas Orzamentarias', 'url'=>['controller'=>'Economico', 'action'=>'partidasOrzamentarias']],
     ['label'=>empty($subarea->id) ? 'Nova subárea' : $subarea->nome]
 ]);
 ?>

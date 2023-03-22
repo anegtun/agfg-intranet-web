@@ -152,11 +152,6 @@ $submenu_option = empty($submenu_option) ? '' : $submenu_option;
                                                 <?= $this->Html->link('Árbitros', ['controller'=>'Arbitros', 'action'=>'index']) ?>
                                             </li>
                                         <?php endif ?>    
-                                        <?php if(in_array($authUser['rol'], ['admin','tesour'])) : ?>
-                                            <li <?=$submenu_option==='areas_economicas'?'class="active"':''?>>
-                                                <?= $this->Html->link('Áreas económicas', ['controller'=>'Economico', 'action'=>'areas']) ?>
-                                            </li>
-                                        <?php endif ?>
                                         <?php if(in_array($authUser['rol'], ['admin','comp'])) : ?>
                                             <li <?=$submenu_option==='campos'?'class="active"':''?>>
                                                 <?= $this->Html->link('Campos', ['controller'=>'Campos', 'action'=>'index']) ?>
@@ -170,6 +165,11 @@ $submenu_option = empty($submenu_option) ? '' : $submenu_option;
                                         <?php if($authUser['rol']==='admin') : ?>
                                             <li <?=$submenu_option==='federacions'?'class="active"':''?>>
                                                 <?= $this->Html->link('Federacións', ['controller'=>'Federacions', 'action'=>'index']) ?>
+                                            </li>
+                                        <?php endif ?>
+                                        <?php if(in_array($authUser['rol'], ['admin','tesour'])) : ?>
+                                            <li <?=$submenu_option==='areas_economicas'?'class="active"':''?>>
+                                                <?= $this->Html->link('Partidas orzamentarias', ['controller'=>'Economico', 'action'=>'partidasOrzamentarias']) ?>
                                             </li>
                                         <?php endif ?>
                                     </ul>
