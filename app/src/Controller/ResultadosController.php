@@ -5,9 +5,11 @@ use App\Controller\AppController;
 use App\Model\Categorias;
 use App\Model\Tempadas;
 use App\Model\TiposCompeticion;
+use Cake\Database\Expression\QueryExpression;
 use Cake\Event\Event;
 use Cake\I18n\FrozenDate;
 use Cake\I18n\Time;
+use Cake\ORM\Query;
 use Cake\ORM\TableRegistry;
 
 class ResultadosController extends AppController {
@@ -28,7 +30,8 @@ class ResultadosController extends AppController {
     }
 
     public function index() {
-        $competicions = $this->Competicions->find()
+        $competicions = $this->Competicions
+            ->find()
             ->contain('Federacion')
             ->order(['Competicions.tempada DESC','Competicions.nome ASC']);
 
@@ -60,6 +63,14 @@ class ResultadosController extends AppController {
         }
         if(!empty($this->request->getQuery('id_campo'))) {
             $partidos->where(['Partidos.id_campo' => $this->request->getQuery('id_campo')]);
+        }
+        if(!empty($this->request->getQuery('pendente'))) {
+            $partidos->where(function (QueryExpression $exp, Query $query) {
+                $goles = $query->newExpr()->isNull('Partidos.goles_equipa1');
+                $tantos = $query->newExpr()->isNull('Partidos.tantos_equipa1');
+                $total = $query->newExpr()->isNull('Partidos.total_equipa1');
+                return $exp->and([$goles, $tantos, $total]);
+            });
         }
 
         $fases = $this->Fases->find()

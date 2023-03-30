@@ -7,6 +7,11 @@ $this->set('cabeceiraMigas', [
     ['label'=>$competicion->nome]
 ]);
 
+$emptyTemplates = [
+    'inputContainer' => '{{content}}',
+    'input' => '<input type="{{type}}" name="{{name}}" {{attrs}}/>',
+];
+
 $is_torneo = $competicion->tipo === 'torneo';
 ?>
 
@@ -18,6 +23,9 @@ $is_torneo = $competicion->tipo === 'torneo';
             </div>
             <div class="col-lg-3">
                 <?= $this->Form->control('id_campo', ['options'=>$this->AgfgForm->objectToKeyValue($campos,'id','nome'), 'label'=>'Campo']) ?>
+            </div>
+            <div class="col-lg-3">
+                <?= $this->Form->control('pendente', ['options'=>['0'=>'Non', '1'=>'Si']]) ?>
             </div>
             <div class="col-lg-3">
                 <?= $this->Form->button('Buscar', ['class'=>'btn btn-primary', 'style'=> ['margin-top: 1.7em']]); ?>
@@ -47,6 +55,9 @@ $is_torneo = $competicion->tipo === 'torneo';
                 $fase = "{$p->fase->categoria} [X.{$p->xornada->numero}]";
             }
             $hora = $is_torneo ? $p->formatDiaHora() : $p->formatDataHora();
+            if(empty($hora) && !empty($p->adiado)) {
+                $hora = '(adiado)';
+            }
 
             $data_referencia = $p->data_partido ? $p->data_partido : $p->xornada->data;
             $sabado = $data_referencia->modify('next monday')->modify('previous saturday')->format('Y-m-d');
