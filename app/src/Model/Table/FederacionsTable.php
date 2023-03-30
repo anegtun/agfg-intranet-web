@@ -1,10 +1,9 @@
 <?php
 namespace App\Model\Table;
 
-use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
-class FederacionsTable extends Table {
+class FederacionsTable extends AgfgTable {
 
     public function initialize(array $config) {
         $this->setTable('agfg_federacions');

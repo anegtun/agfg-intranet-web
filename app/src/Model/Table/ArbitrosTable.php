@@ -1,13 +1,17 @@
 <?php
 namespace App\Model\Table;
 
-use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
-class ArbitrosTable extends Table {
+class ArbitrosTable extends AgfgTable {
 
     public function initialize(array $config) {
         $this->setTable('agfg_arbitros');
+    }
+
+    public function validationDefault(Validator $validator) {
+        return $validator
+            ->notEmpty('alcume', 'O alcume é obrigatorio');
     }
 
     public function findMap($soloActivo = false) {
@@ -20,11 +24,6 @@ class ArbitrosTable extends Table {
             $res[$e->id] = $e;
         }
         return $res;
-    }
-
-    public function validationDefault(Validator $validator) {
-        return $validator
-            ->notEmpty('alcume', 'O alcume é obrigatorio');
     }
 
 }

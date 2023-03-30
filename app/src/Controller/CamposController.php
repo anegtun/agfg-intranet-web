@@ -11,12 +11,14 @@ class CamposController extends AppController {
     }
 
     public function index() {
-        $campos = $this->Campos->find('all', ['order'=>'pobo']);
+        $campos = $this->Campos
+            ->find()
+            ->order('pobo');
         $this->set(compact('campos'));
     }
 
     public function detalle($id=null) {
-        $campo = empty($id) ? $this->Campos->newEntity() : $this->Campos->get($id);
+        $campo = $this->Campos->getOrNew($id);
         $this->set(compact('campo'));
     }
 

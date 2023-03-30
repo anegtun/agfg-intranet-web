@@ -11,12 +11,14 @@ class ArbitrosController extends AppController {
     }
 
     public function index() {
-        $arbitros = $this->Arbitros->find('all', ['order'=>'alcume']);
+        $arbitros = $this->Arbitros
+            ->find()
+            ->order('alcume');
         $this->set(compact('arbitros'));
     }
 
     public function detalle($id=null) {
-        $arbitro = empty($id) ? $this->Arbitros->newEntity() : $this->Arbitros->get($id);
+        $arbitro = $this->Arbitros->getOrNew($id);
         $this->set(compact('arbitro'));
     }
 

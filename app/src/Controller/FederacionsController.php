@@ -13,7 +13,10 @@ class FederacionsController extends AppController {
     }
 
     public function index() {
-        $federacions = $this->Federacions->find()->order('codigo');
+        $federacions = $this->Federacions
+            ->find()
+            ->order('codigo');
+            
         $this->set(compact('federacions'));
     }
 

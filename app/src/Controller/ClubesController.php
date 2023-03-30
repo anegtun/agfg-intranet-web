@@ -16,7 +16,8 @@ class ClubesController extends AppController {
     }
 
     public function index() {
-        $clubes = $this->Clubes->find()
+        $clubes = $this->Clubes
+            ->find()
             ->contain('Federacions')
             ->order('Clubes.codigo');
 
@@ -26,7 +27,8 @@ class ClubesController extends AppController {
             });
         }
 
-        $federacions = $this->Federacions->find()
+        $federacions = $this->Federacions
+            ->find()
             ->order('codigo');
         
         $this->set(compact('clubes', 'federacions'));
@@ -41,8 +43,10 @@ class ClubesController extends AppController {
             ]);
         }
         $categorias = $this->Categorias->getCategoriasWithEmpty();
-        $federacions = $this->Federacions->find()
+        $federacions = $this->Federacions
+            ->find()
             ->order('codigo');
+
         $this->set(compact('clube', 'categorias', 'federacions'));
     }
 

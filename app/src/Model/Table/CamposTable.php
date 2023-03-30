@@ -1,13 +1,18 @@
 <?php
 namespace App\Model\Table;
 
-use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
-class CamposTable extends Table {
+class CamposTable extends AgfgTable {
 
     public function initialize(array $config) {
         $this->setTable('agfg_campos');
+    }
+
+    public function validationDefault(Validator $validator) {
+        return $validator
+            ->notEmpty('nome', 'O nome é obrigatorio')
+            ->notEmpty('pobo', 'O pobo é obrigatorio');
     }
 
     public function findMap($soloActivo = false) {
@@ -20,12 +25,6 @@ class CamposTable extends Table {
             $res[$e->id] = $e;
         }
         return $res;
-    }
-
-    public function validationDefault(Validator $validator) {
-        return $validator
-            ->notEmpty('nome', 'O nome é obrigatorio')
-            ->notEmpty('pobo', 'O pobo é obrigatorio');
     }
 
 }
