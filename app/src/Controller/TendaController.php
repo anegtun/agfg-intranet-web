@@ -24,9 +24,7 @@ class TendaController extends AppController {
     }
 
     public function produto($id=null) {
-        $produto = empty($id)
-            ? $this->newEntity()
-            : $this->TendaProdutos->get($id, [ 'contain' => ['Skus'] ]);
+        $produto = $this->TendaProdutos->getOrNew($id, ['contain'=>['Skus']]);
         $this->set(compact('produto'));
     }
 
