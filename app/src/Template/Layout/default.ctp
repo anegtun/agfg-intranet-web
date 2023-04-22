@@ -132,6 +132,23 @@ $submenu_option = empty($submenu_option) ? '' : $submenu_option;
                             <?php endif ?>
 
                             <?php if(in_array($authUser['rol'], ['admin','tesour'])) : ?>
+                                <li data-toggle="tooltip">
+                                    <a href="#" data-toggle="collapse" data-target="#tenda-entries" data-parent="#left-menu-content" <?=$menu_option==='tenda'?'aria-expanded="true"':''?>>
+                                        <span class="glyphicon glyphicon-shopping-cart"><span class="sr-only">Tenda</span></span>Tenda
+                                        <span class="caret caret-right"></span>
+                                    </a>
+                                    <ul id="tenda-entries" class="nav nav-pills nav-stacked left-submenu collapse <?=$menu_option==='tenda'?'in':''?>" <?=$menu_option==='tenda'?'aria-expanded="true"':''?>>
+                                        <li <?=$submenu_option==='pedidos'?'class="active"':''?>>
+                                            <?= $this->Html->link('Pedidos', ['controller'=>'Tenda', 'action'=>'pedidos']) ?>
+                                        </li>
+                                        <li <?=$submenu_option==='stock'?'class="active"':''?>>
+                                            <?= $this->Html->link('Stock', ['controller'=>'Tenda', 'action'=>'stock']) ?>
+                                        </li>
+                                    </ul>
+                                </li>
+                            <?php endif ?>
+
+                            <?php if(in_array($authUser['rol'], ['admin','tesour'])) : ?>
                                 <li data-toggle="tooltip" <?=$menu_option==='economico'?'class="active"':''?>>
                                     <?= $this->Html->link(
                                         '<span class="glyphicon glyphicon-euro"><span class="sr-only">Xestión Económica</span></span>Xestión Económica',
