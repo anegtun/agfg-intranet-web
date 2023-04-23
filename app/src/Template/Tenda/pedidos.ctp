@@ -12,7 +12,7 @@ $this->set('cabeceiraMigas', [
     <?= $this->Form->setValueSources(['query','context'])->create(null, ['type'=>'get']) ?>
         <div class="row">
             <div class="col-lg-3">
-                <?= $this->Form->control('todos', ['options'=>['0'=>'Só pendentes', '1'=>'Todos'], 'label'=>'']) ?>
+                <?= $this->Form->control('todos', ['options'=>['P'=>'Pendentes', 'F'=>'Finalizados', 'T'=>'Todos'], 'label'=>'']) ?>
             </div>
             <div class="col-lg-3">
                 <?= $this->Form->button('Buscar', ['class'=>'btn btn-primary', 'style'=> ['margin-top: 1.7em']]); ?>

@@ -28,8 +28,11 @@ class TendaController extends AppController {
             ->contain(['Items' => ['Sku' => 'Produto']])
             ->order(['data' => 'DESC']);
 
-        if(empty($this->request->getQuery('todos'))) {
+        $filtro = $this->request->getQuery('todos');
+        if(empty($filtro) || $filtro==='P') {
             $pedidos->where(['estado NOT IN ' => $this->TendaEstados->getCodigosFinalizados()]);
+        } else if($filtro==='F') {
+            $pedidos->where(['estado IN ' => $this->TendaEstados->getCodigosFinalizados()]);
         }
 
         $this->set(compact('pedidos', 'estados'));
@@ -72,7 +75,7 @@ class TendaController extends AppController {
         $pedido->data = empty($data['data']) ? NULL : Time::createFromFormat('d-m-Y', $data['data']);
         if ($this->TendaPedidos->save($pedido)) {
             $this->Flash->success(__('Gardouse o pedido correctamente.'));
-            return $this->redirect(['action'=>'pedidos']);
+            return $this->redirect(['action'=>'pedido', $data['id']]);
         }
         $this->Flash->error(__('Erro ao gardar o pedido.'));
         $this->set(compact('pedido'));

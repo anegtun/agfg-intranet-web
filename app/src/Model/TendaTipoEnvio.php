@@ -8,6 +8,7 @@ class TendaTipoEnvio {
             'M' => 'Entrega en man',
             'O' => 'Ordinario',
             'C' => 'Certificado',
+            'R' => 'Contrareembolso',
             'I' => 'Internacional'
         );
     }

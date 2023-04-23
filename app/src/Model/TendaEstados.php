@@ -8,12 +8,13 @@ class TendaEstados {
             'N' => 'Novo',
             'PS' => 'Pendente stock',
             'PE' => 'Pendente envío',
+            'NC' => 'Non contesta',
             'D' => 'Desistido',
             'F' => 'Finalizado'
         );
     }
     
     public function getCodigosFinalizados() {
-        return ['D', 'F'];
+        return ['NC', 'D', 'F'];
     }
 }
