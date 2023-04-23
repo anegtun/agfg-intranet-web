@@ -15,6 +15,7 @@ class TendaController extends AppController {
         $this->TendaEstados = new TendaEstados();
         $this->TendaTipoEnvio = new TendaTipoEnvio();
         $this->TendaPedidos = TableRegistry::get('TendaPedidos');
+        $this->TendaPedidoItems = TableRegistry::get('TendaPedidoItems');
         $this->TendaProdutos = TableRegistry::get('TendaProdutos');
         $this->TendaProdutoSkus = TableRegistry::get('TendaProdutoSkus');
     }
@@ -22,7 +23,7 @@ class TendaController extends AppController {
     public function pedidos() {
         $pedidos = $this->TendaPedidos
             ->find()
-            ->contain('Items')
+            ->contain(['Items' => ['Sku' => 'Produto']])
             ->order(['data' => 'DESC']);
         
         $this->set(compact('pedidos'));
@@ -31,22 +32,43 @@ class TendaController extends AppController {
     public function pedido($id=null) {
         $estados = $this->TendaEstados->getAll();
         $tipos_envio = $this->TendaTipoEnvio->getAll();
-        $pedido = $this->TendaPedidos->getOrNew($id, ['contain'=>['Items']]);
-        $this->set(compact('estados', 'tipos_envio', 'pedido'));
+        
+        $skus = $this->TendaProdutoSkus
+            ->find()
+            ->contain(['Produto']);
+        
+        $pedido = $this->TendaPedidos->getOrNew($id, ['contain'=>['Items' => ['Sku' => 'Produto']]]);
+
+        $this->set(compact('pedido', 'estados', 'tipos_envio', 'skus'));
+    }
+
+    public function engadirItem() {
+        $data = $this->request->getData();
+        $pedido = $this->TendaPedidos->get($data['id_pedido'], ['contain'=>['Items']]);
+        $pedido->items[] = $this->TendaPedidoItems->newEntity($data);
+        $pedido->setDirty('items', true);
+        $this->TendaPedidos->save($pedido);
+        return $this->redirect(['action'=>'pedido', $data['id_pedido']]);
+    }
+
+    public function borrarItem($id_pedido, $id_sku) {
+        $this->TendaPedidoItems->query()
+            ->delete()
+            ->where(['id_pedido'=>$id_pedido, 'id_sku'=>$id_sku])
+            ->execute();
+        return $this->redirect(['action'=>'pedido', $id_pedido]);
     }
 
     public function gardarPedido() {
-        $pedido = $this->TendaPedidos->newEntity();
-        if ($this->request->is('post') || $this->request->is('put')) {
-            $data = $this->request->getData();
-            $pedido = $this->TendaPedidos->patchEntity($pedido, $data);
-            $pedido->data = empty($data['data']) ? NULL : Time::createFromFormat('d-m-Y', $data['data']);
-            if ($this->TendaPedidos->save($pedido)) {
-                $this->Flash->success(__('Gardouse o pedido correctamente.'));
-                return $this->redirect(['action'=>'pedidos']);
-            }
-            $this->Flash->error(__('Erro ao gardar o pedido.'));
+        $data = $this->request->getData();
+        $pedido = $this->TendaPedidos->getOrNew($data['id_pedido'], ['contain'=>['Items']]);
+        $pedido = $this->TendaPedidos->patchEntity($pedido, $data);
+        $pedido->data = empty($data['data']) ? NULL : Time::createFromFormat('d-m-Y', $data['data']);
+        if ($this->TendaPedidos->save($pedido)) {
+            $this->Flash->success(__('Gardouse o pedido correctamente.'));
+            return $this->redirect(['action'=>'pedidos']);
         }
+        $this->Flash->error(__('Erro ao gardar o pedido.'));
         $this->set(compact('pedido'));
         $this->render('pedido');
     }

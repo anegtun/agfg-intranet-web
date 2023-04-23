@@ -7,6 +7,12 @@ class TendaPedidoItemsTable extends AgfgTable {
 
     public function initialize(array $config) {
         $this->setTable('agfg_tenda_pedido_items');
+
+        $this->belongsTo('Sku', [
+        	'className' => 'TendaProdutoSkus',
+            'foreignKey' => 'id_sku',
+            'propertyName' => 'sku'
+        ]);
     }
 
     public function validationDefault(Validator $validator) {

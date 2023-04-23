@@ -16,6 +16,8 @@ $this->set('cabeceiraMigas', [
                     <th class="celda-titulo" style="width:5px"></th>
                     <th class="celda-titulo">Data</th>
                     <th class="celda-titulo">Nome</th>
+                    <th class="celda-titulo">Nº items</th>
+                    <th class="celda-titulo">Total</th>
                 </tr>
             </thead>
             <tbody>
@@ -24,6 +26,8 @@ $this->set('cabeceiraMigas', [
                         <td class="text-center"><?= $this->AgfgForm->editButton(['action'=>'pedido', $p->id]) ?></td>
                         <td><?= $p->data->format('Y-m-d') ?></td>
                         <td><?= $p->nome ?></td>
+                        <td><?= count($p->items) ?></td>
+                        <td><?= $p->getTotal() ?>&euro;</td>
                     </tr>
                 <?php endforeach ?>
             </tbody>
