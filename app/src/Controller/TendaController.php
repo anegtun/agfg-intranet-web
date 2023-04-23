@@ -21,12 +21,18 @@ class TendaController extends AppController {
     }
 
     public function pedidos() {
+        $estados = $this->TendaEstados->getAll();
+
         $pedidos = $this->TendaPedidos
             ->find()
             ->contain(['Items' => ['Sku' => 'Produto']])
             ->order(['data' => 'DESC']);
-        
-        $this->set(compact('pedidos'));
+
+        if(empty($this->request->getQuery('todos'))) {
+            $pedidos->where(['estado NOT IN ' => $this->TendaEstados->getCodigosFinalizados()]);
+        }
+
+        $this->set(compact('pedidos', 'estados'));
     }
 
     public function pedido($id=null) {

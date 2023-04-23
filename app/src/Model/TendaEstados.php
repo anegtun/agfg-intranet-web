@@ -12,4 +12,8 @@ class TendaEstados {
             'F' => 'Finalizado'
         );
     }
+    
+    public function getCodigosFinalizados() {
+        return ['D', 'F'];
+    }
 }
