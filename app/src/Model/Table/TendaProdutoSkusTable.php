@@ -6,7 +6,7 @@ use Cake\Validation\Validator;
 class TendaProdutoSkusTable extends AgfgTable {
 
     public function initialize(array $config) {
-        $this->setTable('agfg_tenda_produto_sku');
+        $this->setTable('agfg_tenda_produto_skus');
 
         $this->belongsTo('Produto', [
         	'className' => 'TendaProdutos',

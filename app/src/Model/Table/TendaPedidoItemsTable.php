@@ -3,16 +3,10 @@ namespace App\Model\Table;
 
 use Cake\Validation\Validator;
 
-class TendaProdutosTable extends AgfgTable {
+class TendaPedidoItemsTable extends AgfgTable {
 
     public function initialize(array $config) {
-        $this->setTable('agfg_tenda_produtos');
-       
-        $this->hasMany('Skus', array(
-        	'className' => 'TendaProdutoSkus',
-            'foreignKey' => 'id_produto',
-            'propertyName' => 'skus'
-        ));
+        $this->setTable('agfg_tenda_pedido_items');
     }
 
     public function validationDefault(Validator $validator) {

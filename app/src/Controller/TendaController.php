@@ -2,16 +2,63 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
-use App\Model\Categorias;
+use App\Model\TendaEstados;
+use App\Model\TendaTipoEnvio;
 use Cake\Event\Event;
+use Cake\I18n\Time;
 use Cake\ORM\TableRegistry;
 
 class TendaController extends AppController {
     
     public function initialize() {
         parent::initialize();
+        $this->TendaEstados = new TendaEstados();
+        $this->TendaTipoEnvio = new TendaTipoEnvio();
+        $this->TendaPedidos = TableRegistry::get('TendaPedidos');
         $this->TendaProdutos = TableRegistry::get('TendaProdutos');
         $this->TendaProdutoSkus = TableRegistry::get('TendaProdutoSkus');
+    }
+
+    public function pedidos() {
+        $pedidos = $this->TendaPedidos
+            ->find()
+            ->contain('Items')
+            ->order(['data' => 'DESC']);
+        
+        $this->set(compact('pedidos'));
+    }
+
+    public function pedido($id=null) {
+        $estados = $this->TendaEstados->getAll();
+        $tipos_envio = $this->TendaTipoEnvio->getAll();
+        $pedido = $this->TendaPedidos->getOrNew($id, ['contain'=>['Items']]);
+        $this->set(compact('estados', 'tipos_envio', 'pedido'));
+    }
+
+    public function gardarPedido() {
+        $pedido = $this->TendaPedidos->newEntity();
+        if ($this->request->is('post') || $this->request->is('put')) {
+            $data = $this->request->getData();
+            $pedido = $this->TendaPedidos->patchEntity($pedido, $data);
+            $pedido->data = empty($data['data']) ? NULL : Time::createFromFormat('d-m-Y', $data['data']);
+            if ($this->TendaPedidos->save($pedido)) {
+                $this->Flash->success(__('Gardouse o pedido correctamente.'));
+                return $this->redirect(['action'=>'pedidos']);
+            }
+            $this->Flash->error(__('Erro ao gardar o pedido.'));
+        }
+        $this->set(compact('pedido'));
+        $this->render('pedido');
+    }
+
+    public function borrarPedido($id) {
+        $pedido = $this->TendaPedidos->get($id);
+        if($this->TendaPedidos->delete($pedido)) {
+            $this->Flash->success(__('Eliminouse o pedido correctamente.'));
+        } else {
+            $this->Flash->error(__('Erro ao eliminar o pedido.'));
+        }
+        return $this->redirect(['action'=>'pedidos']);
     }
 
     public function stock() {
