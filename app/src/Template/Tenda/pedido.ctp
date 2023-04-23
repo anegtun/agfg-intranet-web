@@ -55,6 +55,7 @@ if(!empty($pedido->id)) {
                             <th class="celda-titulo" style="width:5px"></th>
                             <th class="celda-titulo">Produto</th>
                             <th class="celda-titulo">Cantidade</th>
+                            <th class="celda-titulo">Persoalización</th>
                             <th class="celda-titulo">Prezo</th>
                         </tr>
                     </thead>
@@ -64,6 +65,7 @@ if(!empty($pedido->id)) {
                                 <td class="text-center"><?= $this->AgfgForm->deleteButton(['action'=>'borrarItem', $i->id_pedido, $i->id_sku]) ?></td>
                                 <td><?= $i->sku->produto->nome ?> (<?= $i->sku->nome ?>)</td>
                                 <td><?= $i->cantidade ?></td>
+                                <td><?= $i->persoalizacion ?></td>
                                 <td class="text-right"><?= ($i->sku->produto->prezo * $i->cantidade) ?>&euro;</td>
                             </tr>
                         <?php endforeach ?>
@@ -140,6 +142,7 @@ if(!empty($pedido->id)) {
                     <fieldset>
                         <?= $this->Form->control('id_sku', ['options'=>$this->AgfgForm->objectToKeyValue($skus,'id','{$e->produto->nome} - {$e->nome} (stock: {$e->stock})'), 'label'=>'Produto']) ?>
                         <?= $this->Form->control('cantidade', ['label'=>'Cantidade']) ?>
+                        <?= $this->Form->control('persoalizacion', ['label'=>'Persoalización']) ?>
                     </fieldset>
                 </div>
                 <div class="modal-footer">
