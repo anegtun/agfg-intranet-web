@@ -10,11 +10,11 @@ class TendaEstados {
             'PE' => 'Pendente envío',
             'NC' => 'Non contesta',
             'D' => 'Desistido',
-            'F' => 'Finalizado'
+            'E' => 'Entregado'
         );
     }
     
     public function getCodigosFinalizados() {
-        return ['NC', 'D', 'F'];
+        return ['NC', 'D', 'E'];
     }
 }
