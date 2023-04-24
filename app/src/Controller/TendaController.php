@@ -17,6 +17,7 @@ class TendaController extends AppController {
         $this->TendaPedidos = TableRegistry::get('TendaPedidos');
         $this->TendaPedidoItems = TableRegistry::get('TendaPedidoItems');
         $this->TendaProdutos = TableRegistry::get('TendaProdutos');
+        $this->TendaProdutoPrezos = TableRegistry::get('TendaProdutoPrezos');
         $this->TendaProdutoSkus = TableRegistry::get('TendaProdutoSkus');
     }
 
@@ -75,7 +76,7 @@ class TendaController extends AppController {
         $pedido->data = empty($data['data']) ? NULL : Time::createFromFormat('d-m-Y', $data['data']);
         if ($this->TendaPedidos->save($pedido)) {
             $this->Flash->success(__('Gardouse o pedido correctamente.'));
-            return $this->redirect(['action'=>'pedido', $data['id']]);
+            return empty($data['id']) ? $this->redirect(['action'=>'pedidos']) : $this->redirect(['action'=>'pedido', $data['id']]);
         }
         $this->Flash->error(__('Erro ao gardar o pedido.'));
         $this->set(compact('pedido'));
@@ -102,7 +103,7 @@ class TendaController extends AppController {
     }
 
     public function produto($id=null) {
-        $produto = $this->TendaProdutos->getOrNew($id, ['contain'=>['Skus']]);
+        $produto = $this->TendaProdutos->getOrNew($id, ['contain'=>['Skus', 'Prezos']]);
         $this->set(compact('produto'));
     }
 
@@ -115,6 +116,17 @@ class TendaController extends AppController {
             $sku = $this->TendaProdutoSkus->get($id, ['contain'=>['Produto']]);
         }
         $this->set(compact('sku'));
+    }
+
+    public function prezo($id=null) {
+        if(empty($id)) {
+            $prezo = $this->TendaProdutoPrezos->newEntity();
+            $prezo->id_produto = $this->request->getQuery('id_produto');
+            $prezo->produto = $this->TendaProdutos->get($prezo->id_produto);
+        } else {
+            $prezo = $this->TendaProdutoPrezos->get($id, ['contain'=>['Produto']]);
+        }
+        $this->set(compact('prezo'));
     }
 
     public function gardarProduto() {
@@ -163,6 +175,31 @@ class TendaController extends AppController {
             $this->Flash->error(__('Erro ao eliminar o SKU.'));
         }
         return $this->redirect(['action'=>'produto', $sku->id_produto]);
+    }
+
+    public function gardarPrezo() {
+        $data = $this->request->getData();
+        $prezo = $this->TendaProdutoPrezos->getOrNew($data['id']);
+        $prezo = $this->TendaProdutoPrezos->patchEntity($prezo, $data);
+        $prezo->data_inicio = empty($data['data_inicio']) ? NULL : Time::createFromFormat('d-m-Y', $data['data_inicio']);
+        $prezo->data_fin = empty($data['data_fin']) ? NULL : Time::createFromFormat('d-m-Y', $data['data_fin']);
+        if ($this->TendaProdutoPrezos->save($prezo)) {
+            $this->Flash->success(__('Gardouse o prezo correctamente.'));
+            return $this->redirect(['action'=>'produto', $prezo->id_produto]);
+        }
+        $this->Flash->error(__('Erro ao gardar o prezo.'));
+        $this->set(compact('prezo'));
+        $this->render('prezo');
+    }
+
+    public function borrarPrezo($id) {
+        $prezo = $this->TendaProdutoPrezos->get($id);
+        if($this->TendaProdutoPrezos->delete($prezo)) {
+            $this->Flash->success(__('Eliminouse o prezo correctamente.'));
+        } else {
+            $this->Flash->error(__('Erro ao eliminar o prezo.'));
+        }
+        return $this->redirect(['action'=>'produto', $prezo->id_produto]);
     }
 
 }
