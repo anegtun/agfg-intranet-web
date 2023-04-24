@@ -35,7 +35,7 @@ if(!empty($prezo->id)) {
                 <?= $this->Form->control('data_fin', ['type'=>'text', 'class'=>'form-control fld-date', 'label'=>'Data', 'value'=>$prezo->data_fin_str, 'templates'=>$emptyTemplates]) ?>
             </div>
             <div class="form-group col-lg-1">
-                <?= $this->Form->control('prezo', ['label'=>'Prezo fixo']) ?>
+                <?= $this->Form->control('prezo', ['label'=>'Prezo']) ?>
             </div>
         </div>
         <div class="row">

@@ -15,7 +15,6 @@ $this->set('cabeceiraMigas', [
         <fieldset>
             <legend>Produto</legend>
             <?= $this->Form->control('nome', ['label'=>'Nome']) ?>
-            <?= $this->Form->control('prezo', ['label'=>'Prezo']) ?>
             <?= $this->Form->button('Gardar', ['class'=>'btn btn-primary']); ?>
         </fieldset>
     <?= $this->Form->end() ?>

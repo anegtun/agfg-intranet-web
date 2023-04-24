@@ -64,7 +64,7 @@ if(!empty($pedido->id)) {
                         <?php foreach($pedido->items as $i) : ?>
                             <tr>
                                 <td class="text-center"><?= $this->AgfgForm->deleteButton(['action'=>'borrarItem', $i->id_pedido, $i->id_sku]) ?></td>
-                                <td><?= $i->sku->produto->nome ?> (<?= $i->sku->nome ?>)</td>
+                                <td><?= $i->sku->produto->nome ?> - <?= $i->sku->nome ?></td>
                                 <td><?= $i->cantidade ?></td>
                                 <td><?= $i->persoalizacion ?></td>
                                 <td class="text-right"><?= $this->Number->precision($i->getPrezo(), 2) ?>&euro;</td>

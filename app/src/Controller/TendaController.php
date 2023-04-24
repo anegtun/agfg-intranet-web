@@ -55,6 +55,9 @@ class TendaController extends AppController {
 
     public function engadirItem() {
         $data = $this->request->getData();
+        if(empty($data['prezo_extra'])) {
+            $data['prezo_extra'] = 0;
+        }
         $pedido = $this->TendaPedidos->get($data['id_pedido'], ['contain'=>['Items']]);
         $pedido->items[] = $this->TendaPedidoItems->newEntity($data);
         $pedido->setDirty('items', true);

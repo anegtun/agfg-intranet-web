@@ -31,22 +31,26 @@ $this->set('cabeceiraMigas', [
                     <th class="celda-titulo">Nome</th>
                     <th class="celda-titulo">Estado</th>
                     <th class="celda-titulo">Nº items</th>
-                    <th class="celda-titulo">Total</th>
+                    <th class="celda-titulo text-right">Total</th>
                     <th class="celda-titulo">T. envío</th>
-                    <th class="celda-titulo">G. envío</th>
+                    <th class="celda-titulo text-right">G. envío</th>
                 </tr>
             </thead>
             <tbody>
                 <?php foreach($pedidos as $p) : ?>
-                    <tr>
+                    <?php $total = $p->getTotal() ?>
+                    <tr 
+                        <?= in_array($p->estado, ['D','NC']) ? 'class="text-danger"' : '' ?>
+                        <?= in_array($p->estado, ['E']) ? 'class="text-success"' : '' ?>
+                    >
                         <td class="text-center"><?= $this->AgfgForm->editButton(['action'=>'pedido', $p->id]) ?></td>
                         <td><?= $p->data->format('Y-m-d') ?></td>
                         <td><?= $p->nome ?></td>
                         <td><?= $estados[$p->estado] ?></td>
                         <td><?= count($p->items) ?></td>
-                        <td><?= $this->Number->precision($p->getTotal(), 2) ?>&euro;</td>
+                        <td class="text-right"><?= isset($total) ? ($this->Number->precision($total, 2)." &euro;") : '-' ?></td>
                         <td><?= empty($p->tipo_envio) ? '' : $tipos_envio[$p->tipo_envio] ?></td>
-                        <td><?= $this->Number->precision($p->gastos_envio, 2) ?>&euro;</td>
+                        <td class="text-right"><?= isset($p->gastos_envio) ? ($this->Number->precision($p->gastos_envio, 2)." &euro;") : '-' ?></td>
                     </tr>
                 <?php endforeach ?>
             </tbody>
