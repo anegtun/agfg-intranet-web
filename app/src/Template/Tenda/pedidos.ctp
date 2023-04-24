@@ -32,6 +32,8 @@ $this->set('cabeceiraMigas', [
                     <th class="celda-titulo">Estado</th>
                     <th class="celda-titulo">Nº items</th>
                     <th class="celda-titulo">Total</th>
+                    <th class="celda-titulo">T. envío</th>
+                    <th class="celda-titulo">G. envío</th>
                 </tr>
             </thead>
             <tbody>
@@ -42,7 +44,9 @@ $this->set('cabeceiraMigas', [
                         <td><?= $p->nome ?></td>
                         <td><?= $estados[$p->estado] ?></td>
                         <td><?= count($p->items) ?></td>
-                        <td><?= $p->getTotal() ?>&euro;</td>
+                        <td><?= $this->Number->precision($p->getTotal(), 2) ?>&euro;</td>
+                        <td><?= empty($p->tipo_envio) ? '' : $tipos_envio[$p->tipo_envio] ?></td>
+                        <td><?= $this->Number->precision($p->gastos_envio, 2) ?>&euro;</td>
                     </tr>
                 <?php endforeach ?>
             </tbody>

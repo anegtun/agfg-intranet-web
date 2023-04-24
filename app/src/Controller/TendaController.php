@@ -23,6 +23,7 @@ class TendaController extends AppController {
 
     public function pedidos() {
         $estados = $this->TendaEstados->getAll();
+        $tipos_envio = $this->TendaTipoEnvio->getAll();
 
         $pedidos = $this->TendaPedidos
             ->find()
@@ -36,7 +37,7 @@ class TendaController extends AppController {
             $pedidos->where(['estado IN ' => $this->TendaEstados->getCodigosFinalizados()]);
         }
 
-        $this->set(compact('pedidos', 'estados'));
+        $this->set(compact('pedidos', 'estados', 'tipos_envio'));
     }
 
     public function pedido($id=null) {

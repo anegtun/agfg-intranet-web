@@ -56,7 +56,8 @@ if(!empty($pedido->id)) {
                             <th class="celda-titulo">Produto</th>
                             <th class="celda-titulo">Cantidade</th>
                             <th class="celda-titulo">Persoalización</th>
-                            <th class="celda-titulo">Prezo</th>
+                            <th class="celda-titulo text-right">Prezo</th>
+                            <th class="celda-titulo text-right">Prezo extra</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -66,7 +67,8 @@ if(!empty($pedido->id)) {
                                 <td><?= $i->sku->produto->nome ?> (<?= $i->sku->nome ?>)</td>
                                 <td><?= $i->cantidade ?></td>
                                 <td><?= $i->persoalizacion ?></td>
-                                <td class="text-right"><?= $i->getPrezo() ?>&euro;</td>
+                                <td class="text-right"><?= $this->Number->precision($i->getPrezo(), 2) ?>&euro;</td>
+                                <td class="text-right"><?= $this->Number->precision($i->prezo_extra, 2) ?>&euro;</td>
                             </tr>
                         <?php endforeach ?>
                     </tbody>
@@ -143,6 +145,7 @@ if(!empty($pedido->id)) {
                         <?= $this->Form->control('id_sku', ['options'=>$this->AgfgForm->objectToKeyValue($skus,'id','{$e->produto->nome} - {$e->nome} (stock: {$e->stock})'), 'label'=>'Produto']) ?>
                         <?= $this->Form->control('cantidade', ['label'=>'Cantidade']) ?>
                         <?= $this->Form->control('persoalizacion', ['label'=>'Persoalización']) ?>
+                        <?= $this->Form->control('prezo_extra', ['type'=>'number', 'step'=>'0.01', 'label'=>'Prezo extra']) ?>
                     </fieldset>
                 </div>
                 <div class="modal-footer">
