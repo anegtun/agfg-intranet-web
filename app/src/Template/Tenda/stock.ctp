@@ -14,7 +14,6 @@ $this->set('cabeceiraMigas', [
             <thead>
                 <tr>
                     <th class="celda-titulo">Nome</th>
-                    <th class="celda-titulo text-center">Prezo</th>
                     <th class="celda-titulo text-center">Stock total</th>
                     <th class="celda-titulo"></th>
                 </tr>
@@ -23,7 +22,6 @@ $this->set('cabeceiraMigas', [
                 <?php foreach($produtos as $p) : ?>
                     <tr>
                         <td><?= $this->Html->link($p->nome, ['action'=>'produto', $p->id]) ?></td>
-                        <td class="text-center"><?= $p->prezo ?>&euro;</td>
                         <td class="text-center"><?= $p->getStockTotal() ?></td>
                         <td class="text-center"><?= $this->AgfgForm->deleteButton(['action'=>'borrarProduto', $p->id]) ?></td>
                     </tr>

@@ -66,7 +66,7 @@ if(!empty($pedido->id)) {
                                 <td><?= $i->sku->produto->nome ?> (<?= $i->sku->nome ?>)</td>
                                 <td><?= $i->cantidade ?></td>
                                 <td><?= $i->persoalizacion ?></td>
-                                <td class="text-right"><?= ($i->sku->produto->prezo * $i->cantidade) ?>&euro;</td>
+                                <td class="text-right"><?= $i->getPrezo() ?>&euro;</td>
                             </tr>
                         <?php endforeach ?>
                     </tbody>

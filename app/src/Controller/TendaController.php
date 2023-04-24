@@ -26,7 +26,7 @@ class TendaController extends AppController {
 
         $pedidos = $this->TendaPedidos
             ->find()
-            ->contain(['Items' => ['Sku' => 'Produto']])
+            ->contain(['Items' => ['Pedido', 'Sku' => ['Produto' => 'Prezos']]])
             ->order(['data' => 'DESC']);
 
         $filtro = $this->request->getQuery('todos');
@@ -42,12 +42,12 @@ class TendaController extends AppController {
     public function pedido($id=null) {
         $estados = $this->TendaEstados->getAll();
         $tipos_envio = $this->TendaTipoEnvio->getAll();
-        
+
         $skus = $this->TendaProdutoSkus
             ->find()
             ->contain(['Produto']);
-        
-        $pedido = $this->TendaPedidos->getOrNew($id, ['contain'=>['Items' => ['Sku' => 'Produto']]]);
+
+        $pedido = $this->TendaPedidos->getOrNew($id, ['contain'=>['Items' => ['Pedido', 'Sku' => ['Produto' => 'Prezos']]]]);
 
         $this->set(compact('pedido', 'estados', 'tipos_envio', 'skus'));
     }

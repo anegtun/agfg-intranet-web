@@ -13,7 +13,7 @@ class TendaPedido extends Entity {
 
         $total = 0;
         foreach($this->items as $item) {
-            $total += $item->sku->produto->prezo * $item->cantidade;
+            $total += $item->getPrezo();
         }
         return $total;
     }
