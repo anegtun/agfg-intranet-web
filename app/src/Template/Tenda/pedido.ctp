@@ -36,9 +36,6 @@ if(!empty($pedido->id)) {
             <div class="form-group col-lg-2">
                 <?= $this->Form->control('estado', ['options'=>array_merge([''=>''], $estados), 'label'=>'Estado']) ?>
             </div>
-            <div class="form-group col-lg-2">
-                <?= $this->Form->control('prezo', ['label'=>'Prezo fixo']) ?>
-            </div>
         </div>
     </fieldset>
 
