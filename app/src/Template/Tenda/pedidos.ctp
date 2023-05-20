@@ -27,6 +27,7 @@ $this->set('cabeceiraMigas', [
             <thead>
                 <tr>
                     <th class="celda-titulo" style="width:5px"></th>
+                    <th class="celda-titulo" style="width:5px"></th>
                     <th class="celda-titulo">Data</th>
                     <th class="celda-titulo">Nome</th>
                     <th class="celda-titulo">Estado</th>
@@ -37,13 +38,16 @@ $this->set('cabeceiraMigas', [
                 </tr>
             </thead>
             <tbody>
-                <?php foreach($pedidos as $p) : ?>
+                <?php foreach($pedidos as $k => $p) : ?>
                     <?php $total = $p->getTotal() ?>
                     <tr 
                         <?= in_array($p->estado, ['D','NC']) ? 'class="text-danger"' : '' ?>
                         <?= in_array($p->estado, ['E']) ? 'class="text-success"' : '' ?>
                     >
                         <td class="text-center"><?= $this->AgfgForm->editButton(['action'=>'pedido', $p->id]) ?></td>
+                        <td class="text-center">
+                            <a href="javascript:void(0)"><em class="glyphicon glyphicon-shopping-cart" data-toggle="modal" data-target="#modal-pedido-detalle-<?= $k ?>"></em></a>
+                        </td>
                         <td><?= $p->data->format('Y-m-d') ?></td>
                         <td><?= $p->nome ?></td>
                         <td><?= $estados[$p->estado] ?></td>
@@ -59,3 +63,49 @@ $this->set('cabeceiraMigas', [
         <?= $this->Html->link(__('Crear'), array('action'=>'pedido'), array('class'=>'btn btn-primary')) ?>
     </div>
 </div>
+
+
+
+<?php foreach($pedidos as $k => $p) : ?>
+
+    <div id="modal-pedido-detalle-<?= $k ?>" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title"><?= $p->nome ?></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="col-xs-12 table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th class="celda-titulo">Produto</th>
+                                    <th class="celda-titulo">Cantidade</th>
+                                    <th class="celda-titulo">Persoalización</th>
+                                    <th class="celda-titulo text-right">Prezo</th>
+                                    <th class="celda-titulo text-right">Prezo extra</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach($p->items as $i) : ?>
+                                    <tr>
+                                        <td><?= $i->sku->produto->nome ?> - <?= $i->sku->nome ?> (stock: <?=  $i->sku->stock ?>)</td>
+                                        <td><?= $i->cantidade ?></td>
+                                        <td><?= $i->persoalizacion ?></td>
+                                        <td class="text-right"><?= $this->Number->precision($i->getPrezo(), 2) ?>&euro;</td>
+                                        <td class="text-right"><?= $this->Number->precision($i->prezo_extra, 2) ?>&euro;</td>
+                                    </tr>
+                                <?php endforeach ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<?php endforeach ?>

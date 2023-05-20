@@ -7,6 +7,11 @@ $this->set('cabeceiraMigas', [
     ['label'=>'Stock', 'url'=>['controller'=>'Tenda', 'action'=>'stock']],
     ['label'=>'Produto']
 ]);
+
+$emptyTemplates = [
+    'inputContainer' => '{{content}}',
+    'input' => '<input type="{{type}}" name="{{name}}" {{attrs}}/>',
+];
 ?>
 
 <div class="row">
@@ -15,6 +20,10 @@ $this->set('cabeceiraMigas', [
         <fieldset>
             <legend>Produto</legend>
             <?= $this->Form->control('nome', ['label'=>'Nome']) ?>
+            <div class="form-group">
+                <?= $this->Form->checkbox('activo', ['id'=>'activo','templates'=>$emptyTemplates]) ?>
+                <label for="activo">Activo</label>
+            </div>
             <?= $this->Form->button('Gardar', ['class'=>'btn btn-primary']); ?>
         </fieldset>
     <?= $this->Form->end() ?>

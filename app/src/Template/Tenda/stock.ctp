@@ -15,6 +15,7 @@ $this->set('cabeceiraMigas', [
                 <tr>
                     <th class="celda-titulo">Nome</th>
                     <th class="celda-titulo text-center">Stock total</th>
+                    <th class="celda-titulo text-center">Activo</th>
                     <th class="celda-titulo"></th>
                 </tr>
             </thead>
@@ -23,6 +24,11 @@ $this->set('cabeceiraMigas', [
                     <tr>
                         <td><?= $this->Html->link($p->nome, ['action'=>'produto', $p->id]) ?></td>
                         <td class="text-center"><?= $p->getStockTotal() ?></td>
+                        <td class="text-center">
+                            <?php if($p->activo) : ?>
+                                <a href="javascript:void(0)"><em class="glyphicon glyphicon-shopping-cart"></em></a>
+                            <?php endif ?>
+                        </td>
                         <td class="text-center"><?= $this->AgfgForm->deleteButton(['action'=>'borrarProduto', $p->id]) ?></td>
                     </tr>
                 <?php endforeach ?>

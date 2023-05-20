@@ -45,35 +45,36 @@ if(!empty($pedido->id)) {
             <legend>Produtos</legend>
             <div class="row">
 
-            <div class="col-xs-12 table-responsive">
-                <table class="table table-striped table-hover">
-                    <thead>
-                        <tr>
-                            <th class="celda-titulo" style="width:5px"></th>
-                            <th class="celda-titulo">Produto</th>
-                            <th class="celda-titulo">Cantidade</th>
-                            <th class="celda-titulo">Persoalización</th>
-                            <th class="celda-titulo text-right">Prezo</th>
-                            <th class="celda-titulo text-right">Prezo extra</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach($pedido->items as $i) : ?>
+                <div class="col-xs-12 table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead>
                             <tr>
-                                <td class="text-center"><?= $this->AgfgForm->deleteButton(['action'=>'borrarItem', $i->id_pedido, $i->id_sku]) ?></td>
-                                <td><?= $i->sku->produto->nome ?> - <?= $i->sku->nome ?></td>
-                                <td><?= $i->cantidade ?></td>
-                                <td><?= $i->persoalizacion ?></td>
-                                <td class="text-right"><?= $this->Number->precision($i->getPrezo(), 2) ?>&euro;</td>
-                                <td class="text-right"><?= $this->Number->precision($i->prezo_extra, 2) ?>&euro;</td>
+                                <th class="celda-titulo" style="width:5px"></th>
+                                <th class="celda-titulo">Produto</th>
+                                <th class="celda-titulo">Cantidade</th>
+                                <th class="celda-titulo">Persoalización</th>
+                                <th class="celda-titulo text-right">Prezo</th>
+                                <th class="celda-titulo text-right">Prezo extra</th>
                             </tr>
-                        <?php endforeach ?>
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            <?php foreach($pedido->items as $i) : ?>
+                                <tr>
+                                    <td class="text-center"><?= $this->AgfgForm->deleteButton(['action'=>'borrarItem', $i->id_pedido, $i->id_sku]) ?></td>
+                                    <td><?= $i->sku->produto->nome ?> - <?= $i->sku->nome ?> (stock: <?=  $i->sku->stock ?>)</td>
+                                    <td><?= $i->cantidade ?></td>
+                                    <td><?= $i->persoalizacion ?></td>
+                                    <td class="text-right"><?= $this->Number->precision($i->getPrezo(), 2) ?>&euro;</td>
+                                    <td class="text-right"><?= $this->Number->precision($i->prezo_extra, 2) ?>&euro;</td>
+                                </tr>
+                            <?php endforeach ?>
+                        </tbody>
+                    </table>
 
 
-                <button id="modal-skus-button" type="button" class="btn btn-light">Engadir</button>
+                    <button id="modal-skus-button" type="button" class="btn btn-light">Engadir</button>
 
+                </div>
             </div>
         </fieldset>
 

@@ -46,6 +46,7 @@ class TendaController extends AppController {
 
         $skus = $this->TendaProdutoSkus
             ->find()
+            ->where(['activo' => true])
             ->contain(['Produto']);
 
         $pedido = $this->TendaPedidos->getOrNew($id, ['contain'=>['Items' => ['Pedido', 'Sku' => ['Produto' => 'Prezos']]]]);
