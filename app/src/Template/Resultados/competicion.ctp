@@ -25,7 +25,7 @@ $is_torneo = $competicion->tipo === 'torneo';
                 <?= $this->Form->control('id_campo', ['options'=>$this->AgfgForm->objectToKeyValue($campos,'id','nome'), 'label'=>'Campo']) ?>
             </div>
             <div class="col-lg-3">
-                <?= $this->Form->control('pendente', ['options'=>['0'=>'Non', '1'=>'Si']]) ?>
+                <?= $this->Form->control('pendente', ['options'=>['0'=>'Non', '1'=>'Si'], 'default'=>'1']) ?>
             </div>
             <div class="col-lg-3">
                 <?= $this->Form->button('Buscar', ['class'=>'btn btn-primary', 'style'=> ['margin-top: 1.7em']]); ?>

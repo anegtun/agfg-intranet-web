@@ -64,7 +64,8 @@ class ResultadosController extends AppController {
         if(!empty($this->request->getQuery('id_campo'))) {
             $partidos->where(['Partidos.id_campo' => $this->request->getQuery('id_campo')]);
         }
-        if(!empty($this->request->getQuery('pendente'))) {
+        $pendente = $this->request->getQuery('pendente');
+        if(!isset($pendente) || !empty($pendente)) {
             $partidos->where(function (QueryExpression $exp, Query $query) {
                 $goles = $query->newExpr()->isNull('Partidos.goles_equipa1');
                 $tantos = $query->newExpr()->isNull('Partidos.tantos_equipa1');
