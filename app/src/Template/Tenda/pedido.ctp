@@ -36,6 +36,10 @@ if(!empty($pedido->id)) {
             <div class="form-group col-lg-2">
                 <?= $this->Form->control('estado', ['options'=>array_merge([''=>''], $estados), 'label'=>'Estado']) ?>
             </div>
+            <div class="form-group">
+                <?= $this->Form->checkbox('pago', ['id'=>'pago','templates'=>$emptyTemplates]) ?>
+                <label for="pago">Pago</label>
+            </div>
         </div>
     </fieldset>
 

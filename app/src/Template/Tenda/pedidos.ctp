@@ -31,6 +31,7 @@ $this->set('cabeceiraMigas', [
                     <th class="celda-titulo">Data</th>
                     <th class="celda-titulo">Nome</th>
                     <th class="celda-titulo">Estado</th>
+                    <th class="celda-titulo">Pago</th>
                     <th class="celda-titulo">Nº items</th>
                     <th class="celda-titulo text-right">Total</th>
                     <th class="celda-titulo">T. envío</th>
@@ -51,6 +52,11 @@ $this->set('cabeceiraMigas', [
                         <td><?= $p->data->format('Y-m-d') ?></td>
                         <td><?= $p->nome ?></td>
                         <td><?= $estados[$p->estado] ?></td>
+                        <td class="text-center">
+                            <?php if($p->pago) : ?>
+                                <a href="javascript:void(0)"><em class="glyphicon glyphicon-euro"></em></a>
+                            <?php endif ?>
+                        </td>
                         <td><?= count($p->items) ?></td>
                         <td class="text-right"><?= isset($total) ? ($this->Number->precision($total, 2)." &euro;") : '-' ?></td>
                         <td><?= empty($p->tipo_envio) ? '' : $tipos_envio[$p->tipo_envio] ?></td>
