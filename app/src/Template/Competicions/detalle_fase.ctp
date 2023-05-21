@@ -155,7 +155,7 @@ $this->Html->script('detalle-fase', ['block' => 'script']);
                     <fieldset>
                         <?= $this->Form->control('id_xornada', ['options'=>$this->AgfgForm->objectToKeyValue($fase->xornadas,'id','Xornada $e->numero ({$e->data->format(\'Y-m-d\')})'), 'label'=>'Xornada']) ?>
                         <?php
-                            $equipasHelper = $this->AgfgForm->objectToKeyValue($fase->equipasData,'id','nome');
+                            $equipasHelper = $this->AgfgForm->objectToKeyValue($fase->equipas,'id','nome');
                             echo $this->Form->control('id_equipa1', ['options'=>$equipasHelper, 'label'=>'Equipa local']);
                             echo $this->Form->control('id_equipa2', ['options'=>$equipasHelper, 'label'=>'Equipa visitante']);
                         ?>

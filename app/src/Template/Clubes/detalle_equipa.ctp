@@ -7,6 +7,11 @@ $this->set('cabeceiraMigas', [
     ['label'=>$equipa->clube->nome, 'url'=>['controller'=>'Clubes', 'action'=>'detalle', $equipa->clube->id]],
     ['label'=>empty($equipa->id) ? 'Nova equipa' : $equipa->nome]
 ]);
+
+$emptyTemplates = [
+    'inputContainer' => '{{content}}',
+    'input' => '<input type="{{type}}" name="{{name}}" {{attrs}}/>',
+];
 ?>
 
 <div class="row">
@@ -20,6 +25,10 @@ $this->set('cabeceiraMigas', [
             <?= $this->Form->control('nome_curto', ['label'=>'Nome curto']) ?>
             <?= $this->Form->control('categoria', ['options'=>$categorias, 'label'=>'Categoría']) ?>
             <?= $this->Form->control('logo', ['label'=>'Logo']) ?>
+            <div class="form-group">
+                <?= $this->Form->checkbox('activo', ['id'=>'activo','templates'=>$emptyTemplates]) ?>
+                <label for="activo">Activo</label>
+            </div>
             <?= $this->Form->button('Gardar', ['class'=>'btn btn-primary']); ?>
         </fieldset>
     <?= $this->Form->end() ?>

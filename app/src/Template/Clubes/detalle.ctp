@@ -59,7 +59,9 @@ $this->set('cabeceiraMigas', [
                     <th class="celda-titulo"></th>
                     <th class="celda-titulo">Código</th>
                     <th class="celda-titulo">Nome</th>
+                    <th class="celda-titulo">Nome curto</th>
                     <th class="celda-titulo">Categoria</th>
+                    <th class="celda-titulo">Activo</th>
                     <th class="celda-titulo"></th>
                     <th class="celda-titulo"></th>
                 </tr>
@@ -72,6 +74,11 @@ $this->set('cabeceiraMigas', [
                         <td><?= $e->nome ?></td>
                         <td><?= $e->nome_curto ?></td>
                         <td><?= $categorias[$e->categoria] ?></td>
+                        <td class="text-center">
+                            <?php if($e->activo) : ?>
+                                <a href="javascript:void(0)"><em class="glyphicon glyphicon-user"></em></a>
+                            <?php endif ?>
+                        </td>
                         <td class="text-center"><?= $this->AgfgForm->editButton(['action'=>'detalleEquipa', $e->id]) ?></td>
                         <td class="text-center"><?= $this->AgfgForm->deleteButton(['action'=>'borrarEquipa', $e->id]) ?></td>
                     </tr>
