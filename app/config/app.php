@@ -312,6 +312,11 @@ return [
         ],
     ],
 
+    'DebugKit' => [
+        'forceEnable' => true,
+        // other config options
+    ],
+
     /**
      * Configures logging options
      */
