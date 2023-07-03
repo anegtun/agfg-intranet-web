@@ -141,6 +141,9 @@ $submenu_option = empty($submenu_option) ? '' : $submenu_option;
                                         <li <?=$submenu_option==='pedidos'?'class="active"':''?>>
                                             <?= $this->Html->link('Pedidos', ['controller'=>'Tenda', 'action'=>'pedidos']) ?>
                                         </li>
+                                        <li <?=$submenu_option==='demanda'?'class="active"':''?>>
+                                            <?= $this->Html->link('Demanda', ['controller'=>'Tenda', 'action'=>'demanda']) ?>
+                                        </li>
                                         <li <?=$submenu_option==='stock'?'class="active"':''?>>
                                             <?= $this->Html->link('Stock', ['controller'=>'Tenda', 'action'=>'stock']) ?>
                                         </li>

@@ -103,6 +103,17 @@ class TendaController extends AppController {
         return $this->redirect(['action'=>'pedidos']);
     }
 
+    public function demanda() {
+        $estados = $this->TendaEstados->getAll();
+        $items = $this->TendaPedidoItems
+            ->find()
+            ->contain(['Pedido', 'Sku' => 'Produto'])
+            ->where(['Pedido.estado NOT IN ' => $this->TendaEstados->getCodigosFinalizados()])
+            ->toArray();
+        
+        $this->set(compact('estados', 'items'));
+    }
+
     public function stock() {
         $produtos = $this->TendaProdutos
             ->find()
