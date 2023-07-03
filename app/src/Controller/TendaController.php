@@ -28,11 +28,16 @@ class TendaController extends AppController {
         $pedidos = $this->TendaPedidos
             ->find()
             ->contain(['Items' => ['Pedido', 'Sku' => ['Produto' => 'Prezos']]])
-            ->order(['data' => 'DESC']);
+            ->order(['data' => 'DESC', 'id' => 'DESC']);
 
         $filtro = $this->request->getQuery('todos');
         if(empty($filtro) || $filtro==='P') {
-            $pedidos->where(['estado NOT IN ' => $this->TendaEstados->getCodigosFinalizados()]);
+            $pedidos->where([
+                'OR' => [
+                    'estado NOT IN ' => $this->TendaEstados->getCodigosFinalizados(),
+                    ['estado' => 'E', 'pago' => 0]
+                ]
+            ]);
         } else if($filtro==='F') {
             $pedidos->where(['estado IN ' => $this->TendaEstados->getCodigosFinalizados()]);
         }
