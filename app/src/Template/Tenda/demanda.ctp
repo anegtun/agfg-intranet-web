@@ -27,6 +27,8 @@ $this->set('cabeceiraMigas', [
             ];
         }
     }
+
+    usort($itemsEstado, function($a, $b) { return strcmp($a->nome, $b->nome); });
     ?>
 
     <?php if(!empty($itemsEstado)) : ?>
@@ -46,10 +48,10 @@ $this->set('cabeceiraMigas', [
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach($itemsEstado as $id => $item) : ?>
+                        <?php foreach($itemsEstado as $item) : ?>
                             <tr>
                                 <td class="text-center">
-                                    <a href="javascript:void(0)"><em class="glyphicon glyphicon-shopping-cart" data-toggle="modal" data-target="#modal-pedidos-<?= "{$id_estado}_{$id}" ?>"></em></a>
+                                    <a href="javascript:void(0)"><em class="glyphicon glyphicon-shopping-cart" data-toggle="modal" data-target="#modal-pedidos-<?= "{$id_estado}_{$item->id_sku}" ?>"></em></a>
                                 </td>
                                 <td><?= $item->nome ?></td>
                                 <td><?= $item->estado ?></td>
@@ -64,9 +66,9 @@ $this->set('cabeceiraMigas', [
 
 
 
-        <?php foreach($itemsEstado as $id => $item) : ?>
+        <?php foreach($itemsEstado as $item) : ?>
 
-            <div id="modal-pedidos-<?= "{$id_estado}_{$id}" ?>" class="modal fade" role="dialog">
+            <div id="modal-pedidos-<?= "{$id_estado}_{$item->id_sku}" ?>" class="modal fade" role="dialog">
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -78,6 +80,7 @@ $this->set('cabeceiraMigas', [
                                 <table class="table table-striped table-hover">
                                     <thead>
                                         <tr>
+                                            <th class="celda-titulo"></th>
                                             <th class="celda-titulo">Data</th>
                                             <th class="celda-titulo">Nome</th>
                                             <th class="celda-titulo">Cantidade</th>
@@ -87,12 +90,13 @@ $this->set('cabeceiraMigas', [
                                     </thead>
                                     <tbody>
                                         <?php
-                                        $itemPedido = array_filter($items, function ($i) use ($id, $id_estado) {
-                                            return $i->sku->id === $id && $i->pedido->estado === $id_estado;
+                                        $itemPedido = array_filter($items, function ($i) use ($item, $id_estado) {
+                                            return $i->sku->id === $item->id_sku && $i->pedido->estado === $id_estado;
                                         });
                                         ?>
                                         <?php foreach($itemPedido as $i) : ?>
                                             <tr>
+                                                <td class="text-center"><?= $this->AgfgForm->editButton(['action'=>'pedido', $i->pedido->id]) ?></td>
                                                 <td><?= $i->pedido->data->format('Y-m-d') ?></td>
                                                 <td><?= $i->pedido->nome ?></td>
                                                 <td><?= $i->cantidade ?></td>

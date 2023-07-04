@@ -109,6 +109,7 @@ class TendaController extends AppController {
             ->find()
             ->contain(['Pedido', 'Sku' => 'Produto'])
             ->where(['Pedido.estado NOT IN ' => $this->TendaEstados->getCodigosFinalizados()])
+            ->order(['Pedido.data' => 'DESC', 'Pedido.id' => 'DESC'])
             ->toArray();
         
         $this->set(compact('estados', 'items'));
