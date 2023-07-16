@@ -64,7 +64,7 @@ $this->Html->script('detalle-fase', ['block' => 'script']);
             <tbody>
                 <?php foreach($fase->xornadas as $x) : ?>
                     <tr>
-                        <td colspan="3">
+                        <td colspan="4">
                             <?= empty($x->descricion) ? "Xornada $x->numero" : $x->descricion ?>
                             <?= " ({$x->data->format('Y-m-d')})" ?>
                         </td>
@@ -86,12 +86,15 @@ $this->Html->script('detalle-fase', ['block' => 'script']);
                                 <td>&nbsp;</td>
                                 <td><?= $equipas_map[$p->id_equipa1] ?></td>
                                 <td><?= $equipas_map[$p->id_equipa2] ?></td>
+                                <td><?= $p->formatDataHora() ?></td>
                                 <td class="text-center">
                                     <?= $this->AgfgForm->editButton('#', [
                                         'data-partido-id'=>$p->id,
                                         'data-partido-id-xornada'=>$p->id_xornada,
                                         'data-partido-id-equipo1'=>$p->id_equipa1,
-                                        'data-partido-id-equipo2'=>$p->id_equipa2
+                                        'data-partido-id-equipo2'=>$p->id_equipa2,
+                                        'data-partido-data' => $p->data_partido->format('d-m-Y'),
+                                        'data-partido-hora' => $p->hora_partido
                                     ]) ?>
                                 </td>
                                 <td class="text-center">
@@ -159,6 +162,8 @@ $this->Html->script('detalle-fase', ['block' => 'script']);
                             echo $this->Form->control('id_equipa1', ['options'=>$equipasHelper, 'label'=>'Equipa local']);
                             echo $this->Form->control('id_equipa2', ['options'=>$equipasHelper, 'label'=>'Equipa visitante']);
                         ?>
+                        <?= $this->Form->control('data_partido', ['class'=>'form-control fld-date', 'label'=>'Data', 'templates'=>$emptyTemplates]) ?>
+                        <?= $this->Form->control('hora_partido', ['class'=>'form-control fld-time', 'label'=>'Hora', 'templates'=>$emptyTemplates]) ?>
                     </fieldset>
                 </div>
                 <div class="modal-footer">

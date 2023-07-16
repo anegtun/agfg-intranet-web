@@ -185,6 +185,7 @@ class CompeticionsController extends AppController {
         $partido = empty($data['id']) ? $this->Partidos->newEntity() : $this->Partidos->get($data['id']);
         if ($this->request->is('post') || $this->request->is('put')) {
             $partido = $this->Xornadas->patchEntity($partido, $this->request->getData());
+            $partido->data_partido = empty($data['data_partido']) ? NULL : Time::createFromFormat('d-m-Y', $data['data_partido']);
             if ($this->Partidos->save($partido)) {
                 $this->Flash->success(__('Gardouse o partido correctamente.'));
             } else {

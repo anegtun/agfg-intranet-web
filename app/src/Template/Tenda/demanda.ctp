@@ -48,7 +48,11 @@ $this->set('cabeceiraMigas', [
                         </tr>
                     </thead>
                     <tbody>
+                        <?php $totalDemanda = 0 ?>
+                        <?php $totalStock = 0 ?>
                         <?php foreach($itemsEstado as $item) : ?>
+                            <?php $totalDemanda += $item->demanda ?>
+                            <?php $totalStock += $item->stock ?>
                             <tr>
                                 <td class="text-center">
                                     <a href="javascript:void(0)"><em class="glyphicon glyphicon-shopping-cart" data-toggle="modal" data-target="#modal-pedidos-<?= "{$id_estado}_{$item->id_sku}" ?>"></em></a>
@@ -60,6 +64,15 @@ $this->set('cabeceiraMigas', [
                             </tr>
                         <?php endforeach ?>
                     </tbody>
+                    <tfoot>
+                        <tr>
+                            <th class="celda-titulo"></th>
+                            <th class="celda-titulo">TOTAL</th>
+                            <th class="celda-titulo"></th>
+                            <th class="celda-titulo"><?= $totalDemanda ?></th>
+                            <th class="celda-titulo"><?= $totalStock ?></th>
+                        </tr>
+                    </tfoot>
                 </table>
             </div>
         </div>

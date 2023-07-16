@@ -272,7 +272,7 @@ class CalendarioController extends RestController {
                 'codigo' => $equipas[$p->id_equipa1]->codigo,
                 'nome' => $equipas[$p->id_equipa1]->nome,
                 'nome_curto' => $equipas[$p->id_equipa1]->nome_curto,
-                'logo' => $equipas[$p->id_equipa1]->logo,
+                'logo' => $equipas[$p->id_equipa1]->getLogo(),
                 'goles' => $p->goles_equipa1,
                 'tantos' => $p->tantos_equipa1,
                 'total' => $p->getPuntuacionTotalEquipa1(),
@@ -284,7 +284,7 @@ class CalendarioController extends RestController {
                 'codigo' => $equipas[$p->id_equipa2]->codigo,
                 'nome' => $equipas[$p->id_equipa2]->nome,
                 'nome_curto' => $equipas[$p->id_equipa2]->nome_curto,
-                'logo' => $equipas[$p->id_equipa2]->logo,
+                'logo' => $equipas[$p->id_equipa2]->getLogo(),
                 'goles' => $p->goles_equipa2,
                 'tantos' => $p->tantos_equipa2,
                 'total' => $p->getPuntuacionTotalEquipa2(),
@@ -316,7 +316,7 @@ class CalendarioController extends RestController {
                 'codigo' => $equipas[$p->id_umpire]->codigo,
                 'nome' => $equipas[$p->id_umpire]->nome,
                 'nome_curto' => $equipas[$p->id_umpire]->nome_curto,
-                'logo' => $equipas[$p->id_umpire]->logo
+                'logo' => $equipas[$p->id_umpire]->getLogo()
             ];
         }
         return $resP;

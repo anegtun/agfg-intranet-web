@@ -184,7 +184,7 @@ class Clasificacion {
             'codigo' => $this->_equipas[$id]->codigo,
             'nome' => $this->_equipas[$id]->nome,
             'nome_curto' => $this->_equipas[$id]->nome_curto,
-            'logo' => $this->_equipas[$id]->logo,
+            'logo' => $this->_equipas[$id]->getLogo(),
             'posicion' => 0,
             'puntos' => 0,
             'puntos_sen_sancion' => 0,

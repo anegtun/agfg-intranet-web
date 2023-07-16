@@ -16,8 +16,12 @@ class EquipasTable extends AgfgTable {
     }
 
     public function findMap() {
-        $bd = $this->find()->order('nome');
-        $res = [];
+        $bd = $this
+            ->find()
+            ->contain(['Clube'])
+            ->order('Equipas.nome');
+        
+            $res = [];
         foreach($bd as $e) {
             $res[$e->id] = $e;
         }
