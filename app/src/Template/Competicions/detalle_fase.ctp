@@ -84,8 +84,8 @@ $this->Html->script('detalle-fase', ['block' => 'script']);
                         <?php foreach($x->partidos as $p) : ?>
                             <tr>
                                 <td>&nbsp;</td>
-                                <td><?= $equipas_map[$p->id_equipa1] ?></td>
-                                <td><?= $equipas_map[$p->id_equipa2] ?></td>
+                                <td><?= empty($p->id_equipa1) ? $p->provisional_equipa1 : $equipas_map[$p->id_equipa1] ?></td>
+                                <td><?= empty($p->id_equipa2) ? $p->provisional_equipa2 : $equipas_map[$p->id_equipa2] ?></td>
                                 <td><?= $p->formatDataHora() ?></td>
                                 <td class="text-center">
                                     <?= $this->AgfgForm->editButton('#', [
@@ -93,6 +93,8 @@ $this->Html->script('detalle-fase', ['block' => 'script']);
                                         'data-partido-id-xornada'=>$p->id_xornada,
                                         'data-partido-id-equipo1'=>$p->id_equipa1,
                                         'data-partido-id-equipo2'=>$p->id_equipa2,
+                                        'data-partido-provisional-equipo1' => $p->provisional_equipa1,
+                                        'data-partido-provisional-equipo2' => $p->provisional_equipa2,
                                         'data-partido-data' => $p->data_partido->format('d-m-Y'),
                                         'data-partido-hora' => $p->hora_partido
                                     ]) ?>
@@ -160,7 +162,9 @@ $this->Html->script('detalle-fase', ['block' => 'script']);
                         <?php
                             $equipasHelper = $this->AgfgForm->objectToKeyValue($fase->equipas,'id','nome');
                             echo $this->Form->control('id_equipa1', ['options'=>$equipasHelper, 'label'=>'Equipa local']);
+                            echo $this->Form->control('provisional_equipa1', ['label'=>'Equipa local (provisional)']);
                             echo $this->Form->control('id_equipa2', ['options'=>$equipasHelper, 'label'=>'Equipa visitante']);
+                            echo $this->Form->control('provisional_equipa2', ['label'=>'Equipa visitante (provisional)']);
                         ?>
                         <?= $this->Form->control('data_partido', ['class'=>'form-control fld-date', 'label'=>'Data', 'templates'=>$emptyTemplates]) ?>
                         <?= $this->Form->control('hora_partido', ['class'=>'form-control fld-time', 'label'=>'Hora', 'templates'=>$emptyTemplates]) ?>

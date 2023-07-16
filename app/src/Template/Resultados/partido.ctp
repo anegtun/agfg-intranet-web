@@ -1,11 +1,18 @@
 <?php
 $this->extend('template');
 $this->set('cabeceiraTitulo', $partido->competicion->nome);
+
+$nome1 = empty($partido->id_equipa1) ? $partido->provisional_equipa1 : $equipas[$partido->id_equipa1]->nome;
+$nome2 = empty($partido->id_equipa2) ? $partido->provisional_equipa2 : $equipas[$partido->id_equipa2]->nome;
+
+$logo1 = empty($partido->id_equipa1) ? '' : $equipas[$partido->id_equipa1]->getLogo();
+$logo2 = empty($partido->id_equipa2) ? '' : $equipas[$partido->id_equipa2]->getLogo();
+
 $this->set('cabeceiraMigas', [
     ['label'=>'Competicións'],
     ['label'=>'Horarios e resultados', 'url'=>['controller'=>'Resultados', 'action'=>'index']],
     ['label'=>$partido->competicion->nome, 'url'=>['controller'=>'Resultados', 'action'=>'competicion', $partido->competicion->id]],
-    ['label'=>$equipas[$partido->id_equipa1]->nome.' - '.$equipas[$partido->id_equipa2]->nome]
+    ['label'=>$nome1.' - '.$nome2]
 ]);
 $emptyTemplates = [
     'inputContainer' => '{{content}}',
@@ -18,7 +25,15 @@ $emptyTemplates = [
     <?= $this->Form->hidden('id') ?>
     <?= $this->Form->hidden('id_competicion', ['value'=>$partido->competicion->id]) ?>
     <fieldset>
-        <legend><?=$partido->competicion->nome?> - <?=$categorias[$partido->fase->categoria]?> - Xornada <?=$partido->xornada->numero?> (<?=$partido->xornada->data?>)</legend>
+        <legend>
+            <?=$partido->competicion->nome?>
+            -
+            <?= $partido->fase->nome ?>
+            (<?= $partido->fase->categoria ?>)
+            -
+            <?= empty($partido->xornada->descricion) ? "Xornada {$partido->xornada->numero}" : $partido->xornada->descricion ?>
+            (<?=$partido->xornada->data?>)
+        </legend>
         <div class="row">
             <div class="form-group col-lg-1">
                 <?= $this->Form->control('data', ['class'=>'form-control fld-date', 'label'=>'Data', 'value'=>$partido->data_partido_str, 'templates'=>$emptyTemplates]) ?>
@@ -54,10 +69,10 @@ $emptyTemplates = [
             <div class="col-lg-6">
                 <div class="row">
                     <h3>
-                        <?php if(!empty($equipas[$partido->id_equipa1]->logo)) : ?>
-                            <?= $this->Html->image($equipas[$partido->id_equipa1]->logo, ['width'=>30]) ?>&nbsp;
+                        <?php if(!empty($logo1)) : ?>
+                            <?= $this->Html->image($logo1, ['width'=>30]) ?>&nbsp;
                         <?php endif ?>
-                        <?= $equipas[$partido->id_equipa1]->nome ?>
+                        <?= $nome1 ?>
                     </h3>
                 </div>
                 <div class="row">
@@ -90,10 +105,10 @@ $emptyTemplates = [
             <div class="col-lg-6">
                 <div class="row">
                     <h3>
-                        <?php if(!empty($equipas[$partido->id_equipa2]->logo)) : ?>
-                            <?= $this->Html->image($equipas[$partido->id_equipa2]->logo, ['width'=>30]) ?>&nbsp;
+                        <?php if(!empty($logo2)) : ?>
+                            <?= $this->Html->image($logo2, ['width'=>30]) ?>&nbsp;
                         <?php endif ?>
-                        <?= $equipas[$partido->id_equipa2]->nome ?>
+                        <?= $nome2 ?>
                     </h3>
                 </div>
                 <div class="row">

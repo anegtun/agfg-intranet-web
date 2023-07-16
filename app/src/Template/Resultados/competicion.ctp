@@ -62,8 +62,10 @@ $is_torneo = $competicion->tipo === 'torneo';
             $data_referencia = $p->data_partido ? $p->data_partido : $p->xornada->data;
             $sabado = $data_referencia->modify('next monday')->modify('previous saturday')->format('Y-m-d');
 
-            $logo1 = empty($equipas[$p->id_equipa1]->logo) ? '' : $this->Html->image($equipas[$p->id_equipa1]->logo, ['width'=>25]);
-            $logo2 = empty($equipas[$p->id_equipa2]->logo) ? '' : $this->Html->image($equipas[$p->id_equipa2]->logo, ['width'=>25]);
+            $nome1 = empty($p->id_equipa1) ? $p->provisional_equipa1 : $equipas[$p->id_equipa1]->nome_curto;
+            $nome2 = empty($p->id_equipa2) ? $p->provisional_equipa2 : $equipas[$p->id_equipa2]->nome_curto;
+            $logo1 = empty($p->id_equipa1) ? '' : $equipas[$p->id_equipa1]->getLogo();
+            $logo2 = empty($p->id_equipa2) ? '' : $equipas[$p->id_equipa2]->getLogo();
 
             $total1 = $p->getPuntuacionTotalEquipa1() === NULL ? '-' : $p->getPuntuacionTotalEquipa1();
             $total2 = $p->getPuntuacionTotalEquipa2() === NULL ? '-' : $p->getPuntuacionTotalEquipa2();
@@ -89,8 +91,8 @@ $is_torneo = $competicion->tipo === 'torneo';
             
             <div class="agfg-partido-equipas">
                 <div class='agfg-partido-equipa'>
-                    <div><figure><?= $logo1 ?></figure></div>
-                    <div class='agfg-partido-equipa-nome'><?= $equipas[$p->id_equipa1]->nome_curto ?></div>
+                    <div><figure><?= empty($logo1) ? '' : $this->Html->image($logo1, ['width'=>25]) ?></figure></div>
+                    <div class='agfg-partido-equipa-nome'><?= $nome1 ?></div>
                     <div class='agfg-partido-resultado-equipa1 <?= $p->getGanador()==='L'?'agfg-partido-resultado-ganador':'' ?>'>
                         <div><?= $total1 ?></div>
                         <?php if(!empty($desglose1)) : ?>
@@ -99,8 +101,8 @@ $is_torneo = $competicion->tipo === 'torneo';
                     </div>
                 </div>
                 <div class='agfg-partido-equipa'>
-                    <div><figure><?= $logo2 ?></figure></div>
-                    <div class='agfg-partido-equipa-nome'><?= $equipas[$p->id_equipa2]->nome_curto ?></div>
+                    <div><figure><?= empty($logo2) ? '' : $this->Html->image($logo2, ['width'=>25]) ?></figure></div>
+                    <div class='agfg-partido-equipa-nome'><?= $nome2 ?></div>
                     <div class='agfg-partido-resultado-equipa2 <?= $p->getGanador()==='V'?'agfg-partido-resultado-ganador':'' ?>'>
                         <div><?= $total2 ?></div>
                         <?php if(!empty($desglose2)) : ?>

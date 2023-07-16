@@ -27,6 +27,8 @@ $(document).ready(function() {
         modalPartido.find('[name=id_xornada]').val('');
         modalPartido.find('[name=id_equipa1]').val('');
         modalPartido.find('[name=id_equipa2]').val('');
+        modalPartido.find('[name=provisional_equipa1]').val('');
+        modalPartido.find('[name=provisional_equipa2]').val('');
         modalPartido.find('[name=data_partido]').val('');
         modalPartido.find('[name=hora_partido]').val('');
         modalPartido.modal("show");
@@ -38,6 +40,8 @@ $(document).ready(function() {
         modalPartido.find('[name=id_xornada]').val($(this).attr('data-partido-id-xornada'));
         modalPartido.find('[name=id_equipa1]').val($(this).attr('data-partido-id-equipo1'));
         modalPartido.find('[name=id_equipa2]').val($(this).attr('data-partido-id-equipo2'));
+        modalPartido.find('[name=provisional_equipa1]').val($(this).attr('data-partido-provisional-equipo1'));
+        modalPartido.find('[name=provisional_equipa2]').val($(this).attr('data-partido-provisional-equipo2'));
         modalPartido.find('[name=data_partido]').val($(this).attr('data-partido-data'));
         modalPartido.find('[name=hora_partido]').val($(this).attr('data-partido-hora'));
         modalPartido.modal("show");

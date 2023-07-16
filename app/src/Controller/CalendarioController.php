@@ -267,24 +267,24 @@ class CalendarioController extends RestController {
         if(!empty($p->data_calendario)) {
             $resP['data_calendario'] = $p->data_calendario;
         }
-        if(!empty($p->id_equipa1)) {
+        if(!empty($p->id_equipa1) || !empty($p->provisional_equipa1)) {
             $resP['equipa1'] = [
-                'codigo' => $equipas[$p->id_equipa1]->codigo,
-                'nome' => $equipas[$p->id_equipa1]->nome,
-                'nome_curto' => $equipas[$p->id_equipa1]->nome_curto,
-                'logo' => $equipas[$p->id_equipa1]->getLogo(),
+                'codigo' => empty($p->id_equipa1) ? '' : $equipas[$p->id_equipa1]->codigo,
+                'nome' => empty($p->id_equipa1) ? $p->provisional_equipa1 : $equipas[$p->id_equipa1]->nome,
+                'nome_curto' => empty($p->id_equipa1) ? $p->provisional_equipa1 : $equipas[$p->id_equipa1]->nome_curto,
+                'logo' => empty($p->id_equipa1) ? '' : $equipas[$p->id_equipa1]->getLogo(),
                 'goles' => $p->goles_equipa1,
                 'tantos' => $p->tantos_equipa1,
                 'total' => $p->getPuntuacionTotalEquipa1(),
                 'non_presentado' => $p->non_presentado_equipa1
             ];
         }
-        if(!empty($p->id_equipa2)) {
+        if(!empty($p->id_equipa2) || !empty($p->provisional_equipa2)) {
             $resP['equipa2'] = [
-                'codigo' => $equipas[$p->id_equipa2]->codigo,
-                'nome' => $equipas[$p->id_equipa2]->nome,
-                'nome_curto' => $equipas[$p->id_equipa2]->nome_curto,
-                'logo' => $equipas[$p->id_equipa2]->getLogo(),
+                'codigo' => empty($p->id_equipa2) ? '' : $equipas[$p->id_equipa2]->codigo,
+                'nome' => empty($p->id_equipa2) ? $p->provisional_equipa2 : $equipas[$p->id_equipa2]->nome,
+                'nome_curto' => empty($p->id_equipa2) ? $p->provisional_equipa2 : $equipas[$p->id_equipa2]->nome_curto,
+                'logo' => empty($p->id_equipa2) ? '' : $equipas[$p->id_equipa2]->getLogo(),
                 'goles' => $p->goles_equipa2,
                 'tantos' => $p->tantos_equipa2,
                 'total' => $p->getPuntuacionTotalEquipa2(),

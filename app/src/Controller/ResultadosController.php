@@ -74,9 +74,11 @@ class ResultadosController extends AppController {
             });
         }
 
-        $fases = $this->Fases->find()
+        $fases = $this->Fases
+            ->find()
             ->where(['id_competicion'=>$id]);
-        $arbitros = $this->Arbitros->findMap();
+        
+            $arbitros = $this->Arbitros->findMap();
         $campos_map = $this->Campos->findMap();
         $equipas = $this->Equipas->findMap();
 
