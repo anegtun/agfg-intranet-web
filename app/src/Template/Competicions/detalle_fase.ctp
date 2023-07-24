@@ -66,12 +66,12 @@ $this->Html->script('detalle-fase', ['block' => 'script']);
                     <tr>
                         <td colspan="4">
                             <?= empty($x->descricion) ? "Xornada $x->numero" : $x->descricion ?>
-                            <?= " ({$x->data->format('Y-m-d')})" ?>
+                            <?= empty($x->data) ? "" : " ({$x->data->format('Y-m-d')})" ?>
                         </td>
                         <td class="text-center">
                             <?= $this->AgfgForm->editButton('#', [
                                 'data-xornada-id' => $x->id,
-                                'data-xornada-data' => $x->data->format('d-m-Y'),
+                                'data-xornada-data' => empty($x->data) ? '' : $x->data->format('d-m-Y'),
                                 'data-xornada-numero' => $x->numero,
                                 'data-xornada-descricion' => $x->descricion
                             ]) ?>
@@ -95,7 +95,7 @@ $this->Html->script('detalle-fase', ['block' => 'script']);
                                         'data-partido-id-equipo2'=>$p->id_equipa2,
                                         'data-partido-provisional-equipo1' => $p->provisional_equipa1,
                                         'data-partido-provisional-equipo2' => $p->provisional_equipa2,
-                                        'data-partido-data' => $p->data_partido->format('d-m-Y'),
+                                        'data-partido-data' => empty($p->data_partido) ? '' : $p->data_partido->format('d-m-Y'),
                                         'data-partido-hora' => $p->hora_partido
                                     ]) ?>
                                 </td>
@@ -158,7 +158,7 @@ $this->Html->script('detalle-fase', ['block' => 'script']);
                 </div>
                 <div class="modal-body">
                     <fieldset>
-                        <?= $this->Form->control('id_xornada', ['options'=>$this->AgfgForm->objectToKeyValue($fase->xornadas,'id','Xornada $e->numero ({$e->data->format(\'Y-m-d\')})'), 'label'=>'Xornada']) ?>
+                        <?= $this->Form->control('id_xornada', ['options'=>$this->AgfgForm->objectToKeyValue($fase->xornadas,'id','Xornada $e->numero'), 'label'=>'Xornada']) ?>
                         <?php
                             $equipasHelper = $this->AgfgForm->objectToKeyValue($fase->equipas,'id','nome');
                             echo $this->Form->control('id_equipa1', ['options'=>$equipasHelper, 'label'=>'Equipa local']);

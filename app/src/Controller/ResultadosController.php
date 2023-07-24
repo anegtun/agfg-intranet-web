@@ -54,7 +54,9 @@ class ResultadosController extends AppController {
             ->order(['data_calendario','hora_partido', 'Equipas1.nome'])
             ->formatResults(function (\Cake\Collection\CollectionInterface $results) {
                 return $results->map(function ($row) {
-                    $row['data_calendario'] = FrozenDate::createFromFormat('Y-m-d', $row['data_calendario']);
+                    if (!empty($row['data_calendario'])) {
+                        $row['data_calendario'] = FrozenDate::createFromFormat('Y-m-d', $row['data_calendario']);
+                    }
                     return $row;
                 });
             });

@@ -60,7 +60,7 @@ $is_torneo = $competicion->tipo === 'torneo';
             }
 
             $data_referencia = $p->data_partido ? $p->data_partido : $p->xornada->data;
-            $sabado = $data_referencia->modify('next monday')->modify('previous saturday')->format('Y-m-d');
+            $sabado = empty($data_referencia) ? NULL : $data_referencia->modify('next monday')->modify('previous saturday')->format('Y-m-d');
 
             $nome1 = empty($p->id_equipa1) ? $p->provisional_equipa1 : $equipas[$p->id_equipa1]->nome_curto;
             $nome2 = empty($p->id_equipa2) ? $p->provisional_equipa2 : $equipas[$p->id_equipa2]->nome_curto;
@@ -77,7 +77,7 @@ $is_torneo = $competicion->tipo === 'torneo';
             $umpires = empty($p->id_umpire) ? '-' : "{$equipas[$p->id_umpire]->nome} ({$equipas[$p->id_umpire]->categoria})";
         ?>
 
-        <?php if($data_xornada !== $sabado) : ?>
+        <?php if(!empty($sabado) && $data_xornada !== $sabado) : ?>
             <?php $data_xornada = $sabado; ?>
             <div class="agfg-xornada"><?= $data_xornada ?></div>
         <?php endif?>
