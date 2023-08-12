@@ -7,6 +7,7 @@ class TendaEstados {
         return [
             'N' => 'Novo',
             'PC' => 'Pendente cliente',
+            'PP' => 'Pendente pedir',
             'PS' => 'Pendente stock',
             'PE' => 'Pendente envío',
             'NC' => 'Non contesta',
