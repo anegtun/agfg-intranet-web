@@ -1,12 +1,14 @@
 <?php
 $this->extend('template');
 if($prevision) {
+    $this->set('submenu_option', 'previsions');
     $this->set('cabeceiraTitulo', 'Previsións');
     $this->set('cabeceiraMigas', [
         ['label'=>'Xestión Económica', 'url'=>['controller'=>'Economico', 'action'=>'index']],
         ['label'=>'Previsións']
     ]);
 } else {
+    $this->set('submenu_option', 'movementos');
     $this->set('cabeceiraTitulo', 'Movementos');
     $this->set('cabeceiraMigas', [
         ['label'=>'Xestión Económica', 'url'=>['controller'=>'Economico', 'action'=>'index']],

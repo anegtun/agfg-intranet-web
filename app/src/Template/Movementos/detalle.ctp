@@ -1,12 +1,14 @@
 <?php
 $this->extend('template');
 if($movemento->prevision) {
+    $this->set('submenu_option', 'previsions');
     $this->set('cabeceiraTitulo', empty($movemento->id) ? 'Nova previsión' : $movemento->data->format('Y-m-d'));
     $this->set('cabeceiraMigas', [
         ['label'=>'Previsións', 'url'=>['controller'=>'Movementos', 'action'=>'previsions']],
         ['label'=>empty($movemento->id) ? 'Nova previsión' : $movemento->data->format('Y-m-d')]
     ]);
 } else {
+    $this->set('submenu_option', 'movementos');
     $this->set('cabeceiraTitulo', empty($movemento->id) ? 'Novo movemento' : $movemento->data->format('Y-m-d'));
     $this->set('cabeceiraMigas', [
         ['label'=>'Movementos', 'url'=>['controller'=>'Movementos', 'action'=>'index']],

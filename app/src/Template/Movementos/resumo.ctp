@@ -1,5 +1,6 @@
 <?php
 $this->extend('template');
+$this->set('submenu_option', 'resumo');
 $this->set('cabeceiraTitulo', 'Resumo');
 $this->set('cabeceiraMigas', [
     ['label'=>'Xestión Económica', 'url'=>['controller'=>'Economico', 'action'=>'index']],
