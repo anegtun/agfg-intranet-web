@@ -98,6 +98,7 @@ $this->set('cabeceiraMigas', [
                                             <th class="celda-titulo">Nome</th>
                                             <th class="celda-titulo">Cantidade</th>
                                             <th class="celda-titulo">Persoalización</th>
+                                            <th class="celda-titulo">T. envío</th>
                                             <th class="celda-titulo">Pago</th>
                                         </tr>
                                     </thead>
@@ -114,6 +115,7 @@ $this->set('cabeceiraMigas', [
                                                 <td><?= $i->pedido->nome ?></td>
                                                 <td><?= $i->cantidade ?></td>
                                                 <td><?= $i->persoalizacion ?></td>
+                                                <td><?= empty($i->pedido->tipo_envio) ? '' : $tipos_envio[$i->pedido->tipo_envio] ?></td>
                                                 <td class="text-center">
                                                     <?php if($i->pedido->pago) : ?>
                                                         <a href="javascript:void(0)"><em class="glyphicon glyphicon-euro"></em></a>

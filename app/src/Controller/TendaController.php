@@ -105,6 +105,7 @@ class TendaController extends AppController {
 
     public function demanda() {
         $estados = $this->TendaEstados->getAll();
+        $tipos_envio = $this->TendaTipoEnvio->getAll();
         $items = $this->TendaPedidoItems
             ->find()
             ->contain(['Pedido', 'Sku' => 'Produto'])
@@ -112,7 +113,7 @@ class TendaController extends AppController {
             ->order(['Pedido.data' => 'DESC', 'Pedido.id' => 'DESC'])
             ->toArray();
         
-        $this->set(compact('estados', 'items'));
+        $this->set(compact('estados', 'tipos_envio', 'items'));
     }
 
     public function stock() {
