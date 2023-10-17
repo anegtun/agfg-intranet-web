@@ -1,4 +1,4 @@
 <?php
 return [
-    'agfg.version' => '1.11.4'
+    'agfg.version' => '1.12.0'
 ];

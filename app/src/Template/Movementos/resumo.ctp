@@ -63,7 +63,8 @@ foreach($previsions as $p) {
         </div>
 
         <div style="margin-top:1em">
-            <?= $this->Form->button('Buscar', ['class'=>'btn btn-primary']); ?>
+            <?= $this->Form->button('Buscar', ['name'=>'accion', 'value'=>'buscar', 'class'=>'btn btn-primary']) ?>
+            <?= $this->Form->button('Exportar', ['name'=>'accion', 'value'=>'pdf', 'class'=>'btn btn-default']) ?>
         </div>
 
     <?= $this->Form->end() ?>
