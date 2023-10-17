@@ -116,7 +116,7 @@ class EconomicoController extends AppController {
 
     public function detalleSubarea($id=null) {
         $subarea = empty($id) ? $this->Subareas->newEntity() : $this->Subareas->get($id);
-        $areas = $this->Areas->find()->find('list', ['keyField'=>'id','valueField'=>'nome','order'=>'nome'])->toArray();
+        $areas = $this->Areas->find()->contain(['PartidaOrzamentaria'])->order(['PartidaOrzamentaria.nome', 'MovementosArea.nome']);
         $this->set(compact('subarea', 'areas'));
     }
 

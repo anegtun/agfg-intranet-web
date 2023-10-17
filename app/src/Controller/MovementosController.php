@@ -32,9 +32,10 @@ class MovementosController extends AppController {
     private function listarMovementos($prevision) {
         $contas = $this->Contas->getAllWithEmpty();
         $tempadas = $this->Tempadas->getTempadasWithEmpty();
+        $areas = $this->Areas->find()->contain(['PartidaOrzamentaria'])->order(['PartidaOrzamentaria.nome', 'MovementosArea.nome']);
         $subareas = $this->Subareas->find('all', ['order'=>'Area.nome'])->contain(['Area']);
         $movementos = $this->movementosFiltrados($prevision);
-        $this->set(compact('prevision', 'movementos', 'contas', 'subareas', 'tempadas'));
+        $this->set(compact('prevision', 'movementos', 'contas', 'areas', 'subareas', 'tempadas'));
     }
 
     public function resumo() {
@@ -143,8 +144,8 @@ class MovementosController extends AppController {
         $movemento->data_str = empty($movemento->data) ? NULL : $movemento->data->format('d-m-Y');
         $contas = $this->Contas->getAllWithEmpty();
         $tempadas = $this->Tempadas->getTempadasWithEmpty();
-        $clubes = $this->Clubes->find('all', ['order'=>'nome']);
-        $subareas = $this->Subareas->find('all', ['order'=>'Area.nome'])->contain(['Area']);
+        $clubes = $this->Clubes->find()->order('nome');
+        $subareas = $this->Subareas->find()->contain(['Area' => 'PartidaOrzamentaria'])->order('PartidaOrzamentaria.nome', 'Area.nome');
         $this->set(compact('movemento', 'contas', 'tempadas', 'clubes', 'subareas'));
     }
 

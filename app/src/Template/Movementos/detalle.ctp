@@ -44,7 +44,7 @@ $emptyTemplates = [
                 <?= $this->Form->control('tempada', ['options'=>$tempadas, 'label'=>'Tempada', 'templates'=>$emptyTemplates]) ?>
             </div>
             <div class="form-group col-lg-3">
-                <?= $this->Form->control('id_subarea', ['options'=>$this->AgfgForm->objectToKeyValue($subareas,'id','{$e->area->nome} - {$e->nome}'), 'label'=>'Subárea', 'templates'=>$emptyTemplates]) ?>
+                <?= $this->Form->control('id_subarea', ['options'=>$this->AgfgForm->objectToKeyValue($subareas,'id','{$e->area->partidaOrzamentaria->nome} - {$e->area->nome} - {$e->nome}'), 'label'=>'Subárea', 'templates'=>$emptyTemplates]) ?>
             </div>
             <div class="form-group col-lg-3">
                 <?= $this->Form->control('conta', ['options'=>$contas, 'label'=>'Conta', 'templates'=>$emptyTemplates]) ?>
@@ -56,7 +56,10 @@ $emptyTemplates = [
 
         <div class="row">
             <div class="form-group col-lg-12">
-                <?= $this->Form->control('descricion', ['label'=>'Observacións']) ?>
+                <?= $this->Form->control('descricion', ['label'=>'Descrición']) ?>
+            </div>
+            <div class="form-group col-lg-12">
+                <?= $this->Form->control('referencia', ['label'=>'Referencia']) ?>
             </div>
         </div>
 

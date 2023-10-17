@@ -6,6 +6,11 @@ $this->set('cabeceiraMigas', [
     ['label'=>'Partidas Orzamentarias', 'url'=>['controller'=>'Economico', 'action'=>'partidasOrzamentarias']],
     ['label'=>empty($subarea->id) ? 'Nova subárea' : $subarea->nome]
 ]);
+
+$emptyTemplates = [
+    'inputContainer' => '{{content}}',
+    'input' => '<input type="{{type}}" name="{{name}}" {{attrs}}/>',
+];
 ?>
 
 <div class="row">
@@ -13,7 +18,7 @@ $this->set('cabeceiraMigas', [
         <?= $this->Form->hidden('id') ?>
         <fieldset>
             <legend>Subárea</legend>
-            <?= $this->Form->control('id_area', ['options'=>$areas, 'label'=>'Área']) ?>
+            <?= $this->Form->control('id_area', ['options'=>$this->AgfgForm->objectToKeyValue($areas,'id','{$e->partidaOrzamentaria->nome} - {$e->nome}'), 'label'=>'Área', 'templates'=>$emptyTemplates]) ?>
             <?= $this->Form->control('nome', ['label'=>'Nome']) ?>
             <?= $this->Form->button('Gardar', ['class'=>'btn btn-primary']); ?>
         </fieldset>
