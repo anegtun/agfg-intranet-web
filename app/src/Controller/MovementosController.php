@@ -3,6 +3,7 @@ namespace App\Controller;
 
 use App\Controller\AppController;
 use App\Model\Contas;
+use App\Model\ResumoEconomico;
 use App\Model\Tempadas;
 use Cake\I18n\FrozenDate;
 use Cake\I18n\Time;
@@ -18,6 +19,7 @@ class MovementosController extends AppController {
         $this->Clubes = TableRegistry::get('Clubes');
         $this->PartidasOrzamentarias = TableRegistry::get('MovementosPartidaOrzamentaria');
         $this->Subareas = TableRegistry::get('MovementosSubarea');
+        $this->loadComponent('ResumoEconomicoPdf');
     }
 
     public function index() {
@@ -39,62 +41,25 @@ class MovementosController extends AppController {
     }
 
     public function resumo() {
-        $tempadas = $this->Tempadas->getTempadasWithEmpty();
         $movementos = $this->movementosFiltrados(false);
         $previsions = $this->movementosFiltrados(true);
-        
-        $partidasOrzamentarias = $this->PartidasOrzamentarias
-            ->find()
-            ->order('nome');
+        $resumo = new ResumoEconomico($movementos, $previsions);
 
+        $partidasOrzamentarias = $this->PartidasOrzamentarias->find()->order('nome');
+        $areas = $this->Areas->find()->order('nome');
+        $tempadas = $this->Tempadas->getTempadasWithEmpty();
 
-        $areas = $this->Areas
-            ->find()
-            ->order('nome');
+        if($this->request->getQuery('accion') === 'pdf') {
+            $content = $this->ResumoEconomicoPdf->generate($resumo);
 
-        $resumo = [];
-        foreach($movementos as $m) {
-            $item = (object) [
-                'subarea' => $m->subarea,
-                'tempada' => $m->tempada,
-                'ingresos' => $m->importe>0 ? $m->importe : 0,
-                'gastos' => $m->importe<0 ? $m->importe : 0,
-                'comision' => $m->comision,
-                'balance' => $m->importe + $m->comision
-            ];
-            $existent = $this->findResumo($resumo, $item);
-            if($existent) {
-                $existent->ingresos += $item->ingresos;
-                $existent->gastos += $item->gastos;
-                $existent->comision += $item->comision;
-                $existent->balance += $item->balance;
-            } else {
-                $resumo[] = $item;
+            $response = $this->response
+                ->withStringBody($content)
+                ->withType('application/pdf');
+            if(!empty($this->request->getQuery('download'))) {
+                $response = $response->withDownload($audit->getReportFilename());
             }
+            return $response;
         }
-
-        foreach($previsions as $p) {
-            $item = (object) [
-                'subarea' => $p->subarea,
-                'tempada' => $p->tempada,
-                'ingresos_previstos' => $p->importe>0 ? $p->importe : 0,
-                'gastos_previstos' => $p->importe<0 ? $p->importe : 0
-            ];
-            $existent = $this->findResumo($resumo, $item);
-            if($existent) {
-                if(empty($existent->ingresos_previstos)) {
-                    $existent->ingresos_previstos = 0;
-                }
-                if(empty($existent->gastos_previstos)) {
-                    $existent->gastos_previstos = 0;
-                }
-                $existent->ingresos_previstos += $item->ingresos_previstos;
-                $existent->gastos_previstos += $item->gastos_previstos;
-            } else {
-                $resumo[] = $item;
-            }
-        }
-        usort($resumo, ["self", "cmpResumo"]);
 
         $this->set(compact('areas', 'movementos', 'partidasOrzamentarias', 'previsions', 'resumo', 'tempadas'));
     }
@@ -122,15 +87,6 @@ class MovementosController extends AppController {
         $clubes = empty($resumo) ? [] : $this->Clubes->find('all', ['order'=>'nome'])->where(['id IN' => array_keys($resumo)]);
 
         $this->set(compact('movementos', 'resumo', 'clubes', 'subareas', 'tempadas'));
-    }
-
-    private function findResumo($list, $item) {
-        foreach($list as $e) {
-            if($e->subarea->id===$item->subarea->id && $e->tempada===$item->tempada) {
-                return $e;
-            }
-        }
-        return null;
     }
 
     public function detalle($id=null) {
