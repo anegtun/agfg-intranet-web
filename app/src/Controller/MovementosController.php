@@ -50,7 +50,7 @@ class MovementosController extends AppController {
         $tempadas = $this->Tempadas->getTempadasWithEmpty();
 
         if($this->request->getQuery('accion') === 'pdf') {
-            $content = $this->ResumoEconomicoPdf->generate($resumo);
+            $content = $this->ResumoEconomicoPdf->generate($resumo, $tempadas, $this->request);
 
             $response = $this->response
                 ->withStringBody($content)
