@@ -130,184 +130,32 @@ $emptyTemplates = [
 
 <?php foreach($resumo->getAreas() as $area) : ?>
 
-    <div id="modal-movementos-area-<?= $area->id ?>" class="modal fade" role="dialog">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title"><?= $area->nome ?></h4>
-                </div>
-                <div class="modal-body">
-                    <div class="table-responsive">
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th class="celda-titulo text-center">Data</th>
-                                    <th class="celda-titulo text-center">Importe</th>
-                                    <th class="celda-titulo text-center">Comisión</th>
-                                    <th class="celda-titulo text-center">Subarea</th>
-                                    <th class="celda-titulo text-center">Tempada</th>
-                                    <th class="celda-titulo text-center">Conta</th>
-                                    <th class="celda-titulo text-center">Clube</th>
-                                    <th class="celda-titulo text-center">Observacións</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach($resumo->getMovementosArea(false, $area) as $m) : ?>
-                                    <tr>
-                                        <td class="text-center"><?= $m->data->format('Y-m-d') ?></td>
-                                        <td class="text-right <?= $m->importe<0 ? 'text-danger' : ''?>"><?= $this->Number->currency($m->importe, 'EUR') ?></td>
-                                        <td class="text-right <?= $m->comision<0 ? 'text-danger' : ''?>"><?= empty($m->comision) ? '' : $this->Number->currency($m->comision, 'EUR') ?></td>
-                                        <td class="text-center"><?= $m->subarea->nome ?></td>
-                                        <td class="text-center"><?= $tempadas[$m->tempada] ?></td>
-                                        <td class="text-center"><?= $this->Html->image("/images/conta-{$m->conta}-logo.png", ['width'=>30,'height'=>30]) ?></td>
-                                        <td class="text-center"><?= $m->clube ? ($this->Html->image($m->clube->logo, ['width'=>25,'height'=>25]) . ' ' . $m->clube->codigo) : '-' ?></td>
-                                        <td><?= $m->descricion ?></td>
-                                    </tr>
-                                <?php endforeach ?>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
+    <?= $this->element('Movementos/modal', [
+        'id' => "modal-movementos-area-{$area->id}",
+        'titulo' => $area->nome,
+        'movementos' => $resumo->getMovementosArea(false, $area)
+    ]) ?>
 
-    <div id="modal-previsions-area-<?= $area->id ?>" class="modal fade" role="dialog">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Previsións <?= $area->nome ?></h4>
-                </div>
-                <div class="modal-body">
-                    <div class="table-responsive">
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th class="celda-titulo text-center">Data</th>
-                                    <th class="celda-titulo text-center">Importe</th>
-                                    <th class="celda-titulo text-center">Comisión</th>
-                                    <th class="celda-titulo text-center">Subarea</th>
-                                    <th class="celda-titulo text-center">Tempada</th>
-                                    <th class="celda-titulo text-center">Conta</th>
-                                    <th class="celda-titulo text-center">Clube</th>
-                                    <th class="celda-titulo text-center">Observacións</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach($resumo->getMovementosArea(true, $area) as $m) : ?>
-                                    <tr>
-                                        <td class="text-center"><?= $m->data->format('Y-m-d') ?></td>
-                                        <td class="text-right <?= $m->importe<0 ? 'text-danger' : ''?>"><?= $this->Number->currency($m->importe, 'EUR') ?></td>
-                                        <td class="text-right <?= $m->comision<0 ? 'text-danger' : ''?>"><?= empty($m->comision) ? '' : $this->Number->currency($m->comision, 'EUR') ?></td>
-                                        <td class="text-center"><?= $m->subarea->nome ?></td>
-                                        <td class="text-center"><?= $tempadas[$m->tempada] ?></td>
-                                        <td class="text-center"><?= $this->Html->image("/images/conta-{$m->conta}-logo.png", ['width'=>30,'height'=>30]) ?></td>
-                                        <td class="text-center"><?= $m->clube ? ($this->Html->image($m->clube->logo, ['width'=>25,'height'=>25]) . ' ' . $m->clube->codigo) : '-' ?></td>
-                                        <td><?= $m->descricion ?></td>
-                                    </tr>
-                                <?php endforeach ?>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
+    <?= $this->element('Movementos/modal', [
+        'id' => "modal-previsions-area-{$area->id}",
+        'titulo' => "Previsións {$area->nome}",
+        'movementos' => $resumo->getMovementosArea(true, $area)
+    ]) ?>
 
     <?php foreach($resumo->getSubareas($area) as $subarea) : ?>
         <?php foreach($resumo->getConceptos($subarea) as $concepto) : ?>
-            
-            <div id="modal-movementos-subarea-<?= $subarea->id."_".preg_replace("/[ '()]/i", "_", $concepto) ?>" class="modal fade" role="dialog">
-                <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h4 class="modal-title"><?= $subarea->nome ?> (<?= $concepto ?>)</h4>
-                        </div>
-                        <div class="modal-body">
-                            <div class="table-responsive">
-                                <table class="table table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th class="celda-titulo text-center">Data</th>
-                                            <th class="celda-titulo text-center">Importe</th>
-                                            <th class="celda-titulo text-center">Comisión</th>
-                                            <th class="celda-titulo text-center">Conta</th>
-                                            <th class="celda-titulo text-center">Clube</th>
-                                            <th class="celda-titulo text-center">Observacións</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php foreach($resumo->getMovementosSubareaConcepto(false, $subarea, $concepto) as $m) : ?>
-                                            <tr>
-                                                <td class="text-center"><?= $m->data->format('Y-m-d') ?></td>
-                                                <td class="text-right <?= $m->importe<0 ? 'text-danger' : ''?>"><?= $this->Number->currency($m->importe, 'EUR') ?></td>
-                                                <td class="text-right <?= $m->comision<0 ? 'text-danger' : ''?>"><?= empty($m->comision) ? '' : $this->Number->currency($m->comision, 'EUR') ?></td>
-                                                <td class="text-center"><?= $this->Html->image("/images/conta-{$m->conta}-logo.png", ['width'=>30,'height'=>30]) ?></td>
-                                                <td class="text-center"><?= $m->clube ? ($this->Html->image($m->clube->logo, ['width'=>25,'height'=>25]) . ' ' . $m->clube->codigo) : '-' ?></td>
-                                                <td><?= $m->descricion ?></td>
-                                            </tr>
-                                        <?php endforeach ?>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
-            <div id="modal-previsions-subarea-<?= $subarea->id."_".preg_replace("/[ '()]/i", "_", $concepto) ?>" class="modal fade" role="dialog">
-                <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h4 class="modal-title">Previsións <?= $subarea->nome ?> (<?= $concepto ?>)</h4>
-                        </div>
-                        <div class="modal-body">
-                            <div class="table-responsive">
-                                <table class="table table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th class="celda-titulo text-center">Data</th>
-                                            <th class="celda-titulo text-center">Importe</th>
-                                            <th class="celda-titulo text-center">Comisión</th>
-                                            <th class="celda-titulo text-center">Conta</th>
-                                            <th class="celda-titulo text-center">Clube</th>
-                                            <th class="celda-titulo text-center">Observacións</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php foreach($resumo->getMovementosSubareaConcepto(true, $subarea, $concepto) as $m) : ?>
-                                            <tr>
-                                                <td class="text-center"><?= $m->data->format('Y-m-d') ?></td>
-                                                <td class="text-right <?= $m->importe<0 ? 'text-danger' : ''?>"><?= $this->Number->currency($m->importe, 'EUR') ?></td>
-                                                <td class="text-right <?= $m->comision<0 ? 'text-danger' : ''?>"><?= empty($m->comision) ? '' : $this->Number->currency($m->comision, 'EUR') ?></td>
-                                                <td class="text-center"><?= $this->Html->image("/images/conta-{$m->conta}-logo.png", ['width'=>30,'height'=>30]) ?></td>
-                                                <td class="text-center"><?= $m->clube ? ($this->Html->image($m->clube->logo, ['width'=>25,'height'=>25]) . ' ' . $m->clube->codigo) : '-' ?></td>
-                                                <td><?= $m->descricion ?></td>
-                                            </tr>
-                                        <?php endforeach ?>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <?= $this->element('Movementos/modal', [
+                'id' => "modal-movementos-subarea-" . $subarea->id . "_" . preg_replace("/[ '()]/i", "_", $concepto),
+                'titulo' => "{$subarea->nome} ($concepto)",
+                'movementos' => $resumo->getMovementosSubareaConcepto(false, $subarea, $concepto)
+            ]) ?>
+
+            <?= $this->element('Movementos/modal', [
+                'id' => "modal-previsions-subarea-" . $subarea->id . "_" . preg_replace("/[ '()]/i", "_", $concepto),
+                'titulo' => "Previsións {$subarea->nome} ($concepto)",
+                'movementos' => $resumo->getMovementosSubareaConcepto(true, $subarea, $concepto)
+            ]) ?>
 
         <?php endforeach ?>
     <?php endforeach ?>

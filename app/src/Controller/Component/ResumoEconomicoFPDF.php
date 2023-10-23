@@ -54,7 +54,6 @@ class ResumoEconomicoFPDF extends FPDF {
                     $this->Cell(25, 7, $this->printNumero($total_concepto->balance), 0, 0, 'R');
                     $this->SetDefaultFont();
                     $this->Ln();
-                    // $this->MultiCell(0, 5, utf8_decode($value->value));
                 }
             }
         }
