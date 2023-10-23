@@ -3,6 +3,7 @@ namespace App\Controller;
 
 use App\Controller\AppController;
 use App\Model\Contas;
+use App\Model\Tempadas;
 use Cake\ORM\TableRegistry;
 
 class EconomicoController extends AppController {
@@ -10,6 +11,7 @@ class EconomicoController extends AppController {
     public function initialize() {
         parent::initialize();
         $this->Contas = new Contas();
+        $this->Tempadas = new Tempadas();
         $this->PartidasOrzamentarias = TableRegistry::get('MovementosPartidaOrzamentaria');
         $this->Areas = TableRegistry::get('MovementosArea');
         $this->Subareas = TableRegistry::get('MovementosSubarea');
@@ -117,7 +119,10 @@ class EconomicoController extends AppController {
     public function detalleSubarea($id=null) {
         $subarea = empty($id) ? $this->Subareas->newEntity() : $this->Subareas->get($id);
         $areas = $this->Areas->find()->contain(['PartidaOrzamentaria'])->order(['PartidaOrzamentaria.nome', 'MovementosArea.nome']);
-        $this->set(compact('subarea', 'areas'));
+        $contas = $this->Contas->getAllWithEmpty();
+        $tempadas = $this->Tempadas->getTempadasWithEmpty();
+        $movementos = empty($id) ? [] : $this->Movementos->find()->where(['id_subarea' => $id]);
+        $this->set(compact('subarea', 'areas', 'movementos', 'contas', 'tempadas'));
     }
 
     public function gardarSubarea() {

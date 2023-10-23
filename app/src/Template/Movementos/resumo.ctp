@@ -10,6 +10,8 @@ $emptyTemplates = [
     'inputContainer' => '{{content}}',
     'input' => '<input type="{{type}}" name="{{name}}" {{attrs}}/>',
 ];
+
+$id_regexp = "/[ ñÑºª,'~()\*\.\/\?\+]/i";
 ?>
 
 <div class="row form-group">
@@ -82,9 +84,9 @@ $emptyTemplates = [
                                     <td class="text-right"><strong><?= empty($total_concepto->ingresos_previstos) ? '-' : $this->Number->currency($total_concepto->ingresos_previstos, 'EUR') ?></strong></td>
                                     <td class="text-right text-danger border-right"><strong><?= empty($total_concepto->gastos_previstos) ? '-' : $this->Number->currency($total_concepto->gastos_previstos, 'EUR') ?></strong></td>
                                     <td class="text-center">
-                                        <a href="javascript:void(0)"><em class="glyphicon glyphicon-th-list" data-toggle="modal" data-target="#modal-movementos-subarea-<?= $subarea->id."_".preg_replace("/[ '()]/i", "_", $concepto) ?>"></em></a>
+                                        <a href="javascript:void(0)"><em class="glyphicon glyphicon-th-list" data-toggle="modal" data-target="#modal-movementos-subarea-<?= $subarea->id."_".preg_replace($id_regexp, "_", $concepto) ?>"></em></a>
                                         &nbsp;
-                                        <a href="javascript:void(0)"><em class="glyphicon glyphicon-time" data-toggle="modal" data-target="#modal-previsions-subarea-<?= $subarea->id."_".preg_replace("/[ '()]/i", "_", $concepto) ?>"></em></a>
+                                        <a href="javascript:void(0)"><em class="glyphicon glyphicon-time" data-toggle="modal" data-target="#modal-previsions-subarea-<?= $subarea->id."_".preg_replace($id_regexp, "_", $concepto) ?>"></em></a>
                                     </td>
                                 </tr>
                         <?php endforeach ?>
@@ -146,13 +148,13 @@ $emptyTemplates = [
         <?php foreach($resumo->getConceptos($subarea) as $concepto) : ?>
 
             <?= $this->element('Movementos/modal', [
-                'id' => "modal-movementos-subarea-" . $subarea->id . "_" . preg_replace("/[ '()]/i", "_", $concepto),
+                'id' => "modal-movementos-subarea-" . $subarea->id . "_" . preg_replace($id_regexp, "_", $concepto),
                 'titulo' => "{$subarea->nome} ($concepto)",
                 'movementos' => $resumo->getMovementosSubareaConcepto(false, $subarea, $concepto)
             ]) ?>
 
             <?= $this->element('Movementos/modal', [
-                'id' => "modal-previsions-subarea-" . $subarea->id . "_" . preg_replace("/[ '()]/i", "_", $concepto),
+                'id' => "modal-previsions-subarea-" . $subarea->id . "_" . preg_replace($id_regexp, "_", $concepto),
                 'titulo' => "Previsións {$subarea->nome} ($concepto)",
                 'movementos' => $resumo->getMovementosSubareaConcepto(true, $subarea, $concepto)
             ]) ?>
