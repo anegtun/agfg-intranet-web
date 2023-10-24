@@ -22,7 +22,7 @@ $id_regexp = "/[ ñÑºª,'~()\*\.\/\?\+]/i";
                 <?= $this->Form->control('id_partida_orzamentaria', ['options'=>$this->AgfgForm->objectToKeyValue($partidasOrzamentarias,'id','nome'), 'label'=>'Partida orzamentaria', 'class'=>'form-control']) ?>
             </div>
             <div class="col-lg-2">
-                <?= $this->Form->control('id_area', ['options'=>$this->AgfgForm->objectToKeyValue($areas,'id','nome'), 'label'=>'Area', 'class'=>'form-control']) ?>
+                <?= $this->Form->control('id_area', ['options'=>$this->AgfgForm->objectToKeyValue($areas,'id','{$e->partidaOrzamentaria->nome} - {$e->nome}'), 'label'=>'Area', 'class'=>'form-control']) ?>
             </div>
             <div class="col-lg-2">
                 <?= $this->Form->control('tempada', ['options'=>$tempadas, 'label'=>'Tempada', 'class'=>'form-control']) ?>

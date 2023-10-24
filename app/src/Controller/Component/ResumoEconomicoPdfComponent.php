@@ -16,10 +16,8 @@ class ResumoEconomicoPdfComponent extends Component {
         $pdf->fmt = new NumberFormatter('es_ES', NumberFormatter::CURRENCY);
 
         $pdf->AliasNbPages();
-        $pdf->SetTitle(utf8_decode('Resumo económico'));
+        $pdf->SetTitle(utf8_decode('Informe económico'));
         $pdf->AddPage();
-        
-        $pdf->Intro();
         
         $pdf->Resumo();
 

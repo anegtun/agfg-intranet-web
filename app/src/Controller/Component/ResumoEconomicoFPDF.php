@@ -20,44 +20,86 @@ class ResumoEconomicoFPDF extends FPDF {
 
     use ResumoEconomicoFPDFCommonTraits;
 
-    function Intro() {
-        $this->Ln(10);
-        
+    function Header() {
+        $this->SetTextColor(0, 0, 0);
+        $this->Image(WWW_ROOT . DS . 'images' . DS . 'favicon' . DS . 'agfg-icon.png', 10, 8, 15);
+        $this->SetFont('Arial', 'B', 12);
+        $this->Cell(0, 5, utf8_decode('Informe económico'), 0, 0, 'R');
+        $this->Ln(5);
+        $this->SetFont('Arial', '', 10);
+
         if(!empty($this->request->getQuery('data_ini'))) {
-            $this->H3("Data inicio: {$this->request->getQuery('data_ini')}");
+            $this->Cell(0, 5, "Data inicio: {$this->request->getQuery('data_ini')}", 0, 0, 'R');
+            $this->Ln(5);
         }
         if(!empty($this->request->getQuery('data_fin'))) {
-            $this->H3("Data fin: {$this->request->getQuery('data_fin')}");
+            $this->Cell(0, 5, "Data fin: {$this->request->getQuery('data_fin')}", 0, 0, 'R');
+            $this->Ln(5);
         }
         if(!empty($this->request->getQuery('tempada'))) {
-            $this->H3("Tempada: {$this->tempadas[$this->request->getQuery('tempada')]}");
+            $this->Cell(0, 5, "Tempada: {$this->tempadas[$this->request->getQuery('tempada')]}", 0, 0, 'R');
+            $this->Ln(5);
         }
+
+        $this->Ln(10);
     }
 
     function Resumo() {
+        $count = 0;
+        $partidasOrzamentarias = $this->resumo->getPartidasOrzanentarias();
+        foreach($partidasOrzamentarias as $partidaOrzamentaria) {
+            $total_po = $this->resumo->getTotalPartidaOrzamentaria($partidaOrzamentaria);
 
-        foreach($this->resumo->getAreas() as $area) {
-            $total_area = $this->resumo->getTotalArea($area);
-            
-            $this->H2("{$area->partidaOrzamentaria->nome} - {$area->nome}");
+            $this->H1($partidaOrzamentaria->nome);
+            $this->SetFont('Arial', 'B', 14);
+            $this->SetBlueColor();
+            $this->Cell(63, 7, "Ingresos", 0, 0, 'C');
+            $this->Cell(63, 7, "Gastos", 0, 0, 'C');
+            $this->Cell(63, 7, "Balance", 0, 0, 'C');
+            $this->Ln(10);
+            $this->SetFont('Arial', '', 14);
+            $this->SetDefaultColor();
+            $this->Cell(63, 7, $this->printNumero($total_po->ingresos), 0, 0, 'C');
+            $this->Cell(63, 7, $this->printNumero($total_po->gastos + $total_po->comision), 0, 0, 'C');
+            $this->Cell(63, 7, $this->printNumero($total_po->balance), 0, 0, 'C');
+            $this->Ln(20);
 
-            foreach($this->resumo->getSubareas($area) as $subarea) {
-                $total_subarea = $this->resumo->getTotalSubarea($subarea);
+            foreach($this->resumo->getAreas($partidaOrzamentaria) as $area) {
+                $total_area = $this->resumo->getTotalArea($area);
+                
+                $this->H2($area->nome);
 
-                foreach($this->resumo->getConceptos($subarea) as $concepto) {
-                    $total_concepto = $this->resumo->getTotalConcepto($subarea, $concepto);
+                foreach($this->resumo->getSubareas($area) as $subarea) {
+                    $total_subarea = $this->resumo->getTotalSubarea($subarea);
 
-                    $this->Cell(100, 7, $this->printTexto(empty($concepto) ? $subarea->nome : "$subarea->nome: $concepto", 40));
-                    $this->Cell(25, 7, $this->printNumero($total_concepto->ingresos), 0, 0, 'R');
-                    $this->Cell(25, 7, $this->printNumero($total_concepto->gastos), 0, 0, 'R');
-                    $this->SetFont('Arial', 'B', 12);
-                    $this->Cell(25, 7, $this->printNumero($total_concepto->balance), 0, 0, 'R');
-                    $this->SetDefaultFont();
-                    $this->Ln();
+                    foreach($this->resumo->getConceptos($subarea) as $concepto) {
+                        $total_concepto = $this->resumo->getTotalConcepto($subarea, $concepto);
+
+                        $this->Cell(100, 7, $this->printTexto(empty($concepto) ? $subarea->nome : "$subarea->nome: $concepto", 40));
+                        $this->Cell(25, 7, $this->printNumero($total_concepto->ingresos), 0, 0, 'R');
+                        $this->Cell(25, 7, $this->printNumero($total_concepto->gastos + $total_concepto->comision), 0, 0, 'R');
+                        $this->SetFont('Arial', 'B', 12);
+                        $this->Cell(25, 7, $this->printNumero($total_concepto->balance), 0, 0, 'R');
+                        $this->SetDefaultFont();
+                        $this->Ln();
+                    }
                 }
+                $this->Ln(10);
+            }
+
+            if (++$count < count($partidasOrzamentarias)) {
+                $this->AddPage();
             }
         }
-        $this->Ln(20);
+    }
+
+    function Footer() {
+        $this->SetDefaultColor();
+        $this->SetY(-20);
+        $this->SetFont('Arial', '', 10);
+        $this->Ln();
+        $this->Cell(95, 5, utf8_decode('Asociación Galega de Fútbol Gaélico'));
+        $this->Cell(98, 5, utf8_decode('Páxina ').$this->PageNo().' de {nb}', 0, 0, 'R');
     }
 
     function printTexto($str, $max) {

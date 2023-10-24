@@ -11,13 +11,29 @@ class ResumoEconomico {
         $this->previsions = $previsions;
     }
 
-    public function getAreas() {
+    public function getPartidasOrzanentarias() {
         $result = [];
         foreach($this->movementos as $e) {
-            $result[$e->subarea->area->id] = $e->subarea->area;
+            $result[$e->subarea->area->partidaOrzamentaria->id] = $e->subarea->area->partidaOrzamentaria;
         }
         foreach($this->previsions as $e) {
-            $result[$e->subarea->area->id] = $e->subarea->area;
+            $result[$e->subarea->area->partidaOrzamentaria->id] = $e->subarea->partidaOrzamentaria->area;
+        }
+        usort($result, ["self", "cmpNome"]);
+        return $result;
+    }
+
+    public function getAreas($partidaOrzamentaria = null) {
+        $result = [];
+        foreach($this->movementos as $e) {
+            if (empty($partidaOrzamentaria) || $e->subarea->area->partidaOrzamentaria->id === $partidaOrzamentaria->id) {
+                $result[$e->subarea->area->id] = $e->subarea->area;
+            }
+        }
+        foreach($this->previsions as $e) {
+            if (empty($partidaOrzamentaria) || $e->subarea->area->partidaOrzamentaria->id === $partidaOrzamentaria->id) {
+                $result[$e->subarea->area->id] = $e->subarea->area;
+            }
         }
         usort($result, ["self", "cmpArea"]);
         return $result;
@@ -35,7 +51,7 @@ class ResumoEconomico {
                 $result[$e->subarea->id] = $e->subarea;
             }
         }
-        usort($result, ["self", "cmpSubArea"]);
+        usort($result, ["self", "cmpNome"]);
         return $result;
     }
 
@@ -65,6 +81,10 @@ class ResumoEconomico {
 
     public function getTotal() {
         return $this->sum(fn($e) => true);
+    }
+
+    public function getTotalPartidaOrzamentaria($partidaOrzamentaria) {
+        return $this->sum(fn($e) => $e->subarea->area->partidaOrzamentaria->id === $partidaOrzamentaria->id);
     }
 
     public function getTotalArea($area) {
@@ -125,7 +145,7 @@ class ResumoEconomico {
         return $cmp;
     }
 
-    private static function cmpSubArea($a, $b) {
+    private static function cmpNome($a, $b) {
         return strcmp($a->nome, $b->nome);
     }
 

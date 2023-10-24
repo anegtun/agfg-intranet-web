@@ -10,22 +10,22 @@ trait ResumoEconomicoFPDFCommonTraits {
 
     public function H1($str) {
         $this->SetFont('Arial', 'B', 20);
-        $this->SetTextColor(29, 113, 184);
+        $this->SetBlueColor();
         $this->MultiCell(0, 10, utf8_decode($str), 0, 'C');
         $this->SetDefaultFont();
-        $this->Ln(10);
+        $this->Ln(5);
     }
 
     public function H2($str) {
         $this->SetFont('Arial', 'B', 18);
-        $this->MultiCell(0, 15, utf8_decode($str), 0, 'C');
+        $this->MultiCell(0, 15, utf8_decode($str), 0, 'L');
         $this->SetDefaultFont();
-        $this->Ln(10);
+        $this->Ln(5);
     }
 
     public function H3($str) {
         $this->SetFont('Arial', 'B', 14);
-        $this->SetTextColor(29, 113, 184);
+        $this->SetBlueColor();
         $this->Cell(0, 15, utf8_decode($str));
         $this->SetDefaultFont();
         $this->Ln(20);
@@ -39,7 +39,15 @@ trait ResumoEconomicoFPDFCommonTraits {
 
     public function SetDefaultFont() {
         $this->SetFont('Arial', '', 12);
+        $this->SetDefaultColor();
+    }
+
+    public function SetDefaultColor() {
         $this->SetTextColor(0, 0, 0);
+    }
+
+    public function SetBlueColor() {
+        $this->SetTextColor(29, 113, 184);
     }
 
     public function Table($rows, $config) {

@@ -46,7 +46,7 @@ class MovementosController extends AppController {
         $resumo = new ResumoEconomico($movementos, $previsions);
 
         $partidasOrzamentarias = $this->PartidasOrzamentarias->find()->order('nome');
-        $areas = $this->Areas->find()->order('nome');
+        $areas = $this->Areas->find()->contain(['PartidaOrzamentaria'])->order(['PartidaOrzamentaria.nome', 'MovementosArea.nome']);
         $tempadas = $this->Tempadas->getTempadasWithEmpty();
 
         if($this->request->getQuery('accion') === 'pdf') {
