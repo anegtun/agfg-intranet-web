@@ -1,6 +1,7 @@
 # App  files #
 ##############
 /app/config/app.pro.php
+/app/uploads/**
 
 # CakePHP specific files #
 ##########################

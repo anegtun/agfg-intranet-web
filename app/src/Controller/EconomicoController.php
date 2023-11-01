@@ -5,6 +5,7 @@ use App\Controller\AppController;
 use App\Model\Contas;
 use App\Model\ResumoEconomico;
 use App\Model\Tempadas;
+use Cake\Filesystem\Folder;
 use Cake\I18n\FrozenDate;
 use Cake\I18n\Time;
 use Cake\ORM\TableRegistry;
@@ -21,6 +22,7 @@ class EconomicoController extends AppController {
         $this->Subareas = TableRegistry::get('EconomicoSubareas');
         $this->Facturas = TableRegistry::get('EconomicoFacturas');
         $this->Movementos = TableRegistry::get('EconomicoMovementos');
+        $this->loadComponent('EconomicoFactura');
         $this->loadComponent('MovementosEconomicos');
         $this->loadComponent('ResumoEconomicoPdf');
     }
@@ -143,8 +145,7 @@ class EconomicoController extends AppController {
     }
 
     public function borrarMovemento($id) {
-        $movemento = $this->Movementos->get($id);
-        if($this->Movementos->delete($movemento)) {
+        if($this->Movementos->deleteById($id)) {
             $this->Flash->success(__('Eliminouse o movemento correctamente.'));
         } else {
             $this->Flash->error(__('Erro ao eliminar o movemento.'));
@@ -156,7 +157,8 @@ class EconomicoController extends AppController {
         $factura = $this->Facturas->getOrNew($id);
         // Hack para que o datepicker non a líe formateando a data (alterna dia/mes). Asi forzamos o noso formato.
         $factura->data_str = empty($factura->data) ? NULL : $factura->data->format('d-m-Y');
-        $this->set(compact('factura'));
+        $files = empty($id) ? [] : $this->EconomicoFactura->list($factura);
+        $this->set(compact('factura', 'files'));
     }
 
     public function gardarFactura() {
@@ -164,13 +166,38 @@ class EconomicoController extends AppController {
         $data = $this->request->getData();
         $factura = $this->Facturas->patchEntity($factura, $data);
         $factura->data = empty($data['data']) ? NULL : Time::createFromFormat('d-m-Y', $data['data']);
+
         if ($this->Facturas->save($factura)) {
+            $this->EconomicoFactura->upload($factura, $this->request->data['file']);
             $this->Flash->success(__('Gardáronse os datos da factura correctamente.'));
             return $this->redirect(['action' => 'facturas']);
         }
         $this->Flash->error(__('Erro ao gardar os datos da factura.'));
         $this->set(compact('factura'));
         $this->render('detalleFactura');
+    }
+
+    public function borrarFactura($id) {
+        if($this->Facturas->deleteById($id)) {
+            $this->Flash->success(__('Eliminouse a factura correctamente.'));
+        } else {
+            $this->Flash->error(__('Erro ao eliminar a factura.'));
+        }
+        return $this->redirect(['action' => 'facturas']);
+    }
+
+    public function descargarFacturaArquivo($id_factura, $arquivo) {
+        $factura = $this->Facturas->get($id_factura);
+        $path = $this->EconomicoFactura->getPath($factura, $arquivo);
+        $this->response->file($path, ['name'=>$arquivo]);
+        return $this->response;
+    }
+
+    public function borrarFacturaArquivo($id_factura, $arquivo) {
+        $factura = $this->Facturas->get($id_factura);
+        $path = $this->EconomicoFactura->delete($factura, $arquivo);
+        $this->Flash->success(__('Eliminouse o arquivo correctamente.'));
+        return $this->redirect(['action' => 'detalleFactura', $factura->id]);
     }
 
     public function partidasOrzamentarias() {

@@ -14,7 +14,7 @@ $emptyTemplates = [
 ];
 ?>
 
-<?= $this->Form->create($factura, ['type'=>'post', 'url'=>['action'=>'gardarFactura']]) ?>
+<?= $this->Form->create($factura, ['type'=>'file', 'url'=>['action'=>'gardarFactura']]) ?>
     <?= $this->Form->hidden('id') ?>
     <fieldset>
         <legend>Factura</legend>
@@ -37,6 +37,36 @@ $emptyTemplates = [
             </div>
         </div>
 
+        <?php if(!empty($factura->id)) : ?>
+            <div class="row">
+                <?php echo $this->Form->input('file', ['type'=>'file', 'label'=>'Arquivo', 'class'=>'form-control', 'accept'=>"image/*,.pdf,.doc,.docx"]); ?>
+            </div>
+        <?php endif ?>
+
         <?= $this->Form->button('Gardar', ['class'=>'btn btn-primary glyphicon glyphicon-saved']); ?>
     </fieldset>
 <?= $this->Form->end() ?>
+
+
+
+<?php if(!empty($factura->id)) : ?>
+    <div class="row" style="margin-top:2em;">
+        <h3>Arquivos</h3>
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th class="celda-titulo">Nome</th>
+                    <th class="celda-titulo"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach($files as $f) : ?>
+                    <tr>
+                        <td><?= $this->Html->link($f, ['action'=>'descargarFacturaArquivo', $factura->id, urlencode($f)], ['target'=>'_blank']) ?></td>
+                        <td class="text-center"><?= $this->AgfgForm->deleteButton(['action'=>'borrarFacturaArquivo', $factura->id, urlencode($f)]) ?></td>
+                    </tr>
+                <?php endforeach ?>
+            <tbody>
+        </table>
+    </div>
+<?php endif ?>
