@@ -11,6 +11,13 @@ $emptyTemplates = [
     'input' => '<input type="{{type}}" name="{{name}}" {{attrs}}/>',
 ];
 
+$areas = [];
+foreach($partidasOrzamentarias as $po) {
+    foreach($po->areas as $a) {
+        $areas[] = $a;
+    }
+}
+
 $id_regexp = "/[ ñÑºª,'~()\*\.\/\?\+]/i";
 ?>
 

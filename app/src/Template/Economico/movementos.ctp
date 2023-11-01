@@ -24,6 +24,13 @@ $acumulado = 0;
 foreach($movementos as $m) {
     $acumulado += $m->getImporteConComision();
 }
+
+$areas = [];
+foreach($partidasOrzamentarias as $po) {
+    foreach($po->areas as $a) {
+        $areas[] = $a;
+    }
+}
 ?>
 
 

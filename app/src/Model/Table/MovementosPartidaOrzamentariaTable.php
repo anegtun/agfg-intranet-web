@@ -22,6 +22,7 @@ class MovementosPartidaOrzamentariaTable extends AgfgTable {
     public function findComplete() {
         return $this->find()
             ->contain(['Areas' => [
+                'PartidaOrzamentaria',
                 'Subareas' => ['sort' => 'Subareas.nome'],
                 'sort' => 'Areas.nome'
             ]])

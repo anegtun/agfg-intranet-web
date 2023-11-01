@@ -3,6 +3,7 @@ namespace App\Controller;
 
 use App\Controller\AppController;
 use App\Model\Contas;
+use App\Model\ResumoEconomico;
 use App\Model\Tempadas;
 use Cake\ORM\TableRegistry;
 
@@ -12,6 +13,7 @@ class EconomicoController extends AppController {
         parent::initialize();
         $this->Contas = new Contas();
         $this->Tempadas = new Tempadas();
+        $this->Clubes = TableRegistry::get('Clubes');
         $this->PartidasOrzamentarias = TableRegistry::get('MovementosPartidaOrzamentaria');
         $this->Areas = TableRegistry::get('MovementosArea');
         $this->Subareas = TableRegistry::get('MovementosSubarea');
@@ -32,6 +34,52 @@ class EconomicoController extends AppController {
     public function previsions() {
         $this->listarMovementos(true);
         $this->render('movementos');
+    }
+
+    public function resumo() {
+        $movementos = $this->MovementosEconomicos->find($this->request, false);
+        $previsions = $this->MovementosEconomicos->find($this->request, true);
+        $resumo = new ResumoEconomico($movementos, $previsions);
+
+        $partidasOrzamentarias = $this->PartidasOrzamentarias->findComplete();
+        $tempadas = $this->Tempadas->getTempadasWithEmpty();
+
+        if($this->request->getQuery('accion') === 'pdf') {
+            $content = $this->ResumoEconomicoPdf->generate($resumo, $tempadas, $this->request);
+            $response = $this->response->withStringBody($content)->withType('application/pdf');
+            if(!empty($this->request->getQuery('download'))) {
+                $response = $response->withDownload($content->getReportFilename());
+            }
+            return $response;
+        }
+
+        $this->set(compact('resumo', 'partidasOrzamentarias', 'tempadas'));
+    }
+
+    public function resumoClubes() {
+        $tempadas = $this->Tempadas->getTempadasWithEmpty();
+        $movementos = $this->MovementosEconomicos->find($this->request, false);
+
+        // TODO Mellorar
+        $resumo = [];
+        $ids_subareas = [];
+        foreach($movementos as $m) {
+            if(!empty($m->clube)) {
+                if(empty($resumo[$m->clube->id])) {
+                    $resumo[$m->clube->id] = [];
+                }
+                if(empty($resumo[$m->clube->id][$m->subarea->id])) {
+                    $resumo[$m->clube->id][$m->subarea->id] = 0;
+                }
+                $resumo[$m->clube->id][$m->subarea->id] += $m->importe;
+                $ids_subareas[] = $m->subarea->id;
+            }
+        }
+
+        $subareas = empty($ids_subareas) ? [] : $this->Subareas->find('all', ['order'=>'nome'])->where(['id IN' => $ids_subareas]);
+        $clubes = empty($resumo) ? [] : $this->Clubes->find('all', ['order'=>'nome'])->where(['id IN' => array_keys($resumo)]);
+
+        $this->set(compact('movementos', 'resumo', 'clubes', 'subareas', 'tempadas'));
     }
 
     public function partidasOrzamentarias() {
@@ -127,10 +175,9 @@ class EconomicoController extends AppController {
     private function listarMovementos($prevision) {
         $contas = $this->Contas->getAllWithEmpty();
         $tempadas = $this->Tempadas->getTempadasWithEmpty();
-        $areas = $this->Areas->find()->contain(['PartidaOrzamentaria'])->order(['PartidaOrzamentaria.nome', 'MovementosArea.nome']);
-        $subareas = $this->Subareas->find()->contain(['Area'])->order('Area.nome');
+        $partidasOrzamentarias = $this->PartidasOrzamentarias->findComplete();
         $movementos = $this->MovementosEconomicos->find($this->request, $prevision);
-        $this->set(compact('prevision', 'movementos', 'contas', 'areas', 'subareas', 'tempadas'));
+        $this->set(compact('prevision', 'contas', 'tempadas', 'partidasOrzamentarias', 'movementos'));
     }
 
 }
