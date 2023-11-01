@@ -14,7 +14,7 @@ $emptyTemplates = [
 ];
 ?>
 
-<?= $this->Form->create($factura, ['type'=>'file', 'url'=>['action'=>'gardarFactura']]) ?>
+<?= $this->Form->create($factura, ['type'=>'post', 'url'=>['action'=>'gardarFactura']]) ?>
     <?= $this->Form->hidden('id') ?>
     <fieldset>
         <legend>Factura</legend>
@@ -36,12 +36,6 @@ $emptyTemplates = [
                 <?= $this->Form->control('referencia', ['label'=>'Referencia']) ?>
             </div>
         </div>
-
-        <?php if(!empty($factura->id)) : ?>
-            <div class="row">
-                <?php echo $this->Form->input('file', ['type'=>'file', 'label'=>'Arquivo', 'class'=>'form-control', 'accept'=>"image/*,.pdf,.doc,.docx"]); ?>
-            </div>
-        <?php endif ?>
 
         <?= $this->Form->button('Gardar', ['class'=>'btn btn-primary glyphicon glyphicon-saved']); ?>
     </fieldset>
@@ -68,5 +62,12 @@ $emptyTemplates = [
                 <?php endforeach ?>
             <tbody>
         </table>
+
+        <?= $this->Form->create($factura, ['type'=>'post', 'enctype' => 'multipart/form-data', 'url'=>['action'=>'subirFactura']]) ?>
+            <div class="row">
+                <?php echo $this->Form->input('file', ['type'=>'file', 'label'=>'Arquivo', 'class'=>'form-control', 'accept'=>"image/*,.pdf,.doc,.docx"]); ?>
+            </div>
+            <?= $this->Form->button('Subir', ['class'=>'btn btn-default glyphicon glyphicon-upload']); ?>
+        <?= $this->Form->end() ?>
     </div>
 <?php endif ?>

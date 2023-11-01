@@ -27,11 +27,16 @@ class EconomicoFacturaComponent extends Component {
     }
 
     public function upload($factura, $file) {
-        if (!empty($factura->id) && !empty($file['name'])) {
+        if (!empty($factura->id) && !empty($file) && !empty($file['name'])) {
             $dir_path = $this->getFacturaDir($factura);
             $dir = new Folder($dir_path, true, 0755);
             move_uploaded_file($file['tmp_name'], $dir_path . DS . $file['name']);
         }
+    }
+
+    public function deleteAll($factura) {
+        $dir = new Folder($this->getFacturaDir($factura));
+        $dir->delete();
     }
 
     private function getFacturaDir($factura) {

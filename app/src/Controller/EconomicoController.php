@@ -168,7 +168,6 @@ class EconomicoController extends AppController {
         $factura->data = empty($data['data']) ? NULL : Time::createFromFormat('d-m-Y', $data['data']);
 
         if ($this->Facturas->save($factura)) {
-            $this->EconomicoFactura->upload($factura, $this->request->data['file']);
             $this->Flash->success(__('Gardáronse os datos da factura correctamente.'));
             return $this->redirect(['action' => 'facturas']);
         }
@@ -177,8 +176,16 @@ class EconomicoController extends AppController {
         $this->render('detalleFactura');
     }
 
+    public function subirFactura($id = NULL) {
+        $factura = $this->Facturas->get($id);
+        $this->EconomicoFactura->upload($factura, $this->request->data['file']);
+        $this->redirect(['action'=>'detalleFactura', $factura->id]);
+    }
+
     public function borrarFactura($id) {
-        if($this->Facturas->deleteById($id)) {
+        $factura = $this->Facturas->get($id);
+        if($this->Facturas->delete($factura)) {
+            $this->EconomicoFactura->deleteAll($factura);
             $this->Flash->success(__('Eliminouse a factura correctamente.'));
         } else {
             $this->Flash->error(__('Erro ao eliminar a factura.'));

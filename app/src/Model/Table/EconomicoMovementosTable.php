@@ -3,7 +3,7 @@ namespace App\Model\Table;
 
 use Cake\Validation\Validator;
 
-class MovementosTable extends AgfgTable {
+class EconomicoMovementosTable extends AgfgTable {
 
     public function initialize(array $config) {
         $this->setTable('agfg_economico_movementos');
