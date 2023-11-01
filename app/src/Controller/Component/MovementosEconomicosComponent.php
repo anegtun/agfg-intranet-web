@@ -3,12 +3,13 @@ namespace App\Controller\Component;
 
 use Cake\Event\Event;
 use Cake\Controller\Component;
+use Cake\I18n\FrozenDate;
 use Cake\ORM\TableRegistry;
 
 class MovementosEconomicosComponent extends Component {
 
     public function startup(Event $event) {
-        $this->Movementos = TableRegistry::get('Movementos');
+        $this->Movementos = TableRegistry::get('EconomicoMovementos');
     }
 
     public function find($request, $prevision = false) {
@@ -17,7 +18,7 @@ class MovementosEconomicosComponent extends Component {
             ->find()
             ->contain(['Subarea' => ['Area' => ['PartidaOrzamentaria']], 'Clube'])
             ->where(['prevision' => $prevision])
-            ->order(["data $sort", "Movementos.id $sort"]);
+            ->order(["data $sort", "EconomicoMovementos.id $sort"]);
 
         if(!empty($request->getQuery('data_ini'))) {
             $movementos->where(['data >=' => FrozenDate::createFromFormat('d-m-Y', $request->getQuery('data_ini'))]);
