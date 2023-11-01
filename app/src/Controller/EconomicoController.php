@@ -16,10 +16,10 @@ class EconomicoController extends AppController {
         $this->Contas = new Contas();
         $this->Tempadas = new Tempadas();
         $this->Clubes = TableRegistry::get('Clubes');
-        $this->PartidasOrzamentarias = TableRegistry::get('MovementosPartidaOrzamentaria');
-        $this->Areas = TableRegistry::get('MovementosArea');
-        $this->Subareas = TableRegistry::get('MovementosSubarea');
-        $this->Movementos = TableRegistry::get('Movementos');
+        $this->PartidasOrzamentarias = TableRegistry::get('EconomicoPartidasOrzamentarias');
+        $this->Areas = TableRegistry::get('EconomicoAreas');
+        $this->Subareas = TableRegistry::get('EconomicoSubareas');
+        $this->Movementos = TableRegistry::get('EconomicoMovementos');
         $this->loadComponent('MovementosEconomicos');
         $this->loadComponent('ResumoEconomicoPdf');
     }
@@ -200,7 +200,7 @@ class EconomicoController extends AppController {
 
     public function detalleSubarea($id=null) {
         $subarea = $this->Subareas->getOrNew($id);
-        $areas = $this->Areas->find()->contain(['PartidaOrzamentaria'])->order(['PartidaOrzamentaria.nome', 'MovementosArea.nome']);
+        $areas = $this->Areas->find()->contain(['PartidaOrzamentaria'])->order(['PartidaOrzamentaria.nome', 'EconomicoArea.nome']);
         $contas = $this->Contas->getAllWithEmpty();
         $tempadas = $this->Tempadas->getTempadasWithEmpty();
         $movementos = empty($id) ? [] : $this->Movementos->find()->where(['id_subarea' => $id]);
@@ -209,14 +209,12 @@ class EconomicoController extends AppController {
 
     public function gardarSubarea() {
         $subarea = $this->Subareas->newEntity();
-        if ($this->request->is('post') || $this->request->is('put')) {
-            $subarea = $this->Subareas->patchEntity($subarea, $this->request->getData());
-            if ($this->Subareas->save($subarea)) {
-                $this->Flash->success(__('Gardouse a subárea correctamente.'));
-                return $this->redirect(['action'=>'partidasOrzamentarias']);
-            }
-            $this->Flash->error(__('Erro ao gardar a subárea.'));
+        $subarea = $this->Subareas->patchEntity($subarea, $this->request->getData());
+        if ($this->Subareas->save($subarea)) {
+            $this->Flash->success(__('Gardouse a subárea correctamente.'));
+            return $this->redirect(['action'=>'partidasOrzamentarias']);
         }
+        $this->Flash->error(__('Erro ao gardar a subárea.'));
         $this->set(compact('subarea'));
         $this->render('detalleSubarea');
     }

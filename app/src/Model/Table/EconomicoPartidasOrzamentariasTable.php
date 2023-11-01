@@ -3,13 +3,13 @@ namespace App\Model\Table;
 
 use Cake\Validation\Validator;
 
-class MovementosPartidaOrzamentariaTable extends AgfgTable {
+class EconomicoPartidasOrzamentariasTable extends AgfgTable {
 
     public function initialize(array $config) {
-        $this->setTable('agfg_movemento_partida_orzamentaria');
+        $this->setTable('agfg_economico_partida_orzamentaria');
 
         $this->hasMany('Areas', array(
-        	'className' => 'MovementosArea',
+        	'className' => 'EconomicoAreas',
             'foreignKey' => 'id_partida_orzamentaria',
             'propertyName' => 'areas'
         ));
