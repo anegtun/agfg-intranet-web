@@ -1,10 +1,9 @@
 <?php
 namespace App\Model\Table;
 
-use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
-class MovementosPartidaOrzamentariaTable extends Table {
+class MovementosPartidaOrzamentariaTable extends AgfgTable {
 
     public function initialize(array $config) {
         $this->setTable('agfg_movemento_partida_orzamentaria');
@@ -18,6 +17,15 @@ class MovementosPartidaOrzamentariaTable extends Table {
 
     public function validationDefault(Validator $validator) {
         return $validator->notEmpty('nome', 'O nome é obrigatorio');
+    }
+
+    public function findComplete() {
+        return $this->find()
+            ->contain(['Areas' => [
+                'Subareas' => ['sort' => 'Subareas.nome'],
+                'sort' => 'Areas.nome'
+            ]])
+            ->order('nome');
     }
 
 }

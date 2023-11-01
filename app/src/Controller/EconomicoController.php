@@ -19,42 +19,12 @@ class EconomicoController extends AppController {
     }
 
     public function index() {
-        $contas = $this->Contas->getAll();
-        $movementos_query = $this->Movementos->find()->where(['prevision'=>false]);
-        $prevision_ingresos_query = $this->Movementos->find()->where(['prevision'=>true, 'importe >' => 0]);
-        $prevision_gastos_query = $this->Movementos->find()->where(['prevision'=>true, 'importe <' => 0]);
-        $total = $movementos_query
-            ->select([
-                'balance' => $movementos_query->func()->sum('importe'),
-                'comision' => $movementos_query->func()->sum('comision')
-            ])->toArray()[0];
-        $prevision = (object) [
-            'ingresos' => $prevision_ingresos_query->select(['suma' => $prevision_ingresos_query->func()->sum('importe')])->toArray()[0]->suma,
-            'gastos' => $prevision_gastos_query->select(['suma' => $prevision_gastos_query->func()->sum('importe')])->toArray()[0]->suma
-        ];
-        $resumo_balance = $movementos_query
-            ->select(['conta', 'balance' => $movementos_query->func()->sum('importe'), 'comision' => $movementos_query->func()->sum('comision')])
-            ->group(['conta'])
-            ->toArray();
-        $this->set(compact('contas', 'total', 'prevision', 'resumo_balance'));
+        return $this->redirect(['controller'=>'Movementos', 'action'=>'index']);
     }
 
     public function partidasOrzamentarias() {
-        $partidasOrzamentarias = $this->PartidasOrzamentarias
-            ->find()
-            ->contain(['Areas' => [
-                'Subareas' => ['sort' => 'Subareas.nome'],
-                'sort' => 'Areas.nome'
-            ]])
-            ->order('nome');
-
-        $areas = $this->Areas
-            ->find()
-            ->where(['id_partida_orzamentaria IS NULL'])
-            ->contain(['Subareas' => ['sort' => 'Subareas.nome']])
-            ->order('nome');
-
-        $this->set(compact('partidasOrzamentarias', 'areas'));
+        $partidasOrzamentarias = $this->PartidasOrzamentarias->findComplete();
+        $this->set(compact('partidasOrzamentarias'));
     }
 
     public function detallePartidaOrzamentaria($id=null) {
@@ -64,21 +34,18 @@ class EconomicoController extends AppController {
 
     public function gardarPartidaOrzamentaria() {
         $partidaOrzamentaria = $this->PartidasOrzamentarias->newEntity();
-        if ($this->request->is('post') || $this->request->is('put')) {
-            $partidaOrzamentaria = $this->PartidasOrzamentarias->patchEntity($partidaOrzamentaria, $this->request->getData());
-            if ($this->PartidasOrzamentarias->save($partidaOrzamentaria)) {
-                $this->Flash->success(__('Gardouse a partida orzamentaria correctamente.'));
-                return $this->redirect(['action'=>'partidasOrzamentarias']);
-            }
-            $this->Flash->error(__('Erro ao gardar a partida orzamentaria.'));
+        $partidaOrzamentaria = $this->PartidasOrzamentarias->patchEntity($partidaOrzamentaria, $this->request->getData());
+        if ($this->PartidasOrzamentarias->save($partidaOrzamentaria)) {
+            $this->Flash->success(__('Gardouse a partida orzamentaria correctamente.'));
+            return $this->redirect(['action'=>'partidasOrzamentarias']);
         }
-        $this->set(compact('area'));
+        $this->Flash->error(__('Erro ao gardar a partida orzamentaria.'));
+        $this->set(compact('partidaOrzamentaria'));
         $this->render('detalle');
     }
 
     public function borrarPartidaOrzamentaria($id) {
-        $partidaOrzamentaria = $this->PartidasOrzamentarias->get($id);
-        if($this->PartidasOrzamentarias->delete($partidaOrzamentaria)) {
+        if($this->PartidasOrzamentarias->deleteById($id)) {
             $this->Flash->success(__('Eliminouse a partida orzamentaria correctamente.'));
         } else {
             $this->Flash->error(__('Erro ao eliminar a partida orzamentaria.'));
@@ -87,28 +54,25 @@ class EconomicoController extends AppController {
     }
 
     public function detalleArea($id=null) {
-        $area = empty($id) ? $this->Areas->newEntity() : $this->Areas->get($id);
-        $partidasOrzamentarias = $this->PartidasOrzamentarias->find('all', ['order'=>'nome']);
+        $area = $this->Areas->getOrNew($id);
+        $partidasOrzamentarias = $this->PartidasOrzamentarias->find()->order('nome');
         $this->set(compact('area', 'partidasOrzamentarias'));
     }
 
     public function gardarArea() {
         $area = $this->Areas->newEntity();
-        if ($this->request->is('post') || $this->request->is('put')) {
-            $area = $this->Areas->patchEntity($area, $this->request->getData());
-            if ($this->Areas->save($area)) {
-                $this->Flash->success(__('Gardouse a área correctamente.'));
-                return $this->redirect(['action'=>'partidasOrzamentarias']);
-            }
-            $this->Flash->error(__('Erro ao gardar a área.'));
+        $area = $this->Areas->patchEntity($area, $this->request->getData());
+        if ($this->Areas->save($area)) {
+            $this->Flash->success(__('Gardouse a área correctamente.'));
+            return $this->redirect(['action'=>'partidasOrzamentarias']);
         }
+        $this->Flash->error(__('Erro ao gardar a área.'));
         $this->set(compact('area'));
-        $this->render('detalle');
+        $this->render('detalleArea');
     }
 
     public function borrarArea($id) {
-        $area = $this->Areas->get($id);
-        if($this->Areas->delete($area)) {
+        if($this->Areas->deleteById($id)) {
             $this->Flash->success(__('Eliminouse a área correctamente.'));
         } else {
             $this->Flash->error(__('Erro ao eliminar a área.'));
@@ -117,7 +81,7 @@ class EconomicoController extends AppController {
     }
 
     public function detalleSubarea($id=null) {
-        $subarea = empty($id) ? $this->Subareas->newEntity() : $this->Subareas->get($id);
+        $subarea = $this->Subareas->getOrNew($id);
         $areas = $this->Areas->find()->contain(['PartidaOrzamentaria'])->order(['PartidaOrzamentaria.nome', 'MovementosArea.nome']);
         $contas = $this->Contas->getAllWithEmpty();
         $tempadas = $this->Tempadas->getTempadasWithEmpty();
@@ -136,12 +100,11 @@ class EconomicoController extends AppController {
             $this->Flash->error(__('Erro ao gardar a subárea.'));
         }
         $this->set(compact('subarea'));
-        $this->render('detalle');
+        $this->render('detalleSubarea');
     }
 
     public function borrarSubarea($id) {
-        $subarea = $this->Subareas->get($id);
-        if($this->Subareas->delete($subarea)) {
+        if($this->Subareas->deleteById($id)) {
             $this->Flash->success(__('Eliminouse a subárea correctamente.'));
         } else {
             $this->Flash->error(__('Erro ao eliminar a subárea.'));

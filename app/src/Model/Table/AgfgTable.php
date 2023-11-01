@@ -9,4 +9,9 @@ class AgfgTable extends Table {
         return empty($id) ? $this->newEntity() : $this->get($id, $options);
     }
 
+    public function deleteById($id) {
+        $entity = $this->get($id);
+        return $this->delete($entity);
+    }
+
 }
