@@ -19,6 +19,7 @@ class EconomicoController extends AppController {
         $this->PartidasOrzamentarias = TableRegistry::get('EconomicoPartidasOrzamentarias');
         $this->Areas = TableRegistry::get('EconomicoAreas');
         $this->Subareas = TableRegistry::get('EconomicoSubareas');
+        $this->Facturas = TableRegistry::get('EconomicoFacturas');
         $this->Movementos = TableRegistry::get('EconomicoMovementos');
         $this->loadComponent('MovementosEconomicos');
         $this->loadComponent('ResumoEconomicoPdf');
@@ -36,6 +37,17 @@ class EconomicoController extends AppController {
     public function previsions() {
         $this->listarMovementos(true);
         $this->render('movementos');
+    }
+
+    public function facturas() {
+        $facturas = $this->Facturas->find();
+        if(!empty($this->request->getQuery('data_ini'))) {
+            $facturas->where(['data >=' => FrozenDate::createFromFormat('d-m-Y', $this->request->getQuery('data_ini'))]);
+        }
+        if(!empty($this->request->getQuery('data_fin'))) {
+            $facturas->where(['data <=' => FrozenDate::createFromFormat('d-m-Y', $this->request->getQuery('data_fin'))]);
+        }
+        $this->set(compact('facturas'));
     }
 
     public function resumo() {
@@ -127,7 +139,7 @@ class EconomicoController extends AppController {
         }
         $this->Flash->error(__('Erro ao gardar os datos do movemento.'));
         $this->set(compact('movemento'));
-        $this->render('detalle');
+        $this->render('detalleMovemento');
     }
 
     public function borrarMovemento($id) {
@@ -138,6 +150,27 @@ class EconomicoController extends AppController {
             $this->Flash->error(__('Erro ao eliminar o movemento.'));
         }
         return $this->redirect(['action' => $movemento->prevision ? 'previsions' : 'index']);
+    }
+
+    public function detalleFactura($id=null) {
+        $factura = $this->Facturas->getOrNew($id);
+        // Hack para que o datepicker non a líe formateando a data (alterna dia/mes). Asi forzamos o noso formato.
+        $factura->data_str = empty($factura->data) ? NULL : $factura->data->format('d-m-Y');
+        $this->set(compact('factura'));
+    }
+
+    public function gardarFactura() {
+        $factura = $this->Facturas->newEntity();
+        $data = $this->request->getData();
+        $factura = $this->Facturas->patchEntity($factura, $data);
+        $factura->data = empty($data['data']) ? NULL : Time::createFromFormat('d-m-Y', $data['data']);
+        if ($this->Facturas->save($factura)) {
+            $this->Flash->success(__('Gardáronse os datos da factura correctamente.'));
+            return $this->redirect(['action' => 'facturas']);
+        }
+        $this->Flash->error(__('Erro ao gardar os datos da factura.'));
+        $this->set(compact('factura'));
+        $this->render('detalleFactura');
     }
 
     public function partidasOrzamentarias() {
