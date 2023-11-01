@@ -57,7 +57,7 @@ foreach($partidasOrzamentarias as $po) {
 
         <div style="margin-top:1em">
             <?= $this->Form->button('Buscar', ['class'=>'btn btn-primary']); ?>
-            <?= $this->Html->link(__($prevision ? 'Nova previsión' : 'Novo movemento'), ['action'=>'detalle', '?'=>['prevision'=>$prevision]], ['class'=>'btn btn-success']) ?>
+            <?= $this->Html->link(__($prevision ? 'Nova previsión' : 'Novo movemento'), ['action'=>'detalleMovemento', '?'=>['prevision'=>$prevision]], ['class'=>'btn btn-success']) ?>
         </div>
 
     <?= $this->Form->end() ?>
@@ -111,9 +111,9 @@ foreach($partidasOrzamentarias as $po) {
                                 <a title="<?= $m->referencia ?>" class="glyphicon glyphicon-info-sign" href="javascript:void(0)" data-toggle="tooltip"></a>
                             <?php endif ?>
                         </td>
-                        <td class="text-center"><?= $this->AgfgForm->editButton(['action'=>'detalle', $m->id]) ?></td>
-                        <td class="text-center"><?= $this->Html->link('', ['action'=>'clonar', $m->id], ['class'=>'glyphicon glyphicon-duplicate']) ?></td>
-                        <td class="text-center"><?= $this->AgfgForm->deleteButton(['action'=>'borrar', $m->id]) ?></td>
+                        <td class="text-center"><?= $this->AgfgForm->editButton(['action'=>'detalleMovemento', $m->id]) ?></td>
+                        <td class="text-center"><?= $this->Html->link('', ['action'=>'clonarMovemento', $m->id], ['class'=>'glyphicon glyphicon-duplicate']) ?></td>
+                        <td class="text-center"><?= $this->AgfgForm->deleteButton(['action'=>'borrarMovemento', $m->id]) ?></td>
                     </tr>
                     <?php $acumulado -= $m->getImporteConComision() ?>
                 <?php endforeach ?>

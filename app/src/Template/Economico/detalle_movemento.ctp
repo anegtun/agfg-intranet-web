@@ -4,14 +4,14 @@ if($movemento->prevision) {
     $this->set('submenu_option', 'previsions');
     $this->set('cabeceiraTitulo', empty($movemento->id) ? 'Nova previsión' : $movemento->data->format('Y-m-d'));
     $this->set('cabeceiraMigas', [
-        ['label'=>'Previsións', 'url'=>['controller'=>'Movementos', 'action'=>'previsions']],
+        ['label'=>'Previsións', 'url'=>['action'=>'previsions']],
         ['label'=>empty($movemento->id) ? 'Nova previsión' : $movemento->data->format('Y-m-d')]
     ]);
 } else {
     $this->set('submenu_option', 'movementos');
     $this->set('cabeceiraTitulo', empty($movemento->id) ? 'Novo movemento' : $movemento->data->format('Y-m-d'));
     $this->set('cabeceiraMigas', [
-        ['label'=>'Movementos', 'url'=>['controller'=>'Movementos', 'action'=>'index']],
+        ['label'=>'Movementos', 'url'=>['action'=>'movementos']],
         ['label'=>empty($movemento->id) ? 'Novo movemento' : $movemento->data->format('Y-m-d')]
     ]);
 }
@@ -21,7 +21,7 @@ $emptyTemplates = [
 ];
 ?>
 
-<?= $this->Form->create($movemento, ['type'=>'post', 'url'=>['action'=>'gardar']]) ?>
+<?= $this->Form->create($movemento, ['type'=>'post', 'url'=>['action'=>'gardarMovemento']]) ?>
     <?= $this->Form->hidden('id') ?>
     <?= $this->Form->hidden('prevision') ?>
     <fieldset>

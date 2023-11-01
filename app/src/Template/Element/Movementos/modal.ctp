@@ -30,7 +30,7 @@
                                     <td class="text-center"><?= $tempadas[$m->tempada] ?></td>
                                     <td><?= $m->descricion ?></td>
                                     <td><?= $m->referencia ?></td>
-                                    <td class="text-center"><?= $this->AgfgForm->editButton(['action'=>'detalle', $m->id]) ?></td>
+                                    <td class="text-center"><?= $this->AgfgForm->editButton(['controller'=>'Economico', 'action'=>'detalleMovemento', $m->id]) ?></td>
                                 </tr>
                             <?php endforeach ?>
                         </tbody>
