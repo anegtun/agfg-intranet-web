@@ -1,10 +1,9 @@
 <?php
 namespace App\Model\Table;
 
-use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
-class MovementosTable extends Table {
+class MovementosTable extends AgfgTable {
 
     public function initialize(array $config) {
         $this->setTable('agfg_movementos');

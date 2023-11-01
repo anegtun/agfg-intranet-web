@@ -22,24 +22,6 @@ class MovementosController extends AppController {
         $this->loadComponent('ResumoEconomicoPdf');
     }
 
-    public function index() {
-        $this->listarMovementos(false);
-    }
-
-    public function previsions() {
-        $this->listarMovementos(true);
-        $this->render('index');
-    }
-
-    private function listarMovementos($prevision) {
-        $contas = $this->Contas->getAllWithEmpty();
-        $tempadas = $this->Tempadas->getTempadasWithEmpty();
-        $areas = $this->Areas->find()->contain(['PartidaOrzamentaria'])->order(['PartidaOrzamentaria.nome', 'MovementosArea.nome']);
-        $subareas = $this->Subareas->find('all', ['order'=>'Area.nome'])->contain(['Area']);
-        $movementos = $this->movementosFiltrados($prevision);
-        $this->set(compact('prevision', 'movementos', 'contas', 'areas', 'subareas', 'tempadas'));
-    }
-
     public function resumo() {
         $movementos = $this->movementosFiltrados(false);
         $previsions = $this->movementosFiltrados(true);
@@ -145,48 +127,6 @@ class MovementosController extends AppController {
             $this->Flash->error(__('Erro ao eliminar o movemento.'));
         }
         return $this->redirect(['action' => $movemento->prevision ? 'previsions' : 'index']);
-    }
-
-    private function movementosFiltrados($prevision = false) {
-        $sort = $prevision ? 'asc' : 'desc';
-        $movementos = $this->Movementos
-            ->find('all', ['order'=>["data $sort", "Movementos.id $sort"]])
-            ->contain(['Subarea' => ['Area' => ['PartidaOrzamentaria']], 'Clube'])
-            ->where(['prevision' => $prevision]);
-
-        if(!empty($this->request->getQuery('data_ini'))) {
-            $movementos->where(['data >=' => FrozenDate::createFromFormat('d-m-Y', $this->request->getQuery('data_ini'))]);
-        }
-        if(!empty($this->request->getQuery('data_fin'))) {
-            $movementos->where(['data <=' => FrozenDate::createFromFormat('d-m-Y', $this->request->getQuery('data_fin'))]);
-        }
-        if(!empty($this->request->getQuery('conta'))) {
-            $movementos->where(['conta' => $this->request->getQuery('conta')]);
-        }
-        if(!empty($this->request->getQuery('tempada'))) {
-            $movementos->where(['tempada' => $this->request->getQuery('tempada')]);
-        }
-        if(!empty($this->request->getQuery('id_partida_orzamentaria'))) {
-            $movementos->where(['Area.id_partida_orzamentaria' => $this->request->getQuery('id_partida_orzamentaria')]);
-        }
-        if(!empty($this->request->getQuery('id_area'))) {
-            $movementos->where(['Subarea.id_area' => $this->request->getQuery('id_area')]);
-        }
-        if(!empty($this->request->getQuery('id_subarea'))) {
-            $movementos->where(['id_subarea' => $this->request->getQuery('id_subarea')]);
-        }
-        return $movementos;
-    }
-
-    private static function cmpResumo($a, $b) {
-        $cmp = strcmp($a->subarea->area->nome, $b->subarea->area->nome);
-        if($cmp===0) {
-            $cmp = strcmp($a->subarea->nome, $b->subarea->nome);
-        }
-        if($cmp===0) {
-            $cmp = strcmp($b->tempada, $a->tempada);
-        }
-        return $cmp;
     }
 
 }

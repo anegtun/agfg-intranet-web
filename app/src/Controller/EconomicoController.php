@@ -16,10 +16,22 @@ class EconomicoController extends AppController {
         $this->Areas = TableRegistry::get('MovementosArea');
         $this->Subareas = TableRegistry::get('MovementosSubarea');
         $this->Movementos = TableRegistry::get('Movementos');
+        $this->loadComponent('MovementosEconomicos');
+        $this->loadComponent('ResumoEconomicoPdf');
     }
 
     public function index() {
-        return $this->redirect(['controller'=>'Movementos', 'action'=>'index']);
+        $this->redirect(['action' => 'movementos']);
+    }
+
+    public function movementos() {
+        $this->listarMovementos(false);
+        $this->render('movementos');
+    }
+
+    public function previsions() {
+        $this->listarMovementos(true);
+        $this->render('movementos');
     }
 
     public function partidasOrzamentarias() {
@@ -110,6 +122,15 @@ class EconomicoController extends AppController {
             $this->Flash->error(__('Erro ao eliminar a subárea.'));
         }
         return $this->redirect(['action'=>'partidasOrzamentarias']);
+    }
+
+    private function listarMovementos($prevision) {
+        $contas = $this->Contas->getAllWithEmpty();
+        $tempadas = $this->Tempadas->getTempadasWithEmpty();
+        $areas = $this->Areas->find()->contain(['PartidaOrzamentaria'])->order(['PartidaOrzamentaria.nome', 'MovementosArea.nome']);
+        $subareas = $this->Subareas->find()->contain(['Area'])->order('Area.nome');
+        $movementos = $this->MovementosEconomicos->find($this->request, $prevision);
+        $this->set(compact('prevision', 'movementos', 'contas', 'areas', 'subareas', 'tempadas'));
     }
 
 }

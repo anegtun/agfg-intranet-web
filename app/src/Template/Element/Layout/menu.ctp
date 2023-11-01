@@ -43,8 +43,8 @@ $authUser = $this->request->getSession()->read('Auth.User');
         'icono' => 'euro',
         'auth' => ['admin','tesour'],
         'submenus' => [
-            [ 'id' => 'movementos', 'nome' => 'Movementos', 'url' => ['controller'=>'Movementos', 'action'=>'index'] ],
-            [ 'id' => 'previsions', 'nome' => 'Previsións', 'url' => ['controller'=>'Movementos', 'action'=>'previsions'] ],
+            [ 'id' => 'movementos', 'nome' => 'Movementos', 'url' => ['controller'=>'Economico', 'action'=>'movementos'] ],
+            [ 'id' => 'previsions', 'nome' => 'Previsións', 'url' => ['controller'=>'Economico', 'action'=>'previsions'] ],
             [ 'id' => 'resumo', 'nome' => 'Resumo xeral', 'url' => ['controller'=>'Movementos', 'action'=>'resumo'] ],
             [ 'id' => 'resumoClubes', 'nome' => 'Resumo clubes', 'url' => ['controller'=>'Movementos', 'action'=>'resumoClubes'] ],
             [ 'id' => 'partidas', 'nome' => 'Partidas orzamentarias', 'url' => ['controller'=>'Economico', 'action'=>'partidasOrzamentarias'] ]
