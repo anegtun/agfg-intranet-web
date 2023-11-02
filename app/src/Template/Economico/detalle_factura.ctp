@@ -35,6 +35,9 @@ $emptyTemplates = [
             <div class="form-group col-lg-12">
                 <?= $this->Form->control('referencia', ['label'=>'Referencia']) ?>
             </div>
+            <div class="form-group col-lg-12">
+                <?= $this->Form->control('descricion', ['label'=>'Descrición']) ?>
+            </div>
         </div>
 
         <?= $this->Form->button('Gardar', ['class'=>'btn btn-primary glyphicon glyphicon-saved']); ?>

@@ -30,7 +30,8 @@ class EconomicoFacturaComponent extends Component {
         if (!empty($factura->id) && !empty($file) && !empty($file['name'])) {
             $dir_path = $this->getFacturaDir($factura);
             $dir = new Folder($dir_path, true, 0755);
-            move_uploaded_file($file['tmp_name'], $dir_path . DS . $file['name']);
+            $target_name = str_replace(" ", "_", $file['name']);
+            move_uploaded_file($file['tmp_name'], $dir_path . DS . $target_name);
         }
     }
 

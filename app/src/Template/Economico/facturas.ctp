@@ -44,6 +44,7 @@ $emptyTemplates = [
                     <th class="celda-titulo text-center">Importe</th>
                     <th class="celda-titulo text-center">Entidade</th>
                     <th class="celda-titulo text-center">Referencia</th>
+                    <th class="celda-titulo text-center">Descrición</th>
                     <th class="celda-titulo"></th>
                     <th class="celda-titulo"></th>
                 </tr>
@@ -55,6 +56,7 @@ $emptyTemplates = [
                         <td class="text-right"><?= $this->Number->currency($f->importe, 'EUR') ?></td>
                         <td class="text-center"><?= $f->entidade ?></td>
                         <td class="text-center"><?= $f->referencia ?></td>
+                        <td class="text-center"><?= $f->descricion ?></td>
                         <td class="text-center"><?= $this->AgfgForm->editButton(['action'=>'detalleFactura', $f->id]) ?></td>
                         <td class="text-center"><?= $this->AgfgForm->deleteButton(['action'=>'borrarFactura', $f->id]) ?></td>
                     </tr>
