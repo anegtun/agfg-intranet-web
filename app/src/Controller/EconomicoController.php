@@ -48,8 +48,6 @@ class EconomicoController extends AppController {
         } else {
             $movemento = $this->Movementos->get($id);
         }
-        // Hack para que o datepicker non a líe formateando a data (alterna dia/mes). Asi forzamos o noso formato.
-        $movemento->data_str = empty($movemento->data) ? NULL : $movemento->data->format('d-m-Y');
         $contas = $this->Contas->getAllWithEmpty();
         $tempadas = $this->Tempadas->getTempadasWithEmpty();
         $clubes = $this->Clubes->find()->order('nome');
@@ -60,8 +58,6 @@ class EconomicoController extends AppController {
     public function clonarMovemento($id) {
         $movemento = $this->Movementos->get($id);
         $movemento->id = NULL;
-        // Hack para que o datepicker non a líe formateando a data (alterna dia/mes). Asi forzamos o noso formato.
-        $movemento->data_str = empty($movemento->data) ? NULL : $movemento->data->format('d-m-Y');
         $contas = $this->Contas->getAllWithEmpty();
         $tempadas = $this->Tempadas->getTempadasWithEmpty();
         $clubes = $this->Clubes->find()->order('nome');
@@ -111,10 +107,8 @@ class EconomicoController extends AppController {
 
     public function detalleFactura($id=null) {
         $factura = $this->Facturas->getOrNew($id);
-        // Hack para que o datepicker non a líe formateando a data (alterna dia/mes). Asi forzamos o noso formato.
-        $factura->data_str = empty($factura->data) ? NULL : $factura->data->format('d-m-Y');
-        $files = empty($id) ? [] : $this->EconomicoFactura->list($factura);
-        $this->set(compact('factura', 'files'));
+        $arquivos = empty($id) ? [] : $this->EconomicoFactura->list($factura);
+        $this->set(compact('factura', 'arquivos'));
     }
 
     public function gardarFactura() {
@@ -186,29 +180,12 @@ class EconomicoController extends AppController {
     }
 
     public function resumoClubes() {
-        $tempadas = $this->Tempadas->getTempadasWithEmpty();
         $movementos = $this->MovementosEconomicos->find($this->request, false);
-
-        // TODO Mellorar
-        $resumo = [];
-        $ids_subareas = [];
-        foreach($movementos as $m) {
-            if(!empty($m->clube)) {
-                if(empty($resumo[$m->clube->id])) {
-                    $resumo[$m->clube->id] = [];
-                }
-                if(empty($resumo[$m->clube->id][$m->subarea->id])) {
-                    $resumo[$m->clube->id][$m->subarea->id] = 0;
-                }
-                $resumo[$m->clube->id][$m->subarea->id] += $m->importe;
-                $ids_subareas[] = $m->subarea->id;
-            }
-        }
-
-        $subareas = empty($ids_subareas) ? [] : $this->Subareas->find('all', ['order'=>'nome'])->where(['id IN' => $ids_subareas]);
-        $clubes = empty($resumo) ? [] : $this->Clubes->find('all', ['order'=>'nome'])->where(['id IN' => array_keys($resumo)]);
-
-        $this->set(compact('movementos', 'resumo', 'clubes', 'subareas', 'tempadas'));
+        $previsions = $this->MovementosEconomicos->find($this->request, true);
+        $resumo = new ResumoEconomico($movementos, $previsions);
+        $tempadas = $this->Tempadas->getTempadasWithEmpty();
+        $clubes = $this->Clubes->find()->order('nome');
+        $this->set(compact('resumo', 'clubes', 'tempadas'));
     }
 
 

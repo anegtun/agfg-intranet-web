@@ -38,30 +38,51 @@ $emptyTemplates = [
 
 <div class="row" style="margin-top:2em">
     <div class="col-xs-12 table-responsive">
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th class="celda-titulo text-center">Clube</th>
-                    <?php foreach($subareas as $sa) : ?>
-                        <th class="celda-titulo text-center"><?= $sa->nome ?></th>
-                    <?php endforeach ?>
-                    <th class="celda-titulo text-center">TOTAL</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach($clubes as $clube) : ?>
-                    <tr>
-                        <td class="text-center"><?= $clube->nome ?></td>
-                        <?php $total = 0; ?>
-                        <?php foreach($subareas as $sa) : ?>
-                            <?php $importe = empty($resumo[$clube->id][$sa->id]) ? 0 : $resumo[$clube->id][$sa->id] ?>
-                            <?php $total += $importe ?>
-                            <td class="celda-titulo text-center <?= $importe<=0?'text-danger':'' ?>"><?= $this->Number->currency($importe, 'EUR') ?></td>
+        <?php foreach($resumo->getAreas() as $area) : ?>
+            <?php if ($resumo->getTotalAreaClube($area, null)->balance > 0) : ?>
+
+                <?php
+                    $subareas = [];
+                    foreach ($resumo->getSubareas($area) as $sa) {
+                        if ($resumo->getTotalSubareaClube($sa, null)->balance > 0) {
+                            $subareas[] = $sa;
+                        } 
+                    }
+                ?>
+
+                <h4><?= $area->partidaOrzamentaria->nome ?> - <?= $area->nome ?></h4>
+
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th class="celda-titulo text-center">Clube</th>
+                            <?php foreach($subareas as $sa) : ?>
+                                <th class="celda-titulo text-center"><?= $sa->nome ?></th>
+                            <?php endforeach ?>
+                            <th class="celda-titulo text-center">TOTAL</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach($clubes as $clube) : ?>
+                            <?php $total_area = $resumo->getTotalAreaClube($area, $clube) ?>
+                            <?php if ($total_area->balance > 0) : ?>
+                                <tr>
+                                    <td><?= $clube->nome ?></td>
+                                    <?php $total = 0; ?>
+                                    <?php foreach($subareas as $sa) : ?>
+                                        <?php $subtotal = $resumo->getTotalSubareaClube($sa, $clube) ?>
+                                        <?php $total += $subtotal->balance ?>
+                                        <td class="celda-titulo text-center <?= $subtotal->balance<0?'text-danger':'' ?>"><?= $this->Number->currency($subtotal->balance, 'EUR') ?></td>
+                                    <?php endforeach ?>
+                                    <td class="text-center <?= $total<0?'text-danger':'' ?>"><strong><?= $this->Number->currency($total, 'EUR') ?></strong></td>
+                                </tr>
+                            <?php endif ?>
                         <?php endforeach ?>
-                        <td class="text-center <?= $total<=0?'text-danger':'' ?>"><strong><?= $this->Number->currency($total, 'EUR') ?></strong></td>
-                    </tr>
-                <?php endforeach ?>
-            </tbody>
-        </table>
+                    </tbody>
+                </table>
+
+            <?php endif ?>
+
+        <?php endforeach ?>
     </div>
 </div>

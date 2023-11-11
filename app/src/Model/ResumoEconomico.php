@@ -95,6 +95,14 @@ class ResumoEconomico {
         return $this->sum(fn($e) => $e->subarea->id === $subarea->id);
     }
 
+    public function getTotalAreaClube($area, $clube = NULL) {
+        return $this->sum(fn($e) => $e->subarea->area->id === $area->id && !empty($e->id_clube) && (empty($clube) || $e->id_clube === $clube->id));
+    }
+
+    public function getTotalSubareaClube($subarea, $clube = NULL) {
+        return $this->sum(fn($e) => $e->subarea->id === $subarea->id && !empty($e->id_clube) && (empty($clube) || $e->id_clube === $clube->id));
+    }
+
     public function getTotalConcepto($subarea, $concepto) {
         return $this->sum(fn($e) => $e->subarea->id === $subarea->id && $e->descricion === $concepto);
     }

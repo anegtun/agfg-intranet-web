@@ -1,18 +1,22 @@
 <?php
 $this->extend('template');
+
+// Hack para que o datepicker non a líe formateando a data (alterna dia/mes). Asi forzamos o noso formato.
+$data_str = empty($movemento->data) ? NULL : $movemento->data->format('d-m-Y');
+
 if($movemento->prevision) {
     $this->set('submenu_option', 'previsions');
-    $this->set('cabeceiraTitulo', empty($movemento->id) ? 'Nova previsión' : $movemento->data->format('Y-m-d'));
+    $this->set('cabeceiraTitulo', empty($movemento->id) ? 'Nova previsión' : $data_str);
     $this->set('cabeceiraMigas', [
         ['label'=>'Previsións', 'url'=>['action'=>'previsions']],
-        ['label'=>empty($movemento->id) ? 'Nova previsión' : $movemento->data->format('Y-m-d')]
+        ['label'=>empty($movemento->id) ? 'Nova previsión' : $data_str]
     ]);
 } else {
     $this->set('submenu_option', 'movementos');
-    $this->set('cabeceiraTitulo', empty($movemento->id) ? 'Novo movemento' : $movemento->data->format('Y-m-d'));
+    $this->set('cabeceiraTitulo', empty($movemento->id) ? 'Novo movemento' : $data_str);
     $this->set('cabeceiraMigas', [
         ['label'=>'Movementos', 'url'=>['action'=>'movementos']],
-        ['label'=>empty($movemento->id) ? 'Novo movemento' : $movemento->data->format('Y-m-d')]
+        ['label'=>empty($movemento->id) ? 'Novo movemento' : $data_str]
     ]);
 }
 $emptyTemplates = [
@@ -29,7 +33,7 @@ $emptyTemplates = [
 
         <div class="row">
             <div class="form-group col-lg-3">
-                <?= $this->Form->control('data', ['type'=>'text', 'class'=>'form-control fld-date', 'label'=>'Data', 'value'=>$movemento->data_str, 'templates'=>$emptyTemplates]) ?>
+                <?= $this->Form->control('data', ['type'=>'text', 'class'=>'form-control fld-date', 'label'=>'Data', 'value'=>$data_str, 'templates'=>$emptyTemplates]) ?>
             </div>
             <div class="form-group col-lg-3">
                 <?= $this->Form->control('importe', ['type'=>'number', 'label'=>'Importe']) ?>

@@ -15,10 +15,8 @@ $emptyTemplates = [
 
 $this->Html->script('tenda', ['block' => 'script']);
 
-if(!empty($pedido->id)) {
-    // Hack para que o datepicker non a líe formateando a data (alterna dia/mes). Asi forzamos o noso formato.
-    $pedido->data_str = $pedido->data->format('d-m-Y');
-}
+// Hack para que o datepicker non a líe formateando a data (alterna dia/mes). Asi forzamos o noso formato.
+$data_str = empty($factura->data) ? NULL : $pedido->data->format('d-m-Y');
 ?>
 
 <?= $this->Form->create($pedido, ['type'=>'post', 'url'=>['action'=>'gardarPedido']]) ?>
@@ -28,7 +26,7 @@ if(!empty($pedido->id)) {
         <legend>Pedido</legend>
         <div class="row">
             <div class="form-group col-lg-1">
-                <?= $this->Form->control('data', ['type'=>'text', 'class'=>'form-control fld-date', 'label'=>'Data', 'value'=>$pedido->data_str, 'templates'=>$emptyTemplates]) ?>
+                <?= $this->Form->control('data', ['type'=>'text', 'class'=>'form-control fld-date', 'label'=>'Data', 'value'=>$data_str, 'templates'=>$emptyTemplates]) ?>
             </div>
             <div class="form-group col-lg-3">
                 <?= $this->Form->control('nome', ['class'=>'form-control', 'label'=>'Nome', 'templates'=>$emptyTemplates]) ?>

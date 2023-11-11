@@ -1,11 +1,15 @@
 <?php
 $this->extend('template');
+
+// Hack para que o datepicker non a líe formateando a data (alterna dia/mes). Asi forzamos o noso formato.
+$data_str = empty($factura->data) ? NULL : $factura->data->format('d-m-Y');
+
 $this->set('submenu_option', 'facturas');
-$this->set('cabeceiraTitulo', empty($factura->id) ? 'Nova factura' : $factura->data->format('Y-m-d'));
+$this->set('cabeceiraTitulo', empty($factura->id) ? 'Nova factura' : $data_str);
 $this->set('cabeceiraMigas', [
     ['label'=>'Contabilidade'],
     ['label'=>'Facturas', 'url'=>['action'=>'facturas']],
-    ['label'=>empty($factura->id) ? 'Nova factura' : $factura->data->format('Y-m-d')]
+    ['label'=>empty($factura->id) ? 'Nova factura' : $data_str]
 ]);
 
 $emptyTemplates = [
@@ -21,7 +25,7 @@ $emptyTemplates = [
 
         <div class="row">
             <div class="form-group col-lg-3">
-                <?= $this->Form->control('data', ['type'=>'text', 'class'=>'form-control fld-date', 'label'=>'Data', 'value'=>$factura->data_str, 'templates'=>$emptyTemplates]) ?>
+                <?= $this->Form->control('data', ['type'=>'text', 'class'=>'form-control fld-date', 'label'=>'Data', 'value'=>$data_str, 'templates'=>$emptyTemplates]) ?>
             </div>
             <div class="form-group col-lg-3">
                 <?= $this->Form->control('importe', ['type'=>'number', 'label'=>'Importe']) ?>
@@ -57,10 +61,10 @@ $emptyTemplates = [
                 </tr>
             </thead>
             <tbody>
-                <?php foreach($files as $f) : ?>
+                <?php foreach($arquivos as $a) : ?>
                     <tr>
-                        <td><?= $this->Html->link($f, ['action'=>'descargarFacturaArquivo', $factura->id, urlencode($f)], ['target'=>'_blank']) ?></td>
-                        <td class="text-center"><?= $this->AgfgForm->deleteButton(['action'=>'borrarFacturaArquivo', $factura->id, urlencode($f)]) ?></td>
+                        <td><?= $this->Html->link($a, ['action'=>'descargarFacturaArquivo', $factura->id, urlencode($a)], ['target'=>'_blank']) ?></td>
+                        <td class="text-center"><?= $this->AgfgForm->deleteButton(['action'=>'borrarFacturaArquivo', $factura->id, urlencode($a)]) ?></td>
                     </tr>
                 <?php endforeach ?>
             <tbody>
