@@ -16,55 +16,39 @@ class ClubesController extends AppController {
     }
 
     public function index() {
-        $clubes = $this->Clubes
-            ->find()
-            ->contain('Federacions')
-            ->order('Clubes.codigo');
+        $federacions = $this->Federacions->find()->order('codigo');
+        $clubes = $this->Clubes->find()->contain('Federacions')->order('Clubes.codigo');
 
         if (!empty($this->request->getQuery('id_federacion'))) {
             $clubes->matching('Federacions', function ($q) {
                 return $q->where(['Federacions.id' => $this->request->getQuery('id_federacion')]);
             });
         }
-
-        $federacions = $this->Federacions
-            ->find()
-            ->order('codigo');
         
         $this->set(compact('clubes', 'federacions'));
     }
 
     public function detalle($id=null) {
-        if(empty($id)) {
-            $clube =  $this->Clubes->newEntity();
-        } else {
-            $clube = $this->Clubes->get($id, [
-                'contain' => ['Equipas' => ['sort' => 'Equipas.codigo'], 'Federacions']
-            ]);
-        }
         $categorias = $this->Categorias->getCategoriasWithEmpty();
-        $federacions = $this->Federacions
-            ->find()
-            ->order('codigo');
+        $federacions = $this->Federacions->find()->order('codigo');
+        $clube = empty($id)
+            ? $this->Clubes->newEntity()
+            : $this->Clubes->get($id, ['contain' => ['Equipas' => ['sort' => 'Equipas.codigo'], 'Federacions']]);
 
         $this->set(compact('clube', 'categorias', 'federacions'));
     }
 
     public function gardar() {
+        $data = $this->request->getData();
         $clube = $this->Clubes->newEntity();
-        if ($this->request->is('post') || $this->request->is('put')) {
-            $data = $this->request->getData();
-            $clube = $this->Clubes->patchEntity($clube, $data);
-            $clube->federacions = $this->Federacions->find()
-                ->where(['id IN' => $data['federacions']])
-                ->toArray();
-            $clube->setDirty('federacions', true);
-            if ($this->Clubes->save($clube)) {
-                $this->Flash->success(__('Gardouse o clube correctamente.'));
-                return $this->redirect(['action'=>'index']);
-            }
-            $this->Flash->error(__('Erro ao gardar o clube.'));
+        $clube = $this->Clubes->patchEntity($clube, $data);
+        $clube->federacions = $this->Federacions->find()->where(['id IN' => $data['federacions']])->toArray();
+        $clube->setDirty('federacions', true);
+        if ($this->Clubes->save($clube)) {
+            $this->Flash->success(__('Gardouse o clube correctamente.'));
+            return $this->redirect(['action'=>'index']);
         }
+        $this->Flash->error(__('Erro ao gardar o clube.'));
         $this->set(compact('clube'));
         $this->render('detalle');
     }
@@ -93,14 +77,12 @@ class ClubesController extends AppController {
 
     public function gardarEquipa() {
         $equipa = $this->Equipas->newEntity();
-        if ($this->request->is('post') || $this->request->is('put')) {
-            $equipa = $this->Equipas->patchEntity($equipa, $this->request->getData());
-            if ($this->Equipas->save($equipa)) {
-                $this->Flash->success(__('Gardouse a equipa correctamente.'));
-                return $this->redirect(['action'=>'detalle', $equipa->id_clube]);
-            }
-            $this->Flash->error(__('Erro ao gardar a equipa.'));
+        $equipa = $this->Equipas->patchEntity($equipa, $this->request->getData());
+        if ($this->Equipas->save($equipa)) {
+            $this->Flash->success(__('Gardouse a equipa correctamente.'));
+            return $this->redirect(['action'=>'detalle', $equipa->id_clube]);
         }
+        $this->Flash->error(__('Erro ao gardar a equipa.'));
         $this->set(compact('equipa'));
         $this->render('detalleEquipa');
     }

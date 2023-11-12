@@ -2,18 +2,11 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
-use Cake\Event\Event;
 
 class ArbitrosController extends AppController {
-    
-    public function initialize() {
-        parent::initialize();
-    }
 
     public function index() {
-        $arbitros = $this->Arbitros
-            ->find()
-            ->order('alcume');
+        $arbitros = $this->Arbitros->find()->order('alcume');
         $this->set(compact('arbitros'));
     }
 

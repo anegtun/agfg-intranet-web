@@ -13,21 +13,14 @@ class FederacionsController extends AppController {
     }
 
     public function index() {
-        $federacions = $this->Federacions
-            ->find()
-            ->order('codigo');
-            
+        $federacions = $this->Federacions->find()->order('codigo');
         $this->set(compact('federacions'));
     }
 
     public function detalle($id=null) {
-        if(empty($id)) {
-            $federacion =  $this->Federacions->newEntity();
-        } else {
-            $federacion = $this->Federacions->get($id, [
-                'contain' => [ 'Clubes' => [ 'sort' => 'Clubes.codigo' ] ]
-            ]);
-        }
+        $federacion = empty($id)
+            ? $this->Federacions->newEntity()
+            : $this->Federacions->get($id, ['contain' => [ 'Clubes' => [ 'sort' => 'Clubes.codigo' ] ]]);
         $this->set(compact('federacion'));
     }
 

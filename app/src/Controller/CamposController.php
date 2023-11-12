@@ -2,18 +2,11 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
-use Cake\Event\Event;
 
 class CamposController extends AppController {
-    
-    public function initialize() {
-        parent::initialize();
-    }
 
     public function index() {
-        $campos = $this->Campos
-            ->find()
-            ->order('pobo');
+        $campos = $this->Campos->find()->order('pobo');
         $this->set(compact('campos'));
     }
 
