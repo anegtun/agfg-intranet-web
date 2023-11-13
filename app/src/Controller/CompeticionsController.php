@@ -37,11 +37,9 @@ class CompeticionsController extends AppController {
     }
 
     public function detalle($id=null) {
-        if(empty($id)) {
-            $competicion = $this->Competicions->newEntity();
-        } else {
-            $competicion = $this->Competicions->get($id, ['contain' => ['Fases' => ['sort'=>['Fases.categoria', 'Fases.nome']], 'Fases.FasePai']]);
-        }
+        $competicion = empty($id)
+            ? $this->Competicions->newEntity()
+            : $this->Competicions->get($id, ['contain' => ['Fases' => ['sort'=>['Fases.categoria', 'Fases.nome']], 'Fases.FasePai']]);
         $categorias = $this->Categorias->getCategoriasWithEmpty();
         $tempadas = $this->Tempadas->getTempadasWithEmpty();
         $tiposCompeticion = $this->TiposCompeticion->getTiposWithEmpty();
@@ -51,14 +49,12 @@ class CompeticionsController extends AppController {
 
     public function gardar() {
         $competicion = $this->Competicions->newEntity();
-        if ($this->request->is('post') || $this->request->is('put')) {
-            $competicion = $this->Competicions->patchEntity($competicion, $this->request->getData());
-            if ($this->Competicions->save($competicion)) {
-                $this->Flash->success(__('Gardouse a competición correctamente.'));
-                return $this->redirect(['action'=>'detalle', $competicion->id]);
-            }
-            $this->Flash->error(__('Erro ao gardar a competición.'));
+        $competicion = $this->Competicions->patchEntity($competicion, $this->request->getData());
+        if ($this->Competicions->save($competicion)) {
+            $this->Flash->success(__('Gardouse a competición correctamente.'));
+            return $this->redirect(['action'=>'detalle', $competicion->id]);
         }
+        $this->Flash->error(__('Erro ao gardar a competición.'));
         $this->set(compact('competicion'));
         $this->render('detail');
     }
@@ -155,17 +151,15 @@ class CompeticionsController extends AppController {
 
     public function gardarXornada() {
         $data = $this->request->getData();
-        $xornada = empty($data['id']) ? $this->Xornadas->newEntity() : $this->Xornadas->get($data['id']);
-        if ($this->request->is('post') || $this->request->is('put')) {
-            $xornada = $this->Xornadas->patchEntity($xornada, $data);
-            $xornada->data = empty($data['data_xornada']) ? NULL : Time::createFromFormat('d-m-Y', $data['data_xornada']);
-            if ($this->Xornadas->save($xornada)) {
-                $this->Flash->success(__('Gardouse a xornada correctamente.'));
-            } else {
-                $this->Flash->error(__('Erro ao gardar a xornada.'));
-            }
+        $xornada = $this->Xornadas->getOrNew($data['id']);
+        $xornada = $this->Xornadas->patchEntity($xornada, $data);
+        $xornada->data = empty($data['data_xornada']) ? NULL : Time::createFromFormat('d-m-Y', $data['data_xornada']);
+        if ($this->Xornadas->save($xornada)) {
+            $this->Flash->success(__('Gardouse a xornada correctamente.'));
+        } else {
+            $this->Flash->error(__('Erro ao gardar a xornada.'));
         }
-        return $this->redirect(['action'=>'detalleFase',$xornada->id_fase]);
+        return $this->redirect(['action'=>'detalleFase', $xornada->id_fase]);
     }
 
     public function borrarXornada($id) {
@@ -182,15 +176,13 @@ class CompeticionsController extends AppController {
 
     public function gardarPartido() {
         $data = $this->request->getData();
-        $partido = empty($data['id']) ? $this->Partidos->newEntity() : $this->Partidos->get($data['id']);
-        if ($this->request->is('post') || $this->request->is('put')) {
-            $partido = $this->Xornadas->patchEntity($partido, $this->request->getData());
-            $partido->data_partido = empty($data['data_partido']) ? NULL : Time::createFromFormat('d-m-Y', $data['data_partido']);
-            if ($this->Partidos->save($partido)) {
-                $this->Flash->success(__('Gardouse o partido correctamente.'));
-            } else {
-                $this->Flash->error(__('Erro ao gardar o partido.'));
-            }
+        $partido = $this->Partidos->getOrNew($data['id']);
+        $partido = $this->Xornadas->patchEntity($partido, $data);
+        $partido->data_partido = empty($data['data_partido']) ? NULL : Time::createFromFormat('d-m-Y', $data['data_partido']);
+        if ($this->Partidos->save($partido)) {
+            $this->Flash->success(__('Gardouse o partido correctamente.'));
+        } else {
+            $this->Flash->error(__('Erro ao gardar o partido.'));
         }
         return $this->redirect(['action'=>'detalleFase',$partido->id_fase]);
     }

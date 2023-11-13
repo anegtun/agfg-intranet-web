@@ -250,7 +250,7 @@ class EconomicoController extends AppController {
 
     public function detalleSubarea($id=null) {
         $subarea = $this->Subareas->getOrNew($id);
-        $areas = $this->Areas->find()->contain(['PartidaOrzamentaria'])->order(['PartidaOrzamentaria.nome', 'EconomicoArea.nome']);
+        $areas = $this->Areas->find()->contain(['PartidaOrzamentaria'])->order(['PartidaOrzamentaria.nome', 'EconomicoAreas.nome']);
         $contas = $this->Contas->getAllWithEmpty();
         $tempadas = $this->Tempadas->getTempadasWithEmpty();
         $movementos = empty($id) ? [] : $this->Movementos->find()->where(['id_subarea' => $id]);
