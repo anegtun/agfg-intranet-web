@@ -81,27 +81,7 @@ class CompeticionsController extends AppController {
         } else {
             $fase = $this->Fases->get($id, [ 'contain' => [ 'Competicion', 'Equipas' ] ]);
             $fase->xornadas = $this->Xornadas->findWithPartidos($fase->id);
-            
-
-            $id_clubes = $this->Clubes->findInFederacion($fase->competicion->id_federacion)
-                ->extract('id')
-                ->toList();
-
-            $or_condition = ['activo' => 1];
-            $id_equipas_fase = [];
-            foreach($fase->equipas as $e) {
-                $id_equipas_fase[] = $e->id;
-            }
-            if(!empty($id_equipas_fase)) {
-                $or_condition['id IN'] =  $id_equipas_fase;
-            }
-            $equipas = $this->Equipas->find()
-                ->where([
-                    'id_clube IN' => $id_clubes,
-                    'categoria' => $fase->categoria,
-                    'OR' => $or_condition
-                ])
-                ->order(['Equipas.nome']);
+            $equipas = $this->Equipas->findInFase($fase);
             $outras_fases = $this->Fases->find()->where(['id_competicion'=>$fase->id_competicion, 'id !='=>$id]);
         }
         $categorias = $this->Categorias->getCategoriasWithEmpty();

@@ -76,11 +76,9 @@ class ResultadosController extends AppController {
             });
         }
 
-        $fases = $this->Fases
-            ->find()
-            ->where(['id_competicion'=>$id]);
+        $fases = $this->Fases->find()->where(['id_competicion'=>$id]);
         
-            $arbitros = $this->Arbitros->findMap();
+        $arbitros = $this->Arbitros->findMap();
         $campos_map = $this->Campos->findMap();
         $equipas = $this->Equipas->findMap();
 
@@ -100,15 +98,7 @@ class ResultadosController extends AppController {
     public function reemplazar($id) {
         $this->competicion($id);
         $competicion = $this->Competicions->get($id);
-
-        $id_clubes = $this->Clubes->findInFederacion($competicion->id_federacion)
-            ->extract('id')
-            ->toList();
-
-        $equipas_competicion = $this->Equipas->find()
-            ->where(['id_clube IN' => $id_clubes])
-            ->order('nome');
-
+        $equipas_competicion = $this->Equipas->findInFederacion($competicion->id_federacion);
         $this->set(compact('equipas_competicion'));
     }
 
@@ -151,12 +141,7 @@ class ResultadosController extends AppController {
         // Hack para que o datepicker non a líe formateando a data (alterna dia/mes). Asi forzamos o noso formato.
         $partido->data_partido_str = empty($partido->data_partido) ? NULL : $partido->data_partido->format('d-m-Y');
 
-        $id_clubes = $this->Clubes->findInFederacion($partido->competicion->id_federacion)
-            ->extract('id')
-            ->toList();
-        $umpires = $this->Equipas->find()
-            ->where(['id_clube IN' => $id_clubes])
-            ->order('nome');
+        $umpires = $this->Equipas->findInFederacion($partido->competicion->id_federacion);
 
         $arbitros = $this->Arbitros->findMap(true);
         if ($partido->id_arbitro) {
