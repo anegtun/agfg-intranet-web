@@ -105,14 +105,14 @@ class CalendarioController extends RestController {
         $xornadaActual = FrozenDate::now()->modify('monday this week');
         $partidos = $this->Partidos
             ->find()
-            ->contain(['Xornadas', 'Equipas1', 'Equipas2'])
-            ->select(['data_calendario' => 'COALESCE(Partidos.data_partido, Xornadas.data)'])
-            ->select(['codigo_clube1' => '(SELECT c1.codigo FROM agfg_clubes c1 WHERE c1.id = Equipas1.id_clube)'])
-            ->select(['codigo_clube2' => '(SELECT c2.codigo FROM agfg_clubes c2 WHERE c2.id = Equipas2.id_clube)'])
+            ->contain(['Xornada', 'Equipa1', 'Equipa2'])
+            ->select(['data_calendario' => 'COALESCE(Partidos.data_partido, Xornada.data)'])
+            ->select(['codigo_clube1' => '(SELECT c1.codigo FROM agfg_clubes c1 WHERE c1.id = Equipa1.id_clube)'])
+            ->select(['codigo_clube2' => '(SELECT c2.codigo FROM agfg_clubes c2 WHERE c2.id = Equipa2.id_clube)'])
             ->enableAutoFields(true)
             ->where(['OR' => [
                 'Partidos.data_partido >=' => $xornadaActual,
-                'Xornadas.data >=' => $xornadaActual
+                'Xornada.data >=' => $xornadaActual
             ]])
             ->having(['OR' => [
                 'codigo_clube1' => $codigo,
@@ -134,10 +134,10 @@ class CalendarioController extends RestController {
         $partidos = $this->Partidos
             ->find()
             ->limit(10)
-            ->contain(['Xornadas', 'Equipas1', 'Equipas2'])
-            ->select(['data_calendario' => 'COALESCE(Partidos.data_partido, Xornadas.data)'])
-            ->select(['codigo_clube1' => '(SELECT c1.codigo FROM agfg_clubes c1 WHERE c1.id = Equipas1.id_clube)'])
-            ->select(['codigo_clube2' => '(SELECT c2.codigo FROM agfg_clubes c2 WHERE c2.id = Equipas2.id_clube)'])
+            ->contain(['Xornada', 'Equipa1', 'Equipa2'])
+            ->select(['data_calendario' => 'COALESCE(Partidos.data_partido, Xornada.data)'])
+            ->select(['codigo_clube1' => '(SELECT c1.codigo FROM agfg_clubes c1 WHERE c1.id = Equipa1.id_clube)'])
+            ->select(['codigo_clube2' => '(SELECT c2.codigo FROM agfg_clubes c2 WHERE c2.id = Equipa2.id_clube)'])
             ->enableAutoFields(true)
             ->where(['Partidos.data_partido <' => $xornadaActual])
             ->having(['OR' => [
@@ -179,9 +179,9 @@ class CalendarioController extends RestController {
         $domingoYMD = $domingo->i18nFormat('yyyy-MM-dd');
         $partidos = $this->Partidos
             ->find()
-            ->contain(['Fases', 'Xornadas'])
+            ->contain(['Fases', 'Xornada'])
             ->where(['Fases.id_competicion'=>$competicion->id, 'OR' => [
-                ['Xornadas.data >='=>$lunsYMD, 'Xornadas.data <='=>$domingoYMD],
+                ['Xornada.data >='=>$lunsYMD, 'Xornada.data <='=>$domingoYMD],
                 ['Partidos.data_partido >='=>$lunsYMD, 'Partidos.data_partido <='=>$domingoYMD]
             ]])
             ->order(['-Partidos.data_partido DESC', 'Partidos.hora_partido']);

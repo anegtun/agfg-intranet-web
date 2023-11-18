@@ -13,17 +13,17 @@ class PartidosTable extends Table {
             'foreignKey' => 'id_fase',
             'propertyName' => 'fase'
         ]);
-        $this->belongsTo('Xornadas', [
+        $this->belongsTo('Xornada', [
         	'className' => 'Xornadas',
             'foreignKey' => 'id_xornada',
             'propertyName' => 'xornada'
         ]);
-        $this->belongsTo('Equipas1', [
+        $this->belongsTo('Equipa1', [
         	'className' => 'Equipas',
             'foreignKey' => 'id_equipa1',
             'propertyName' => 'equipa1'
         ]);
-        $this->belongsTo('Equipas2', [
+        $this->belongsTo('Equipa2', [
         	'className' => 'Equipas',
             'foreignKey' => 'id_equipa2',
             'propertyName' => 'equipa2'
@@ -33,6 +33,15 @@ class PartidosTable extends Table {
             'foreignKey' => 'id_campo',
             'propertyName' => 'campo'
         ]);
+    }
+
+    public function getDetalle($id) {
+        return $this->get($id, [ 'contain' => [
+            'Xornada',
+            'Fases' => 'Competicion',
+            'Equipa1' => 'Clube',
+            'Equipa2' => 'Clube'
+        ]]);
     }
 
     public function validationDefault(Validator $validator) {

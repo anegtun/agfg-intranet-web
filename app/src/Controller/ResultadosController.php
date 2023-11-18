@@ -47,11 +47,11 @@ class ResultadosController extends AppController {
         $xornadas = [];
         $partidos = $this->Partidos
             ->find()
-            ->contain(['Fases', 'Xornadas', 'Equipas1'])
-            ->select(['data_calendario' => 'COALESCE(Partidos.data_partido, Xornadas.data)'])
+            ->contain(['Fases', 'Xornada', 'Equipa1'])
+            ->select(['data_calendario' => 'COALESCE(Partidos.data_partido, Xornada.data)'])
             ->enableAutoFields(true)
             ->where(['Fases.id_competicion'=>$id])
-            ->order(['data_calendario','hora_partido', 'Equipas1.nome'])
+            ->order(['data_calendario', 'hora_partido', 'Equipa1.nome'])
             ->formatResults(function (\Cake\Collection\CollectionInterface $results) {
                 return $results->map(function ($row) {
                     if (!empty($row['data_calendario'])) {
@@ -134,14 +134,7 @@ class ResultadosController extends AppController {
     }
 
     public function partido($id) {
-        $partido = $this->Partidos->get($id);
-        $partido->xornada = $this->Xornadas->get($partido->id_xornada);
-        $partido->fase = $this->Fases->get($partido->xornada->id_fase);
-        $partido->competicion = $this->Competicions->get($partido->fase->id_competicion);
-        // Hack para que o datepicker non a líe formateando a data (alterna dia/mes). Asi forzamos o noso formato.
-        $partido->data_partido_str = empty($partido->data_partido) ? NULL : $partido->data_partido->format('d-m-Y');
-
-        $umpires = $this->Equipas->findInFederacion($partido->competicion->id_federacion);
+        $partido = $this->Partidos->getDetalle($id);
 
         $arbitros = $this->Arbitros->findMap(true);
         if ($partido->id_arbitro) {
@@ -151,9 +144,9 @@ class ResultadosController extends AppController {
         if ($partido->id_campo) {
             $campos[$partido->id_campo] = $this->Campos->get($partido->id_campo);
         }
-        $equipas = $this->Equipas->findMap();
+        $umpires = $this->Equipas->findInFederacion($partido->fase->competicion->id_federacion);
         $categorias = $this->Categorias->getCategorias();
-        $this->set(compact('partido', 'arbitros', 'campos', 'equipas', 'umpires', 'categorias'));
+        $this->set(compact('partido', 'arbitros', 'campos', 'umpires', 'categorias'));
     }
 
     public function gardar() {

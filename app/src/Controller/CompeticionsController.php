@@ -92,29 +92,27 @@ class CompeticionsController extends AppController {
 
     public function gardarFase() {
         $fase = $this->Fases->newEntity();
-        if ($this->request->is('post') || $this->request->is('put')) {
-            $data = $this->request->getData();
-            // Gardamos datos de fase
-            $fase = $this->Fases->patchEntity($fase, $data);
-            if (!$this->Fases->save($fase)) {
-                $this->Flash->error(__('Erro ao gardar a fase.'));
-                $this->set(compact('fase'));
-                return $this->render('detalleFase');
-            }
-            // Gardamos equipas
-            $this->FasesEquipas->deleteAll(['id_fase'=>$fase->id]);
-            if(!empty($data['equipas'])) {
-                foreach($data['equipas'] as $idE) {
-                    $faseEquipa = $this->FasesEquipas->newEntity();
-                    $faseEquipa->id_fase = $fase->id;
-                    $faseEquipa->id_equipa = $idE;
-                    $faseEquipa->puntos = empty($data['puntos'][$idE]) ? 0 : $data['puntos'][$idE];
-                    $this->FasesEquipas->save($faseEquipa);
-                }
-            }
-            $this->Flash->success(__('Gardouse a fase correctamente.'));
-            $this->redirect(['action'=>'detalleFase', $fase->id]);
+        $data = $this->request->getData();
+        // Gardamos datos de fase
+        $fase = $this->Fases->patchEntity($fase, $data);
+        if (!$this->Fases->save($fase)) {
+            $this->Flash->error(__('Erro ao gardar a fase.'));
+            $this->set(compact('fase'));
+            return $this->render('detalleFase');
         }
+        // Gardamos equipas
+        $this->FasesEquipas->deleteAll(['id_fase'=>$fase->id]);
+        if(!empty($data['equipas'])) {
+            foreach($data['equipas'] as $idE) {
+                $faseEquipa = $this->FasesEquipas->newEntity();
+                $faseEquipa->id_fase = $fase->id;
+                $faseEquipa->id_equipa = $idE;
+                $faseEquipa->puntos = empty($data['puntos'][$idE]) ? 0 : $data['puntos'][$idE];
+                $this->FasesEquipas->save($faseEquipa);
+            }
+        }
+        $this->Flash->success(__('Gardouse a fase correctamente.'));
+        $this->redirect(['action'=>'detalleFase', $fase->id]);
     }
 
     public function borrarFase($id) {

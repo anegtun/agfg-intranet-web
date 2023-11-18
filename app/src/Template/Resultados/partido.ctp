@@ -1,32 +1,35 @@
 <?php
 $this->extend('template');
-$this->set('cabeceiraTitulo', $partido->competicion->nome);
+$this->set('cabeceiraTitulo', $partido->fase->competicion->nome);
 
-$nome1 = empty($partido->id_equipa1) ? $partido->provisional_equipa1 : $equipas[$partido->id_equipa1]->nome;
-$nome2 = empty($partido->id_equipa2) ? $partido->provisional_equipa2 : $equipas[$partido->id_equipa2]->nome;
+$nome1 = empty($partido->equipa1) ? $partido->provisional_equipa1 : $partido->equipa1->nome;
+$nome2 = empty($partido->equipa2) ? $partido->provisional_equipa2 : $partido->equipa2->nome;
 
-$logo1 = empty($partido->id_equipa1) ? '' : $equipas[$partido->id_equipa1]->getLogo();
-$logo2 = empty($partido->id_equipa2) ? '' : $equipas[$partido->id_equipa2]->getLogo();
+$logo1 = empty($partido->equipa1) ? '' : $partido->equipa1->getLogo();
+$logo2 = empty($partido->equipa2) ? '' : $partido->equipa2->getLogo();
 
 $this->set('cabeceiraMigas', [
     ['label'=>'Competicións'],
     ['label'=>'Horarios e resultados', 'url'=>['controller'=>'Resultados', 'action'=>'index']],
-    ['label'=>$partido->competicion->nome, 'url'=>['controller'=>'Resultados', 'action'=>'competicion', $partido->competicion->id]],
+    ['label'=>$partido->fase->competicion->nome, 'url'=>['controller'=>'Resultados', 'action'=>'competicion', $partido->fase->competicion->id]],
     ['label'=>$nome1.' - '.$nome2]
 ]);
 $emptyTemplates = [
     'inputContainer' => '{{content}}',
     'input' => '<input type="{{type}}" name="{{name}}" {{attrs}}/>',
 ];
+
+// Hack para que o datepicker non a líe formateando a data (alterna dia/mes). Asi forzamos o noso formato.
+$data_partido_str = empty($partido->data_partido) ? NULL : $partido->data_partido->format('d-m-Y');
 ?>
 
 
 <?= $this->Form->create($partido, ['type'=>'post', 'url'=>['action'=>'gardar']]) ?>
     <?= $this->Form->hidden('id') ?>
-    <?= $this->Form->hidden('id_competicion', ['value'=>$partido->competicion->id]) ?>
+    <?= $this->Form->hidden('id_competicion', ['value'=>$partido->fase->competicion->id]) ?>
     <fieldset>
         <legend>
-            <?=$partido->competicion->nome?>
+            <?=$partido->fase->competicion->nome?>
             -
             <?= $partido->fase->nome ?>
             (<?= $partido->fase->categoria ?>)
@@ -36,7 +39,7 @@ $emptyTemplates = [
         </legend>
         <div class="row">
             <div class="form-group col-lg-1">
-                <?= $this->Form->control('data', ['class'=>'form-control fld-date', 'label'=>'Data', 'value'=>$partido->data_partido_str, 'templates'=>$emptyTemplates]) ?>
+                <?= $this->Form->control('data', ['class'=>'form-control fld-date', 'label'=>'Data', 'value'=>$data_partido_str, 'templates'=>$emptyTemplates]) ?>
             </div>
             <div class="form-group col-lg-1">
                 <?= $this->Form->control('hora_partido', ['class'=>'form-control fld-time', 'label'=>'Hora', 'templates'=>$emptyTemplates]) ?>
@@ -44,7 +47,7 @@ $emptyTemplates = [
             <div class="form-group col-lg-3">
                 <?= $this->Form->control('id_campo', ['options'=>$this->AgfgForm->objectToKeyValue($campos,'id','$e->pobo - $e->nome'), 'label'=>'Campo', 'templates'=>$emptyTemplates]) ?>
             </div>
-            <?php if ($partido->competicion->tipo === 'torneo') : ?>
+            <?php if ($partido->fase->competicion->tipo === 'torneo') : ?>
                 <div class="form-group col-lg-3">
                     <?= $this->Form->control('id_umpire', ['options'=>$this->AgfgForm->objectToKeyValue($umpires,'id','$e->nome ($e->categoria)'), 'label'=>'Umpires', 'templates'=>$emptyTemplates]) ?>
                 </div>
