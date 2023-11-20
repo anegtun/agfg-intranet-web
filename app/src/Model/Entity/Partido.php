@@ -15,7 +15,6 @@ class Partido extends Entity {
 
     protected $diasSemana = ['Dom','Lun','Mar','Mér','Xov','Ven','Sáb'];
 
-
     public function formatDataHora() {
         if(empty($this->data_partido)) {
             return NULL;
@@ -43,6 +42,14 @@ class Partido extends Entity {
         return $time;
     }
 
+    public function hasPuntuacionTotalEquipa1() {
+        return $this->getPuntuacionTotalEquipa1() !== NULL;
+    }
+
+    public function hasPuntuacionTotalEquipa2() {
+        return $this->getPuntuacionTotalEquipa2() !== NULL;
+    }
+
     public function getPuntuacionTotalEquipa1() {
         return $this->_calculatePuntuacionTotal($this->goles_equipa1, $this->tantos_equipa1, $this->total_equipa1);
     }
@@ -51,12 +58,16 @@ class Partido extends Entity {
         return $this->_calculatePuntuacionTotal($this->goles_equipa2, $this->tantos_equipa2, $this->total_equipa2);
     }
 
-    public function formatPuntuacionEquipa1() {
-        return $this->_formatPuntuacionTotal($this->goles_equipa1, $this->tantos_equipa1, $this->total_equipa1, $this->non_presentado_equipa1);
+    public function hasDesglose() {
+        return !is_null($this->goles_equipa1) || !is_null($this->goles_equipa2);
     }
 
-    public function formatPuntuacionEquipa2() {
-        return $this->_formatPuntuacionTotal($this->goles_equipa2, $this->tantos_equipa2, $this->total_equipa2, $this->non_presentado_equipa2);
+    public function formatDesglose1() {
+        return sprintf('%01d', $this->goles_equipa1)."-".sprintf('%02d', $this->tantos_equipa1);
+    }
+
+    public function formatDesglose2() {
+        return sprintf('%01d', $this->goles_equipa2)."-".sprintf('%02d', $this->tantos_equipa2);
     }
 
     public function getGanador() {
@@ -83,22 +94,6 @@ class Partido extends Entity {
         $g = $goles===NULL ? 0 : $goles;
         $t = $tantos===NULL ? 0 : $tantos;
         return $g*3 + $t;
-    }
-
-    protected function _formatPuntuacionTotal($goles, $tantos, $total, $non_presentado) {
-        if(!empty($non_presentado)) {
-            return 'N.P.';
-        }
-        if($goles===NULL && $tantos===NULL) {
-            if($total===NULL) {
-                return NULL;
-            }
-            return '('.sprintf('%02d',$total).')';
-        }
-        $g = $goles===NULL ? 0 : $goles;
-        $t = $tantos===NULL ? 0 : $tantos;
-        $p = $this->_calculatePuntuacionTotal($goles, $tantos, NULL);
-        return $g.'-'.sprintf('%02d',$t).' ('.sprintf('%02d',$p).')';
     }
 
 }

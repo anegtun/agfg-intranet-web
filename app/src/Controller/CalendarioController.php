@@ -62,10 +62,10 @@ class CalendarioController extends RestController {
                 }
                 $conditions_partido = ['id_xornada'=>$x->id];
                 if(!empty($campo_request)) {
-                    $conditions_partido['Campos.codigo'] = $campo_request;
+                    $conditions_partido['Campo.codigo'] = $campo_request;
                 }
                 $partidos = $this->Partidos->find()
-                    ->contain('Campos')
+                    ->contain('Campo')
                     ->where($conditions_partido);
                 foreach($partidos as $p) {
                     $resX['partidos'][] = $this->_buildPartidoData($p, $f, $x, $equipas, $campos, $arbitros);

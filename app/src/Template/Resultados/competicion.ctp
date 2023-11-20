@@ -13,6 +13,17 @@ $emptyTemplates = [
 ];
 
 $is_torneo = $competicion->tipo === 'torneo';
+
+$campos = [];
+$fases = [];
+foreach($partidos_competicion as $p) {
+    if(!empty($p->fase)) {
+        $fases[$p->id_fase] = $p->fase;
+    }
+    if(!empty($p->campo)) {
+        $campos[$p->id_campo] = $p->campo;
+    }
+}
 ?>
 
 <div class="row form-group">
@@ -46,7 +57,7 @@ $is_torneo = $competicion->tipo === 'torneo';
 
     <?php $data_xornada = "" ?>
 
-    <?php foreach($partidos as $p) : ?>
+    <?php foreach($partidos_filtrados as $p) : ?>
         <?php
             $fase = "";
             if($is_torneo) {
@@ -61,20 +72,6 @@ $is_torneo = $competicion->tipo === 'torneo';
 
             $data_referencia = $p->data_partido ? $p->data_partido : $p->xornada->data;
             $sabado = empty($data_referencia) ? NULL : $data_referencia->modify('next monday')->modify('previous saturday')->format('Y-m-d');
-
-            $nome1 = empty($p->id_equipa1) ? $p->provisional_equipa1 : $equipas[$p->id_equipa1]->nome_curto;
-            $nome2 = empty($p->id_equipa2) ? $p->provisional_equipa2 : $equipas[$p->id_equipa2]->nome_curto;
-            $logo1 = empty($p->id_equipa1) ? '' : $equipas[$p->id_equipa1]->getLogo();
-            $logo2 = empty($p->id_equipa2) ? '' : $equipas[$p->id_equipa2]->getLogo();
-
-            $total1 = $p->getPuntuacionTotalEquipa1() === NULL ? '-' : $p->getPuntuacionTotalEquipa1();
-            $total2 = $p->getPuntuacionTotalEquipa2() === NULL ? '-' : $p->getPuntuacionTotalEquipa2();
-            $desglose1 = (!is_null($p->goles_equipa1) || !is_null($p->goles_equipa2)) ? sprintf('%01d', $p->goles_equipa1)."-".sprintf('%02d', $p->tantos_equipa1) : '';
-            $desglose2 = (!is_null($p->goles_equipa1) || !is_null($p->goles_equipa2)) ? sprintf('%01d', $p->goles_equipa2)."-".sprintf('%02d', $p->tantos_equipa2) : '';
-
-            $campo = empty($p->id_campo) ? '-' : $campos[$p->id_campo]->nome_curto;
-            $arbitro = empty($p->id_arbitro) ? '-' : $arbitros[$p->id_arbitro]->alcume;
-            $umpires = empty($p->id_umpire) ? '-' : "{$equipas[$p->id_umpire]->nome} ({$equipas[$p->id_umpire]->categoria})";
         ?>
 
         <?php if(!empty($sabado) && $data_xornada !== $sabado) : ?>
@@ -91,22 +88,22 @@ $is_torneo = $competicion->tipo === 'torneo';
             
             <div class="agfg-partido-equipas">
                 <div class='agfg-partido-equipa'>
-                    <div><figure><?= empty($logo1) ? '' : $this->Html->image($logo1, ['width'=>25]) ?></figure></div>
-                    <div class='agfg-partido-equipa-nome'><?= $nome1 ?></div>
+                    <div><figure><?= empty($p->equipa1) ? '' : $this->Html->image($p->equipa1->getLogo(), ['width'=>25]) ?></figure></div>
+                    <div class='agfg-partido-equipa-nome'><?= empty($p->equipa1) ? $p->provisional_equipa1 : $p->equipa1->nome_curto ?></div>
                     <div class='agfg-partido-resultado-equipa1 <?= $p->getGanador()==='L'?'agfg-partido-resultado-ganador':'' ?>'>
-                        <div><?= $total1 ?></div>
-                        <?php if(!empty($desglose1)) : ?>
-                            <div class='agfg-partido-resultado-desglose'><?= $desglose1 ?></div>
+                        <div><?= $p->hasPuntuacionTotalEquipa1() ? $p->getPuntuacionTotalEquipa1() : '-' ?></div>
+                        <?php if($p->hasDesglose()) : ?>
+                            <div class='agfg-partido-resultado-desglose'><?= $p->formatDesglose1() ?></div>
                         <?php endif ?>
                     </div>
                 </div>
                 <div class='agfg-partido-equipa'>
-                    <div><figure><?= empty($logo2) ? '' : $this->Html->image($logo2, ['width'=>25]) ?></figure></div>
-                    <div class='agfg-partido-equipa-nome'><?= $nome2 ?></div>
+                    <div><figure><?= empty($p->equipa2) ? '' : $this->Html->image($p->equipa2->getLogo(), ['width'=>25]) ?></figure></div>
+                    <div class='agfg-partido-equipa-nome'><?= empty($p->equipa2) ? $p->provisional_equipa2 : $p->equipa2->nome_curto ?></div>
                     <div class='agfg-partido-resultado-equipa2 <?= $p->getGanador()==='V'?'agfg-partido-resultado-ganador':'' ?>'>
-                        <div><?= $total2 ?></div>
-                        <?php if(!empty($desglose2)) : ?>
-                            <div class='agfg-partido-resultado-desglose'><?= $desglose2 ?></div>
+                        <div><?= $p->hasPuntuacionTotalEquipa2() ? $p->getPuntuacionTotalEquipa2() : '-' ?></div>
+                        <?php if($p->hasDesglose()) : ?>
+                            <div class='agfg-partido-resultado-desglose'><?= $p->formatDesglose2() ?></div>
                         <?php endif ?>
                     </div>
                 </div>
@@ -116,17 +113,17 @@ $is_torneo = $competicion->tipo === 'torneo';
             <div class='agfg-partido-bottom'>
                 <div class='agfg-partido-bottom-detalle'>
                     <figure><img class='alignnone' src='https://gaelicogalego.gal/wp-content/uploads/2022/07/icono-estadio.jpg' alt='Campo' width='15'></figure>
-                    <?= $campo ?>
+                    <?= empty($p->campo) ? '-' : $p->campo->nome_curto ?>
                 </div>
                 <?php if($is_torneo) : ?>
                     <div class='agfg-partido-bottom-detalle'>
                         <figure><img class='alignnone' src='https://gaelicogalego.gal/wp-content/uploads/2022/07/icono-umpire.jpg' alt='Umpires' width='15'></figure>
-                        <?= $umpires ?>
+                        <?= empty($p->umpire) ? '-' : "{$p->umpire->nome} ({$p->umpire->categoria})" ?>
                     </div>
                 <?php endif ?>
                 <div class='agfg-partido-bottom-detalle'>
                     <figure><img class='alignnone' src='https://gaelicogalego.gal/wp-content/uploads/2022/07/icono-silbato.jpg' alt='Árbitro' width='15'></figure>
-                    <?= $arbitro ?>
+                    <?= empty($p->arbitro) ? '-' : $p->arbitro->alcume ?>
                 </div>
             </div>
 

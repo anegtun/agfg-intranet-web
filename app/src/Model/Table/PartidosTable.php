@@ -28,10 +28,20 @@ class PartidosTable extends Table {
             'foreignKey' => 'id_equipa2',
             'propertyName' => 'equipa2'
         ]);
-        $this->belongsTo('Campos', [
+        $this->belongsTo('Campo', [
         	'className' => 'Campos',
             'foreignKey' => 'id_campo',
             'propertyName' => 'campo'
+        ]);
+        $this->belongsTo('Arbitro', [
+        	'className' => 'Arbitros',
+            'foreignKey' => 'id_arbitro',
+            'propertyName' => 'arbitro'
+        ]);
+        $this->belongsTo('Umpire', [
+        	'className' => 'Equipas',
+            'foreignKey' => 'id_umpire',
+            'propertyName' => 'umpire'
         ]);
     }
 

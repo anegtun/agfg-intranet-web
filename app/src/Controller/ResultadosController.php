@@ -43,11 +43,14 @@ class ResultadosController extends AppController {
 
     public function competicion($id) {
         $competicion = $this->Competicions->get($id, ['contain'=>['Fases']]);
+
+        $partidos_competicion = $this->Partidos->find()
+            ->contain(['Fases', 'Campo'])
+            ->where(['Fases.id_competicion'=>$id]);
   
-        $xornadas = [];
-        $partidos = $this->Partidos
+        $partidos_filtrados = $this->Partidos
             ->find()
-            ->contain(['Fases', 'Xornada', 'Equipa1'])
+            ->contain(['Fases', 'Xornada', 'Equipa1'=>'Clube', 'Equipa2'=>'Clube', 'Campo', 'Arbitro', 'Umpire'])
             ->select(['data_calendario' => 'COALESCE(Partidos.data_partido, Xornada.data)'])
             ->enableAutoFields(true)
             ->where(['Fases.id_competicion'=>$id])
@@ -61,14 +64,14 @@ class ResultadosController extends AppController {
                 });
             });
         if(!empty($this->request->getQuery('id_fase'))) {
-            $partidos->where(['Partidos.id_fase' => $this->request->getQuery('id_fase')]);
+            $partidos_filtrados->where(['Partidos.id_fase' => $this->request->getQuery('id_fase')]);
         }
         if(!empty($this->request->getQuery('id_campo'))) {
-            $partidos->where(['Partidos.id_campo' => $this->request->getQuery('id_campo')]);
+            $partidos_filtrados->where(['Partidos.id_campo' => $this->request->getQuery('id_campo')]);
         }
         $pendente = $this->request->getQuery('pendente');
         if(!isset($pendente) || !empty($pendente)) {
-            $partidos->where(function (QueryExpression $exp, Query $query) {
+            $partidos_filtrados->where(function (QueryExpression $exp, Query $query) {
                 $goles = $query->newExpr()->isNull('Partidos.goles_equipa1');
                 $tantos = $query->newExpr()->isNull('Partidos.tantos_equipa1');
                 $total = $query->newExpr()->isNull('Partidos.total_equipa1');
@@ -76,23 +79,7 @@ class ResultadosController extends AppController {
             });
         }
 
-        $fases = $this->Fases->find()->where(['id_competicion'=>$id]);
-        
-        $arbitros = $this->Arbitros->findMap();
-        $campos_map = $this->Campos->findMap();
-        $equipas = $this->Equipas->findMap();
-
-        $all_partidos = $this->Partidos->find()
-            ->contain(['Fases'])
-            ->where(['Fases.id_competicion'=>$id]);
-        $campos = [];
-        foreach($all_partidos as $p) {
-            if(!empty($p->id_campo)) {
-                $campos[$p->id_campo] = $campos_map[$p->id_campo];
-            }
-        }
-
-        $this->set(compact('competicion', 'partidos', 'arbitros', 'campos', 'equipas', 'fases'));
+        $this->set(compact('competicion', 'partidos_filtrados', 'partidos_competicion'));
     }
 
     public function reemplazar($id) {
