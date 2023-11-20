@@ -24,12 +24,35 @@ class CalendarioController extends RestController {
     }
 
     public function competicion($codigo) {
-        $competicion = $this->Competicions->find()->where(['Competicions.codigo'=>$codigo])->first();
+        $competicionQuery = $this->Competicions
+            ->find()
+            ->contain(['Fases' => ['Xornadas' => ['sort'=>'Xornadas.data ASC']]])
+            ->where(['Competicions.codigo'=>$codigo]);
+
+        $categoriaParam = $this->request->getQuery('categoria');
+        if(!empty($categoriaParam)) {
+            $competicionQuery->matching('Fases', function ($q) use ($categoriaParam) {
+                return $q->where(['Fases.categoria' => $categoriaParam]);
+            });
+        }
+        $faseParam = $this->request->getQuery('fase');
+        if(!empty($faseParam)) {
+            $competicionQuery->matching('Fases', function ($q) use ($faseParam) {
+                return $q->where(['Fases.codigo' => $faseParam]);
+            });
+        }
+        $fasesParam = $this->request->getQuery('fases');
+        if(!empty($fasesParam)) {
+            $competicionQuery->matching('Fases', function ($q) use ($fasesParam) {
+                return $q->where(['Fases.codigo IN' => explode(",", $fasesParam)]);
+            });
+        }
+
+        $competicion = $competicionQuery->first();
         if(empty($competicion)) {
             throw new Exception("Non existe competición");
         }
-        // Obtemos fases
-        $fases = $this->_getFases($competicion);
+
         $campos = $this->Campos->findMap();
         $equipas = $this->Equipas->findMap();
         $arbitros = $this->Arbitros->findMap();
@@ -43,7 +66,7 @@ class CalendarioController extends RestController {
             ],
             'xornadas' => []
         ];
-        foreach($fases as $f) {
+        foreach($competicion->fases as $f) {
             $xornadasFase = $this->Xornadas->find()->where(['id_fase'=>$f->id])->order(['data ASC']);
             foreach($xornadasFase as $x) {
                 $resX = [
@@ -150,23 +173,6 @@ class CalendarioController extends RestController {
             $res[] = $this->_buildPartidoData($p, null, null, $equipas, $campos, $arbitros);
         }
         $this->set($res);
-    }
-
-    private function _getFases($competicion) {
-        $conditions = ['id_competicion'=>$competicion->id];
-        $categoria = $this->request->getQuery('categoria');
-        if(!empty($categoria)) {
-            $conditions['categoria'] = $categoria;
-        }
-        $fase = $this->request->getQuery('fase');
-        if(!empty($fase)) {
-            $conditions['codigo'] = $fase;
-        }
-        $fases = $this->request->getQuery('fases');
-        if(!empty($fases)) {
-            $conditions['codigo IN'] = explode(",", $fases);
-        }
-        return $this->Fases->find()->where($conditions);
     }
 
     private function _getJsonPartidosSemana($competicion, $dataReferencia) {

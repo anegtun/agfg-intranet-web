@@ -15,6 +15,12 @@ class FasesTable extends Table {
             'propertyName' => 'competicion'
         ]);
 
+        $this->hasMany('Xornadas', [
+        	'className' => 'Xornadas',
+            'foreignKey' => 'id_fase',
+            'propertyName' => 'xornadas'
+        ]);
+
         $this->belongsTo('FasePai', [
         	'className' => 'Fases',
             'foreignKey' => 'id_fase_pai',
