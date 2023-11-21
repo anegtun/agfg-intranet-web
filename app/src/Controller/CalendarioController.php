@@ -70,40 +70,8 @@ class CalendarioController extends RestController {
             throw new Exception("Non existe competición");
         }
 
-        $res = [
-            'competicion' => [
-                'nome' => $competicion->nome,
-                'tipo' => $competicion->tipo
-            ],
-            'xornadas' => []
-        ];
-        foreach($competicion->fases as $f) {
-            foreach($f->xornadas as $x) {
-                $resX = [
-                    'data' => $x->data,
-                    'numero' => $x->numero,
-                    'descricion' => $x->descricion,
-                    'partidos' => []
-                ];
-                $index = -1;
-                foreach($res['xornadas'] as $i=>$xJson) {
-                    if($xJson['data']==$x->data) {
-                        $resX = $xJson;
-                        $index = $i;
-                        break;
-                    }
-                }
-                foreach($x->partidos as $p) {
-                    $resX['partidos'][] = $this->_buildPartidoData($p, $f, $x);
-                }
-                if($index>=0) {
-                    $res['xornadas'][$index] = $resX;
-                } else {
-                    $res['xornadas'][] = $resX;
-                }
-            }
-        }
-        $this->set($res);
+        $this->set('_serialize', false);
+        $this->set('competicion', $competicion);
     }
 
     public function xornadaSeguinte($codigo) {
