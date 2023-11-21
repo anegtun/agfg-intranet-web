@@ -37,9 +37,7 @@ class CompeticionsController extends AppController {
     }
 
     public function detalle($id=null) {
-        $competicion = empty($id)
-            ? $this->Competicions->newEntity()
-            : $this->Competicions->get($id, ['contain' => ['Fases' => ['sort'=>['Fases.categoria', 'Fases.nome']], 'Fases.FasePai']]);
+        $competicion = $this->Competicions->getOrNew($id, ['contain' => ['Fases' => ['sort'=>['Fases.categoria', 'Fases.nome']], 'Fases.FasePai']]);
         $categorias = $this->Categorias->getCategoriasWithEmpty();
         $tempadas = $this->Tempadas->getTempadasWithEmpty();
         $tiposCompeticion = $this->TiposCompeticion->getTiposWithEmpty();

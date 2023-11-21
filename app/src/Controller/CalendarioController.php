@@ -24,29 +24,44 @@ class CalendarioController extends RestController {
     }
 
     public function competicion($codigo) {
+        $categoriaParam = $this->request->getQuery('categoria');
+        $faseParam = $this->request->getQuery('fase');
+        $fasesParam = $this->request->getQuery('fases');
+        $campoParam = $this->request->getQuery('campo');
         $competicionQuery = $this->Competicions
             ->find()
-            ->contain(['Fases' => ['Xornadas' => ['sort'=>'Xornadas.data ASC']]])
+            ->contain([
+                'Fases' => [
+                    'queryBuilder' => function ($q) use ($categoriaParam, $faseParam, $fasesParam) {
+                        if(!empty($categoriaParam)) {
+                            $q = $q->where(['Fases.categoria' => $categoriaParam]);
+                        }
+                        if(!empty($faseParam)) {
+                            $q = $q->where(['Fases.codigo' => $faseParam]);
+                        }
+                        if(!empty($fasesParam)) {
+                            $q = $q->where(['Fases.codigo IN' => explode(",", $fasesParam)]);
+                        }
+                        return $q;
+                    },      
+                    'Xornadas' => [
+                        'sort' => ['Xornadas.data ASC', 'Xornadas.numero ASC'],
+                        'Partidos' => [
+                            'queryBuilder' => function ($q) use ($campoParam) {
+                                $q = $q->order(['Partidos.data_partido', 'Partidos.hora_partido']);
+                                if(!empty($campoParam)) {
+                                    $q = $q->where(['Fases.Xornadas.Partidos.Campo.codigo' => $campoParam]);
+                                }
+                                // debug($q);
+                                // die();
+                                return $q;
+                            },
+                            'Campo'
+                        ]
+                    ]
+                ]
+            ])
             ->where(['Competicions.codigo'=>$codigo]);
-
-        $categoriaParam = $this->request->getQuery('categoria');
-        if(!empty($categoriaParam)) {
-            $competicionQuery->matching('Fases', function ($q) use ($categoriaParam) {
-                return $q->where(['Fases.categoria' => $categoriaParam]);
-            });
-        }
-        $faseParam = $this->request->getQuery('fase');
-        if(!empty($faseParam)) {
-            $competicionQuery->matching('Fases', function ($q) use ($faseParam) {
-                return $q->where(['Fases.codigo' => $faseParam]);
-            });
-        }
-        $fasesParam = $this->request->getQuery('fases');
-        if(!empty($fasesParam)) {
-            $competicionQuery->matching('Fases', function ($q) use ($fasesParam) {
-                return $q->where(['Fases.codigo IN' => explode(",", $fasesParam)]);
-            });
-        }
 
         $competicion = $competicionQuery->first();
         if(empty($competicion)) {
@@ -57,8 +72,6 @@ class CalendarioController extends RestController {
         $equipas = $this->Equipas->findMap();
         $arbitros = $this->Arbitros->findMap();
 
-        $campo_request = $this->request->getQuery('campo');
-
         $res = [
             'competicion' => [
                 'nome' => $competicion->nome,
@@ -67,8 +80,7 @@ class CalendarioController extends RestController {
             'xornadas' => []
         ];
         foreach($competicion->fases as $f) {
-            $xornadasFase = $this->Xornadas->find()->where(['id_fase'=>$f->id])->order(['data ASC']);
-            foreach($xornadasFase as $x) {
+            foreach($f->xornadas as $x) {
                 $resX = [
                     'data' => $x->data,
                     'numero' => $x->numero,
@@ -83,14 +95,7 @@ class CalendarioController extends RestController {
                         break;
                     }
                 }
-                $conditions_partido = ['id_xornada'=>$x->id];
-                if(!empty($campo_request)) {
-                    $conditions_partido['Campo.codigo'] = $campo_request;
-                }
-                $partidos = $this->Partidos->find()
-                    ->contain('Campo')
-                    ->where($conditions_partido);
-                foreach($partidos as $p) {
+                foreach($x->partidos as $p) {
                     $resX['partidos'][] = $this->_buildPartidoData($p, $f, $x, $equipas, $campos, $arbitros);
                 }
                 if($index>=0) {

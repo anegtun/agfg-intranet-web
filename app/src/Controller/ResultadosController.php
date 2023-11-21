@@ -138,15 +138,13 @@ class ResultadosController extends AppController {
 
     public function gardar() {
         $partido = $this->Competicions->newEntity();
-        if ($this->request->is('post') || $this->request->is('put')) {
-            $data = $this->request->getData();
-            $partido = $this->processGameForm($partido, $data);
-            if ($this->Partidos->save($partido)) {
-                $this->Flash->success(__('Gardáronse os datos do partido correctamente.'));
-                return $this->redirect(['action'=>'competicion', $data['id_competicion']]);
-            }
-            $this->Flash->error(__('Erro ao gardar os datos do partido.'));
+        $data = $this->request->getData();
+        $partido = $this->processGameForm($partido, $data);
+        if ($this->Partidos->save($partido)) {
+            $this->Flash->success(__('Gardáronse os datos do partido correctamente.'));
+            return $this->redirect(['action'=>'competicion', $data['id_competicion']]);
         }
+        $this->Flash->error(__('Erro ao gardar os datos do partido.'));
         $this->set(compact('partido'));
         $this->render('partido');
     }
