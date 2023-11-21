@@ -70,10 +70,6 @@ class CalendarioController extends RestController {
             throw new Exception("Non existe competición");
         }
 
-        $campos = $this->Campos->findMap();
-        $equipas = $this->Equipas->findMap();
-        $arbitros = $this->Arbitros->findMap();
-
         $res = [
             'competicion' => [
                 'nome' => $competicion->nome,
@@ -98,7 +94,7 @@ class CalendarioController extends RestController {
                     }
                 }
                 foreach($x->partidos as $p) {
-                    $resX['partidos'][] = $this->_buildPartidoData($p, $f, $x, $equipas, $campos, $arbitros);
+                    $resX['partidos'][] = $this->_buildPartidoData($p, $f, $x);
                 }
                 if($index>=0) {
                     $res['xornadas'][$index] = $resX;
@@ -144,9 +140,6 @@ class CalendarioController extends RestController {
                 ['Partidos.data_partido >='=>$lunsYMD, 'Partidos.data_partido <='=>$domingoYMD]
             ]])
             ->order(['-Partidos.data_partido DESC', 'Partidos.hora_partido']);
-        $campos = $this->Campos->findMap();
-        $equipas = $this->Equipas->findMap();
-        $arbitros = $this->Arbitros->findMap();
         $categorias = $this->Categorias->getCategoriasWithEmpty();
         $res = [
             'inicio' => $luns,
@@ -154,7 +147,7 @@ class CalendarioController extends RestController {
             'partidos' => []
         ];
         foreach($partidos as $p) {
-            $resP = $this->_buildPartidoData($p, null, null, $equipas, $campos, $arbitros);
+            $resP = $this->_buildPartidoData($p, null, null);
             $resP['fase'] = [
                 'categoria' => $categorias[$p->fase->categoria],
                 'nome' => $p->fase->nome
@@ -216,7 +209,7 @@ class CalendarioController extends RestController {
         return $data;
     }
 
-    private function _buildPartidoData($p, $f, $x, $equipas, $campos, $arbitros) {
+    private function _buildPartidoData($p, $f, $x) {
         $resP = [
             'data_partido' => $p->getDataHora(),
             'adiado' => $p->adiado,
