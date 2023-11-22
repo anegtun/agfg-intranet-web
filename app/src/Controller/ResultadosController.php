@@ -45,15 +45,15 @@ class ResultadosController extends AppController {
         $competicion = $this->Competicions->get($id, ['contain'=>['Fases']]);
 
         $partidos_competicion = $this->Partidos->find()
-            ->contain(['Fases', 'Campo'])
-            ->where(['Fases.id_competicion'=>$id]);
+            ->contain(['Fase', 'Campo'])
+            ->where(['Fase.id_competicion'=>$id]);
   
         $partidos_filtrados = $this->Partidos
             ->find()
-            ->contain(['Fases', 'Xornada', 'Equipa1'=>'Clube', 'Equipa2'=>'Clube', 'Campo', 'Arbitro', 'Umpire'])
+            ->contain(['Fase', 'Xornada', 'Equipa1'=>'Clube', 'Equipa2'=>'Clube', 'Campo', 'Arbitro', 'Umpire'])
             ->select(['data_calendario' => 'COALESCE(Partidos.data_partido, Xornada.data)'])
             ->enableAutoFields(true)
-            ->where(['Fases.id_competicion'=>$id])
+            ->where(['Fase.id_competicion'=>$id])
             ->order(['data_calendario', 'hora_partido', 'Equipa1.nome'])
             ->formatResults(function (\Cake\Collection\CollectionInterface $results) {
                 return $results->map(function ($row) {
@@ -94,24 +94,24 @@ class ResultadosController extends AppController {
         if(!empty($data['id_competicion']) && !empty($data['id_orixinal']) && !empty($data['id_nova'])) {
             $partidos = $this->Partidos
                 ->find()
-                ->contain(['Fases'])
-                ->where(['Fases.id_competicion' => $data['id_competicion'], 'id_equipa1' => $data['id_orixinal']]);
+                ->contain(['Fase'])
+                ->where(['Fase.id_competicion' => $data['id_competicion'], 'id_equipa1' => $data['id_orixinal']]);
             foreach($partidos as $p) {
                 $p->id_equipa1 = $data['id_nova'];
                 $this->Partidos->save($p);
             }
             $partidos = $this->Partidos
                 ->find()
-                ->contain(['Fases'])
-                ->where(['Fases.id_competicion' => $data['id_competicion'], 'id_equipa2' => $data['id_orixinal']]);
+                ->contain(['Fase'])
+                ->where(['Fase.id_competicion' => $data['id_competicion'], 'id_equipa2' => $data['id_orixinal']]);
             foreach($partidos as $p) {
                 $p->id_equipa2 = $data['id_nova'];
                 $this->Partidos->save($p);
             }
             $partidos = $this->Partidos
                 ->find()
-                ->contain(['Fases'])
-                ->where(['Fases.id_competicion' => $data['id_competicion'], 'id_umpire' => $data['id_orixinal']]);
+                ->contain(['Fase'])
+                ->where(['Fase.id_competicion' => $data['id_competicion'], 'id_umpire' => $data['id_orixinal']]);
             foreach($partidos as $p) {
                 $p->id_umpire = $data['id_nova'];
                 $this->Partidos->save($p);

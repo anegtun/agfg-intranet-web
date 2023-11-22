@@ -8,7 +8,7 @@ class PartidosTable extends Table {
 
     public function initialize(array $config) {
         $this->setTable('agfg_partidos');
-        $this->belongsTo('Fases', [
+        $this->belongsTo('Fase', [
         	'className' => 'Fases',
             'foreignKey' => 'id_fase',
             'propertyName' => 'fase'
@@ -48,7 +48,7 @@ class PartidosTable extends Table {
     public function getDetalle($id) {
         return $this->get($id, [ 'contain' => [
             'Xornada',
-            'Fases' => 'Competicion',
+            'Fase' => 'Competicion',
             'Equipa1' => 'Clube',
             'Equipa2' => 'Clube'
         ]]);

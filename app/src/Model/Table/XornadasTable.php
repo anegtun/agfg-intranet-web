@@ -1,20 +1,24 @@
 <?php
 namespace App\Model\Table;
 
-use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
-class XornadasTable extends Table {
+class XornadasTable extends AgfgTable {
 
     public function initialize(array $config) {
         $this->setTable('agfg_xornada');
-        $this->hasMany('Partidos', array(
+
+        $this->hasMany('Partidos', [
         	'className' => 'Partidos',
             'foreignKey' => 'id_xornada',
-            //'conditions' => ['approved' => true]
-            'propertyName' => 'partidos',
-            //'dependent' => true,
-        ));
+            'propertyName' => 'partidos'
+        ]);
+
+        $this->belongsTo('Fase', [
+        	'className' => 'Fases',
+            'foreignKey' => 'id_fase',
+            'propertyName' => 'fase'
+        ]);
     }
 
     public function findWithPartidos($id_fase) {

@@ -79,8 +79,15 @@ class CalendarioController extends RestController {
         if(empty($competicion)) {
             throw new Exception("Non existe competición");
         }
+
         $dataReferencia = $this->_getDataMaisCercanaFutura($competicion);
-        $this->set($this->_getJsonPartidosSemana($competicion, $dataReferencia));
+        $luns = $dataReferencia->modify('monday this week');
+        $domingo = $luns->modify('sunday this week');
+
+        $partidos = $this->_getPartidosSemana($competicion, $luns, $domingo);
+        $categorias = $this->Categorias->getCategoriasWithEmpty();
+
+        $this->set($this->_getJsonPartidosSemana($partidos, $categorias, $luns, $domingo));
     }
 
     public function xornadaAnterior($codigo) {
@@ -88,27 +95,31 @@ class CalendarioController extends RestController {
         if(empty($competicion)) {
             throw new Exception("Non existe competición");
         }
-        $dataReferencia = $this->_getDataMaisCercanaPasada($competicion);
-        $this->set($this->_getJsonPartidosSemana($competicion, $dataReferencia));
-    }
 
-    private function _getJsonPartidosSemana($competicion, $dataReferencia) {
-        if(empty($dataReferencia)) {
-            return ['partidos' => []];
-        }
+        $dataReferencia = $this->_getDataMaisCercanaPasada($competicion);
         $luns = $dataReferencia->modify('monday this week');
         $domingo = $luns->modify('sunday this week');
+
+        $partidos = $this->_getPartidosSemana($competicion, $luns, $domingo);
+        $categorias = $this->Categorias->getCategoriasWithEmpty();
+
+        $this->set($this->_getJsonPartidosSemana($partidos, $categorias, $luns, $domingo));
+    }
+
+    private function _getPartidosSemana($competicion, $luns, $domingo) {
         $lunsYMD = $luns->i18nFormat('yyyy-MM-dd');
         $domingoYMD = $domingo->i18nFormat('yyyy-MM-dd');
-        $partidos = $this->Partidos
+        return $this->Partidos
             ->find()
-            ->contain(['Fases', 'Xornada', 'Equipa1', 'Equipa2', 'Campo', 'Arbitro', 'Umpire'])
-            ->where(['Fases.id_competicion'=>$competicion->id, 'OR' => [
+            ->contain(['Fase', 'Xornada', 'Equipa1', 'Equipa2', 'Campo', 'Arbitro', 'Umpire'])
+            ->where(['Fase.id_competicion'=>$competicion->id, 'OR' => [
                 ['Xornada.data >='=>$lunsYMD, 'Xornada.data <='=>$domingoYMD],
                 ['Partidos.data_partido >='=>$lunsYMD, 'Partidos.data_partido <='=>$domingoYMD]
             ]])
             ->order(['-Partidos.data_partido DESC', 'Partidos.hora_partido']);
-        $categorias = $this->Categorias->getCategoriasWithEmpty();
+    }
+
+    private function _getJsonPartidosSemana($partidos, $categorias, $luns, $domingo) {
         $res = [
             'inicio' => $luns,
             'fin' => $domingo,
@@ -134,18 +145,18 @@ class CalendarioController extends RestController {
         // Data da seguinte xornada
         $seguinteXornada = $this->Xornadas
             ->find()
-            ->join(['table'=>'agfg_fase', 'alias'=>'Fases', 'conditions'=>['Fases.id = Xornadas.id_fase']])
-            ->where(['id_competicion'=>$competicion->id, 'data >='=>$currentMonday])
-            ->order(['data'])
+            ->contain('Fase')
+            ->where(['Fase.id_competicion'=>$competicion->id, 'Xornadas.data >='=>$currentMonday])
+            ->order(['Xornadas.data'])
             ->first();
         $data = empty($seguinteXornada) ? null : $seguinteXornada->data;
         
         // Por se hai un partido antes da seguinte xornada
         $seguintePartido = $this->Partidos
             ->find()
-            ->join(['table'=>'agfg_fase', 'alias'=>'Fases', 'conditions'=>['Fases.id = Partidos.id_fase']])
-            ->where(['id_competicion'=>$competicion->id, 'data_partido >='=>$currentMonday])
-            ->order(['data_partido'])
+            ->contain(['Xornada' => 'Fase'])
+            ->where(['Fase.id_competicion'=>$competicion->id, 'Partidos.data_partido >='=>$currentMonday])
+            ->order(['Partidos.data_partido'])
             ->first();
         if(!empty($seguintePartido) && (empty($data) || $data>$seguintePartido->data_partido)) {
             $data = $seguintePartido->data_partido;
@@ -158,14 +169,14 @@ class CalendarioController extends RestController {
         // Data da seguinte xornada
         $anteriorXornada = $this->Xornadas
             ->find()
-            ->join(['table'=>'agfg_fase', 'alias'=>'Fases', 'conditions'=>['Fases.id = Xornadas.id_fase']])
-            ->where(['id_competicion'=>$competicion->id, 'data <='=>$currentMonday])
-            ->order(['data DESC'])
+            ->contain('Fase')
+            ->where(['Fase.id_competicion'=>$competicion->id, 'Xornadas.data <='=>$currentMonday])
+            ->order(['Xornadas.data DESC'])
             ->first();
         $data = empty($anteriorXornada) ? null : $anteriorXornada->data;
         
         // Por se hai un partido antes da seguinte xornada
-        $anteriorPartido = $this->Partidos
+        $anteriorPartido = null; $this->Partidos
             ->find()
             ->join(['table'=>'agfg_fase', 'alias'=>'Fases', 'conditions'=>['Fases.id = Partidos.id_fase']])
             ->where(['id_competicion'=>$competicion->id, 'data_partido <='=>$currentMonday])

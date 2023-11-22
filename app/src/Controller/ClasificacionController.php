@@ -22,8 +22,8 @@ class ClasificacionController extends RestController {
         $competicion = $this->_getCompeticion($codCompeticion, $categoria);
         $partidos = $this->Partidos
             ->find()
-            ->contain(['Fases'])
-            ->where(['Fases.id_competicion'=>$competicion->id, 'Fases.categoria'=>$categoria])
+            ->contain(['Fase'])
+            ->where(['Fase.id_competicion'=>$competicion->id, 'Fase.categoria'=>$categoria])
             ->toArray();
         $equipasFases = $this->FasesEquipas->find()->contain(['Fases'])->where(['Fases.id_competicion'=>$competicion->id]);
         $equipasPuntos = [];
