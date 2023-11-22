@@ -70,18 +70,4 @@ class AppController extends Controller
     public function beforeFilter(Event $event) {
         //$this->Auth->allow(['index', 'view', 'display']);
     }
-
-    /**
-     * Before render callback.
-     *
-     * @param \Cake\Event\Event $event The beforeRender event.
-     * @return \Cake\Network\Response|null|void
-     */
-    public function beforeRender(Event $event) {
-        if (!array_key_exists('_serialize', $this->viewVars) &&
-            in_array($this->response->getType(), array('application/json', 'application/xml'))
-        ) {
-            $this->set('_serialize', true);
-        }
-    }
 }

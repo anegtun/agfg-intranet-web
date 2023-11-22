@@ -32,7 +32,7 @@ class UsuariosController extends AppController {
             }
             $this->Flash->error(__('Erro ao crear o usuario.'));
         }
-        $this->set('usuario', $usuario);
+        $this->set(compact('usuario'));
     }
 
     public function edit($id = null) {

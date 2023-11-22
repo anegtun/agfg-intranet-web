@@ -19,13 +19,20 @@ class ClasificacionController extends RestController {
     }
 
     public function competicion($codCompeticion, $categoria) {
-        $competicion = $this->_getCompeticion($codCompeticion, $categoria);
+        if(empty($categoria)) {
+            throw new Exception("Hai que especificar categoría");
+        }
+
+        $competicion = $this->Competicions->findByCodigoOrFail($codCompeticion);
         $partidos = $this->Partidos
             ->find()
             ->contain(['Fase'])
             ->where(['Fase.id_competicion'=>$competicion->id, 'Fase.categoria'=>$categoria])
             ->toArray();
-        $equipasFases = $this->FasesEquipas->find()->contain(['Fases'])->where(['Fases.id_competicion'=>$competicion->id]);
+        $equipasFases = $this->FasesEquipas
+            ->find()
+            ->contain(['Fases'])
+            ->where(['Fases.id_competicion'=>$competicion->id]);
         $equipasPuntos = [];
         foreach($equipasFases as $fe) {
             if(empty($equipasPuntos[$fe->id_equipa])) {
@@ -37,13 +44,26 @@ class ClasificacionController extends RestController {
         }
         $clasificacion = $this->_buildClasificacion($partidos);
         $clasificacion->addData(array_values($equipasPuntos));
-        $this->set($clasificacion->getClasificacion());
+
+        $this->set(compact('clasificacion'));
+        $this->render('clasificacion');
     }
 
     public function fase($codCompeticion, $categoria, $codFase) {
-        $competicion = $this->_getCompeticion($codCompeticion, $categoria);
-        $fase = $this->Fases->find()->where(['id_competicion'=>$competicion->id, 'categoria'=>$categoria, 'codigo'=>$codFase])->first();
-        $partidos = $this->Partidos->find()->where(['id_fase'=>$fase->id])->toArray();
+        if(empty($categoria)) {
+            throw new Exception("Hai que especificar categoría");
+        }
+
+        $competicion = $this->Competicions->findByCodigoOrFail($codCompeticion);
+        $fase = $this->Fases
+            ->find()
+            ->where(['id_competicion'=>$competicion->id, 'categoria'=>$categoria, 'codigo'=>$codFase])
+            ->first();
+        $partidos = $this->Partidos
+            ->find()
+            ->where(['id_fase'=>$fase->id])
+            ->toArray();
+        
         $clasificacion = $this->_buildClasificacion($partidos);
         if(!empty($fase->id_fase_pai)) {
             $partidos = $this->Partidos->find()->where(['id_fase'=>$fase->id_fase_pai])->toArray();
@@ -51,7 +71,10 @@ class ClasificacionController extends RestController {
             $clasificacion->add($clasificacionAcumulada);
             $clasificacion->desempatar();
         }
-        $equipasFase = $this->FasesEquipas->find()->where(['id_fase'=>$fase->id]);
+        $equipasFase = $this->FasesEquipas
+            ->find()
+            ->where(['id_fase'=>$fase->id]);
+        
         $equipasPuntos = [];
         foreach($equipasFase as $fe) {
             if(empty($equipasPuntos[$fe->id_equipa])) {
@@ -63,18 +86,9 @@ class ClasificacionController extends RestController {
         }
         $clasificacion->addData(array_values($equipasPuntos));
         $clasificacion->desempatar();
-        $this->set($clasificacion->getClasificacion());
-    }
 
-    private function _getCompeticion($codCompeticion, $categoria) {
-        $competicion = $this->Competicions->find()->where(['Competicions.codigo'=>$codCompeticion])->first();
-        if(empty($competicion)) {
-            throw new Exception("Non existe competición");
-        }
-        if(empty($categoria)) {
-            throw new Exception("Hai que especificar categoría");
-        }
-        return $competicion;
+        $this->set(compact('clasificacion'));
+        $this->render('clasificacion');
     }
 
     private function _buildClasificacion($partidos) {

@@ -70,7 +70,6 @@ class CalendarioController extends RestController {
             throw new Exception("Non existe competición");
         }
 
-        $this->set('_serialize', false);
         $this->set('competicion', $competicion);
     }
 
@@ -84,7 +83,6 @@ class CalendarioController extends RestController {
         $partidos = $this->Partidos->findPartidosSemana($competicion->id, $luns, $domingo);
         $categorias = $this->Categorias->getCategoriasWithEmpty();
 
-        $this->set('_serialize', false);
         $this->set(compact('partidos', 'categorias', 'luns', 'domingo'));
         $this->render('xornada');
     }
@@ -99,7 +97,6 @@ class CalendarioController extends RestController {
         $partidos = $this->Partidos->findPartidosSemana($competicion->id, $luns, $domingo);
         $categorias = $this->Categorias->getCategoriasWithEmpty();
 
-        $this->set('_serialize', false);
         $this->set(compact('partidos', 'categorias', 'luns', 'domingo'));
         $this->render('xornada');
     }
