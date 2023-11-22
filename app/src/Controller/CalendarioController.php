@@ -75,65 +75,42 @@ class CalendarioController extends RestController {
     }
 
     public function xornadaSeguinte($codigo) {
-        $competicion = $this->Competicions->find()->where(['Competicions.codigo'=>$codigo])->first();
-        if(empty($competicion)) {
-            throw new Exception("Non existe competición");
-        }
+        $competicion = $this->Competicions->findByCodigoOrFail($codigo);
 
-        $dataReferencia = $this->_getDataMaisCercanaFutura($competicion);
+        $dataReferencia = $this->_getDataMaisCercanaFutura($competicion->id);
         $luns = $dataReferencia->modify('monday this week');
         $domingo = $luns->modify('sunday this week');
 
         $partidos = $this->Partidos->findPartidosSemana($competicion->id, $luns, $domingo);
         $categorias = $this->Categorias->getCategoriasWithEmpty();
 
-        $this->set($this->_getJsonPartidosSemana($partidos, $categorias, $luns, $domingo));
+        $this->set('_serialize', false);
+        $this->set(compact('partidos', 'categorias', 'luns', 'domingo'));
+        $this->render('xornada');
     }
 
     public function xornadaAnterior($codigo) {
-        $competicion = $this->Competicions->find()->where(['Competicions.codigo'=>$codigo])->first();
-        if(empty($competicion)) {
-            throw new Exception("Non existe competición");
-        }
+        $competicion = $this->Competicions->findByCodigoOrFail($codigo);
 
-        $dataReferencia = $this->_getDataMaisCercanaPasada($competicion);
+        $dataReferencia = $this->_getDataMaisCercanaPasada($competicion->id);
         $luns = $dataReferencia->modify('monday this week');
         $domingo = $luns->modify('sunday this week');
 
         $partidos = $this->Partidos->findPartidosSemana($competicion->id, $luns, $domingo);
         $categorias = $this->Categorias->getCategoriasWithEmpty();
 
-        $this->set($this->_getJsonPartidosSemana($partidos, $categorias, $luns, $domingo));
+        $this->set('_serialize', false);
+        $this->set(compact('partidos', 'categorias', 'luns', 'domingo'));
+        $this->render('xornada');
     }
 
-    private function _getJsonPartidosSemana($partidos, $categorias, $luns, $domingo) {
-        $res = [
-            'inicio' => $luns,
-            'fin' => $domingo,
-            'partidos' => []
-        ];
-        foreach($partidos as $p) {
-            $resP = $this->_buildPartidoData($p, null, null);
-            $resP['fase'] = [
-                'categoria' => $categorias[$p->fase->categoria],
-                'nome' => $p->fase->nome
-            ];
-            $resP['xornada'] = [
-                'data' => $p->xornada->data,
-                'numero' => $p->xornada->numero
-            ];
-            $res['partidos'][] = $resP;
-        }
-        return $res;
-    }
-
-    private function _getDataMaisCercanaFutura($competicion) {
+    private function _getDataMaisCercanaFutura($id_competicion) {
         $currentMonday = new FrozenDate('monday this week');
         // Data da seguinte xornada
         $seguinteXornada = $this->Xornadas
             ->find()
             ->contain('Fase')
-            ->where(['Fase.id_competicion'=>$competicion->id, 'Xornadas.data >='=>$currentMonday])
+            ->where(['Fase.id_competicion'=>$id_competicion, 'Xornadas.data >='=>$currentMonday])
             ->order(['Xornadas.data'])
             ->first();
         $data = empty($seguinteXornada) ? null : $seguinteXornada->data;
@@ -142,7 +119,7 @@ class CalendarioController extends RestController {
         $seguintePartido = $this->Partidos
             ->find()
             ->contain(['Xornada' => 'Fase'])
-            ->where(['Fase.id_competicion'=>$competicion->id, 'Partidos.data_partido >='=>$currentMonday])
+            ->where(['Fase.id_competicion'=>$id_competicion, 'Partidos.data_partido >='=>$currentMonday])
             ->order(['Partidos.data_partido'])
             ->first();
         if(!empty($seguintePartido) && (empty($data) || $data>$seguintePartido->data_partido)) {
@@ -151,13 +128,13 @@ class CalendarioController extends RestController {
         return $data;
     }
 
-    private function _getDataMaisCercanaPasada($competicion) {
+    private function _getDataMaisCercanaPasada($id_competicion) {
         $currentMonday = new FrozenDate('monday this week');
         // Data da seguinte xornada
         $anteriorXornada = $this->Xornadas
             ->find()
             ->contain('Fase')
-            ->where(['Fase.id_competicion'=>$competicion->id, 'Xornadas.data <='=>$currentMonday])
+            ->where(['Fase.id_competicion'=>$id_competicion, 'Xornadas.data <='=>$currentMonday])
             ->order(['Xornadas.data DESC'])
             ->first();
         $data = empty($anteriorXornada) ? null : $anteriorXornada->data;
@@ -166,78 +143,13 @@ class CalendarioController extends RestController {
         $anteriorPartido = null; $this->Partidos
             ->find()
             ->join(['table'=>'agfg_fase', 'alias'=>'Fases', 'conditions'=>['Fases.id = Partidos.id_fase']])
-            ->where(['id_competicion'=>$competicion->id, 'data_partido <='=>$currentMonday])
+            ->where(['id_competicion'=>$id_competicion, 'data_partido <='=>$currentMonday])
             ->order(['data_partido DESC'])
             ->first();
         if(!empty($anteriorPartido) && (empty($data) || $data<$anteriorPartido->data_partido)) {
             $data = $anteriorPartido->data_partido;
         }
         return $data;
-    }
-
-    private function _buildPartidoData($p, $f, $x) {
-        $resP = [
-            'data_partido' => $p->getDataHora(),
-            'adiado' => $p->adiado,
-            'cancelado' => $p->cancelado,
-            'ganador' => $p->getGanador()
-        ];
-        if(!empty($p->data_calendario)) {
-            $resP['data_calendario'] = $p->data_calendario;
-        }
-        if(!empty($p->equipa1) || !empty($p->provisional_equipa1)) {
-            $resP['equipa1'] = [
-                'codigo' => empty($p->equipa1) ? '' : $p->equipa1->codigo,
-                'nome' => empty($p->equipa1) ? $p->provisional_equipa1 : $p->equipa1->nome,
-                'nome_curto' => empty($p->equipa1) ? $p->provisional_equipa1 : $p->equipa1->nome_curto,
-                'logo' => empty($p->equipa1) ? '' : $p->equipa1->getLogo(),
-                'goles' => $p->goles_equipa1,
-                'tantos' => $p->tantos_equipa1,
-                'total' => $p->getPuntuacionTotalEquipa1(),
-                'non_presentado' => $p->non_presentado_equipa1
-            ];
-        }
-        if(!empty($p->equipa2) || !empty($p->provisional_equipa2)) {
-            $resP['equipa2'] = [
-                'codigo' => empty($p->equipa2) ? '' : $p->equipa2->codigo,
-                'nome' => empty($p->equipa2) ? $p->provisional_equipa2 : $p->equipa2->nome,
-                'nome_curto' => empty($p->equipa2) ? $p->provisional_equipa2 : $p->equipa2->nome_curto,
-                'logo' => empty($p->equipa2) ? '' : $p->equipa2->getLogo(),
-                'goles' => $p->goles_equipa2,
-                'tantos' => $p->tantos_equipa2,
-                'total' => $p->getPuntuacionTotalEquipa2(),
-                'non_presentado' => $p->non_presentado_equipa2
-            ];
-        }
-        if(!empty($f) || !empty($x)) {
-            $resP['fase'] = [
-                'fase' => empty($f->nome) ? null : $f->nome,
-                'subfase' => empty($x->descricion) ? null : $x->descricion
-            ];
-        }
-        if(!empty($p->campo)) {
-            $resP['campo'] = [
-                'nome' => $p->campo->nome,
-                'nome_curto' => $p->campo->nome_curto,
-                'pobo' => $p->campo->pobo
-            ];
-        }
-        if(!empty($p->arbitro)) {
-            $resP['arbitro'] = [
-                'alcume' => $p->arbitro->alcume,
-                'nome' => $p->arbitro->nome_publico
-            ];
-        }
-        if(!empty($p->umpire)) {
-            $resP['umpires'] = [
-                'categoria' => $p->umpire->categoria,
-                'codigo' => $p->umpire->codigo,
-                'nome' => $p->umpire->nome,
-                'nome_curto' => $p->umpire->nome_curto,
-                'logo' => $p->umpire->getLogo()
-            ];
-        }
-        return $resP;
     }
     
 }

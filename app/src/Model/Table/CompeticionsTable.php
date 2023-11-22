@@ -23,6 +23,14 @@ class CompeticionsTable extends AgfgTable {
         ]);
     }
 
+    public function findByCodigoOrFail($codigo) {
+        $competicion = $this->find()->where(['Competicions.codigo'=>$codigo])->first();
+        if(empty($competicion)) {
+            throw new Exception("Non existe competición");
+        }
+        return $competicion;
+    }
+
     public function validationDefault(Validator $validator) {
         return $validator
             ->notEmpty('nome', 'O nome é obrigatorio')
