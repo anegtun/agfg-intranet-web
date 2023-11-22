@@ -84,7 +84,7 @@ class CalendarioController extends RestController {
         $luns = $dataReferencia->modify('monday this week');
         $domingo = $luns->modify('sunday this week');
 
-        $partidos = $this->_getPartidosSemana($competicion, $luns, $domingo);
+        $partidos = $this->Partidos->findPartidosSemana($competicion->id, $luns, $domingo);
         $categorias = $this->Categorias->getCategoriasWithEmpty();
 
         $this->set($this->_getJsonPartidosSemana($partidos, $categorias, $luns, $domingo));
@@ -100,23 +100,10 @@ class CalendarioController extends RestController {
         $luns = $dataReferencia->modify('monday this week');
         $domingo = $luns->modify('sunday this week');
 
-        $partidos = $this->_getPartidosSemana($competicion, $luns, $domingo);
+        $partidos = $this->Partidos->findPartidosSemana($competicion->id, $luns, $domingo);
         $categorias = $this->Categorias->getCategoriasWithEmpty();
 
         $this->set($this->_getJsonPartidosSemana($partidos, $categorias, $luns, $domingo));
-    }
-
-    private function _getPartidosSemana($competicion, $luns, $domingo) {
-        $lunsYMD = $luns->i18nFormat('yyyy-MM-dd');
-        $domingoYMD = $domingo->i18nFormat('yyyy-MM-dd');
-        return $this->Partidos
-            ->find()
-            ->contain(['Fase', 'Xornada', 'Equipa1', 'Equipa2', 'Campo', 'Arbitro', 'Umpire'])
-            ->where(['Fase.id_competicion'=>$competicion->id, 'OR' => [
-                ['Xornada.data >='=>$lunsYMD, 'Xornada.data <='=>$domingoYMD],
-                ['Partidos.data_partido >='=>$lunsYMD, 'Partidos.data_partido <='=>$domingoYMD]
-            ]])
-            ->order(['-Partidos.data_partido DESC', 'Partidos.hora_partido']);
     }
 
     private function _getJsonPartidosSemana($partidos, $categorias, $luns, $domingo) {

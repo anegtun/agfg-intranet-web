@@ -54,6 +54,18 @@ class PartidosTable extends Table {
         ]]);
     }
 
+    public function findPartidosSemana($id_competicion, $inicio, $fin) {
+        $inicioYMD = $inicio->i18nFormat('yyyy-MM-dd');
+        $finYMD = $fin->i18nFormat('yyyy-MM-dd');
+        return $this->find()
+            ->contain(['Fase', 'Xornada', 'Equipa1', 'Equipa2', 'Campo', 'Arbitro', 'Umpire'])
+            ->where(['Fase.id_competicion'=>$id_competicion, 'OR' => [
+                ['Xornada.data >='=>$inicioYMD, 'Xornada.data <='=>$finYMD],
+                ['Partidos.data_partido >='=>$inicioYMD, 'Partidos.data_partido <='=>$finYMD]
+            ]])
+            ->order(['-Partidos.data_partido DESC', 'Partidos.hora_partido']);
+    }
+
     public function validationDefault(Validator $validator) {
         return $validator
             ->notEmpty('id_fase', 'A fase da competición é obrigatoria')
