@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -22,7 +24,6 @@ use Cake\Utility\Text;
  */
 trait IdGeneratorTrait
 {
-
     /**
      * Prefix for id attribute.
      *
@@ -33,7 +34,7 @@ trait IdGeneratorTrait
     /**
      * A list of id suffixes used in the current rendering.
      *
-     * @var array
+     * @var array<string>
      */
     protected $_idSuffixes = [];
 
@@ -42,7 +43,7 @@ trait IdGeneratorTrait
      *
      * @return void
      */
-    protected function _clearIds()
+    protected function _clearIds(): void
     {
         $this->_idSuffixes = [];
     }
@@ -56,19 +57,33 @@ trait IdGeneratorTrait
      * @param string $val The ID attribute value.
      * @return string Generated id.
      */
-    protected function _id($name, $val)
+    protected function _id(string $name, string $val): string
     {
         $name = $this->_domId($name);
+        $suffix = $this->_idSuffix($val);
 
+        return trim($name . '-' . $suffix, '-');
+    }
+
+    /**
+     * Generate an ID suffix.
+     *
+     * Ensures that id's for a given set of fields are unique.
+     *
+     * @param string $val The ID attribute value.
+     * @return string Generated id suffix.
+     */
+    protected function _idSuffix(string $val): string
+    {
         $idSuffix = mb_strtolower(str_replace(['/', '@', '<', '>', ' ', '"', '\''], '-', $val));
         $count = 1;
         $check = $idSuffix;
-        while (in_array($check, $this->_idSuffixes)) {
+        while (in_array($check, $this->_idSuffixes, true)) {
             $check = $idSuffix . $count++;
         }
         $this->_idSuffixes[] = $check;
 
-        return trim($name . '-' . $check, '-');
+        return $check;
     }
 
     /**
@@ -77,7 +92,7 @@ trait IdGeneratorTrait
      * @param string $value The value to convert into an ID.
      * @return string The generated id.
      */
-    protected function _domId($value)
+    protected function _domId(string $value): string
     {
         $domId = mb_strtolower(Text::slug($value, '-'));
         if ($this->_idPrefix) {

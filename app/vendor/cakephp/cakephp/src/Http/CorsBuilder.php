@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -30,7 +32,6 @@ use Psr\Http\Message\MessageInterface;
  */
 class CorsBuilder
 {
-
     /**
      * The response object this builder is attached to.
      *
@@ -46,7 +47,7 @@ class CorsBuilder
     protected $_origin;
 
     /**
-     * Whether or not the request was over SSL.
+     * Whether the request was over SSL.
      *
      * @var bool
      */
@@ -55,7 +56,7 @@ class CorsBuilder
     /**
      * The headers that have been queued so far.
      *
-     * @var array
+     * @var array<string, mixed>
      */
     protected $_headers = [];
 
@@ -64,9 +65,9 @@ class CorsBuilder
      *
      * @param \Psr\Http\Message\MessageInterface $response The response object to add headers onto.
      * @param string $origin The request's Origin header.
-     * @param bool $isSsl Whether or not the request was over SSL.
+     * @param bool $isSsl Whether the request was over SSL.
      */
-    public function __construct(MessageInterface $response, $origin, $isSsl = false)
+    public function __construct(MessageInterface $response, string $origin, bool $isSsl = false)
     {
         $this->_origin = $origin;
         $this->_isSsl = $isSsl;
@@ -81,7 +82,7 @@ class CorsBuilder
      *
      * @return \Psr\Http\Message\MessageInterface A new instance of the response with new headers.
      */
-    public function build()
+    public function build(): MessageInterface
     {
         $response = $this->_response;
         if (empty($this->_origin)) {
@@ -103,12 +104,12 @@ class CorsBuilder
      * Accepts a string or an array of domains that have CORS enabled.
      * You can use `*.example.com` wildcards to accept subdomains, or `*` to allow all domains
      *
-     * @param string|array $domain The allowed domains
+     * @param array<string>|string $domains The allowed domains
      * @return $this
      */
-    public function allowOrigin($domain)
+    public function allowOrigin($domains)
     {
-        $allowed = $this->_normalizeDomains((array)$domain);
+        $allowed = $this->_normalizeDomains((array)$domains);
         foreach ($allowed as $domain) {
             if (!preg_match($domain['preg'], $this->_origin)) {
                 continue;
@@ -124,10 +125,10 @@ class CorsBuilder
     /**
      * Normalize the origin to regular expressions and put in an array format
      *
-     * @param array $domains Domain names to normalize.
+     * @param array<string> $domains Domain names to normalize.
      * @return array
      */
-    protected function _normalizeDomains($domains)
+    protected function _normalizeDomains(array $domains): array
     {
         $result = [];
         foreach ($domains as $domain) {
@@ -150,7 +151,7 @@ class CorsBuilder
     /**
      * Set the list of allowed HTTP Methods.
      *
-     * @param array $methods The allowed HTTP methods
+     * @param array<string> $methods The allowed HTTP methods
      * @return $this
      */
     public function allowMethods(array $methods)
@@ -173,9 +174,9 @@ class CorsBuilder
     }
 
     /**
-     * Whitelist headers that can be sent in CORS requests.
+     * Allowed headers that can be sent in CORS requests.
      *
-     * @param array $headers The list of headers to accept in CORS requests.
+     * @param array<string> $headers The list of headers to accept in CORS requests.
      * @return $this
      */
     public function allowHeaders(array $headers)
@@ -188,7 +189,7 @@ class CorsBuilder
     /**
      * Define the headers a client library/browser can expose to scripting
      *
-     * @param array $headers The list of headers to expose CORS responses
+     * @param array<string> $headers The list of headers to expose CORS responses
      * @return $this
      */
     public function exposeHeaders(array $headers)
@@ -201,7 +202,7 @@ class CorsBuilder
     /**
      * Define the max-age preflight OPTIONS requests are valid for.
      *
-     * @param int $age The max-age for OPTIONS requests in seconds
+     * @param string|int $age The max-age for OPTIONS requests in seconds
      * @return $this
      */
     public function maxAge($age)

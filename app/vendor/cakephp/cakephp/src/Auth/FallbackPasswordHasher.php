@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -21,29 +23,28 @@ namespace Cake\Auth;
  */
 class FallbackPasswordHasher extends AbstractPasswordHasher
 {
-
     /**
      * Default config for this object.
      *
-     * @var array
+     * @var array<string, mixed>
      */
     protected $_defaultConfig = [
-        'hashers' => []
+        'hashers' => [],
     ];
 
     /**
      * Holds the list of password hasher objects that will be used
      *
-     * @var array
+     * @var array<\Cake\Auth\AbstractPasswordHasher>
      */
     protected $_hashers = [];
 
     /**
      * Constructor
      *
-     * @param array $config configuration options for this object. Requires the
+     * @param array<string, mixed> $config configuration options for this object. Requires the
      * `hashers` key to be present in the array with a list of other hashers to be
-     * used
+     * used.
      */
     public function __construct(array $config = [])
     {
@@ -62,9 +63,9 @@ class FallbackPasswordHasher extends AbstractPasswordHasher
      * Uses the first password hasher in the list to generate the hash
      *
      * @param string $password Plain text password to hash.
-     * @return string Password hash
+     * @return string|false Password hash or false
      */
-    public function hash($password)
+    public function hash(string $password)
     {
         return $this->_hashers[0]->hash($password);
     }
@@ -79,7 +80,7 @@ class FallbackPasswordHasher extends AbstractPasswordHasher
      * @param string $hashedPassword Existing hashed password.
      * @return bool True if hashes match else false.
      */
-    public function check($password, $hashedPassword)
+    public function check(string $password, string $hashedPassword): bool
     {
         foreach ($this->_hashers as $hasher) {
             if ($hasher->check($password, $hashedPassword)) {
@@ -97,7 +98,7 @@ class FallbackPasswordHasher extends AbstractPasswordHasher
      * @param string $password The password to verify
      * @return bool
      */
-    public function needsRehash($password)
+    public function needsRehash(string $password): bool
     {
         return $this->_hashers[0]->needsRehash($password);
     }

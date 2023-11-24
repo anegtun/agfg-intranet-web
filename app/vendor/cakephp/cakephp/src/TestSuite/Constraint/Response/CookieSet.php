@@ -1,15 +1,17 @@
 <?php
+declare(strict_types=1);
+
 /**
- * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
+ * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
  *
  * Licensed under The MIT License
  * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice
  *
- * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @copyright     Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
  * @since         3.7.0
- * @license       http://www.opensource.org/licenses/mit-license.php MIT License
+ * @license       https://www.opensource.org/licenses/mit-license.php MIT License
  */
 namespace Cake\TestSuite\Constraint\Response;
 
@@ -20,6 +22,10 @@ namespace Cake\TestSuite\Constraint\Response;
  */
 class CookieSet extends ResponseBase
 {
+    /**
+     * @var \Cake\Http\Response
+     */
+    protected $response;
 
     /**
      * Checks assertion
@@ -27,7 +33,7 @@ class CookieSet extends ResponseBase
      * @param mixed $other Expected content
      * @return bool
      */
-    public function matches($other)
+    public function matches($other): bool
     {
         $cookie = $this->response->getCookie($other);
 
@@ -39,8 +45,8 @@ class CookieSet extends ResponseBase
      *
      * @return string
      */
-    public function toString()
+    public function toString(): string
     {
-        return 'cookie was set';
+        return 'cookie is set';
     }
 }

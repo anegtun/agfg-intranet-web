@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -16,10 +18,11 @@ namespace Cake\Validation;
 
 /**
  * Describes objects that can be validated by passing a Validator object.
+ *
+ * @deprecated 4.4.5 This interface is unused.
  */
 interface ValidatableInterface
 {
-
     /**
      * Validates the internal properties using a validator object and returns any
      * validation errors found.
@@ -27,5 +30,5 @@ interface ValidatableInterface
      * @param \Cake\Validation\Validator $validator The validator to use when validating the entity.
      * @return array
      */
-    public function validate(Validator $validator);
+    public function validate(Validator $validator): array;
 }

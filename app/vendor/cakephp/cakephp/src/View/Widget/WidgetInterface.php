@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -21,22 +23,20 @@ use Cake\View\Form\ContextInterface;
  */
 interface WidgetInterface
 {
-
     /**
      * Converts the $data into one or many HTML elements.
      *
-     * @param array $data The data to render.
+     * @param array<string, mixed> $data The data to render.
      * @param \Cake\View\Form\ContextInterface $context The current form context.
      * @return string Generated HTML for the widget element.
      */
-    public function render(array $data, ContextInterface $context);
+    public function render(array $data, ContextInterface $context): string;
 
     /**
-     * Returns a list of fields that need to be secured for
-     * this widget. Fields are in the form of Model[field][suffix]
+     * Returns a list of fields that need to be secured for this widget.
      *
-     * @param array $data The data to render.
-     * @return array Array of fields to secure.
+     * @param array<string, mixed> $data The data to render.
+     * @return array<string> Array of fields to secure.
      */
-    public function secureFields(array $data);
+    public function secureFields(array $data): array;
 }

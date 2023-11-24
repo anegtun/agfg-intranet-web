@@ -21,17 +21,17 @@ use Cake\TestSuite\Fixture\TestFixture;
  */
 class DatatypesFixture extends TestFixture
 {
-
     /**
      * @var array
      */
     public $fields = [
         'id' => ['type' => 'biginteger'],
-        'cost' => ['type' => 'decimal', 'length' => 20, 'precision' => 0, 'null' => true],
+        'cost' => ['type' => 'decimal', 'length' => 20, 'precision' => 1, 'null' => true],
+        'fraction' => ['type' => 'decimal', 'length' => 20, 'precision' => 19, 'null' => true],
         'floaty' => ['type' => 'float', 'null' => true],
         'small' => ['type' => 'smallinteger', 'null' => true],
         'tiny' => ['type' => 'tinyinteger', 'null' => true],
-        '_constraints' => ['primary' => ['type' => 'primary', 'columns' => ['id']]]
+        '_constraints' => ['primary' => ['type' => 'primary', 'columns' => ['id']]],
     ];
 
     /**

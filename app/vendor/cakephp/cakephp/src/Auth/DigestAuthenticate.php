@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -61,11 +63,10 @@ use Cake\Utility\Security;
  * `User.password` would store the password hash for use with other methods like
  * Basic or Form.
  *
- * @see https://book.cakephp.org/3.0/en/controllers/components/authentication.html
+ * @see https://book.cakephp.org/4/en/controllers/components/authentication.html
  */
 class DigestAuthenticate extends BasicAuthenticate
 {
-
     /**
      * Constructor
      *
@@ -81,7 +82,7 @@ class DigestAuthenticate extends BasicAuthenticate
      *
      * @param \Cake\Controller\ComponentRegistry $registry The Component registry
      *   used on this request.
-     * @param array $config Array of config to use.
+     * @param array<string, mixed> $config Array of config to use.
      */
     public function __construct(ComponentRegistry $registry, array $config = [])
     {
@@ -100,7 +101,7 @@ class DigestAuthenticate extends BasicAuthenticate
      * Get a user based on information in the request. Used by cookie-less auth for stateless clients.
      *
      * @param \Cake\Http\ServerRequest $request Request object.
-     * @return mixed Either false or an array of user information
+     * @return array<string, mixed>|false Either false or an array of user information
      */
     public function getUser(ServerRequest $request)
     {
@@ -122,7 +123,12 @@ class DigestAuthenticate extends BasicAuthenticate
         $password = $user[$field];
         unset($user[$field]);
 
-        $hash = $this->generateResponseHash($digest, $password, $request->getEnv('ORIGINAL_REQUEST_METHOD'));
+        $requestMethod = $request->getEnv('ORIGINAL_REQUEST_METHOD') ?: $request->getMethod();
+        $hash = $this->generateResponseHash(
+            $digest,
+            $password,
+            (string)$requestMethod
+        );
         if (hash_equals($hash, $digest['response'])) {
             return $user;
         }
@@ -134,9 +140,9 @@ class DigestAuthenticate extends BasicAuthenticate
      * Gets the digest headers from the request/environment.
      *
      * @param \Cake\Http\ServerRequest $request Request object.
-     * @return array|bool Array of digest information.
+     * @return array<string, mixed>|null Array of digest information.
      */
-    protected function _getDigest(ServerRequest $request)
+    protected function _getDigest(ServerRequest $request): ?array
     {
         $digest = $request->getEnv('PHP_AUTH_DIGEST');
         if (empty($digest) && function_exists('apache_request_headers')) {
@@ -146,7 +152,7 @@ class DigestAuthenticate extends BasicAuthenticate
             }
         }
         if (empty($digest)) {
-            return false;
+            return null;
         }
 
         return $this->parseAuthData($digest);
@@ -158,7 +164,7 @@ class DigestAuthenticate extends BasicAuthenticate
      * @param string $digest The raw digest authentication headers.
      * @return array|null An array of digest authentication headers
      */
-    public function parseAuthData($digest)
+    public function parseAuthData(string $digest): ?array
     {
         if (substr($digest, 0, 7) === 'Digest ') {
             $digest = substr($digest, 7);
@@ -182,12 +188,12 @@ class DigestAuthenticate extends BasicAuthenticate
     /**
      * Generate the response hash for a given digest array.
      *
-     * @param array $digest Digest information containing data from DigestAuthenticate::parseAuthData().
+     * @param array<string, mixed> $digest Digest information containing data from DigestAuthenticate::parseAuthData().
      * @param string $password The digest hash password generated with DigestAuthenticate::password()
      * @param string $method Request method
      * @return string Response hash
      */
-    public function generateResponseHash($digest, $password, $method)
+    public function generateResponseHash(array $digest, string $password, string $method): string
     {
         return md5(
             $password .
@@ -204,7 +210,7 @@ class DigestAuthenticate extends BasicAuthenticate
      * @param string $realm The realm the password is for.
      * @return string the hashed password that can later be used with Digest authentication.
      */
-    public static function password($username, $password, $realm)
+    public static function password(string $username, string $password, string $realm): string
     {
         return md5($username . ':' . $realm . ':' . $password);
     }
@@ -213,9 +219,9 @@ class DigestAuthenticate extends BasicAuthenticate
      * Generate the login headers
      *
      * @param \Cake\Http\ServerRequest $request Request object.
-     * @return array Headers for logging in.
+     * @return array<string, string> Headers for logging in.
      */
-    public function loginHeaders(ServerRequest $request)
+    public function loginHeaders(ServerRequest $request): array
     {
         $realm = $this->_config['realm'] ?: $request->getEnv('SERVER_NAME');
 
@@ -223,7 +229,7 @@ class DigestAuthenticate extends BasicAuthenticate
             'realm' => $realm,
             'qop' => $this->_config['qop'],
             'nonce' => $this->generateNonce(),
-            'opaque' => $this->_config['opaque'] ?: md5($realm)
+            'opaque' => $this->_config['opaque'] ?: md5($realm),
         ];
 
         $digest = $this->_getDigest($request);
@@ -242,7 +248,7 @@ class DigestAuthenticate extends BasicAuthenticate
         }
 
         return [
-            'WWW-Authenticate' => 'Digest ' . implode(',', $opts)
+            'WWW-Authenticate' => 'Digest ' . implode(',', $opts),
         ];
     }
 
@@ -251,7 +257,7 @@ class DigestAuthenticate extends BasicAuthenticate
      *
      * @return string
      */
-    protected function generateNonce()
+    protected function generateNonce(): string
     {
         $expiryTime = microtime(true) + $this->getConfig('nonceLifetime');
         $secret = $this->getConfig('secret');
@@ -267,7 +273,7 @@ class DigestAuthenticate extends BasicAuthenticate
      * @param string $nonce The nonce value to check.
      * @return bool
      */
-    protected function validNonce($nonce)
+    protected function validNonce(string $nonce): bool
     {
         $value = base64_decode($nonce);
         if ($value === false) {
@@ -277,7 +283,7 @@ class DigestAuthenticate extends BasicAuthenticate
         if (count($parts) !== 2) {
             return false;
         }
-        list($expires, $checksum) = $parts;
+        [$expires, $checksum] = $parts;
         if ($expires < microtime(true)) {
             return false;
         }
