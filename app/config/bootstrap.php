@@ -84,7 +84,7 @@ try {
 }
 
 // Custom config
-Configure::load('info', 'default');
+Configure::load('agfg_info', 'default');
 
 /*
  * Load an environment local configuration file to provide overrides to your configuration.

@@ -1,14 +1,13 @@
 <?php
 namespace App\Controller;
 
-use App\Controller\AppController;
-use Cake\Event\Event;
+use Cake\Event\EventInterface;
 
 class MainController extends AppController {
 
-    /*public function beforeFilter(Event $event) {
+    public function beforeFilter(EventInterface $event) {
         $this->Auth->allow(['index']);
-    }*/
+    }
 
     public function index() {
         if(!$this->Auth->user()) {

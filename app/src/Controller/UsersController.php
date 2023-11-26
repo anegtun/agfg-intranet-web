@@ -1,14 +1,13 @@
 <?php
 namespace App\Controller;
 
-use App\Controller\AppController;
-use Cake\Event\Event;
+use Cake\Event\EventInterface;
 
 class UsersController extends AppController {
 
-    /*public function beforeFilter(Event $event) {
+    public function beforeFilter(EventInterface $event) {
         $this->Auth->allow(['login','logout']);
-    }*/
+    }
     
     public function login() {
         if ($this->request->is('post')) {
