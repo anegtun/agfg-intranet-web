@@ -83,6 +83,9 @@ try {
     exit($e->getMessage() . "\n");
 }
 
+// Custom config
+Configure::load('info', 'default');
+
 /*
  * Load an environment local configuration file to provide overrides to your configuration.
  * Notice: For security reasons app_local.php **should not** be included in your git repo.

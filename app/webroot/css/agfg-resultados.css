@@ -1,0 +1,97 @@
+.agfg-competicion {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2em 5em;
+  justify-content: flex-start;
+  align-content: center;
+}
+
+.agfg-xornada {
+  flex-basis: 100%;
+  text-align: center;
+  font-weight: bold;
+  color: #134876;
+}
+
+.agfg-partido {
+  padding: 1em 0;
+  border-bottom: 1px solid #e9e9e9;
+  width: 300px;
+}
+
+.agfg-partido-top {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  font-weight: bold;
+  margin-bottom: .5em;
+}
+.agfg-partido-top-data {
+  min-width: 200px;
+  text-align: left;
+}
+.agfg-partido-top-fase {
+  text-align: right;
+}
+
+.agfg-partido-equipas {
+  display: flex;
+  flex-direction: column;
+  gap: .5em;
+}
+
+.agfg-partido-equipa {
+  display: flex;
+  justify-content: space-between;
+  gap: .5em;
+}
+.agfg-partido-equipa-nome {
+  flex-grow: 1;
+}
+
+.agfg-partido-resultado {
+  display: flex;
+  gap: 0.2em;
+}
+.agfg-partido-resultado-equipa1,
+.agfg-partido-resultado-equipa2 {
+  text-align: center;
+  width: 3em;
+  padding: 0.25em 0;
+  border: 1px solid black;
+  background-color: #c6e15615;
+}
+.agfg-partido-resultado-desglose {
+  font-size: x-small;
+}
+.agfg-partido-resultado-ganador {
+  font-weight: bold;
+}
+
+.agfg-partido-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+.agfg-partido-bottom-detalle {
+  display: flex;
+  align-items: center;
+  font-size: smaller;
+}
+.agfg-partido-bottom-detalle figure {
+  margin-right: .5em;
+}
+
+.agfg-partido-botons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.agfg-partido-edit {
+  margin-top: .5em;
+}
+
+.agfg-partido-observacions {
+  text-align: right;
+}
