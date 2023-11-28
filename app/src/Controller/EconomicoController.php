@@ -1,7 +1,6 @@
 <?php
 namespace App\Controller;
 
-use App\Controller\AppController;
 use App\Model\Contas;
 use App\Model\ResumoEconomico;
 use App\Model\Tempadas;

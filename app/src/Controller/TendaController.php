@@ -1,7 +1,6 @@
 <?php
 namespace App\Controller;
 
-use App\Controller\AppController;
 use App\Model\TendaEstados;
 use App\Model\TendaTipoEnvio;
 use Cake\Event\Event;
