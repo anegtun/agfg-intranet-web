@@ -22,7 +22,7 @@ class ResumoEconomicoFPDF extends FPDF {
 
     function Header() {
         $this->SetTextColor(0, 0, 0);
-        $this->Image(WWW_ROOT . DS . 'images' . DS . 'favicon' . DS . 'agfg-icon.png', 10, 8, 15);
+        $this->Image(WWW_ROOT . DS . 'agfg' . DS . 'img' . DS . 'favicon' . DS . 'agfg-icon.png', 10, 8, 15);
         $this->SetFont('Arial', 'B', 12);
         $this->Cell(0, 5, utf8_decode('Informe económico'), 0, 0, 'R');
         $this->Ln(5);

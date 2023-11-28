@@ -7,11 +7,8 @@
     <a href="LICENSE" target="_blank">
         <img alt="Software License" src="https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square">
     </a>
-    <a href="https://travis-ci.org/cakephp/cakephp" target="_blank">
-        <img alt="Build Status" src="https://img.shields.io/travis/cakephp/cakephp/master.svg?style=flat-square">
-    </a>
-    <a href="https://codecov.io/github/cakephp/cakephp" target="_blank">
-        <img alt="Coverage Status" src="https://img.shields.io/codecov/c/github/cakephp/cakephp.svg?style=flat-square">
+    <a href="https://codecov.io/gh/cakephp/cakephp/branch/4.x" target="_blank">
+        <img alt="Coverage Status" src="https://img.shields.io/codecov/c/github/cakephp/cakephp?style=flat-square">
     </a>
     <a href="https://squizlabs.github.io/PHP_CodeSniffer/analysis/cakephp/cakephp/" target="_blank">
         <img alt="Code Consistency" src="https://squizlabs.github.io/PHP_CodeSniffer/analysis/cakephp/cakephp/grade.svg">
@@ -41,6 +38,8 @@ a starting point. For existing applications you can run the following:
 $ composer require cakephp/cakephp
 ```
 
+For details on the (minimum/maximum) PHP version see [version map](https://github.com/cakephp/cakephp/wiki#version-map).
+
 ## Running Tests
 
 Assuming you have PHPUnit installed system wide using one of the methods stated
@@ -67,7 +66,8 @@ tests for CakePHP by doing the following:
 
 ## Get Support!
 
-* [Slack](https://cakesf.herokuapp.com/) - Join us on Slack.
+* [Slack](https://slack-invite.cakephp.org/) - Join us on Slack.
+* [Discord](https://discord.gg/k4trEMPebj) - Join us on Discord.
 * [#cakephp](https://webchat.freenode.net/?channels=#cakephp) on irc.freenode.net - Come chat with us, we have cake.
 * [Forum](https://discourse.cakephp.org/) - Official CakePHP forum.
 * [GitHub Issues](https://github.com/cakephp/cakephp/issues) - Got issues? Please tell us!
@@ -76,16 +76,9 @@ tests for CakePHP by doing the following:
 ## Contributing
 
 * [CONTRIBUTING.md](.github/CONTRIBUTING.md) - Quick pointers for contributing to the CakePHP project.
-* [CookBook "Contributing" Section](https://book.cakephp.org/3.0/en/contributing.html) - Details about contributing to the project.
+* [CookBook "Contributing" Section](https://book.cakephp.org/4/en/contributing.html) - Details about contributing to the project.
 
 # Security
 
-If you’ve found a security issue in CakePHP, please use the following procedure instead of the normal bug reporting system. Instead of using the bug tracker, mailing list or IRC please send an email to security [at] cakephp.org. Emails sent to this address go to the CakePHP core team on a private mailing list.
-
-For each report, we try to first confirm the vulnerability. Once confirmed, the CakePHP team will take the following actions:
-
-- Acknowledge to the reporter that we’ve received the issue, and are working on a fix. We ask that the reporter keep the issue confidential until we announce it.
-- Get a fix/patch prepared.
-- Prepare a post describing the vulnerability, and the possible exploits.
-- Release new versions of all affected versions.
-- Prominently feature the problem in the release announcement.
+If you’ve found a security issue in CakePHP, please use the procedure
+described in [SECURITY.md](.github/SECURITY.md).

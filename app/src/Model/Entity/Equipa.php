@@ -1,8 +1,6 @@
 <?php
 namespace App\Model\Entity;
 
-use Cake\Auth\DefaultPasswordHasher;
-use Cake\I18N\Time;
 use Cake\ORM\Entity;
 
 class Equipa extends Entity {

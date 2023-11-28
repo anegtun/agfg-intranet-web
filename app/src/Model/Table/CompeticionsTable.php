@@ -5,7 +5,7 @@ use Cake\Validation\Validator;
 
 class CompeticionsTable extends AgfgTable {
 
-    public function initialize(array $config) {
+    public function initialize(array $config): void {
         $this->setTable('agfg_competicion');
        
         $this->hasMany('Fases', array(
@@ -23,19 +23,19 @@ class CompeticionsTable extends AgfgTable {
         ]);
     }
 
+    public function validationDefault(Validator $validator): Validator {
+        return $validator
+            ->notEmpty('nome', 'O nome é obrigatorio')
+            ->notEmpty('tipo', 'O tipo é obrigatorio')
+            ->notEmpty('ano', 'O ano é obrigatorio');
+    }
+
     public function findByCodigoOrFail($codigo) {
         $competicion = $this->find()->where(['Competicions.codigo'=>$codigo])->first();
         if(empty($competicion)) {
             throw new Exception("Non existe competición");
         }
         return $competicion;
-    }
-
-    public function validationDefault(Validator $validator) {
-        return $validator
-            ->notEmpty('nome', 'O nome é obrigatorio')
-            ->notEmpty('tipo', 'O tipo é obrigatorio')
-            ->notEmpty('ano', 'O ano é obrigatorio');
     }
 
 }

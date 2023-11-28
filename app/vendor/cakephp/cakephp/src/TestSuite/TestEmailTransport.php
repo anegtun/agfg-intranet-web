@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -14,8 +16,8 @@
  */
 namespace Cake\TestSuite;
 
-use Cake\Mailer\AbstractTransport;
-use Cake\Mailer\Email;
+use Cake\Mailer\Message;
+use Cake\Mailer\Transport\DebugTransport;
 use Cake\Mailer\TransportFactory;
 
 /**
@@ -23,23 +25,26 @@ use Cake\Mailer\TransportFactory;
  *
  * Set this as the email transport to capture emails for later assertions
  *
- * @see Cake\TestSuite\EmailTrait
+ * @see \Cake\TestSuite\EmailTrait
  */
-class TestEmailTransport extends AbstractTransport
+class TestEmailTransport extends DebugTransport
 {
-    private static $emails = [];
+    /**
+     * @var array
+     */
+    private static $messages = [];
 
     /**
      * Stores email for later assertions
      *
-     * @param Email $email Email
-     * @return bool
+     * @param \Cake\Mailer\Message $message Message
+     * @return array{headers: string, message: string}
      */
-    public function send(Email $email)
+    public function send(Message $message): array
     {
-        static::$emails[] = $email;
+        static::$messages[] = clone $message;
 
-        return true;
+        return parent::send($message);
     }
 
     /**
@@ -47,7 +52,7 @@ class TestEmailTransport extends AbstractTransport
      *
      * @return void
      */
-    public static function replaceAllTransports()
+    public static function replaceAllTransports(): void
     {
         $configuredTransports = TransportFactory::configured();
 
@@ -62,11 +67,11 @@ class TestEmailTransport extends AbstractTransport
     /**
      * Gets emails sent
      *
-     * @return \Cake\Mailer\Email[]
+     * @return array<\Cake\Mailer\Message>
      */
-    public static function getEmails()
+    public static function getMessages()
     {
-        return static::$emails;
+        return static::$messages;
     }
 
     /**
@@ -74,8 +79,8 @@ class TestEmailTransport extends AbstractTransport
      *
      * @return void
      */
-    public static function clearEmails()
+    public static function clearMessages(): void
     {
-        static::$emails = [];
+        static::$messages = [];
     }
 }

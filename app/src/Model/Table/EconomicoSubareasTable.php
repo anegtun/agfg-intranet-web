@@ -5,7 +5,7 @@ use Cake\Validation\Validator;
 
 class EconomicoSubareasTable extends AgfgTable {
 
-    public function initialize(array $config) {
+    public function initialize(array $config): void {
         $this->setTable('agfg_economico_subarea');
         
         $this->belongsTo('Area', [
@@ -15,7 +15,7 @@ class EconomicoSubareasTable extends AgfgTable {
         ]);
     }
 
-    public function validationDefault(Validator $validator) {
+    public function validationDefault(Validator $validator): Validator {
         return $validator->notEmpty('nome', 'O nome é obrigatorio');
     }
 

@@ -1,7 +1,6 @@
 <?php
 namespace App\Controller;
 
-use App\Controller\AppController;
 use App\Model\Contas;
 use App\Model\ResumoEconomico;
 use App\Model\Tempadas;
@@ -11,8 +10,8 @@ use Cake\I18n\Time;
 use Cake\ORM\TableRegistry;
 
 class EconomicoController extends AppController {
-    
-    public function initialize() {
+
+    public function initialize(): void {
         parent::initialize();
         $this->Contas = new Contas();
         $this->Tempadas = new Tempadas();
@@ -43,7 +42,7 @@ class EconomicoController extends AppController {
 
     public function detalleMovemento($id=null) {
         if(empty($id)) {
-            $movemento = $this->Movementos->newEntity();
+            $movemento = $this->Movementos->newEntity([]);
             $movemento->prevision = $this->request->getQuery('prevision', false);
         } else {
             $movemento = $this->Movementos->get($id);
@@ -67,9 +66,8 @@ class EconomicoController extends AppController {
     }
 
     public function gardarMovemento() {
-        $movemento = $this->Movementos->newEntity();
         $data = $this->request->getData();
-        $movemento = $this->Movementos->patchEntity($movemento, $data);
+        $movemento = $this->Movementos->newEntity($data);
         if(empty($data['id_clube'])) {
             $movemento->id_clube = NULL;
         }
@@ -84,7 +82,8 @@ class EconomicoController extends AppController {
     }
 
     public function borrarMovemento($id) {
-        if($this->Movementos->deleteById($id)) {
+        $movemento = $this->Movementos->get($id);
+        if($this->Movementos->delete($movemento)) {
             $this->Flash->success(__('Eliminouse o movemento correctamente.'));
         } else {
             $this->Flash->error(__('Erro ao eliminar o movemento.'));
@@ -112,9 +111,8 @@ class EconomicoController extends AppController {
     }
 
     public function gardarFactura() {
-        $factura = $this->Facturas->newEntity();
         $data = $this->request->getData();
-        $factura = $this->Facturas->patchEntity($factura, $data);
+        $factura = $this->Facturas->newEntity($data);
         $factura->data = empty($data['data']) ? NULL : Time::createFromFormat('d-m-Y', $data['data']);
 
         if ($this->Facturas->save($factura)) {
@@ -126,9 +124,11 @@ class EconomicoController extends AppController {
         $this->render('detalleFactura');
     }
 
-    public function subirFactura($id = NULL) {
-        $factura = $this->Facturas->get($id);
-        $this->EconomicoFactura->upload($factura, $this->request->data['file']);
+    public function subirFactura() {
+        $data = $this->request->getData();
+        $file = $this->request->getUploadedFile('file');
+        $factura = $this->Facturas->get($data['id']);
+        $this->EconomicoFactura->upload($factura, $file );
         $this->redirect(['action'=>'detalleFactura', $factura->id]);
     }
 
@@ -146,8 +146,7 @@ class EconomicoController extends AppController {
     public function descargarFacturaArquivo($id_factura, $arquivo) {
         $factura = $this->Facturas->get($id_factura);
         $path = $this->EconomicoFactura->getPath($factura, $arquivo);
-        $this->response->file($path, ['name'=>$arquivo]);
-        return $this->response;
+        return $this->response->withFile($path, ['name'=>$arquivo]);
     }
 
     public function borrarFacturaArquivo($id_factura, $arquivo) {
@@ -196,13 +195,12 @@ class EconomicoController extends AppController {
     }
 
     public function detallePartidaOrzamentaria($id=null) {
-        $partidaOrzamentaria = empty($id) ? $this->PartidasOrzamentarias->newEntity() : $this->PartidasOrzamentarias->get($id);
+        $partidaOrzamentaria = $this->PartidasOrzamentarias->getOrNew($id);
         $this->set(compact('partidaOrzamentaria'));
     }
 
     public function gardarPartidaOrzamentaria() {
-        $partidaOrzamentaria = $this->PartidasOrzamentarias->newEntity();
-        $partidaOrzamentaria = $this->PartidasOrzamentarias->patchEntity($partidaOrzamentaria, $this->request->getData());
+        $partidaOrzamentaria = $this->PartidasOrzamentarias->newEntity($this->request->getData());
         if ($this->PartidasOrzamentarias->save($partidaOrzamentaria)) {
             $this->Flash->success(__('Gardouse a partida orzamentaria correctamente.'));
             return $this->redirect(['action'=>'partidasOrzamentarias']);
@@ -228,8 +226,7 @@ class EconomicoController extends AppController {
     }
 
     public function gardarArea() {
-        $area = $this->Areas->newEntity();
-        $area = $this->Areas->patchEntity($area, $this->request->getData());
+        $area = $this->Areas->newEntity($this->request->getData());
         if ($this->Areas->save($area)) {
             $this->Flash->success(__('Gardouse a área correctamente.'));
             return $this->redirect(['action'=>'partidasOrzamentarias']);
@@ -258,8 +255,7 @@ class EconomicoController extends AppController {
     }
 
     public function gardarSubarea() {
-        $subarea = $this->Subareas->newEntity();
-        $subarea = $this->Subareas->patchEntity($subarea, $this->request->getData());
+        $subarea = $this->Subareas->newEntity($this->request->getData());
         if ($this->Subareas->save($subarea)) {
             $this->Flash->success(__('Gardouse a subárea correctamente.'));
             return $this->redirect(['action'=>'partidasOrzamentarias']);

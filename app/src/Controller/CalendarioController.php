@@ -1,17 +1,15 @@
 <?php
 namespace App\Controller;
 
-use App\Controller\RestController;
 use App\Model\Categorias;
 use Cake\Core\Exception\Exception;
-use Cake\Event\Event;
-use Cake\I18n\Date;
+use Cake\Event\EventInterface;
 use Cake\I18n\FrozenDate;
 use Cake\ORM\TableRegistry;
 
-class CalendarioController extends RestController {
-    
-    public function initialize() {
+class CalendarioController extends AppController {
+
+    public function initialize(): void {
         parent::initialize();
         $this->Categorias = new Categorias();
         $this->Arbitros = TableRegistry::get('Arbitros');
@@ -21,6 +19,11 @@ class CalendarioController extends RestController {
         $this->Equipas = TableRegistry::get('Equipas');
         $this->Partidos = TableRegistry::get('Partidos');
         $this->Xornadas = TableRegistry::get('Xornadas');
+    }
+
+    public function beforeFilter(EventInterface $event) {
+        parent::beforeFilter($event);
+        $this->Authentication->allowUnauthenticated(['competicion', 'xornadaSeguinte', 'xornadaAnterior']);
     }
 
     public function competicion($codigo) {

@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -15,35 +17,30 @@
 namespace Cake\Collection;
 
 use ArrayIterator;
-use InvalidArgumentException;
+use Exception;
 use IteratorIterator;
 use Serializable;
-use Traversable;
 
 /**
  * A collection is an immutable list of elements with a handful of functions to
  * iterate, group, transform and extract information from it.
+ *
+ * @template-extends \IteratorIterator<mixed, mixed, \Traversable<mixed>>
  */
 class Collection extends IteratorIterator implements CollectionInterface, Serializable
 {
-
     use CollectionTrait;
 
     /**
      * Constructor. You can provide an array or any traversable object
      *
-     * @param array|\Traversable $items Items.
+     * @param iterable $items Items.
      * @throws \InvalidArgumentException If passed incorrect type for items.
      */
-    public function __construct($items)
+    public function __construct(iterable $items)
     {
         if (is_array($items)) {
             $items = new ArrayIterator($items);
-        }
-
-        if (!($items instanceof Traversable)) {
-            $msg = 'Only an array or \Traversable is allowed for Collection';
-            throw new InvalidArgumentException($msg);
         }
 
         parent::__construct($items);
@@ -55,9 +52,19 @@ class Collection extends IteratorIterator implements CollectionInterface, Serial
      *
      * @return string
      */
-    public function serialize()
+    public function serialize(): string
     {
         return serialize($this->buffered());
+    }
+
+    /**
+     * Returns an array for serializing this of this object.
+     *
+     * @return array
+     */
+    public function __serialize(): array
+    {
+        return $this->buffered()->toArray();
     }
 
     /**
@@ -66,9 +73,20 @@ class Collection extends IteratorIterator implements CollectionInterface, Serial
      * @param string $collection The serialized collection
      * @return void
      */
-    public function unserialize($collection)
+    public function unserialize($collection): void
     {
         $this->__construct(unserialize($collection));
+    }
+
+    /**
+     * Rebuilds the Collection instance.
+     *
+     * @param array $data Data array.
+     * @return void
+     */
+    public function __unserialize(array $data): void
+    {
+        $this->__construct($data);
     }
 
     /**
@@ -76,7 +94,7 @@ class Collection extends IteratorIterator implements CollectionInterface, Serial
      *
      * @return int
      */
-    public function count()
+    public function count(): int
     {
         $traversable = $this->optimizeUnwrap();
 
@@ -92,7 +110,7 @@ class Collection extends IteratorIterator implements CollectionInterface, Serial
      *
      * @return int
      */
-    public function countKeys()
+    public function countKeys(): int
     {
         return count($this->toArray());
     }
@@ -101,12 +119,18 @@ class Collection extends IteratorIterator implements CollectionInterface, Serial
      * Returns an array that can be used to describe the internal state of this
      * object.
      *
-     * @return array
+     * @return array<string, mixed>
      */
-    public function __debugInfo()
+    public function __debugInfo(): array
     {
+        try {
+            $count = $this->count();
+        } catch (Exception $e) {
+            $count = 'An exception occurred while getting count';
+        }
+
         return [
-            'count' => $this->count(),
+            'count' => $count,
         ];
     }
 }

@@ -1,30 +1,30 @@
 <?php
 namespace App\Controller;
 
-use App\Controller\AppController;
-use Cake\Event\Event;
+use Cake\Event\EventInterface;
 
 class UsersController extends AppController {
 
-    public function beforeFilter(Event $event) {
-        $this->Auth->allow(['login','logout']);
+    public function beforeFilter(EventInterface $event) {
+        parent::beforeFilter($event);
+        $this->Authentication->allowUnauthenticated(['login','logout']);
     }
     
     public function login() {
+        $user = $this->Authentication->getResult();
+        if ($user->isValid()) {
+            return $this->redirect(['controller'=>'Main', 'action'=>'index']);
+        }
+
         if ($this->request->is('post')) {
-            $user = $this->Auth->identify();
-            if ($user) {
-                $this->Auth->setUser($user);
-                return $this->redirect($this->Auth->redirectUrl());
-            }
             $this->Flash->error(__('Invalid username or password, try again'));
         }
-        // Pantalla login (peticion GET)
         $this->viewBuilder()->setLayout('login');
     }
 
     public function logout() {
-        return $this->redirect($this->Auth->logout());
+        $this->Authentication->logout();
+        return $this->redirect(['action'=>'login']);
     }
 
 }

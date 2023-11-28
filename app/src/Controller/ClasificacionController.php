@@ -1,21 +1,25 @@
 <?php
 namespace App\Controller;
 
-use App\Controller\RestController;
 use App\Model\Clasificacion;
 use Cake\Core\Exception\Exception;
-use Cake\Event\Event;
+use Cake\Event\EventInterface;
 use Cake\ORM\TableRegistry;
 
-class ClasificacionController extends RestController {
+class ClasificacionController extends AppController {
     
-    public function initialize() {
+    public function initialize(): void {
         parent::initialize();
         $this->Competicions = TableRegistry::get('Competicions');
         $this->Equipas = TableRegistry::get('Equipas');
         $this->FasesEquipas = TableRegistry::get('FasesEquipas');
         $this->Fases = TableRegistry::get('Fases');
         $this->Partidos = TableRegistry::get('Partidos');
+    }
+
+    public function beforeFilter(EventInterface $event) {
+        parent::beforeFilter($event);
+        $this->Authentication->allowUnauthenticated(['competicion', 'fase']);
     }
 
     public function competicion($codCompeticion, $categoria) {

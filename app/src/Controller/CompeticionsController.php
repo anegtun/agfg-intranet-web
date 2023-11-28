@@ -1,7 +1,6 @@
 <?php
 namespace App\Controller;
 
-use App\Controller\AppController;
 use App\Model\Categorias;
 use App\Model\Tempadas;
 use App\Model\TiposCompeticion;
@@ -10,8 +9,8 @@ use Cake\I18n\Time;
 use Cake\ORM\TableRegistry;
 
 class CompeticionsController extends AppController {
-    
-    public function initialize() {
+
+    public function initialize(): void {
         parent::initialize();
         $this->Categorias = new Categorias();
         $this->Tempadas = new Tempadas();
@@ -46,8 +45,7 @@ class CompeticionsController extends AppController {
     }
 
     public function gardar() {
-        $competicion = $this->Competicions->newEntity();
-        $competicion = $this->Competicions->patchEntity($competicion, $this->request->getData());
+        $competicion = $this->Competicions->newEntity($this->request->getData());
         if ($this->Competicions->save($competicion)) {
             $this->Flash->success(__('Gardouse a competición correctamente.'));
             return $this->redirect(['action'=>'detalle', $competicion->id]);
@@ -71,7 +69,7 @@ class CompeticionsController extends AppController {
 
     public function detalleFase($id=null) {
         if(empty($id)) {
-            $fase = $this->Fases->newEntity();
+            $fase = $this->Fases->newEntity([]);
             $fase->id_competicion = $this->request->getQuery('idCompeticion');
             $fase->equipas = [];
             $equipas = [];
@@ -89,10 +87,9 @@ class CompeticionsController extends AppController {
     }
 
     public function gardarFase() {
-        $fase = $this->Fases->newEntity();
         $data = $this->request->getData();
+        $fase = $this->Fases->newEntity($data);
         // Gardamos datos de fase
-        $fase = $this->Fases->patchEntity($fase, $data);
         if (!$this->Fases->save($fase)) {
             $this->Flash->error(__('Erro ao gardar a fase.'));
             $this->set(compact('fase'));
@@ -102,7 +99,7 @@ class CompeticionsController extends AppController {
         $this->FasesEquipas->deleteAll(['id_fase'=>$fase->id]);
         if(!empty($data['equipas'])) {
             foreach($data['equipas'] as $idE) {
-                $faseEquipa = $this->FasesEquipas->newEntity();
+                $faseEquipa = $this->FasesEquipas->newEntity([]);
                 $faseEquipa->id_fase = $fase->id;
                 $faseEquipa->id_equipa = $idE;
                 $faseEquipa->puntos = empty($data['puntos'][$idE]) ? 0 : $data['puntos'][$idE];

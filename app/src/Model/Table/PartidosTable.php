@@ -1,12 +1,11 @@
 <?php
 namespace App\Model\Table;
 
-use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
-class PartidosTable extends Table {
+class PartidosTable extends AgfgTable {
 
-    public function initialize(array $config) {
+    public function initialize(array $config): void {
         $this->setTable('agfg_partidos');
         $this->belongsTo('Fase', [
         	'className' => 'Fases',
@@ -45,6 +44,13 @@ class PartidosTable extends Table {
         ]);
     }
 
+    public function validationDefault(Validator $validator): Validator {
+        return $validator
+            ->notEmpty('id_fase', 'A fase da competición é obrigatoria')
+            ->notEmpty('id_equipa1', 'O equipo local é obrigatorio')
+            ->notEmpty('id_equipa2', 'O equipo visitante é obrigatorio');
+    }
+
     public function getDetalle($id) {
         return $this->get($id, [ 'contain' => [
             'Xornada',
@@ -64,13 +70,6 @@ class PartidosTable extends Table {
                 ['Partidos.data_partido >='=>$inicioYMD, 'Partidos.data_partido <='=>$finYMD]
             ]])
             ->order(['-Partidos.data_partido DESC', 'Partidos.hora_partido']);
-    }
-
-    public function validationDefault(Validator $validator) {
-        return $validator
-            ->notEmpty('id_fase', 'A fase da competición é obrigatoria')
-            ->notEmpty('id_equipa1', 'O equipo local é obrigatorio')
-            ->notEmpty('id_equipa2', 'O equipo visitante é obrigatorio');
     }
 
 }

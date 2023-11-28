@@ -1,12 +1,11 @@
 <?php
 namespace App\Model\Table;
 
-use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
-class FasesEquipasTable extends Table {
+class FasesEquipasTable extends AgfgTable {
 
-    public function initialize(array $config) {
+    public function initialize(array $config): void {
         $this->setTable('agfg_fase_equipas');
         $this->belongsTo('Fases', [
         	'className' => 'Fases',
@@ -15,7 +14,7 @@ class FasesEquipasTable extends Table {
         ]);
     }
 
-    public function validationDefault(Validator $validator) {
+    public function validationDefault(Validator $validator): Validator {
         return $validator
             ->notEmpty('id_fase', 'A fase é obrigatoria')
             ->notEmpty('id_equipa', 'A equipa é obrigatoria');

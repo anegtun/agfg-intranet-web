@@ -5,11 +5,11 @@ use Cake\Validation\Validator;
 
 class ArbitrosTable extends AgfgTable {
 
-    public function initialize(array $config) {
+    public function initialize(array $config): void {
         $this->setTable('agfg_arbitros');
     }
 
-    public function validationDefault(Validator $validator) {
+    public function validationDefault(Validator $validator): Validator {
         return $validator
             ->notEmpty('alcume', 'O alcume é obrigatorio');
     }

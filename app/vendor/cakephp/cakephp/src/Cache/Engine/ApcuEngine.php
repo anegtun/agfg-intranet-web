@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -14,20 +16,20 @@
  */
 namespace Cake\Cache\Engine;
 
-use APCuIterator;
+use APCUIterator;
 use Cake\Cache\CacheEngine;
+use RuntimeException;
 
 /**
  * APCu storage engine for cache
  */
 class ApcuEngine extends CacheEngine
 {
-
     /**
      * Contains the compiled group names
      * (prefixed with the global configuration prefix)
      *
-     * @var string[]
+     * @var array<string>
      */
     protected $_compiledGroupNames = [];
 
@@ -36,13 +38,13 @@ class ApcuEngine extends CacheEngine
      *
      * Called automatically by the cache frontend
      *
-     * @param array $config array of setting for the engine
+     * @param array<string, mixed> $config array of setting for the engine
      * @return bool True if the engine has been successfully initialized, false if not
      */
-    public function init(array $config = [])
+    public function init(array $config = []): bool
     {
         if (!extension_loaded('apcu')) {
-            return false;
+            throw new RuntimeException('The `apcu` extension must be enabled to use ApcuEngine.');
         }
 
         return parent::init($config);
@@ -53,13 +55,16 @@ class ApcuEngine extends CacheEngine
      *
      * @param string $key Identifier for the data
      * @param mixed $value Data to be cached
-     * @return bool True if the data was successfully cached, false on failure
+     * @param \DateInterval|int|null $ttl Optional. The TTL value of this item. If no value is sent and
+     *   the driver supports TTL then the library may set a default value
+     *   for it or let the driver take care of that.
+     * @return bool True on success and false on failure.
      * @link https://secure.php.net/manual/en/function.apcu-store.php
      */
-    public function write($key, $value)
+    public function set($key, $value, $ttl = null): bool
     {
         $key = $this->_key($key);
-        $duration = $this->_config['duration'];
+        $duration = $this->duration($ttl);
 
         return apcu_store($key, $value, $duration);
     }
@@ -68,15 +73,19 @@ class ApcuEngine extends CacheEngine
      * Read a key from the cache
      *
      * @param string $key Identifier for the data
-     * @return mixed The cached data, or false if the data doesn't exist,
+     * @param mixed $default Default value in case the cache misses.
+     * @return mixed The cached data, or default if the data doesn't exist,
      *   has expired, or if there was an error fetching it
      * @link https://secure.php.net/manual/en/function.apcu-fetch.php
      */
-    public function read($key)
+    public function get($key, $default = null)
     {
-        $key = $this->_key($key);
+        $value = apcu_fetch($this->_key($key), $success);
+        if ($success === false) {
+            return $default;
+        }
 
-        return apcu_fetch($key);
+        return $value;
     }
 
     /**
@@ -84,10 +93,10 @@ class ApcuEngine extends CacheEngine
      *
      * @param string $key Identifier for the data
      * @param int $offset How much to increment
-     * @return bool|int New incremented value, false otherwise
+     * @return int|false New incremented value, false otherwise
      * @link https://secure.php.net/manual/en/function.apcu-inc.php
      */
-    public function increment($key, $offset = 1)
+    public function increment(string $key, int $offset = 1)
     {
         $key = $this->_key($key);
 
@@ -99,10 +108,10 @@ class ApcuEngine extends CacheEngine
      *
      * @param string $key Identifier for the data
      * @param int $offset How much to subtract
-     * @return bool|int New decremented value, false otherwise
+     * @return int|false New decremented value, false otherwise
      * @link https://secure.php.net/manual/en/function.apcu-dec.php
      */
-    public function decrement($key, $offset = 1)
+    public function decrement(string $key, int $offset = 1)
     {
         $key = $this->_key($key);
 
@@ -116,7 +125,7 @@ class ApcuEngine extends CacheEngine
      * @return bool True if the value was successfully deleted, false if it didn't exist or couldn't be removed
      * @link https://secure.php.net/manual/en/function.apcu-delete.php
      */
-    public function delete($key)
+    public function delete($key): bool
     {
         $key = $this->_key($key);
 
@@ -126,19 +135,14 @@ class ApcuEngine extends CacheEngine
     /**
      * Delete all keys from the cache. This will clear every cache config using APC.
      *
-     * @param bool $check If true, nothing will be cleared, as entries are removed
-     *    from APC as they expired. This flag is really only used by FileEngine.
      * @return bool True Returns true.
      * @link https://secure.php.net/manual/en/function.apcu-cache-info.php
      * @link https://secure.php.net/manual/en/function.apcu-delete.php
      */
-    public function clear($check)
+    public function clear(): bool
     {
-        if ($check) {
-            return true;
-        }
-        if (class_exists('APCuIterator', false)) {
-            $iterator = new APCuIterator(
+        if (class_exists(APCUIterator::class, false)) {
+            $iterator = new APCUIterator(
                 '/^' . preg_quote($this->_config['prefix'], '/') . '/',
                 APC_ITER_NONE
             );
@@ -166,7 +170,7 @@ class ApcuEngine extends CacheEngine
      * @return bool True if the data was successfully cached, false on failure.
      * @link https://secure.php.net/manual/en/function.apcu-add.php
      */
-    public function add($key, $value)
+    public function add(string $key, $value): bool
     {
         $key = $this->_key($key);
         $duration = $this->_config['duration'];
@@ -179,11 +183,11 @@ class ApcuEngine extends CacheEngine
      * If the group initial value was not found, then it initializes
      * the group accordingly.
      *
-     * @return array
+     * @return array<string>
      * @link https://secure.php.net/manual/en/function.apcu-fetch.php
      * @link https://secure.php.net/manual/en/function.apcu-store.php
      */
-    public function groups()
+    public function groups(): array
     {
         if (empty($this->_compiledGroupNames)) {
             foreach ($this->_config['groups'] as $group) {
@@ -225,7 +229,7 @@ class ApcuEngine extends CacheEngine
      * @return bool success
      * @link https://secure.php.net/manual/en/function.apcu-inc.php
      */
-    public function clearGroup($group)
+    public function clearGroup(string $group): bool
     {
         $success = false;
         apcu_inc($this->_config['prefix'] . $group, 1, $success);

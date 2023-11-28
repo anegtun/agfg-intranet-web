@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -21,16 +23,15 @@ namespace Cake\TestSuite\Constraint\Email;
  */
 class NoMailSent extends MailConstraintBase
 {
-
     /**
      * Checks constraint
      *
      * @param mixed $other Constraint check
      * @return bool
      */
-    public function matches($other)
+    public function matches($other): bool
     {
-        return count($this->getEmails()) === 0;
+        return count($this->getMessages()) === 0;
     }
 
     /**
@@ -38,7 +39,7 @@ class NoMailSent extends MailConstraintBase
      *
      * @return string
      */
-    public function toString()
+    public function toString(): string
     {
         return 'no emails were sent';
     }
@@ -49,7 +50,7 @@ class NoMailSent extends MailConstraintBase
      * @param mixed $other Value
      * @return string
      */
-    protected function failureDescription($other)
+    protected function failureDescription($other): string
     {
         return $this->toString();
     }

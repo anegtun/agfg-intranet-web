@@ -1,10 +1,10 @@
 <?php
 namespace App\Controller;
 
-use App\Controller\AppController;
 use App\Model\Categorias;
 use App\Model\Tempadas;
 use App\Model\TiposCompeticion;
+use Cake\Collection\CollectionInterface;
 use Cake\Database\Expression\QueryExpression;
 use Cake\Event\Event;
 use Cake\I18n\FrozenDate;
@@ -13,8 +13,8 @@ use Cake\ORM\Query;
 use Cake\ORM\TableRegistry;
 
 class ResultadosController extends AppController {
-    
-    public function initialize() {
+
+    public function initialize(): void {
         parent::initialize();
         $this->Categorias = new Categorias();
         $this->Tempadas = new Tempadas();
@@ -55,7 +55,7 @@ class ResultadosController extends AppController {
             ->enableAutoFields(true)
             ->where(['Fase.id_competicion'=>$id])
             ->order(['data_calendario', 'hora_partido', 'Equipa1.nome'])
-            ->formatResults(function (\Cake\Collection\CollectionInterface $results) {
+            ->formatResults(function (CollectionInterface $results) {
                 return $results->map(function ($row) {
                     if (!empty($row['data_calendario'])) {
                         $row['data_calendario'] = FrozenDate::createFromFormat('Y-m-d', $row['data_calendario']);
@@ -137,7 +137,7 @@ class ResultadosController extends AppController {
     }
 
     public function gardar() {
-        $partido = $this->Competicions->newEntity();
+        $partido = $this->Competicions->newEntity([]);
         $data = $this->request->getData();
         $partido = $this->processGameForm($partido, $data);
         if ($this->Partidos->save($partido)) {
@@ -157,13 +157,13 @@ class ResultadosController extends AppController {
         $p->data_partido = empty($data['data']) ? NULL : Time::createFromFormat('d-m-Y', $data['data']);
         $p->id_campo = $this->clean($data['id_campo']);
         $p->id_arbitro = $this->clean($data['id_arbitro']);
-        $p->goles_equipa1 = $this->clean($data['goles_equipa1']);
-        $p->tantos_equipa1 = $this->clean($data['tantos_equipa1']);
+        $p->goles_equipa1 = isset($data['goles_equipa1']) ? $this->clean($data['goles_equipa1']) : NULL;
+        $p->tantos_equipa1 = isset($data['tantos_equipa1']) ? $this->clean($data['tantos_equipa1']) : NULL;
         if(isset($data['total_equipa1'])) {
             $p->total_equipa1 = $this->clean($data['total_equipa1']);
         }
-        $p->goles_equipa2 = $this->clean($data['goles_equipa2']);
-        $p->tantos_equipa2 = $this->clean($data['tantos_equipa2']);
+        $p->goles_equipa2 = isset($data['goles_equipa2']) ? $this->clean($data['goles_equipa2']) : NULL;
+        $p->tantos_equipa2 = isset($data['tantos_equipa2']) ? $this->clean($data['tantos_equipa2']) : NULL;
         if(isset($data['total_equipa2'])) {
             $p->total_equipa2 = $this->clean($data['total_equipa2']);
         }

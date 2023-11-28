@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -12,13 +14,13 @@
  */
 namespace Cake\Console\Exception;
 
-use Cake\Core\Exception\Exception;
-
 /**
  * Used when a shell method cannot be found.
  */
-class MissingShellMethodException extends Exception
+class MissingShellMethodException extends ConsoleException
 {
-
+    /**
+     * @var string
+     */
     protected $_messageTemplate = "Unknown command %1\$s %2\$s.\nFor usage try `cake %1\$s --help`";
 }

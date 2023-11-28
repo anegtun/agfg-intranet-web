@@ -5,7 +5,7 @@ use Cake\Validation\Validator;
 
 class ClubesTable extends AgfgTable {
 
-    public function initialize(array $config) {
+    public function initialize(array $config): void {
         $this->setTable('agfg_clubes');
 
         $this->hasMany('Equipas', [
@@ -20,7 +20,7 @@ class ClubesTable extends AgfgTable {
         ]);
     }
 
-    public function validationDefault(Validator $validator) {
+    public function validationDefault(Validator $validator): Validator {
         return $validator
             ->notEmpty('codigo', 'O código é obrigatorio')
             ->notEmpty('name', 'O nome é obrigatorio');

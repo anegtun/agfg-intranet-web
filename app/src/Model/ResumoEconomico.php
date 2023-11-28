@@ -17,7 +17,7 @@ class ResumoEconomico {
             $result[$e->subarea->area->partidaOrzamentaria->id] = $e->subarea->area->partidaOrzamentaria;
         }
         foreach($this->previsions as $e) {
-            $result[$e->subarea->area->partidaOrzamentaria->id] = $e->subarea->partidaOrzamentaria->area;
+            $result[$e->subarea->area->partidaOrzamentaria->id] = $e->subarea->area->partidaOrzamentaria;
         }
         usort($result, ["self", "cmpNome"]);
         return $result;

@@ -1,8 +1,6 @@
 <?php
 namespace App\Controller;
 
-use App\Controller\AppController;
-
 class ArbitrosController extends AppController {
 
     public function index() {
@@ -16,15 +14,12 @@ class ArbitrosController extends AppController {
     }
 
     public function gardar() {
-        $arbitro = $this->Arbitros->newEntity();
-        if ($this->request->is('post') || $this->request->is('put')) {
-            $arbitro = $this->Arbitros->patchEntity($arbitro, $this->request->getData());
-            if ($this->Arbitros->save($arbitro)) {
-                $this->Flash->success(__('Gardouse o arbitro correctamente.'));
-                return $this->redirect(['action'=>'index']);
-            }
-            $this->Flash->error(__('Erro ao gardar o arbitro.'));
+        $arbitro = $this->Arbitros->newEntity($this->request->getData());
+        if ($this->Arbitros->save($arbitro)) {
+            $this->Flash->success(__('Gardouse o arbitro correctamente.'));
+            return $this->redirect(['action'=>'index']);
         }
+        $this->Flash->error(__('Erro ao gardar o arbitro.'));
         $this->set(compact('arbitro'));
         $this->render('detalle');
     }

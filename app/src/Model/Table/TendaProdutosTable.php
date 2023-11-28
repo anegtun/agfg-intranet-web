@@ -5,7 +5,7 @@ use Cake\Validation\Validator;
 
 class TendaProdutosTable extends AgfgTable {
 
-    public function initialize(array $config) {
+    public function initialize(array $config): void {
         $this->setTable('agfg_tenda_produtos');
 
         $this->hasMany('Skus', array(
@@ -22,7 +22,7 @@ class TendaProdutosTable extends AgfgTable {
         ));
     }
 
-    public function validationDefault(Validator $validator) {
+    public function validationDefault(Validator $validator): Validator {
         return $validator
             ->notEmpty('nome', 'O nome é obrigatorio');
     }

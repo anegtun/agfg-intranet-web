@@ -1,8 +1,6 @@
 <?php
 namespace App\Controller;
 
-use App\Controller\AppController;
-
 class CamposController extends AppController {
 
     public function index() {
@@ -16,15 +14,12 @@ class CamposController extends AppController {
     }
 
     public function gardar() {
-        $campo = $this->Campos->newEntity();
-        if ($this->request->is('post') || $this->request->is('put')) {
-            $campo = $this->Campos->patchEntity($campo, $this->request->getData());
-            if ($this->Campos->save($campo)) {
-                $this->Flash->success(__('Gardouse o campo correctamente.'));
-                return $this->redirect(['action'=>'index']);
-            }
-            $this->Flash->error(__('Erro ao gardar o campo.'));
+        $campo = $this->Campos->newEntity($this->request->getData());
+        if ($this->Campos->save($campo)) {
+            $this->Flash->success(__('Gardouse o campo correctamente.'));
+            return $this->redirect(['action'=>'index']);
         }
+        $this->Flash->error(__('Erro ao gardar o campo.'));
         $this->set(compact('campo'));
         $this->render('detalle');
     }

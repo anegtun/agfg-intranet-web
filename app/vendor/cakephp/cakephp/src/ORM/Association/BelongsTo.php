@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -20,7 +22,9 @@ use Cake\ORM\Association;
 use Cake\ORM\Association\Loader\SelectLoader;
 use Cake\ORM\Table;
 use Cake\Utility\Inflector;
+use Closure;
 use RuntimeException;
+use function Cake\Core\pluginSplit;
 
 /**
  * Represents an 1 - N relationship where the source side of the relation is
@@ -30,21 +34,20 @@ use RuntimeException;
  */
 class BelongsTo extends Association
 {
-
     /**
      * Valid strategies for this type of association
      *
-     * @var array
+     * @var array<string>
      */
     protected $_validStrategies = [
         self::STRATEGY_JOIN,
-        self::STRATEGY_SELECT
+        self::STRATEGY_SELECT,
     ];
 
     /**
      * Gets the name of the field representing the foreign key to the target table.
      *
-     * @return string
+     * @return array<string>|string
      */
     public function getForeignKey()
     {
@@ -61,10 +64,10 @@ class BelongsTo extends Association
      * BelongsTo associations are never cleared in a cascading delete scenario.
      *
      * @param \Cake\Datasource\EntityInterface $entity The entity that started the cascaded delete.
-     * @param array $options The options for the original delete.
+     * @param array<string, mixed> $options The options for the original delete.
      * @return bool Success.
      */
-    public function cascadeDelete(EntityInterface $entity, array $options = [])
+    public function cascadeDelete(EntityInterface $entity, array $options = []): bool
     {
         return true;
     }
@@ -74,22 +77,22 @@ class BelongsTo extends Association
      *
      * @return string
      */
-    protected function _propertyName()
+    protected function _propertyName(): string
     {
-        list(, $name) = pluginSplit($this->_name);
+        [, $name] = pluginSplit($this->_name);
 
         return Inflector::underscore(Inflector::singularize($name));
     }
 
     /**
-     * Returns whether or not the passed table is the owning side for this
+     * Returns whether the passed table is the owning side for this
      * association. This means that rows in the 'target' table would miss important
      * or required information if the row in 'source' did not exist.
      *
      * @param \Cake\ORM\Table $side The potential Table with ownership
      * @return bool
      */
-    public function isOwningSide(Table $side)
+    public function isOwningSide(Table $side): bool
     {
         return $side === $this->getTarget();
     }
@@ -99,7 +102,7 @@ class BelongsTo extends Association
      *
      * @return string
      */
-    public function type()
+    public function type(): string
     {
         return self::MANY_TO_ONE;
     }
@@ -111,8 +114,8 @@ class BelongsTo extends Association
      * `$options`
      *
      * @param \Cake\Datasource\EntityInterface $entity an entity from the source table
-     * @param array $options options to be passed to the save method in the target table
-     * @return bool|\Cake\Datasource\EntityInterface false if $entity could not be saved, otherwise it returns
+     * @param array<string, mixed> $options options to be passed to the save method in the target table
+     * @return \Cake\Datasource\EntityInterface|false false if $entity could not be saved, otherwise it returns
      * the saved entity
      * @see \Cake\ORM\Table::save()
      */
@@ -142,12 +145,12 @@ class BelongsTo extends Association
      * Returns a single or multiple conditions to be appended to the generated join
      * clause for getting the results on the target table.
      *
-     * @param array $options list of options passed to attachTo method
-     * @return array
+     * @param array<string, mixed> $options list of options passed to attachTo method
+     * @return array<\Cake\Database\Expression\IdentifierExpression>
      * @throws \RuntimeException if the number of columns in the foreignKey do not
      * match the number of columns in the target table primaryKey
      */
-    protected function _joinCondition($options)
+    protected function _joinCondition(array $options): array
     {
         $conditions = [];
         $tAlias = $this->_name;
@@ -180,11 +183,9 @@ class BelongsTo extends Association
     }
 
     /**
-     * {@inheritDoc}
-     *
-     * @return \Closure
+     * @inheritDoc
      */
-    public function eagerLoader(array $options)
+    public function eagerLoader(array $options): Closure
     {
         $loader = new SelectLoader([
             'alias' => $this->getAlias(),
@@ -194,7 +195,7 @@ class BelongsTo extends Association
             'bindingKey' => $this->getBindingKey(),
             'strategy' => $this->getStrategy(),
             'associationType' => $this->type(),
-            'finder' => [$this, 'find']
+            'finder' => [$this, 'find'],
         ]);
 
         return $loader->buildEagerLoader($options);

@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -12,13 +14,13 @@
  */
 namespace Cake\Console\Exception;
 
-use Cake\Core\Exception\Exception;
-
 /**
  * Used when a Task cannot be found.
  */
-class MissingTaskException extends Exception
+class MissingTaskException extends ConsoleException
 {
-
+    /**
+     * @var string
+     */
     protected $_messageTemplate = 'Task class %s could not be found.';
 }

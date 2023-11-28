@@ -5,11 +5,11 @@ use Cake\Validation\Validator;
 
 class CamposTable extends AgfgTable {
 
-    public function initialize(array $config) {
+    public function initialize(array $config): void {
         $this->setTable('agfg_campos');
     }
 
-    public function validationDefault(Validator $validator) {
+    public function validationDefault(Validator $validator): Validator {
         return $validator
             ->notEmpty('nome', 'O nome é obrigatorio')
             ->notEmpty('pobo', 'O pobo é obrigatorio');

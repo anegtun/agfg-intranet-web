@@ -1,14 +1,12 @@
 <?php
 namespace App\Controller;
 
-use App\Controller\AppController;
 use App\Model\Categorias;
-use Cake\Event\Event;
 use Cake\ORM\TableRegistry;
 
 class ClubesController extends AppController {
-    
-    public function initialize() {
+
+    public function initialize(): void {
         parent::initialize();
         $this->Categorias = new Categorias();
         $this->Equipas = TableRegistry::get('Equipas');
@@ -31,17 +29,14 @@ class ClubesController extends AppController {
     public function detalle($id=null) {
         $categorias = $this->Categorias->getCategoriasWithEmpty();
         $federacions = $this->Federacions->find()->order('codigo');
-        $clube = empty($id)
-            ? $this->Clubes->newEntity()
-            : $this->Clubes->get($id, ['contain' => ['Equipas' => ['sort' => 'Equipas.codigo'], 'Federacions']]);
+        $clube = $this->Clubes->getOrNew($id, ['contain' => ['Equipas' => ['sort' => 'Equipas.codigo'], 'Federacions']]);
 
         $this->set(compact('clube', 'categorias', 'federacions'));
     }
 
     public function gardar() {
         $data = $this->request->getData();
-        $clube = $this->Clubes->newEntity();
-        $clube = $this->Clubes->patchEntity($clube, $data);
+        $clube = $this->Clubes->newEntity($data);
         $clube->federacions = $this->Federacions->find()->where(['id IN' => $data['federacions']])->toArray();
         $clube->setDirty('federacions', true);
         if ($this->Clubes->save($clube)) {
@@ -65,7 +60,7 @@ class ClubesController extends AppController {
 
     public function detalleEquipa($id=null) {
         if(empty($id)) {
-            $equipa = $this->Equipas->newEntity();
+            $equipa = $this->Equipas->newEntity([]);
             $equipa->id_clube = $this->request->getQuery('idClube');
             $equipa->clube = $this->Clubes->get($equipa->id_clube);
         } else {
@@ -76,8 +71,7 @@ class ClubesController extends AppController {
     }
 
     public function gardarEquipa() {
-        $equipa = $this->Equipas->newEntity();
-        $equipa = $this->Equipas->patchEntity($equipa, $this->request->getData());
+        $equipa = $this->Equipas->newEntity($this->request->getData());
         if ($this->Equipas->save($equipa)) {
             $this->Flash->success(__('Gardouse a equipa correctamente.'));
             return $this->redirect(['action'=>'detalle', $equipa->id_clube]);

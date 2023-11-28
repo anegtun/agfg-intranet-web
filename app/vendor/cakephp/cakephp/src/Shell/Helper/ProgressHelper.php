@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -33,11 +35,21 @@ use RuntimeException;
  */
 class ProgressHelper extends Helper
 {
+    /**
+     * Default value for progress bar total value.
+     * Percent completion is derived from progress/total
+     */
+    protected const DEFAULT_TOTAL = 100;
+
+    /**
+     * Default value for progress bar width
+     */
+    protected const DEFAULT_WIDTH = 80;
 
     /**
      * The current progress.
      *
-     * @var int
+     * @var float|int
      */
     protected $_progress = 0;
 
@@ -46,14 +58,14 @@ class ProgressHelper extends Helper
      *
      * @var int
      */
-    protected $_total = 0;
+    protected $_total = self::DEFAULT_TOTAL;
 
     /**
      * The width of the bar.
      *
      * @var int
      */
-    protected $_width = 0;
+    protected $_width = self::DEFAULT_WIDTH;
 
     /**
      * Output a progress bar.
@@ -68,7 +80,7 @@ class ProgressHelper extends Helper
      * @param array $args The arguments/options to use when outputing the progress bar.
      * @return void
      */
-    public function output($args)
+    public function output(array $args): void
     {
         $args += ['callback' => null];
         if (isset($args[0])) {
@@ -101,7 +113,7 @@ class ProgressHelper extends Helper
      */
     public function init(array $args = [])
     {
-        $args += ['total' => 100, 'width' => 80];
+        $args += ['total' => self::DEFAULT_TOTAL, 'width' => self::DEFAULT_WIDTH];
         $this->_progress = 0;
         $this->_width = $args['width'];
         $this->_total = $args['total'];
@@ -112,7 +124,7 @@ class ProgressHelper extends Helper
     /**
      * Increment the progress bar.
      *
-     * @param int $num The amount of progress to advance by.
+     * @param float|int $num The amount of progress to advance by.
      * @return $this
      */
     public function increment($num = 1)
@@ -131,15 +143,15 @@ class ProgressHelper extends Helper
     {
         $numberLen = strlen(' 100%');
         $complete = round($this->_progress / $this->_total, 2);
-        $barLen = ($this->_width - $numberLen) * ($this->_progress / $this->_total);
+        $barLen = ($this->_width - $numberLen) * $this->_progress / $this->_total;
         $bar = '';
         if ($barLen > 1) {
-            $bar = str_repeat('=', $barLen - 1) . '>';
+            $bar = str_repeat('=', (int)$barLen - 1) . '>';
         }
 
         $pad = ceil($this->_width - $numberLen - $barLen);
         if ($pad > 0) {
-            $bar .= str_repeat(' ', $pad);
+            $bar .= str_repeat(' ', (int)$pad);
         }
         $percent = ($complete * 100) . '%';
         $bar .= str_pad($percent, $numberLen, ' ', STR_PAD_LEFT);
