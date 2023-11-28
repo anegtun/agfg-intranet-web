@@ -2,7 +2,7 @@
 namespace App\Model\Entity;
 
 use Cake\Auth\DefaultPasswordHasher;
-use Cake\I18N\Time;
+use Cake\I18n\Time;
 use Cake\ORM\Entity;
 
 class Partido extends Entity {
