@@ -4,7 +4,7 @@ namespace App\Model\Table;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
-class UsuariosTable extends AgfgTable {
+class UsersTable extends AgfgTable {
     
     public function initialize(array $config): void {
         $this->setTable('agfg_users');

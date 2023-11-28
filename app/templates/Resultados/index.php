@@ -6,7 +6,7 @@ $this->set('cabeceiraMigas', [
     ['label'=>'Horarios e resultados']
 ]);
 
-$authUser = $this->request->getSession()->read('Auth.User');
+$authUser = $this->request->getAttribute('identity');
 ?>
 
 <div class="row">

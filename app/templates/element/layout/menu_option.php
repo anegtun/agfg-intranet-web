@@ -1,5 +1,5 @@
 <?php
-$authUser = $this->request->getSession()->read('Auth.User');
+$authUser = $this->request->getAttribute('identity');
 
 $menu_selected = $menu_option === $id;
 ?>
