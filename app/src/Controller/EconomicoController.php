@@ -124,9 +124,11 @@ class EconomicoController extends AppController {
         $this->render('detalleFactura');
     }
 
-    public function subirFactura($id = NULL) {
-        $factura = $this->Facturas->get($id);
-        $this->EconomicoFactura->upload($factura, $this->request->data['file']);
+    public function subirFactura() {
+        $data = $this->request->getData();
+        $file = $this->request->getUploadedFile('file');
+        $factura = $this->Facturas->get($data['id']);
+        $this->EconomicoFactura->upload($factura, $file );
         $this->redirect(['action'=>'detalleFactura', $factura->id]);
     }
 
@@ -144,8 +146,7 @@ class EconomicoController extends AppController {
     public function descargarFacturaArquivo($id_factura, $arquivo) {
         $factura = $this->Facturas->get($id_factura);
         $path = $this->EconomicoFactura->getPath($factura, $arquivo);
-        $this->response->file($path, ['name'=>$arquivo]);
-        return $this->response;
+        return $this->response->withFile($path, ['name'=>$arquivo]);
     }
 
     public function borrarFacturaArquivo($id_factura, $arquivo) {

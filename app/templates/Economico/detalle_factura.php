@@ -70,9 +70,11 @@ $emptyTemplates = [
             <tbody>
         </table>
 
-        <?= $this->Form->create($factura, ['type'=>'post', 'enctype' => 'multipart/form-data', 'url'=>['action'=>'subirFactura']]) ?>
+        <?= $this->Form->create($factura, ['type'=>'file', 'url'=>['action'=>'subirFactura']]) ?>
+            <?php echo $this->Form->input('id', ['type'=>'hidden', 'value'=>$factura->id]) ?>
+
             <div class="row">
-                <?php echo $this->Form->input('file', ['type'=>'file', 'label'=>'Arquivo', 'class'=>'form-control', 'accept'=>"image/*,.pdf,.doc,.docx"]); ?>
+                <?php echo $this->Form->input('file', ['type'=>'file', 'label'=>'Arquivo', 'class'=>'form-control', 'accept'=>"image/*,.pdf,.doc,.docx"]) ?>
             </div>
             <?= $this->Form->button('Subir', ['class'=>'btn btn-default glyphicon glyphicon-upload']); ?>
         <?= $this->Form->end() ?>
