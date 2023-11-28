@@ -5,7 +5,7 @@ use App\Controller\AppController;
 use Cake\ORM\TableRegistry;
 
 class FederacionsController extends AppController {
-    
+
     public function initialize(): void {
         parent::initialize();
         $this->Clubes = TableRegistry::get('Clubes');
