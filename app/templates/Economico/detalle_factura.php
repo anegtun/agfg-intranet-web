@@ -70,7 +70,7 @@ $emptyTemplates = [
             <tbody>
         </table>
 
-        <?= $this->Form->create($factura, ['type'=>'file', 'url'=>['action'=>'subirFactura']]) ?>
+        <?= $this->Form->create($factura, ['type'=>'post', 'enctype' => 'multipart/form-data', 'url'=>['action'=>'subirFactura']]) ?>
             <?php echo $this->Form->input('id', ['type'=>'hidden', 'value'=>$factura->id]) ?>
 
             <div class="row">
