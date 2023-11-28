@@ -6,7 +6,7 @@ use App\Model\Categorias;
 use Cake\ORM\TableRegistry;
 
 class ClubesController extends AppController {
-    
+
     public function initialize(): void {
         parent::initialize();
         $this->Categorias = new Categorias();
