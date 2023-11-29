@@ -1,10 +1,7 @@
 <?php
 namespace App\Controller\Component;
 
-require_once(ROOT . DS . 'vendor' . DS  . 'fpdf' . DS . 'fpdf.php');
-
 use Cake\Core\Configure;
-use FPDF;
 
 trait ResumoEconomicoFPDFCommonTraits {
 

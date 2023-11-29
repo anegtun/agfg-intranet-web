@@ -1,14 +1,14 @@
 <?php
 namespace App\Controller\Component;
 
-require_once(ROOT . DS . 'vendor' . DS  . 'fpdf' . DS . 'fpdf.php');
+require_once(ROOT . DS . 'vendor' . DS  . 'fpdf' . DS . 'fpdf' . DS . 'src' . DS . 'Fpdf' . DS . 'Fpdf.php');
 
 define('EURO',chr(128));
 
 use Cake\Core\Configure;
-use FPDF;
+use Fpdf\Fpdf;
 
-class ResumoEconomicoFPDF extends FPDF {
+class ResumoEconomicoFPDF extends Fpdf {
 
     public $resumo;
 
