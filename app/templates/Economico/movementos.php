@@ -69,7 +69,7 @@ foreach($partidasOrzamentarias as $po) {
         <table class="table table-striped table-hover">
             <thead>
                 <tr>
-                    <th class="celda-titulo text-center">Data</th>
+                    <th class="celda-titulo text-center" style="min-width: 100px;">Data</th>
                     <th class="celda-titulo text-center">Importe</th>
                     <th class="celda-titulo text-center">Acumulado</th>
                     <th class="celda-titulo text-center">Tempada</th>
