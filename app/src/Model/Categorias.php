@@ -6,7 +6,8 @@ class Categorias {
     public function getCategorias() {
         return array(
             'F' => 'Feminina',
-            'M' => 'Masculina'
+            'M' => 'Masculina',
+            'E' => 'Escolas'
         );
     }
     
