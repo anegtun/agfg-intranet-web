@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Model\Contas;
+use App\Model\EconomicoFacturaEstado;
 use App\Model\ResumoEconomico;
 use App\Model\Tempadas;
 use Cake\Filesystem\Folder;
@@ -15,6 +16,7 @@ class EconomicoController extends AppController {
         parent::initialize();
         $this->Contas = new Contas();
         $this->Tempadas = new Tempadas();
+        $this->FacturaEstado = new EconomicoFacturaEstado();
         $this->Clubes = TableRegistry::get('Clubes');
         $this->PartidasOrzamentarias = TableRegistry::get('EconomicoPartidasOrzamentarias');
         $this->Areas = TableRegistry::get('EconomicoAreas');
@@ -94,6 +96,7 @@ class EconomicoController extends AppController {
 
 
     public function facturas() {
+        $estados = $this->FacturaEstado->getAll();
         $facturas = $this->Facturas->find()->order('data desc');
         if(!empty($this->request->getQuery('data_ini'))) {
             $facturas->where(['data >=' => FrozenDate::createFromFormat('d-m-Y', $this->request->getQuery('data_ini'))]);
@@ -101,13 +104,14 @@ class EconomicoController extends AppController {
         if(!empty($this->request->getQuery('data_fin'))) {
             $facturas->where(['data <=' => FrozenDate::createFromFormat('d-m-Y', $this->request->getQuery('data_fin'))]);
         }
-        $this->set(compact('facturas'));
+        $this->set(compact('facturas', 'estados'));
     }
 
     public function detalleFactura($id=null) {
+        $estados = $this->FacturaEstado->getAll();
         $factura = $this->Facturas->getOrNew($id);
         $arquivos = empty($id) ? [] : $this->EconomicoFactura->list($factura);
-        $this->set(compact('factura', 'arquivos'));
+        $this->set(compact('factura', 'arquivos', 'estados'));
     }
 
     public function gardarFactura() {

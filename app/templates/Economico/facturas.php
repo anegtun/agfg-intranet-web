@@ -47,6 +47,7 @@ $emptyTemplates = [
                     <th class="celda-titulo text-center">Descrición</th>
                     <th class="celda-titulo"></th>
                     <th class="celda-titulo"></th>
+                    <th class="celda-titulo"></th>
                 </tr>
             </thead>
             <tbody>
@@ -57,6 +58,17 @@ $emptyTemplates = [
                         <td class="text-center"><?= $f->entidade ?></td>
                         <td class="text-center"><?= $f->referencia ?></td>
                         <td class="text-center"><?= $f->descricion ?></td>
+                        <td class="text-center">
+                            <?php
+                                $icon = '';
+                                $color = '';
+                                switch ($f->estado) {
+                                    case 'P': $icon = 'alert'; $color = 'text-warning'; break;
+                                    case 'F': $icon = 'euro'; $color = 'text-success'; break;
+                                }
+                            ?>
+                            <a class="glyphicon glyphicon-<?= $icon ?> <?= $color ?>" href="javascript:void(0)"></a>
+                        </td>
                         <td class="text-center"><?= $this->AgfgForm->editButton(['action'=>'detalleFactura', $f->id]) ?></td>
                         <td class="text-center"><?= $this->AgfgForm->deleteButton(['action'=>'borrarFactura', $f->id]) ?></td>
                     </tr>

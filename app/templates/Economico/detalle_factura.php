@@ -30,6 +30,9 @@ $emptyTemplates = [
             <div class="form-group col-lg-3">
                 <?= $this->Form->control('importe', ['type'=>'number', 'label'=>'Importe']) ?>
             </div>
+            <div class="form-group col-lg-2">
+                <?= $this->Form->control('estado', ['options'=>$estados, 'label'=>'Estado']) ?>
+            </div>
         </div>
 
         <div class="row">
@@ -40,7 +43,10 @@ $emptyTemplates = [
                 <?= $this->Form->control('referencia', ['label'=>'Referencia']) ?>
             </div>
             <div class="form-group col-lg-12">
-                <?= $this->Form->control('descricion', ['label'=>'Descrición']) ?>
+                <?= $this->Form->control('descricion', ['label'=>'Descrición curta']) ?>
+            </div>
+            <div class="form-group col-lg-12">
+                <?= $this->Form->control('observacions', ['label'=>'Observacións']) ?>
             </div>
         </div>
 
