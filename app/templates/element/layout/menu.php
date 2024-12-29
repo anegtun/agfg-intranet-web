@@ -17,22 +17,10 @@ $authUser = $this->request->getAttribute('identity');
         'auth' => ['admin','comp','euro22'],
         'submenus' => [
             [ 'id' => 'resultados', 'nome' => 'Horarios e resultados', 'url' => ['controller'=>'Resultados', 'action'=>'index'] ],
+            [ 'id' => 'prensa', 'nome' => 'Prensa', 'url' => ['controller'=>'Calendario', 'action'=>'prensa'], 'auth' => ['admin','comp'] ],
             [ 'id' => 'administracion', 'nome' => 'Administrar competicións', 'url' => ['controller'=>'Competicions', 'action'=>'index'], 'auth' => ['admin'] ],
             [ 'id' => 'arbitros', 'nome' => 'Árbitros', 'url' => ['controller'=>'Arbitros', 'action'=>'index'], 'auth' => ['admin','comp'] ],
             [ 'id' => 'campos', 'nome' => 'Campos', 'url' => ['controller'=>'Campos', 'action'=>'index'], 'auth' => ['admin','comp'] ],
-        ],
-        'menu_option'=>$menu_option, 
-        'submenu_option'=>$submenu_option]) ?>
-
-    <?= $this->element('layout/menu_option', [
-        'id' => 'tenda',
-        'nome' => 'Tenda',
-        'icono' => 'shopping-cart',
-        'auth' => ['admin','tesour'],
-        'submenus' => [
-            [ 'id' => 'pedidos', 'nome' => 'Pedidos', 'url' => ['controller'=>'Tenda', 'action'=>'pedidos'] ],
-            [ 'id' => 'demanda', 'nome' => 'Demanda', 'url' => ['controller'=>'Tenda', 'action'=>'demanda'] ],
-            [ 'id' => 'stock', 'nome' => 'Stock', 'url' => ['controller'=>'Tenda', 'action'=>'stock'] ]
         ],
         'menu_option'=>$menu_option, 
         'submenu_option'=>$submenu_option]) ?>
@@ -49,6 +37,19 @@ $authUser = $this->request->getAttribute('identity');
             [ 'id' => 'resumo', 'nome' => 'Resumo xeral', 'url' => ['controller'=>'Economico', 'action'=>'resumo'] ],
             [ 'id' => 'resumoClubes', 'nome' => 'Resumo clubes', 'url' => ['controller'=>'Economico', 'action'=>'resumoClubes'] ],
             [ 'id' => 'partidas', 'nome' => 'Partidas orzamentarias', 'url' => ['controller'=>'Economico', 'action'=>'partidasOrzamentarias'] ]
+        ],
+        'menu_option'=>$menu_option, 
+        'submenu_option'=>$submenu_option]) ?>
+
+    <?= $this->element('layout/menu_option', [
+        'id' => 'tenda',
+        'nome' => 'Tenda',
+        'icono' => 'shopping-cart',
+        'auth' => ['admin','tesour'],
+        'submenus' => [
+            [ 'id' => 'pedidos', 'nome' => 'Pedidos', 'url' => ['controller'=>'Tenda', 'action'=>'pedidos'] ],
+            [ 'id' => 'demanda', 'nome' => 'Demanda', 'url' => ['controller'=>'Tenda', 'action'=>'demanda'] ],
+            [ 'id' => 'stock', 'nome' => 'Stock', 'url' => ['controller'=>'Tenda', 'action'=>'stock'] ]
         ],
         'menu_option'=>$menu_option, 
         'submenu_option'=>$submenu_option]) ?>

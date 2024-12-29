@@ -4,11 +4,20 @@ namespace App\Model;
 class Categorias {
     
     public function getCategorias() {
-        return array(
+        return [
             'F' => 'Feminina',
             'M' => 'Masculina',
             'E' => 'Escolas'
-        );
+        ];
+    }
+    
+    public function getCategoriasFiltered($codes) {
+        $all = $this->getCategorias();
+        $res = [];
+        foreach($codes as $c) {
+            $res[$c] = $all[$c];
+        }
+        return $res;
     }
     
     public function getCategoriasWithEmpty() {

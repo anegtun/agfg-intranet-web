@@ -5,6 +5,7 @@ use App\Model\Categorias;
 use Cake\Core\Exception\Exception;
 use Cake\Event\EventInterface;
 use Cake\I18n\FrozenDate;
+use Cake\I18n\FrozenTime;
 use Cake\ORM\TableRegistry;
 
 class CalendarioController extends AppController {
@@ -85,12 +86,33 @@ class CalendarioController extends AppController {
         $data_ini = FrozenDate::createFromFormat('Y-m-d', $this->request->getQuery('data_ini'));
         $data_fin = !empty($this->request->getQuery('data_fin'))
             ? FrozenDate::createFromFormat('Y-m-d', $this->request->getQuery('data_fin'))
-            : $data_ini->modify('sunday this week');;
+            : $data_ini->modify('sunday this week');
 
         $partidos = $this->Partidos->findByDatas($competicion->id, $data_ini, $data_fin);
         $categorias = $this->Categorias->getCategoriasWithEmpty();
 
         $this->set(compact('partidos', 'categorias', 'data_ini', 'data_fin'));
         $this->render('partidos');
+    }
+
+    public function prensa() {
+        $competicions = $this->Competicions->find()->order(['tempada DESC','nome ASC']);
+
+        $data_seguinte = !empty($this->request->getQuery('data_seguinte'))
+            ? FrozenDate::createFromFormat('d-m-Y', $this->request->getQuery('data_seguinte'))
+            : FrozenTime::now();
+        
+        $data_anterior = !empty($this->request->getQuery('data_anterior'))
+            ? FrozenDate::createFromFormat('d-m-Y', $this->request->getQuery('data_anterior'))
+            : $data_seguinte->modify('-1 week');
+
+        $id_competicion = $this->request->getQuery('id_competicion');
+        if(!empty($id_competicion)) {
+            $partidos_anterior = $this->Partidos->findByDatas($id_competicion, $data_anterior, $data_anterior->modify('sunday this week'));
+            $partidos_seguinte = $this->Partidos->findByDatas($id_competicion, $data_seguinte, $data_seguinte->modify('sunday this week'));
+        }
+
+        $categorias = $this->Categorias->getCategoriasFiltered(['M','F']);
+        $this->set(compact('competicions', 'categorias', 'data_seguinte', 'data_anterior', 'partidos_anterior', 'partidos_seguinte'));
     }
 }
