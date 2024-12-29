@@ -60,7 +60,7 @@ class PartidosTable extends AgfgTable {
         ]]);
     }
 
-    public function findPartidosSemana($id_competicion, $inicio, $fin) {
+    public function findByDatas($id_competicion, $inicio, $fin) {
         $inicioYMD = $inicio->i18nFormat('yyyy-MM-dd');
         $finYMD = $fin->i18nFormat('yyyy-MM-dd');
         return $this->find()

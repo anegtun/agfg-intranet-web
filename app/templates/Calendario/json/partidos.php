@@ -1,16 +1,27 @@
 <?php
 
+$res = [
+    'inicio' => $data_ini,
+    'fin' => $data_fin,
+    'partidos' => []
+];
 
-function _buildPartidoData($p) {
+foreach($partidos as $p) {
     $resP = [
+        'fase' => [
+            'categoria' => $categorias[$p->fase->categoria],
+            'nome' => $p->fase->nome
+        ],
+        'xornada' => [
+            'data' => $p->xornada->data,
+            'numero' => $p->xornada->numero
+        ],
         'data_partido' => $p->getDataHora(),
         'adiado' => $p->adiado,
         'cancelado' => $p->cancelado,
         'ganador' => $p->getGanador()
     ];
-    if(!empty($p->data_calendario)) {
-        $resP['data_calendario'] = $p->data_calendario;
-    }
+
     if(!empty($p->equipa1) || !empty($p->provisional_equipa1)) {
         $resP['equipa1'] = [
             'codigo' => empty($p->equipa1) ? '' : $p->equipa1->codigo,
@@ -23,6 +34,7 @@ function _buildPartidoData($p) {
             'non_presentado' => $p->non_presentado_equipa1
         ];
     }
+   
     if(!empty($p->equipa2) || !empty($p->provisional_equipa2)) {
         $resP['equipa2'] = [
             'codigo' => empty($p->equipa2) ? '' : $p->equipa2->codigo,
@@ -35,6 +47,7 @@ function _buildPartidoData($p) {
             'non_presentado' => $p->non_presentado_equipa2
         ];
     }
+   
     if(!empty($p->campo)) {
         $resP['campo'] = [
             'nome' => $p->campo->nome,
@@ -42,12 +55,14 @@ function _buildPartidoData($p) {
             'pobo' => $p->campo->pobo
         ];
     }
+ 
     if(!empty($p->arbitro)) {
         $resP['arbitro'] = [
             'alcume' => $p->arbitro->alcume,
             'nome' => $p->arbitro->nome_publico
         ];
     }
+ 
     if(!empty($p->umpire)) {
         $resP['umpires'] = [
             'categoria' => $p->umpire->categoria,
@@ -57,24 +72,7 @@ function _buildPartidoData($p) {
             'logo' => $p->umpire->getLogo()
         ];
     }
-    return $resP;
-}
 
-$res = [
-    'inicio' => $luns,
-    'fin' => $domingo,
-    'partidos' => []
-];
-foreach($partidos as $p) {
-    $resP = _buildPartidoData($p);
-    $resP['fase'] = [
-        'categoria' => $categorias[$p->fase->categoria],
-        'nome' => $p->fase->nome
-    ];
-    $resP['xornada'] = [
-        'data' => $p->xornada->data,
-        'numero' => $p->xornada->numero
-    ];
     $res['partidos'][] = $resP;
 }
 

@@ -76,80 +76,21 @@ class CalendarioController extends AppController {
         $this->set('competicion', $competicion);
     }
 
-    public function xornadaSeguinte($codigo) {
+    public function partidos($codigo) {
         $competicion = $this->Competicions->findByCodigoOrFail($codigo);
+        if(empty($this->request->getQuery('data_ini'))) {
+            die('Falta o parámetro "data_ini"');
+        }
 
-        $dataReferencia = $this->_getDataMaisCercanaFutura($competicion->id);
-        $luns = $dataReferencia->modify('monday this week');
-        $domingo = $luns->modify('sunday this week');
+        $data_ini = FrozenDate::createFromFormat('Y-m-d', $this->request->getQuery('data_ini'));
+        $data_fin = !empty($this->request->getQuery('data_fin'))
+            ? FrozenDate::createFromFormat('Y-m-d', $this->request->getQuery('data_fin'))
+            : $data_ini->modify('sunday this week');;
 
-        $partidos = $this->Partidos->findPartidosSemana($competicion->id, $luns, $domingo);
+        $partidos = $this->Partidos->findByDatas($competicion->id, $data_ini, $data_fin);
         $categorias = $this->Categorias->getCategoriasWithEmpty();
 
-        $this->set(compact('partidos', 'categorias', 'luns', 'domingo'));
-        $this->render('xornada');
+        $this->set(compact('partidos', 'categorias', 'data_ini', 'data_fin'));
+        $this->render('partidos');
     }
-
-    public function xornadaAnterior($codigo) {
-        $competicion = $this->Competicions->findByCodigoOrFail($codigo);
-
-        $dataReferencia = $this->_getDataMaisCercanaPasada($competicion->id);
-        $luns = $dataReferencia->modify('monday this week');
-        $domingo = $luns->modify('sunday this week');
-
-        $partidos = $this->Partidos->findPartidosSemana($competicion->id, $luns, $domingo);
-        $categorias = $this->Categorias->getCategoriasWithEmpty();
-
-        $this->set(compact('partidos', 'categorias', 'luns', 'domingo'));
-        $this->render('xornada');
-    }
-
-    private function _getDataMaisCercanaFutura($id_competicion) {
-        $currentMonday = new FrozenDate('monday this week');
-        // Data da seguinte xornada
-        $seguinteXornada = $this->Xornadas
-            ->find()
-            ->contain('Fase')
-            ->where(['Fase.id_competicion'=>$id_competicion, 'Xornadas.data >='=>$currentMonday])
-            ->order(['Xornadas.data'])
-            ->first();
-        $data = empty($seguinteXornada) ? null : $seguinteXornada->data;
-        
-        // Por se hai un partido antes da seguinte xornada
-        $seguintePartido = $this->Partidos
-            ->find()
-            ->contain(['Xornada' => 'Fase'])
-            ->where(['Fase.id_competicion'=>$id_competicion, 'Partidos.data_partido >='=>$currentMonday])
-            ->order(['Partidos.data_partido'])
-            ->first();
-        if(!empty($seguintePartido) && (empty($data) || $data>$seguintePartido->data_partido)) {
-            $data = $seguintePartido->data_partido;
-        }
-        return $data;
-    }
-
-    private function _getDataMaisCercanaPasada($id_competicion) {
-        $currentMonday = new FrozenDate('monday this week');
-        // Data da seguinte xornada
-        $anteriorXornada = $this->Xornadas
-            ->find()
-            ->contain('Fase')
-            ->where(['Fase.id_competicion'=>$id_competicion, 'Xornadas.data <='=>$currentMonday])
-            ->order(['Xornadas.data DESC'])
-            ->first();
-        $data = empty($anteriorXornada) ? null : $anteriorXornada->data;
-        
-        // Por se hai un partido antes da seguinte xornada
-        $anteriorPartido = null; $this->Partidos
-            ->find()
-            ->join(['table'=>'agfg_fase', 'alias'=>'Fases', 'conditions'=>['Fases.id = Partidos.id_fase']])
-            ->where(['id_competicion'=>$id_competicion, 'data_partido <='=>$currentMonday])
-            ->order(['data_partido DESC'])
-            ->first();
-        if(!empty($anteriorPartido) && (empty($data) || $data<$anteriorPartido->data_partido)) {
-            $data = $anteriorPartido->data_partido;
-        }
-        return $data;
-    }
-    
 }
