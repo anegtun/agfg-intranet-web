@@ -18,9 +18,6 @@ $emptyTemplates = [
 
         <div class="row">
             <div class="col-lg-2">
-                <?= $this->Form->control('id_competicion', ['options'=>$this->AgfgForm->objectToKeyValue($competicions,'id','{$e->tempada} - {$e->nome}'), 'label'=>'Competicións', 'templates'=>$emptyTemplates]) ?>
-            </div>
-            <div class="col-lg-2">
                 <?= $this->Form->control('data_anterior', ['type'=>'text', 'class'=>'form-control fld-date', 'label'=>'Data anterior', 'value'=>$data_anterior->format('d-m-Y'), 'templates'=>$emptyTemplates]) ?>
             </div>
             <div class="col-lg-2">

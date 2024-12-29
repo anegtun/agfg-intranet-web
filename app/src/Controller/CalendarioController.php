@@ -78,7 +78,6 @@ class CalendarioController extends AppController {
     }
 
     public function partidos($codigo) {
-        $competicion = $this->Competicions->findByCodigoOrFail($codigo);
         if(empty($this->request->getQuery('data_ini'))) {
             die('Falta o parámetro "data_ini"');
         }
@@ -88,7 +87,7 @@ class CalendarioController extends AppController {
             ? FrozenDate::createFromFormat('Y-m-d', $this->request->getQuery('data_fin'))
             : $data_ini->modify('sunday this week');
 
-        $partidos = $this->Partidos->findByDatas($competicion->id, $data_ini, $data_fin);
+        $partidos = $this->Partidos->findByDatas($data_ini, $data_fin);
         $categorias = $this->Categorias->getCategoriasWithEmpty();
 
         $this->set(compact('partidos', 'categorias', 'data_ini', 'data_fin'));
@@ -96,8 +95,6 @@ class CalendarioController extends AppController {
     }
 
     public function prensa() {
-        $competicions = $this->Competicions->find()->order(['tempada DESC','nome ASC']);
-
         $data_seguinte = !empty($this->request->getQuery('data_seguinte'))
             ? FrozenDate::createFromFormat('d-m-Y', $this->request->getQuery('data_seguinte'))
             : FrozenTime::now();
@@ -106,13 +103,10 @@ class CalendarioController extends AppController {
             ? FrozenDate::createFromFormat('d-m-Y', $this->request->getQuery('data_anterior'))
             : $data_seguinte->modify('-1 week');
 
-        $id_competicion = $this->request->getQuery('id_competicion');
-        if(!empty($id_competicion)) {
-            $partidos_anterior = $this->Partidos->findByDatas($id_competicion, $data_anterior, $data_anterior->modify('sunday this week'));
-            $partidos_seguinte = $this->Partidos->findByDatas($id_competicion, $data_seguinte, $data_seguinte->modify('sunday this week'));
-        }
+        $partidos_anterior = $this->Partidos->findByDatas($data_anterior, $data_anterior->modify('sunday this week'));
+        $partidos_seguinte = $this->Partidos->findByDatas($data_seguinte, $data_seguinte->modify('sunday this week'));
 
         $categorias = $this->Categorias->getCategoriasFiltered(['M','F']);
-        $this->set(compact('competicions', 'categorias', 'data_seguinte', 'data_anterior', 'partidos_anterior', 'partidos_seguinte'));
+        $this->set(compact('categorias', 'data_anterior', 'data_seguinte', 'partidos_anterior', 'partidos_seguinte'));
     }
 }
