@@ -104,5 +104,5 @@ $emptyTemplates = [
         </ul>
     </li>
     <li>Copiar texto xerado e pegalo en <a href="https://tradutorgaio.xunta.gal/TradutorPublico/traducir/index">Gaio</a></li>
-    <li>Repasar texto xerado e pegalo como artigo na Web.</li>
+    <li>Repasar texto xerado e pegalo como artigo na <a href="https://gaelicogalego.gal/wp-admin/post-new.php?post_title=">Web</a>.</li>
 </ol>
