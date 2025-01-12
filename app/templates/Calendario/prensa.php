@@ -1,5 +1,5 @@
 <?php
-$this->set('menu_option', 'competicion');
+$this->set('menu_option', 'competicions');
 $this->set('submenu_option', 'prensa');
 $this->set('cabeceiraTitulo', 'Prensa');
 $this->set('cabeceiraMigas', [
@@ -34,16 +34,18 @@ $emptyTemplates = [
 
 
 <blockquote>
-    <p>Redacta un resumen de la liga de fútbol gaélico gallego con los datos:</p>
+    <p>Redacta un resumo da liga galega de fútbol gaélico nun ton formal:</p>
+
+    <p>&nbsp;</p>
 
     <?php if(!empty($partidos_anterior)) : ?>
 
         <?php foreach($categorias as $c=>$categoria) : ?>
-            <strong>Resultados xornada <?= $categoria ?></strong>
+            <p><strong>Resultados da xornada <?= $categoria ?></strong></p>
 
             <?php foreach($partidos_anterior as $p) : ?>
                 <?php if($p->fase->categoria == $c) : ?>
-                    <div>
+                    <p>
                         -
                         <?= empty($p->equipa1) ? $p->provisional_equipa1 : $p->equipa1->nome ?>
                         (<?= $p->getPuntuacionTotalEquipa1() ?>)
@@ -52,7 +54,7 @@ $emptyTemplates = [
                         (<?= $p->getPuntuacionTotalEquipa2() ?>)
                         , <?= $p->getDataHora() ?>
                         , <?= $p->campo->nome ?> (<?= $p->campo->pobo ?>)
-                    </div>
+                </p>
                 <?php endif ?>
 
             <?php endforeach ?>
@@ -67,11 +69,11 @@ $emptyTemplates = [
     <?php if(!empty($partidos_seguinte)) : ?>
 
         <?php foreach($categorias as $c=>$categoria) : ?>
-            <strong>Partidos seguinte xornada <?= $categoria ?></strong>
+            <p><strong>Partidos seguinte xornada <?= $categoria ?></strong></p>
 
             <?php foreach($partidos_seguinte as $p) : ?>
                 <?php if($p->fase->categoria == $c) : ?>
-                    <div>
+                    <p>
                         -
                         <?= empty($p->equipa1) ? $p->provisional_equipa1 : $p->equipa1->nome ?>
                         VS
@@ -82,7 +84,7 @@ $emptyTemplates = [
                         <?php if(!empty($p->campo)) : ?>
                             , <?= $p->campo->nome ?> (<?= $p->campo->pobo ?>)
                         <?php endif ?>
-                    </div>
+                    </p>
                 <?php endif ?>
 
             <?php endforeach ?>

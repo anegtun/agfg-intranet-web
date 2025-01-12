@@ -83,7 +83,7 @@ $is_torneo = $competicion->tipo === 'torneo';
 
             <div class='agfg-partido-bottom'>
                 <div class='agfg-partido-bottom-detalle'>
-                    <figure><img class='alignnone' src='https://gaelicogalego.gal/wp-content/uploads/2022/07/icono-umpire.jpg' alt='Umpires' width='15'></figure>
+                    <figure><img class='alignnone' src='https://gaelicogalego.gal/wp-content/uploads/2025/01/icono-umpire.png' alt='Umpires' width='15'></figure>
                     <?= $umpires ?>
                 </div>
             </div>

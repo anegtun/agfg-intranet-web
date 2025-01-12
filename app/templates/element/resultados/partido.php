@@ -31,17 +31,17 @@
 
     <div class='agfg-partido-bottom'>
         <div class='agfg-partido-bottom-detalle'>
-            <figure><img class='alignnone' src='https://gaelicogalego.gal/wp-content/uploads/2022/07/icono-estadio.jpg' alt='Campo' width='15'></figure>
+            <figure><img class='alignnone' src='https://gaelicogalego.gal/wp-content/uploads/2025/01/icono-estadio.png' alt='Campo' width='15'></figure>
             <?= empty($partido->campo) ? '-' : $partido->campo->nome_curto ?>
         </div>
         <?php if($is_torneo) : ?>
             <div class='agfg-partido-bottom-detalle'>
-                <figure><img class='alignnone' src='https://gaelicogalego.gal/wp-content/uploads/2022/07/icono-umpire.jpg' alt='Umpires' width='15'></figure>
+                <figure><img class='alignnone' src='https://gaelicogalego.gal/wp-content/uploads/2025/01/icono-umpire.png' alt='Umpires' width='15'></figure>
                 <?= empty($partido->umpire) ? '-' : "{$partido->umpire->nome} ({$partido->umpire->categoria})" ?>
             </div>
         <?php endif ?>
         <div class='agfg-partido-bottom-detalle'>
-            <figure><img class='alignnone' src='https://gaelicogalego.gal/wp-content/uploads/2022/07/icono-silbato.jpg' alt='Árbitro' width='15'></figure>
+            <figure><img class='alignnone' src='https://gaelicogalego.gal/wp-content/uploads/2025/01/icono-silbato.png' alt='Árbitro' width='15'></figure>
             <?= empty($partido->arbitro) ? '-' : $partido->arbitro->alcume ?>
         </div>
     </div>
