@@ -1,4 +1,13 @@
-<div class="agfg-partido">
+<?php
+    $text_class = "";
+    if ($partido->adiado) {
+        $text_class = "text-warning";
+    } elseif (empty($partido->data_partido)) {
+        $text_class = "text-muted";
+    }
+?>
+
+<div class="agfg-partido <?= $text_class ?>">
 
     <div class='agfg-partido-top'>
         <div class='agfg-partido-top-data'><?= $hora ?></div>

@@ -11,6 +11,8 @@ $emptyTemplates = [
     'inputContainer' => '{{content}}',
     'input' => '<input type="{{type}}" name="{{name}}" {{attrs}}/>',
 ];
+
+$this->Html->script('prensa', ['block' => 'script']);
 ?>
 
 <div class="row form-group">
@@ -27,13 +29,14 @@ $emptyTemplates = [
 
         <div style="margin-top:1em">
             <?= $this->Form->button('Ver', ['class'=>'btn btn-primary']); ?>
+            <?= $this->Form->button('Copiar a portapapéis', ['class'=>'btn btn-info', 'type'=>'button', 'onclick'=>'copyClipboard("quote")']); ?>
         </div>
 
     <?= $this->Form->end() ?>
 </div>
 
 
-<blockquote>
+<blockquote id="quote">
     <p>Redacta un resumo da liga galega de fútbol gaélico nun ton formal:</p>
 
     <p>&nbsp;</p>
@@ -96,15 +99,4 @@ $emptyTemplates = [
 
 <h3>Instrucións</h3>
 
-<ol>
-    <li>
-        Copiar texto de arriba e pegalo en <a href="https://toolbaz.com/writer/ai-text-generator">toolbaz.com</a>. Configuración recomendada:
-        <ul>
-            <li>AI Model: O1-Mini</li>
-            <li>Tone/Mood: Profesional</li>
-            <li>Content Structure: Paragraphs</li>
-        </ul>
-    </li>
-    <li>Copiar texto xerado e pegalo en <a href="https://tradutorgaio.xunta.gal/TradutorPublico/traducir/index">Gaio</a></li>
-    <li>Repasar texto xerado e pegalo como artigo na <a href="https://gaelicogalego.gal/wp-admin/post-new.php?post_title=">Web</a>.</li>
-</ol>
+<p>Copiar texto de arriba e pegalo en <a href="https://chat.deepseek.com/" target="_blank">deepseek.com</a> ou <a href="https://chatgpt.com/" target="_blank">chatgpt.com</a>.</p>
