@@ -61,6 +61,13 @@ foreach($partidasOrzamentarias as $po) {
         </div>
 
     <?= $this->Form->end() ?>
+
+    <?= $this->Form->create(null, ['type'=>'post', 'enctype' => 'multipart/form-data', 'url'=>['action'=>'previsualizarMovementos']]) ?>
+        <div class="row">
+            <?php echo $this->Form->input('file', ['type'=>'file', 'label'=>'Arquivo', 'class'=>'form-control', 'accept'=>".xlsx"]) ?>
+        </div>
+        <?= $this->Form->button('Subir', ['class'=>'btn btn-default glyphicon glyphicon-upload']); ?>
+    <?= $this->Form->end() ?>
 </div>
 
 

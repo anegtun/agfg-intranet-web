@@ -26,4 +26,13 @@ class ClubesTable extends AgfgTable {
             ->notEmpty('name', 'O nome é obrigatorio');
     }
 
+    public function findAGFG() {
+        return $this->find()
+            ->contain('Federacions')
+            ->matching('Federacions', function ($q) {
+                return $q->where(['Federacions.codigo' => 'AGFG']);
+            })
+            ->order('Clubes.nome');
+    }
+
 }

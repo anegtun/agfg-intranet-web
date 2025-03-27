@@ -9,6 +9,8 @@ use Cake\Filesystem\Folder;
 use Cake\I18n\FrozenDate;
 use Cake\I18n\Time;
 use Cake\ORM\TableRegistry;
+use Shuchkin\SimpleXLSX;
+use InvalidArgumentException;
 
 class EconomicoController extends AppController {
 
@@ -91,6 +93,63 @@ class EconomicoController extends AppController {
             $this->Flash->error(__('Erro ao eliminar o movemento.'));
         }
         return $this->redirect(['action' => $movemento->prevision ? 'previsions' : 'index']);
+    }
+
+    public function previsualizarMovementos() {
+        $file = $this->request->getUploadedFile('file');
+
+        $stream = $file->getStream();
+        $tmpFilePath = $stream->getMetadata('uri');
+        $stream->close();
+
+        if (!$xlsx = SimpleXLSX::parse($tmpFilePath)) {
+            die(SimpleXLSX::parseError());
+        }
+
+        $filas = [];
+        $fin = null;
+        $inicio = null;
+        foreach($xlsx->rows() as $row) {
+            try {
+                $data = FrozenDate::createFromFormat('Y-m-d H:i:s', $row[0], 'Europe/Madrid');
+                $inicio = $data;
+                if(empty($fin)) {
+                    $fin = $data;
+                }
+                $filas[] = (object) [
+                    'data' => $data,
+                    'importe' => $row[9],
+                    'descricion' => $row[5]
+                ];
+            } catch (InvalidArgumentException $ex) {
+            }
+        }
+
+        $movementos = $this->Movementos
+            ->find()
+            ->contain(['Subarea' => ['Area' => ['PartidaOrzamentaria']], 'Clube'])
+            ->where(['and' => ['data >= ' => $inicio, 'data <= ' => $fin]]);
+
+        $contas = $this->Contas->getAllWithEmpty();
+        $tempadas = $this->Tempadas->getTempadasWithEmpty();
+        $clubes = $this->Clubes->findAGFG();
+        $subareas = $this->Subareas->find()->contain(['Area' => 'PartidaOrzamentaria'])->order('PartidaOrzamentaria.nome', 'Area.nome');
+        $this->set(compact('filas', 'movementos', 'contas', 'tempadas', 'clubes', 'subareas'));
+    }
+
+    public function importarMovementos() {
+        $data = $this->request->getData();
+
+        foreach($data['fila'] as $fila) {
+            $movemento = $this->Movementos->newEntity($fila);
+            if(empty($fila['id_clube'])) {
+                $movemento->id_clube = NULL;
+            }
+            $movemento->data = empty($fila['data']) ? NULL : Time::createFromFormat('d-m-Y', $fila['data']);
+            $this->Movementos->save($movemento);
+
+        }
+        return $this->redirect(['action' => 'index']);
     }
 
 
