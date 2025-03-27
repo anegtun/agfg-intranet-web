@@ -12,7 +12,11 @@ $emptyTemplates = [
     'inputContainer' => '{{content}}',
     'input' => '<input type="{{type}}" name="{{name}}" {{attrs}}/>',
 ];
+
+$ids_movementos_existentes = [];
 ?>
+
+<h2>Movementos a importar</h2>
 
 
 <?= $this->Form->create(null, ['type'=>'post', 'url'=>['action'=>'importarMovementos']]) ?>
@@ -22,6 +26,7 @@ $emptyTemplates = [
             <table class="table table-striped table-hover">
                 <thead>
                     <tr>
+                        <th class="celda-titulo text-center"></th>
                         <th class="celda-titulo text-center" style="min-width: 100px;">Data</th>
                         <th class="celda-titulo text-center">Importe</th>
                         <th class="celda-titulo text-center">Tempada</th>
@@ -29,6 +34,7 @@ $emptyTemplates = [
                         <th class="celda-titulo text-center">Subárea</th>
                         <th class="celda-titulo text-center">Clube</th>
                         <th class="celda-titulo">Descricición</th>
+                        <th class="celda-titulo">Referencia</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -37,7 +43,15 @@ $emptyTemplates = [
                         <?php
                             $movemento = null;
                             foreach($movementos as $m) {
-                                if($m->data == $f->data && $m->importe == $f->importe) {
+                                $atopado_anteriormente = in_array($m->id, $ids_movementos_existentes);
+                                $mesma_data = $m->data == $f->data;
+                                $mesmo_importe = $m->importe == $f->importe;
+                                $mesma_comision = !empty($m->comision) && $m->comision == $f->importe;
+                                if ($mesma_data && $mesmo_importe && !$atopado_anteriormente) {
+                                    $ids_movementos_existentes[] = $m->id;
+                                    $movemento = $m;
+                                    break;
+                                } else if ($mesma_data && $mesma_comision) {
                                     $movemento = $m;
                                     break;
                                 }
@@ -47,20 +61,25 @@ $emptyTemplates = [
                         <?php if (!empty($movemento)) : ?>
 
                             <tr>
-                                <td class="text-center"><?= $m->data->format('Y-m-d') ?></td>
-                                <td class="text-right <?= $m->importe<0 ? 'text-danger' : ''?>">
-                                    <?= $this->Number->currency($m->importe, 'EUR') ?>
+                                <td class="text-center">&nbsp;</td>
+                                <td class="text-center"><?= $f->data->format('Y-m-d') ?></td>
+                                <td class="text-right <?= $f->importe<0 ? 'text-danger' : ''?>">
+                                    <?= $this->Number->currency($f->importe, 'EUR') ?>
                                 </td>
-                                <td class="text-center"><?= $tempadas[$m->tempada] ?></td>
-                                <td class="text-center"><?= $contas[$m->conta] ?></td>
-                                <td class="text-center"><?= "{$m->subarea->area->partidaOrzamentaria->nome} - {$m->subarea->area->nome} - {$m->subarea->nome}" ?></td>
-                                <td class="text-center"><?= empty($m->clube) ? '' : $m->clube->nome ?></td>
-                                <td class="text-center"><?= $m->descricion ?></td>
+                                <td class="text-center"><?= $tempadas[$movemento->tempada] ?></td>
+                                <td class="text-center"><?= $contas[$movemento->conta] ?></td>
+                                <td class="text-center"><?= "{$movemento->subarea->area->partidaOrzamentaria->nome} - {$movemento->subarea->area->nome} - {$movemento->subarea->nome}" ?></td>
+                                <td class="text-center"><?= empty($movemento->clube) ? '' : $movemento->clube->nome ?></td>
+                                <td class="text-center"><?= $movemento->descricion ?></td>
+                                <td class="text-center"><?= $movemento->referencia ?></td>
                             </tr>
 
                         <?php else : ?>
 
                             <tr>
+                                <td class="text-center">
+                                <?= $this->Form->checkbox('fila.'.$i.'.importar', ['checked'=>false]) ?>
+                                </td>
                                 <td class="text-center">
                                     <?= $f->data->format('Y-m-d') ?>
                                     <?= $this->Form->hidden('fila.'.$i.'.data', ['value' => $f->data->format('d-m-Y')]) ?>
@@ -84,6 +103,9 @@ $emptyTemplates = [
                                 <td>
                                     <?= $this->Form->control('fila.'.$i.'.descricion', ['label'=>false, 'value' => $f->descricion]) ?>
                                 </td>
+                                <td>
+                                    <?= $this->Form->control('fila.'.$i.'.referencia', ['label'=>false]) ?>
+                                </td>
                             </tr>
 
                             <?php $i++ ?>
@@ -99,3 +121,45 @@ $emptyTemplates = [
     </div>
 
 <?= $this->Form->end() ?>
+
+
+
+<h2>Existentes fóra do Excel</h2>
+
+<div class="row" style="margin-top:2em">
+    <div class="col-xs-12 table-responsive">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th class="celda-titulo text-center"></th>
+                    <th class="celda-titulo text-center" style="min-width: 100px;">Data</th>
+                    <th class="celda-titulo text-center">Importe</th>
+                    <th class="celda-titulo text-center">Tempada</th>
+                    <th class="celda-titulo text-center">Conta</th>
+                    <th class="celda-titulo text-center">Subárea</th>
+                    <th class="celda-titulo text-center">Clube</th>
+                    <th class="celda-titulo">Descricición</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach($movementos as $m) : ?>
+                    <?php if (!in_array($m->id, $ids_movementos_existentes)) : ?>
+                        <tr>
+                            <td class="text-center">&nbsp;</td>
+                            <td class="text-center"><?= $m->data->format('Y-m-d') ?></td>
+                            <td class="text-right <?= $m->importe<0 ? 'text-danger' : ''?>">
+                                <?= $this->Number->currency($m->importe, 'EUR') ?>
+                            </td>
+                            <td class="text-center"><?= $tempadas[$m->tempada] ?></td>
+                            <td class="text-center"><?= $contas[$m->conta] ?></td>
+                            <td class="text-center"><?= "{$m->subarea->area->partidaOrzamentaria->nome} - {$m->subarea->area->nome} - {$m->subarea->nome}" ?></td>
+                            <td class="text-center"><?= empty($m->clube) ? '' : $m->clube->nome ?></td>
+                            <td class="text-center"><?= $m->descricion ?></td>
+                        </tr>
+                    <?php endif ?>
+
+                <?php endforeach ?>
+            </tbody>
+        </table>
+    </div>
+</div>

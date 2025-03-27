@@ -118,12 +118,16 @@ class EconomicoController extends AppController {
                 }
                 $filas[] = (object) [
                     'data' => $data,
-                    'importe' => $row[9],
+                    'importe' => $row[8],
                     'descricion' => $row[5]
                 ];
             } catch (InvalidArgumentException $ex) {
             }
         }
+
+        //uasort($filas, function($a, $b) {
+        //    return $a->data->diffInDays($b->data);
+        //});
 
         $movementos = $this->Movementos
             ->find()
@@ -141,13 +145,14 @@ class EconomicoController extends AppController {
         $data = $this->request->getData();
 
         foreach($data['fila'] as $fila) {
-            $movemento = $this->Movementos->newEntity($fila);
-            if(empty($fila['id_clube'])) {
-                $movemento->id_clube = NULL;
+            if(!empty($fila['importar'])) {
+                $movemento = $this->Movementos->newEntity($fila);
+                if(empty($fila['id_clube'])) {
+                    $movemento->id_clube = NULL;
+                }
+                $movemento->data = empty($fila['data']) ? NULL : Time::createFromFormat('d-m-Y', $fila['data']);
+                $this->Movementos->save($movemento);
             }
-            $movemento->data = empty($fila['data']) ? NULL : Time::createFromFormat('d-m-Y', $fila['data']);
-            $this->Movementos->save($movemento);
-
         }
         return $this->redirect(['action' => 'index']);
     }
