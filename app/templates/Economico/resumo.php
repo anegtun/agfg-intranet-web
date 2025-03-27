@@ -44,7 +44,7 @@ $id_regexp = "/[ ñÑºª,'~()\*\.\/\?\+]/i";
 
         <div style="margin-top:1em">
             <?= $this->Form->button('Buscar', ['name'=>'accion', 'value'=>'buscar', 'class'=>'btn btn-primary']) ?>
-            <?= $this->Form->button('Exportar', ['name'=>'accion', 'value'=>'pdf', 'class'=>'btn btn-default']) ?>
+            <?= $this->Form->button('Exportar', ['name'=>'accion', 'value'=>'pdf', 'class'=>'btn btn-default', 'formtarget'=>'_blank']) ?>
         </div>
 
     <?= $this->Form->end() ?>

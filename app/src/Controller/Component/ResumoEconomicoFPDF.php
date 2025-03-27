@@ -69,19 +69,50 @@ class ResumoEconomicoFPDF extends Fpdf {
                 
                 $this->H2($area->nome);
 
+                $con_prevision = [];
                 foreach($this->resumo->getSubareas($area) as $subarea) {
                     $total_subarea = $this->resumo->getTotalSubarea($subarea);
 
                     foreach($this->resumo->getConceptos($subarea) as $concepto) {
                         $total_concepto = $this->resumo->getTotalConcepto($subarea, $concepto);
+                        if(!empty($total_concepto->ingresos_previstos) || !empty($total_concepto->gastos_previstos)) {
+                            $con_prevision[] = $concepto;
+                        }
 
-                        $this->Cell(100, 7, $this->printTexto(empty($concepto) ? $subarea->nome : "$subarea->nome: $concepto", 40));
-                        $this->Cell(25, 7, $this->printNumero($total_concepto->ingresos), 0, 0, 'R');
-                        $this->Cell(25, 7, $this->printNumero($total_concepto->gastos + $total_concepto->comision), 0, 0, 'R');
-                        $this->SetFont('Arial', 'B', 12);
-                        $this->Cell(25, 7, $this->printNumero($total_concepto->balance), 0, 0, 'R');
-                        $this->SetDefaultFont();
-                        $this->Ln();
+                        if(!empty($total_concepto->ingresos) || !empty($total_concepto->gastos)) {
+                            $this->Cell(100, 7, $this->printTexto(empty($concepto) ? $subarea->nome : "$subarea->nome: $concepto", 40));
+                            $this->Cell(25, 7, $this->printNumero($total_concepto->ingresos), 0, 0, 'R');
+                            $this->Cell(25, 7, $this->printNumero($total_concepto->gastos + $total_concepto->comision), 0, 0, 'R');
+                            $this->SetFont('Arial', 'B', 12);
+                            $this->Cell(25, 7, $this->printNumero($total_concepto->balance), 0, 0, 'R');
+                            $this->SetDefaultFont();
+                            $this->Ln();
+                        }
+                    }
+                }
+
+                if (!empty($con_prevision)) {
+
+                    $this->Ln();
+                    $this->SetFont('Arial', 'I', 12);
+                    $this->Cell(100, 7, $this->printTexto("Prevision", 40));
+                    $this->SetDefaultFont();
+                    $this->Ln();
+                
+                    foreach($this->resumo->getSubareas($area) as $subarea) {
+                        foreach($con_prevision as $concepto) {
+                            $total_concepto = $this->resumo->getTotalConcepto($subarea, $concepto);
+
+                            if(!empty($total_concepto->ingresos_previstos) || !empty($total_concepto->gastos_previstos)) {
+                                $this->Cell(100, 7, $this->printTexto(empty($concepto) ? $subarea->nome : "$subarea->nome: $concepto", 40));
+                                $this->Cell(25, 7, $this->printNumero($total_concepto->ingresos_previstos), 0, 0, 'R');
+                                $this->Cell(25, 7, $this->printNumero($total_concepto->gastos_previstos), 0, 0, 'R');
+                                $this->SetFont('Arial', 'B', 12);
+                                $this->Cell(25, 7, $this->printNumero($total_concepto->balance_previsto), 0, 0, 'R');
+                                $this->SetDefaultFont();
+                                $this->Ln();
+                            }
+                        }
                     }
                 }
                 $this->Ln(10);

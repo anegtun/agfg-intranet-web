@@ -127,7 +127,7 @@ class ResumoEconomico {
     }
 
     private function sum($filter) {
-        $total = (object) ['ingresos' => 0, 'gastos' => 0, 'comision' => 0, 'balance' => 0, 'ingresos_previstos' => 0, 'gastos_previstos' => 0];
+        $total = (object) ['ingresos' => 0, 'gastos' => 0, 'comision' => 0, 'balance' => 0, 'ingresos_previstos' => 0, 'gastos_previstos' => 0, 'balance_previsto' => 0];
         foreach($this->movementos as $e) {
             if($filter($e)) {
                 $total->ingresos += $e->importe>0 ? $e->importe : 0;
@@ -140,6 +140,7 @@ class ResumoEconomico {
             if($filter($e)) {
                 $total->ingresos_previstos += $e->importe>0 ? $e->importe : 0;
                 $total->gastos_previstos += $e->importe<0 ? $e->importe : 0;
+                $total->balance_previsto += $e->importe;
             }
         }
         return $total;
