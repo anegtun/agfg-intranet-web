@@ -47,6 +47,10 @@ trait ResumoEconomicoFPDFCommonTraits {
         $this->SetTextColor(29, 113, 184);
     }
 
+    public function SetGreyColor() {
+        $this->SetTextColor(150, 150, 150);
+    }
+
     public function Table($rows, $config) {
         foreach($rows as $row) {
             if(!empty($config['marginLeft'])) {

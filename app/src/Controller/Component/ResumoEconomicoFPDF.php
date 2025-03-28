@@ -62,6 +62,22 @@ class ResumoEconomicoFPDF extends Fpdf {
             $this->Cell(63, 7, $this->printNumero($total_po->ingresos), 0, 0, 'C');
             $this->Cell(63, 7, $this->printNumero($total_po->gastos + $total_po->comision), 0, 0, 'C');
             $this->Cell(63, 7, $this->printNumero($total_po->balance), 0, 0, 'C');
+
+            if(!empty($total_po->ingresos_previstos) || !empty($total_po->gastos_previstos)) {
+                $this->Ln(15);
+                $this->SetFont('Arial', 'B', 12);
+                $this->SetBlueColor();
+                $this->Cell(63, 7, "Prev. Ingresos", 0, 0, 'C');
+                $this->Cell(63, 7, "Prev. Gastos", 0, 0, 'C');
+                $this->Cell(63, 7, "Prev. Total", 0, 0, 'C');
+                $this->Ln(10);
+                $this->SetFont('Arial', '', 12);
+                $this->SetDefaultColor();
+                $this->Cell(63, 7, $this->printNumero($total_po->ingresos_previstos), 0, 0, 'C');
+                $this->Cell(63, 7, $this->printNumero($total_po->gastos_previstos), 0, 0, 'C');
+                $this->Cell(63, 7, $this->printNumero($total_po->balance_previsto), 0, 0, 'C');
+            }
+
             $this->Ln(20);
 
             foreach($this->resumo->getAreas($partidaOrzamentaria) as $area) {
@@ -95,8 +111,8 @@ class ResumoEconomicoFPDF extends Fpdf {
 
                     $this->Ln();
                     $this->SetFont('Arial', 'I', 12);
+                    $this->SetGreyColor();
                     $this->Cell(100, 7, $this->printTexto("Prevision", 40));
-                    $this->SetDefaultFont();
                     $this->Ln();
                 
                     foreach($this->resumo->getSubareas($area) as $subarea) {
@@ -110,10 +126,13 @@ class ResumoEconomicoFPDF extends Fpdf {
                                 $this->SetFont('Arial', 'B', 12);
                                 $this->Cell(25, 7, $this->printNumero($total_concepto->balance_previsto), 0, 0, 'R');
                                 $this->SetDefaultFont();
+                                $this->SetGreyColor();
                                 $this->Ln();
                             }
                         }
                     }
+                    $this->SetDefaultColor();
+                    $this->SetDefaultFont();
                 }
                 $this->Ln(10);
             }
