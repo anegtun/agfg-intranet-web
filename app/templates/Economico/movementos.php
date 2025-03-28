@@ -39,11 +39,16 @@ foreach($partidasOrzamentarias as $po) {
 
         <div class="row">
             <div class="col-lg-2">
-                <?= $this->Form->control('conta', ['options'=>$contas, 'label'=>'Conta', 'class'=>'form-control']) ?>
+                <?= $this->Form->control('id_partida_orzamentaria', ['options'=>$this->AgfgForm->objectToKeyValue($partidasOrzamentarias,'id','{$e->nome}'), 'label'=>'Part. Orzamentaria', 'templates'=>$emptyTemplates]) ?>
             </div>
-            <div class="col-lg-2">
+            <div class="col-lg-4">
                 <?= $this->Form->control('id_area', ['options'=>$this->AgfgForm->objectToKeyValue($areas,'id','{$e->partidaOrzamentaria->nome} - {$e->nome}'), 'label'=>'Área', 'templates'=>$emptyTemplates]) ?>
             </div>
+            <div class="col-lg-2">
+                <?= $this->Form->control('subarea_activa', ['options'=>['0'=>'Non', '1'=>'Si'], 'default'=>'1']) ?>
+            </div>
+        </div>
+        <div class="row">
             <div class="col-lg-2">
                 <?= $this->Form->control('tempada', ['options'=>$tempadas, 'label'=>'Tempada', 'class'=>'form-control']) ?>
             </div>
@@ -53,6 +58,11 @@ foreach($partidasOrzamentarias as $po) {
             <div class="col-lg-2">
                 <?= $this->Form->control('data_fin', ['type'=>'text', 'class'=>'form-control fld-date', 'label'=>'Data fin', 'templates'=>$emptyTemplates]) ?>
             </div>
+            <?php if(empty($prevision)) : ?>
+                <div class="col-lg-2">
+                    <?= $this->Form->control('conta', ['options'=>$contas, 'label'=>'Conta', 'class'=>'form-control']) ?>
+                </div>
+            <?php endif ?>
         </div>
 
         <div style="margin-top:1em">
@@ -80,7 +90,9 @@ foreach($partidasOrzamentarias as $po) {
                     <th class="celda-titulo text-center">Importe</th>
                     <th class="celda-titulo text-center">Acumulado</th>
                     <th class="celda-titulo text-center">Tempada</th>
-                    <th class="celda-titulo text-center">Conta</th>
+                    <?php if(empty($prevision)) : ?>
+                        <th class="celda-titulo text-center">Conta</th>
+                    <?php endif ?>
                     <th class="celda-titulo text-center">Partida Orz.</th>
                     <th class="celda-titulo text-center">Área</th>
                     <th class="celda-titulo text-center">Subárea</th>
@@ -103,7 +115,9 @@ foreach($partidasOrzamentarias as $po) {
                         </td>
                         <td class="text-right"><?= $this->Number->currency($acumulado, 'EUR') ?></td>
                         <td class="text-center"><?= $tempadas[$m->tempada] ?></td>
-                        <td class="text-center"><?= empty($m->conta) ? '' : $this->Html->image("/images/conta-{$m->conta}-logo.png", ['width'=>30,'height'=>30]) ?></td>
+                        <?php if(empty($prevision)) : ?>
+                            <td class="text-center"><?= empty($m->conta) ? '' : $this->Html->image("/images/conta-{$m->conta}-logo.png", ['width'=>30,'height'=>30]) ?></td>
+                        <?php endif ?>
                         <td class="text-center"><?= $m->subarea->area->partidaOrzamentaria->nome ?></td>
                         <td class="text-center"><?= $m->subarea->area->nome ?></td>
                         <td class="text-center"><?= $m->subarea->nome ?></td>
@@ -120,7 +134,11 @@ foreach($partidasOrzamentarias as $po) {
                         </td>
                         <td class="text-center"><?= $this->AgfgForm->editButton(['action'=>'detalleMovemento', $m->id]) ?></td>
                         <td class="text-center"><?= $this->Html->link('', ['action'=>'clonarMovemento', $m->id], ['class'=>'glyphicon glyphicon-duplicate']) ?></td>
-                        <td class="text-center"><?= $this->AgfgForm->deleteButton(['action'=>'borrarMovemento', $m->id]) ?></td>
+                        <td class="text-center">
+                            <?php if(!empty($m->subarea->activa)) : ?>
+                                <?= $this->AgfgForm->deleteButton(['action'=>'borrarMovemento', $m->id]) ?>
+                            <?php endif ?>
+                        </td>
                     </tr>
                     <?php $acumulado -= $m->getImporteConComision() ?>
                 <?php endforeach ?>

@@ -20,6 +20,10 @@ $emptyTemplates = [
             <legend>Subárea</legend>
             <?= $this->Form->control('id_area', ['options'=>$this->AgfgForm->objectToKeyValue($areas,'id','{$e->partidaOrzamentaria->nome} - {$e->nome}'), 'label'=>'Área', 'templates'=>$emptyTemplates]) ?>
             <?= $this->Form->control('nome', ['label'=>'Nome']) ?>
+            <div class="form-group">
+                <?= $this->Form->checkbox('activa', ['id'=>'activa']) ?>
+                <label for="activa">Activa</label>
+            </div>
             <?= $this->Form->button('Gardar', ['class'=>'btn btn-primary']); ?>
         </fieldset>
     <?= $this->Form->end() ?>

@@ -23,6 +23,16 @@ $emptyTemplates = [
     'inputContainer' => '{{content}}',
     'input' => '<input type="{{type}}" name="{{name}}" {{attrs}}/>',
 ];
+
+$subarea_activa = true;
+if(!empty($movemento->id_subarea)) {
+    foreach($subareas as $s) {
+        if($s->id === $movemento->id_subarea && empty($s->activa)) {
+            $subarea_activa = false;
+            break;
+        }
+    }
+}
 ?>
 
 <?= $this->Form->create($movemento, ['type'=>'post', 'url'=>['action'=>'gardarMovemento']]) ?>
@@ -38,9 +48,11 @@ $emptyTemplates = [
             <div class="form-group col-lg-3">
                 <?= $this->Form->control('importe', ['type'=>'number', 'label'=>'Importe']) ?>
             </div>
-            <div class="form-group col-lg-3">
-                <?= $this->Form->control('comision', ['type'=>'number', 'label'=>'Comisión']) ?>
-            </div>
+            <?php if(!$movemento->prevision) : ?>
+                <div class="form-group col-lg-3">
+                    <?= $this->Form->control('comision', ['type'=>'number', 'label'=>'Comisión']) ?>
+                </div>
+            <?php endif ?>
         </div>
 
         <div class="row">
@@ -50,9 +62,11 @@ $emptyTemplates = [
             <div class="form-group col-lg-3">
                 <?= $this->Form->control('id_subarea', ['options'=>$this->AgfgForm->objectToKeyValue($subareas,'id','{$e->area->partidaOrzamentaria->nome} - {$e->area->nome} - {$e->nome}'), 'label'=>'Subárea', 'templates'=>$emptyTemplates]) ?>
             </div>
-            <div class="form-group col-lg-3">
-                <?= $this->Form->control('conta', ['options'=>$contas, 'label'=>'Conta', 'templates'=>$emptyTemplates]) ?>
-            </div>
+            <?php if(!$movemento->prevision) : ?>
+                <div class="form-group col-lg-3">
+                    <?= $this->Form->control('conta', ['options'=>$contas, 'label'=>'Conta', 'templates'=>$emptyTemplates]) ?>
+                </div>
+            <?php endif ?>
             <div class="form-group col-lg-3">
                 <?= $this->Form->control('id_clube', ['options'=>$this->AgfgForm->objectToKeyValue($clubes,'id','{$e->nome}'), 'label'=>'Clube', 'templates'=>$emptyTemplates]) ?>
             </div>
@@ -67,6 +81,8 @@ $emptyTemplates = [
             </div>
         </div>
 
-        <?= $this->Form->button('Gardar', ['class'=>'btn btn-primary glyphicon glyphicon-saved']); ?>
+        <?php if($subarea_activa) : ?>
+            <?= $this->Form->button('Gardar', ['class'=>'btn btn-primary glyphicon glyphicon-saved']); ?>
+        <?php endif ?>
     </fieldset>
 <?= $this->Form->end() ?>

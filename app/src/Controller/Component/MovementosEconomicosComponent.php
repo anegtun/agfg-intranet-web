@@ -41,6 +41,10 @@ class MovementosEconomicosComponent extends Component {
         if(!empty($request->getQuery('id_subarea'))) {
             $movementos->where(['id_subarea' => $request->getQuery('id_subarea')]);
         }
+        $subarea_activa = $request->getQuery('subarea_activa');
+        if(!isset($subarea_activa) || !empty($subarea_activa)) {
+            $movementos->where(['Subarea.activa' => 1]);
+        }
         return $movementos;
     }
 

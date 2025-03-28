@@ -22,6 +22,7 @@ $this->set('cabeceiraMigas', [
                     <tr>
                         <th class="celda-titulo">Área</th>
                         <th class="celda-titulo">Subárea</th>
+                        <th class="celda-titulo">Activa</th>
                         <th class="celda-titulo"></th>
                         <th class="celda-titulo"></th>
                     </tr>
@@ -31,6 +32,7 @@ $this->set('cabeceiraMigas', [
                         <tr>
                             <td><?= $a->nome ?></td>
                             <td></td>
+                            <td></td>
                             <td class="text-center"><?= $this->AgfgForm->editButton(['action'=>'detalleArea', $a->id]) ?></td>
                             <td class="text-center"><?= $this->AgfgForm->deleteButton(['action'=>'borrarArea', $a->id]) ?></td>
                         </tr>
@@ -38,6 +40,11 @@ $this->set('cabeceiraMigas', [
                             <tr>
                                 <td></td>
                                 <td><?= $s->nome ?></td>
+                                <td>
+                                    <?php if(!empty($s->activa)) : ?>
+                                        <span class="glyphicon glyphicon-euro">&nbsp;</span>
+                                    <?php endif ?>
+                                </td>
                                 <td class="text-center"><?= $this->AgfgForm->editButton(['action'=>'detalleSubarea', $s->id]) ?></td>
                                 <td class="text-center"><?= $this->AgfgForm->deleteButton(['action'=>'borrarSubarea', $s->id]) ?></td>
                             </tr>

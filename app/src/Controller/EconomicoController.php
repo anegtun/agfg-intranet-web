@@ -55,6 +55,11 @@ class EconomicoController extends AppController {
         $tempadas = $this->Tempadas->getTempadasWithEmpty();
         $clubes = $this->Clubes->find()->order('nome');
         $subareas = $this->Subareas->find()->contain(['Area' => 'PartidaOrzamentaria'])->order('PartidaOrzamentaria.nome', 'Area.nome');
+        if ($movemento->id_subarea) {
+            $subareas->where(['OR' => ['EconomicoSubareas.activa' => 1, 'EconomicoSubareas.id' => $movemento->id_subarea]]);
+        } else {
+            $subareas->where(['EconomicoSubareas.activa' => 1]);
+        }
         $this->set(compact('movemento', 'contas', 'tempadas', 'clubes', 'subareas'));
     }
 
@@ -137,7 +142,12 @@ class EconomicoController extends AppController {
         $contas = $this->Contas->getAllWithEmpty();
         $tempadas = $this->Tempadas->getTempadasWithEmpty();
         $clubes = $this->Clubes->findAGFG();
-        $subareas = $this->Subareas->find()->contain(['Area' => 'PartidaOrzamentaria'])->order('PartidaOrzamentaria.nome', 'Area.nome');
+        $subareas = $this->Subareas
+            ->find()
+            ->contain(['Area' => 'PartidaOrzamentaria'])
+            ->where(['activa' => 1])
+            ->order('PartidaOrzamentaria.nome', 'Area.nome');
+
         $this->set(compact('filas', 'movementos', 'contas', 'tempadas', 'clubes', 'subareas'));
     }
 
