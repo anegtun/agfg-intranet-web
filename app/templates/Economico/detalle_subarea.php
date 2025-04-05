@@ -69,7 +69,7 @@ $emptyTemplates = [
                                     <a title="<?= $m->referencia ?>" class="glyphicon glyphicon-info-sign" href="javascript:void(0)" data-toggle="tooltip"></a>
                                 <?php endif ?>
                             </td>
-                            <td class="text-center"><?= $this->AgfgForm->editButton(['controller' => 'movementos', 'action'=>'detalle', $m->id]) ?></td>
+                            <td class="text-center"><?= $this->AgfgForm->editButton(['controller' => 'economico', 'action'=>'detalle-movemento', $m->id]) ?></td>
                         </tr>
                     <?php endforeach ?>
                 </tbody>

@@ -16,7 +16,7 @@ $this->set('cabeceiraMigas', [
         <?= $this->AgfgForm->deleteButton(['action'=>'borrarPartidaOrzamentaria', $po->id]) ?>
 
 
-        <div id="partidaOrzamentaria-<?= $po->id ?>" class="col-xs-12 table-responsive collapse">
+        <div id="partidaOrzamentaria-<?= $po->id ?>" class="col-xs-12 table-responsive">
             <table class="table table-striped table-hover">
                 <thead>
                     <tr>

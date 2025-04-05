@@ -328,7 +328,7 @@ class EconomicoController extends AppController {
         $areas = $this->Areas->find()->contain(['PartidaOrzamentaria'])->order(['PartidaOrzamentaria.nome', 'EconomicoAreas.nome']);
         $contas = $this->Contas->getAllWithEmpty();
         $tempadas = $this->Tempadas->getTempadasWithEmpty();
-        $movementos = empty($id) ? [] : $this->Movementos->find()->where(['id_subarea' => $id]);
+        $movementos = empty($id) ? [] : $this->Movementos->find()->where(['id_subarea' => $id])->order('data DESC');
         $this->set(compact('subarea', 'areas', 'movementos', 'contas', 'tempadas'));
     }
 

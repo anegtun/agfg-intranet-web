@@ -101,10 +101,10 @@ $ids_movementos_existentes = [];
                                     <?= $this->Form->control('fila.'.$i.'.id_clube', ['options'=>$this->AgfgForm->objectToKeyValue($clubes,'id','{$e->nome}'), 'label'=>false, 'templates'=>$emptyTemplates]) ?>
                                 </td>
                                 <td>
-                                    <?= $this->Form->control('fila.'.$i.'.descricion', ['label'=>false, 'value' => $f->descricion]) ?>
+                                    <?= $this->Form->control('fila.'.$i.'.descricion', ['label'=>false]) ?>
                                 </td>
                                 <td>
-                                    <?= $this->Form->control('fila.'.$i.'.referencia', ['label'=>false]) ?>
+                                    <?= $this->Form->control('fila.'.$i.'.referencia', ['label'=>false, 'value' => $f->descricion]) ?>
                                 </td>
                             </tr>
 

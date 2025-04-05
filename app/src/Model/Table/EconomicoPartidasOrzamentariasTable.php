@@ -23,7 +23,7 @@ class EconomicoPartidasOrzamentariasTable extends AgfgTable {
         return $this->find()
             ->contain(['Areas' => [
                 'PartidaOrzamentaria',
-                'Subareas' => ['sort' => 'Subareas.nome'],
+                'Subareas' => ['sort' => ['Subareas.activa DESC', 'Subareas.nome']],
                 'sort' => 'Areas.nome'
             ]])
             ->order('nome');
