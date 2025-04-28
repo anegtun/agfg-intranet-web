@@ -43,13 +43,16 @@ foreach($partidos_competicion as $p) {
             </div>
         </div>
 
-        <?php if($is_torneo) : ?>
-            <div class="row">
+        <div class="row">
+            <div class="col-lg-3">
+                <?= $this->Html->link('Resumo', ['action'=>'resumo', $competicion->id], ['class'=>'btn btn-secondary']) ?>
+            </div>
+            <?php if($is_torneo) : ?>
                 <div class="col-lg-3">
                     <?= $this->Html->link('Reemplazar equipos', ['action'=>'reemplazar', $competicion->id], ['class'=>'btn btn-success']) ?>
                 </div>
-            </div>
-        <?php endif ?>
+            <?php endif ?>
+        </div>
     <?= $this->Form->end() ?>
 </div>
 

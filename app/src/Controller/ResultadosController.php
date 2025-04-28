@@ -82,6 +82,28 @@ class ResultadosController extends AppController {
         $this->set(compact('competicion', 'partidos_filtrados', 'partidos_competicion'));
     }
 
+    public function resumo($id) {
+        $competicion = $this->Competicions->get($id, ['contain'=>['Fases']]);
+
+        $partidos = $this->Partidos
+            ->find()
+            ->contain(['Fase', 'Xornada', 'Equipa1'=>'Clube', 'Equipa2'=>'Clube', 'Campo', 'Arbitro', 'Umpire'])
+            ->select(['data_calendario' => 'COALESCE(Partidos.data_partido, Xornada.data)'])
+            ->enableAutoFields(true)
+            ->where(['Fase.id_competicion'=>$id])
+            ->order(['data_calendario', 'hora_partido', 'Equipa1.nome'])
+            ->formatResults(function (CollectionInterface $results) {
+                return $results->map(function ($row) {
+                    if (!empty($row['data_calendario'])) {
+                        $row['data_calendario'] = FrozenDate::createFromFormat('Y-m-d', $row['data_calendario']);
+                    }
+                    return $row;
+                });
+            });
+
+        $this->set(compact('competicion', 'partidos'));
+    }
+
     public function reemplazar($id) {
         $this->competicion($id);
         $competicion = $this->Competicions->get($id);
