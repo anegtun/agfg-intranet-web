@@ -13,7 +13,7 @@ $authUser = $this->request->getAttribute('identity');
     <?= $this->element('layout/menu_option', [
         'id' => 'competicions',
         'nome' => 'Competición',
-        'icono' => 'calendar',
+        'icono' => 'fire',
         'auth' => ['admin','comp','euro22'],
         'submenus' => [
             [ 'id' => 'resultados', 'nome' => 'Horarios e resultados', 'url' => ['controller'=>'Resultados', 'action'=>'index'] ],
@@ -21,6 +21,17 @@ $authUser = $this->request->getAttribute('identity');
             [ 'id' => 'administracion', 'nome' => 'Administrar competicións', 'url' => ['controller'=>'Competicions', 'action'=>'index'], 'auth' => ['admin'] ],
             [ 'id' => 'arbitros', 'nome' => 'Árbitros', 'url' => ['controller'=>'Arbitros', 'action'=>'index'], 'auth' => ['admin','comp'] ],
             [ 'id' => 'campos', 'nome' => 'Campos', 'url' => ['controller'=>'Campos', 'action'=>'index'], 'auth' => ['admin','comp'] ],
+        ],
+        'menu_option'=>$menu_option, 
+        'submenu_option'=>$submenu_option]) ?>
+
+    <?= $this->element('layout/menu_option', [
+        'id' => 'calendario',
+        'nome' => 'Calendario',
+        'icono' => 'calendar',
+        'auth' => ['admin'],
+        'submenus' => [
+            [ 'id' => 'eventos', 'nome' => 'Eventos', 'url' => ['controller'=>'Calendario', 'action'=>'eventos'] ]
         ],
         'menu_option'=>$menu_option, 
         'submenu_option'=>$submenu_option]) ?>

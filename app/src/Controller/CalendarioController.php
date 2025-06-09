@@ -6,6 +6,7 @@ use Cake\Core\Exception\Exception;
 use Cake\Event\EventInterface;
 use Cake\I18n\FrozenDate;
 use Cake\I18n\FrozenTime;
+use Cake\I18n\Time;
 use Cake\ORM\TableRegistry;
 
 class CalendarioController extends AppController {
@@ -16,6 +17,7 @@ class CalendarioController extends AppController {
         $this->Arbitros = TableRegistry::get('Arbitros');
         $this->Campos = TableRegistry::get('Campos');
         $this->Competicions = TableRegistry::get('Competicions');
+        $this->Eventos = TableRegistry::get('Eventos');
         $this->Fases = TableRegistry::get('Fases');
         $this->Equipas = TableRegistry::get('Equipas');
         $this->Partidos = TableRegistry::get('Partidos');
@@ -25,6 +27,39 @@ class CalendarioController extends AppController {
     public function beforeFilter(EventInterface $event) {
         parent::beforeFilter($event);
         $this->Authentication->allowUnauthenticated(['competicion', 'xornadaSeguinte', 'xornadaAnterior']);
+    }
+
+    public function eventos() {
+        $eventos = $this->Eventos->find()->order('data DESC');
+        $this->set(compact('eventos'));
+    }
+
+    public function evento($id=null) {
+        $evento = $this->Eventos->getOrNew($id);
+        $this->set(compact('evento'));
+    }
+
+    public function gardarEvento() {
+        $data = $this->request->getData();
+        $evento = $this->Eventos->newEntity($data);
+        $evento->data = empty($data['data']) ? NULL : Time::createFromFormat('d-m-Y', $data['data']);
+        if ($this->Eventos->save($evento)) {
+            $this->Flash->success(__('Gardouse o evento correctamente.'));
+            return $this->redirect(['action'=>'eventos']);
+        }
+        $this->Flash->error(__('Erro ao gardar o evento.'));
+        $this->set(compact('evento'));
+        $this->render('evento');
+    }
+
+    public function borrarEvento($id) {
+        $evento = $this->Eventos->get($id);
+        if($this->Eventos->delete($evento)) {
+            $this->Flash->success(__('Eliminouse o evento correctamente.'));
+        } else {
+            $this->Flash->error(__('Erro ao eliminar o evento.'));
+        }
+        return $this->redirect(['action'=>'eventos']);
     }
 
     public function competicion($codigo) {

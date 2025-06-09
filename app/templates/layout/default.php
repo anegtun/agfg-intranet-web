@@ -17,7 +17,7 @@ $submenu_option = empty($submenu_option) ? '' : $submenu_option;
         <!-- custom:css -->
         <?= $this->Html->css(["/maqint/maqint", "/agfg/css/resultados", "/agfg/css/custom"]) ?>
         <!-- libs:js -->
-        <?= $this->Html->script("/libs/ckeditor/ckeditor") ?>
+        <?= $this->Html->script("/libs/ckeditor5-build-classic/ckeditor") ?>
         <!-- custom:js -->
         <?= $this->Html->script(["/maqint/maqint-config", "/maqint/maqint", "/maqint/support"]) ?>
         <!-- outros -->
