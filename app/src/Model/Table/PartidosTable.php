@@ -64,7 +64,7 @@ class PartidosTable extends AgfgTable {
         $inicioYMD = $inicio->i18nFormat('yyyy-MM-dd');
         $finYMD = $fin->i18nFormat('yyyy-MM-dd');
         return $this->find()
-            ->contain(['Fase', 'Xornada', 'Equipa1'=>'Clube', 'Equipa2'=>'Clube', 'Campo', 'Arbitro', 'Umpire'=>'Clube'])
+            ->contain(['Fase'=>'Competicion', 'Xornada', 'Equipa1'=>'Clube', 'Equipa2'=>'Clube', 'Campo', 'Arbitro', 'Umpire'=>'Clube'])
             ->where(['OR' => [
                 ['Xornada.data >='=>$inicioYMD, 'Xornada.data <='=>$finYMD],
                 ['Partidos.data_partido >='=>$inicioYMD, 'Partidos.data_partido <='=>$finYMD]

@@ -35,7 +35,8 @@ class CalendarioController extends AppController {
     public function eventos() {
         $eventos = $this->Eventos->find()->contain('Datas')->order('data DESC');
         $tipos = $this->EventosTipo->getAll();
-        $this->set(compact('eventos', 'tipos'));
+        $partidos = $this->Partidos->findByDatas(FrozenDate::createFromFormat('Y-m-d', '2010-01-01'), FrozenDate::createFromFormat('Y-m-d', '2025-12-31'));
+        $this->set(compact('eventos', 'tipos', 'partidos'));
     }
 
     public function evento($id=null) {

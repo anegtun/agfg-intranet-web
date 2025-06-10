@@ -7,6 +7,7 @@ class EventosTipo {
         return [
             'CL' => 'Competicion clubes',
             'FO' => 'Formación',
+            'GE' => 'Gaélico Escolas',
             'SE' => 'Selección',
             'OU' => 'Outros'
         ];
