@@ -26,11 +26,14 @@ $emptyTemplates = [
         <legend>Evento</legend>
 
         <div class="row">
-            <div class="form-group col-lg-9">
+            <div class="form-group col-lg-6">
                 <?= $this->Form->control('nome', ['label'=>'Nome']) ?>
             </div>
             <div class="form-group col-lg-3">
                 <?= $this->Form->control('data', ['type'=>'text', 'class'=>'form-control fld-date', 'label'=>'Data', 'value'=>$data_str, 'templates'=>$emptyTemplates]) ?>
+            </div>
+            <div class="form-group col-lg-3">
+                <?= $this->Form->control('lugar', ['label'=>'Lugar']) ?>
             </div>
         </div>
 

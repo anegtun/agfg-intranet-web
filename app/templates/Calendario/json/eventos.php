@@ -4,8 +4,9 @@ $res = [];
 foreach($eventos as $e) {
     $res[] = [
         'nome' => $e->nome,
-        'observacions' => $e->observacions,
-        'data' => $e->data
+        'data' => $e->data,
+        'lugar' => $e->lugar,
+        'observacions' => $e->observacions
     ];
 }
 

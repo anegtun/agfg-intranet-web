@@ -41,7 +41,8 @@ class CalendarioController extends AppController {
 
     public function gardarEvento() {
         $data = $this->request->getData();
-        $evento = $this->Eventos->newEntity($data);
+        $evento = $this->Eventos->getOrNew($data['id']);
+        $evento = $this->Eventos->patchEntity($evento, $data);
         $evento->data = empty($data['data']) ? NULL : Time::createFromFormat('d-m-Y', $data['data']);
         if ($this->Eventos->save($evento)) {
             $this->Flash->success(__('Gardouse o evento correctamente.'));
