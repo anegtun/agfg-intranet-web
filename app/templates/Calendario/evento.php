@@ -1,7 +1,5 @@
 <?php
 $this->extend('template');
-$this->Html->script('eventos', ['block' => 'script']);
-
 
 // Hack para que o datepicker non a líe formateando a data (alterna dia/mes). Asi forzamos o noso formato.
 $data_str = empty($evento->data) ? NULL : $evento->data->format('d-m-Y');
@@ -91,3 +89,30 @@ $emptyTemplates = [
     </div>
 <?php endif ?>
 
+
+<script type="module">
+    import {
+        ClassicEditor,
+        Essentials,
+        Paragraph,
+        Bold,
+        Italic,
+        Font,
+        Autoformat,
+        AutoLink,
+        Link,
+        Image,
+        ImageResizeEditing,
+        ImageResizeHandles,
+        ImageInsert
+    } from 'ckeditor5';
+
+    ClassicEditor
+        .create(document.querySelector('#observacions'), {
+            licenseKey: 'GPL',
+            plugins: [ Essentials, Paragraph, Bold, Italic, Autoformat, AutoLink, Link, Image, ImageResizeEditing, ImageResizeHandles, ImageInsert ],
+            toolbar: [ 'bold', 'italic', '|', 'bulletedList', 'numberedList', '|', 'link', 'insertImage' ]
+        })
+        .then(newEditor => window.editor = newEditor)
+        .catch(error => console.error(error));
+</script>

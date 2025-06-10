@@ -14,10 +14,19 @@ $submenu_option = empty($submenu_option) ? '' : $submenu_option;
         <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
         <!-- Favicon -->
         <?= $this->Html->meta('favicon.ico', '/agfg/img/favicon/agfg-icon.png', ['type' => 'icon']) ?>
+        <!-- lib:css -->
+        <?= $this->Html->css("/libs/ckeditor5-45.2.0/ckeditor5/ckeditor5") ?>
         <!-- custom:css -->
         <?= $this->Html->css(["/maqint/maqint", "/agfg/css/resultados", "/agfg/css/custom"]) ?>
         <!-- libs:js -->
-        <?= $this->Html->script("/libs/ckeditor5-build-classic/ckeditor") ?>
+		<script type="importmap">
+			{
+				"imports": {
+					"ckeditor5": "/libs/ckeditor5-45.2.0/ckeditor5/ckeditor5.js",
+					"ckeditor5/": "/libs/ckeditor5-45.2.0/ckeditor5"
+				}
+			}
+		</script>
         <!-- custom:js -->
         <?= $this->Html->script(["/maqint/maqint-config", "/maqint/maqint", "/maqint/support"]) ?>
         <!-- outros -->

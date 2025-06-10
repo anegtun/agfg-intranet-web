@@ -4,7 +4,7 @@ namespace App\Controller;
 class CamposController extends AppController {
 
     public function index() {
-        $campos = $this->Campos->find()->order('pobo');
+        $campos = $this->Campos->find()->order(['pobo', 'nome']);
         $this->set(compact('campos'));
     }
 
