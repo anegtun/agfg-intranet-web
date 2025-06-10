@@ -17,6 +17,7 @@ $this->set('cabeceiraMigas', [
                     <th class="celda-titulo">Nome</th>
                     <th class="celda-titulo">Data</th>
                     <th class="celda-titulo">Lugar</th>
+                    <th class="celda-titulo">Tipo</th>
                     <th class="celda-titulo"></th>
                 </tr>
             </thead>
@@ -26,6 +27,7 @@ $this->set('cabeceiraMigas', [
                         <td><?= $this->Html->link($e->nome, ['action'=>'evento', $e->id]) ?></td>
                         <td><?= $e->data->format('Y-m-d') ?></td>
                         <td><?= $e->lugar ?></td>
+                        <td><?= $tipos[$e->tipo] ?></td>
                         <td class="text-center"><?= $this->AgfgForm->deleteButton(['action'=>'borrarEvento', $e->id]) ?></td>
                     </tr>
                 <?php endforeach ?>

@@ -6,6 +6,10 @@ foreach($eventos as $e) {
         'nome' => $e->nome,
         'data' => $e->data,
         'lugar' => $e->lugar,
+        'tipo' => [
+            'codigo' => $e->tipo,
+            'descricion' => $tipos[$e->tipo]
+        ],
         'observacions' => $e->observacions,
         'datas' => []
     ];

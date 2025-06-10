@@ -26,7 +26,7 @@ $emptyTemplates = [
         <legend>Evento</legend>
 
         <div class="row">
-            <div class="form-group col-lg-6">
+            <div class="form-group col-lg-3">
                 <?= $this->Form->control('nome', ['label'=>'Nome']) ?>
             </div>
             <div class="form-group col-lg-3">
@@ -34,6 +34,9 @@ $emptyTemplates = [
             </div>
             <div class="form-group col-lg-3">
                 <?= $this->Form->control('lugar', ['label'=>'Lugar']) ?>
+            </div>
+            <div class="form-group col-lg-3">
+                <?= $this->Form->control('tipo', ['options'=>$tipos, 'label'=>'Tipo', 'templates'=>$emptyTemplates]) ?>
             </div>
         </div>
 

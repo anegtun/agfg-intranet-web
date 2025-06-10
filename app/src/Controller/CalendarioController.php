@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Model\Categorias;
+use App\Model\EventosTipo;
 use Cake\Core\Exception\Exception;
 use Cake\Event\EventInterface;
 use Cake\I18n\FrozenDate;
@@ -14,6 +15,7 @@ class CalendarioController extends AppController {
     public function initialize(): void {
         parent::initialize();
         $this->Categorias = new Categorias();
+        $this->EventosTipo = new EventosTipo();
         $this->Arbitros = TableRegistry::get('Arbitros');
         $this->Campos = TableRegistry::get('Campos');
         $this->Competicions = TableRegistry::get('Competicions');
@@ -32,12 +34,14 @@ class CalendarioController extends AppController {
 
     public function eventos() {
         $eventos = $this->Eventos->find()->contain('Datas')->order('data DESC');
-        $this->set(compact('eventos'));
+        $tipos = $this->EventosTipo->getAll();
+        $this->set(compact('eventos', 'tipos'));
     }
 
     public function evento($id=null) {
         $evento = $this->Eventos->getOrNew($id, ['contain' => ['Datas'=>['sort'=>'data_ini']]]);
-        $this->set(compact('evento'));
+        $tipos = $this->EventosTipo->getAllWithEmpty();
+        $this->set(compact('evento', 'tipos'));
     }
 
     public function gardarEvento() {
