@@ -7,6 +7,8 @@ $this->set('cabeceiraMigas', [
     ['label'=>'Calendario'],
     ['label'=>'Eventos']
 ]);
+
+$agora = $this->Time->fromString(time());
 ?>
 
 <div class="row">
@@ -23,7 +25,7 @@ $this->set('cabeceiraMigas', [
             </thead>
             <tbody>
                 <?php foreach($eventos as $e) : ?>
-                    <tr>
+                    <tr class="<?= $e->data->greaterThan($agora) ? '' : 'text-muted' ?>">
                         <td><?= $this->Html->link($e->nome, ['action'=>'evento', $e->id]) ?></td>
                         <td><?= $e->data->format('Y-m-d') ?></td>
                         <td><?= $e->lugar ?></td>

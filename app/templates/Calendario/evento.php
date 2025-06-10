@@ -98,7 +98,8 @@ $emptyTemplates = [
         Bold,
         Italic,
         Font,
-        Autoformat,
+        List,
+        Alignment,
         AutoLink,
         Link,
         Image,
@@ -110,8 +111,8 @@ $emptyTemplates = [
     ClassicEditor
         .create(document.querySelector('#observacions'), {
             licenseKey: 'GPL',
-            plugins: [ Essentials, Paragraph, Bold, Italic, Autoformat, AutoLink, Link, Image, ImageResizeEditing, ImageResizeHandles, ImageInsert ],
-            toolbar: [ 'bold', 'italic', '|', 'bulletedList', 'numberedList', '|', 'link', 'insertImage' ]
+            plugins: [ Essentials, Paragraph, Bold, Italic, List, Alignment, AutoLink, Link, Image, ImageResizeEditing, ImageResizeHandles, ImageInsert ],
+            toolbar: [ 'bold', 'italic', '|', 'alignment', '|', 'bulletedList', 'numberedList', '|', 'link', 'insertImage' ]
         })
         .then(newEditor => window.editor = newEditor)
         .catch(error => console.error(error));
