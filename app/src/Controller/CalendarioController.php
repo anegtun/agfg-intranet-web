@@ -18,6 +18,7 @@ class CalendarioController extends AppController {
         $this->Campos = TableRegistry::get('Campos');
         $this->Competicions = TableRegistry::get('Competicions');
         $this->Eventos = TableRegistry::get('Eventos');
+        $this->EventosDatas = TableRegistry::get('EventosDatas');
         $this->Fases = TableRegistry::get('Fases');
         $this->Equipas = TableRegistry::get('Equipas');
         $this->Partidos = TableRegistry::get('Partidos');
@@ -30,12 +31,12 @@ class CalendarioController extends AppController {
     }
 
     public function eventos() {
-        $eventos = $this->Eventos->find()->order('data DESC');
+        $eventos = $this->Eventos->find()->contain('Datas')->order('data DESC');
         $this->set(compact('eventos'));
     }
 
     public function evento($id=null) {
-        $evento = $this->Eventos->getOrNew($id);
+        $evento = $this->Eventos->getOrNew($id, ['contain' => ['Datas'=>['sort'=>'data_ini']]]);
         $this->set(compact('evento'));
     }
 
@@ -61,6 +62,32 @@ class CalendarioController extends AppController {
             $this->Flash->error(__('Erro ao eliminar o evento.'));
         }
         return $this->redirect(['action'=>'eventos']);
+    }
+
+    public function engadirEventoData() {
+        $data = $this->request->getData();
+        $evento_data = $this->EventosDatas->newEntity([
+            'id_evento' => $data['id'],
+            'data_ini' => Time::createFromFormat('d-m-Y', $data['data_ini']),
+            'data_fin' => Time::createFromFormat('d-m-Y', $data['data_fin'])
+        ]);
+
+        if ($this->EventosDatas->save($evento_data)) {
+            $this->Flash->success(__('Gardouse o evento correctamente.'));
+            return $this->redirect(['action'=>'evento', $data['id']]);
+        }
+        $this->Flash->error(__('Erro ao gardar o evento.'));
+        return $this->redirect(['action'=>'evento', $data['id']]);
+    }
+
+    public function borrarEventoData($id) {
+        $evento_data = $this->EventosDatas->get($id);
+        if($this->EventosDatas->delete($evento_data)) {
+            $this->Flash->success(__('Eliminouse a data correctamente.'));
+        } else {
+            $this->Flash->error(__('Erro ao eliminar a data.'));
+        }
+        return $this->redirect(['action'=>'evento', $evento_data->id_evento]);
     }
 
     public function competicion($codigo) {

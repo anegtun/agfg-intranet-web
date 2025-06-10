@@ -46,3 +46,45 @@ $emptyTemplates = [
         <?= $this->Form->button('Gardar', ['class'=>'btn btn-primary glyphicon glyphicon-saved']); ?>
     </fieldset>
 <?= $this->Form->end() ?>
+
+
+
+<?php if(!empty($evento->id)) : ?>
+    <div class="row" style="margin-top:2em;">
+        <h3>Outras datas</h3>
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th class="celda-titulo">Data inicio</th>
+                    <th class="celda-titulo">Data fin</th>
+                    <th class="celda-titulo"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if(!empty($evento->datas)) : ?>
+                    <?php foreach($evento->datas as $d) : ?>
+                        <tr>
+                            <td><?= $d->data_ini->format('Y-m-d') ?></td>
+                            <td><?= $d->data_fin->format('Y-m-d') ?></td>
+                            <td class="text-center"><?= $this->AgfgForm->deleteButton(['action'=>'borrarEventoData', $d->id]) ?></td>
+                        </tr>
+                    <?php endforeach ?>
+                <?php endif ?>
+            <tbody>
+        </table>
+
+        <?= $this->Form->create($evento, ['type'=>'post', 'url'=>['action'=>'engadirEventoData']]) ?>
+            <?php echo $this->Form->input('id', ['type'=>'hidden', 'value'=>$evento->id]) ?>
+            <div class="row">
+                <div class="form-group col-lg-3">
+                    <?= $this->Form->control('data_ini', ['type'=>'text', 'class'=>'form-control fld-date', 'label'=>'Data inicio', 'templates'=>$emptyTemplates]) ?>
+                </div>
+                <div class="form-group col-lg-3">
+                    <?= $this->Form->control('data_fin', ['type'=>'text', 'class'=>'form-control fld-date', 'label'=>'Data fin', 'templates'=>$emptyTemplates]) ?>
+                </div>
+            </div>
+            <?= $this->Form->button('Gardar', ['class'=>'btn btn-default glyphicon glyphicon-upload']); ?>
+        <?= $this->Form->end() ?>
+    </div>
+<?php endif ?>
+
