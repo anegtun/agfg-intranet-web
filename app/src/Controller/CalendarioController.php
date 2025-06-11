@@ -29,7 +29,13 @@ class CalendarioController extends AppController {
 
     public function beforeFilter(EventInterface $event) {
         parent::beforeFilter($event);
-        $this->Authentication->allowUnauthenticated(['competicion', 'eventos', 'xornadaSeguinte', 'xornadaAnterior']);
+
+        $unauth = ['competicion'];
+        $extension = $event->getSubject()->getRequest()->getParam("_ext");
+        if($extension === 'json') {
+            $unauth[] = 'eventos';
+        }
+        $this->Authentication->allowUnauthenticated($unauth);
     }
 
     public function eventos() {
