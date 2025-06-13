@@ -89,4 +89,31 @@ foreach($partidos_agrupados as $pa) {
     }
 }
 
+function cmp($a, $b) {
+    // return strcmp($a['datas'][0]['data_ini'], $b['datas'][0]['data_ini']);
+    return strcmp($a['data']->format('Y-m-d'), $b['data']->format('Y-m-d'));
+}
+
+usort($res, "cmp");
+
+if(!empty($iniParam)) {
+    $res_aux = [];
+    foreach($res as $r) {
+        //echo $r['data']->format('Y-m-d')." VS ".$iniParam." == ".strcmp($r['data']->format('Y-m-d'), $iniParam)."<br/>";
+        if(strcmp($r['data']->format('Y-m-d'), $iniParam) >= 0) {
+            $res_aux[] = $r;
+        }
+    }
+    $res = $res_aux;
+}
+
+if(!empty($limitParam)) {
+    $res_aux = [];
+    $i = 0;
+    for($i=0; $i < $limitParam; $i++) {
+        $res_aux[] = $res[$i];
+    }
+    $res = $res_aux;
+}
+
 echo json_encode($res);
