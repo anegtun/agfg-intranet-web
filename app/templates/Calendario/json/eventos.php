@@ -7,6 +7,7 @@ foreach($eventos as $e) {
         'nome' => $e->nome,
         'data' => $e->data,
         'lugar' => $e->lugar,
+        'imaxe' => $e->imaxe,
         'tipo' => [
             'codigo' => $e->tipo,
             'descricion' => $tipos[$e->tipo]
@@ -37,6 +38,11 @@ foreach($partidos as $p) {
     }
 
     $data = empty($p->data_partido) ? $p->xornada->data : $p->data_partido;
+    $domingo = $data->modify('sunday this week');
+    if ($domingo->diffInDays($data) === 0) {
+        $data = $data->modify('-1 day');
+    }
+
     $data_str = $data->format('Y-m-d');
     $id_comp = $p->fase->competicion->id;
 
@@ -57,11 +63,22 @@ foreach($partidos as $p) {
 
 foreach($partidos_agrupados as $pa) {
     foreach($pa as $e) {
+        $data_ini = null;
+        $data_fin = null;
         $observacions = "";
         foreach($e->partidos as $p) {
+            $data = empty($p->data_partido) ? $p->xornada->data : $p->data_partido;
+            if(empty($data_ini) || $data->lessThan($data_ini)) {
+                $data_ini = $data;
+            }
+            if(empty($data_fin) || $data->greaterThan($data_fin)) {
+                $data_fin = $data;
+            }
+
             $observacions .= "<p>";
             if(!empty($p->hora_partido)) {
-                $observacions .= "{$p->hora_partido}: ";
+                $dia = str_replace("Sat", "Sáb", str_replace("Sun", "Dom", $data->format('D')));
+                $observacions .= "$dia {$p->hora_partido}: ";
             }
             $observacions .= "{$p->equipa1->nome} VS {$p->equipa2->nome}";
             if(!empty($p->campo)) {
@@ -70,27 +87,28 @@ foreach($partidos_agrupados as $pa) {
             $observacions .= "</p>";
         }
 
-        $data = [
+
+        $r = [
             'nome' => $e->competicion,
-            'data' => $e->data,
+            'data' => $data_ini,
             'lugar' => '',
+            'imaxe' => '',
             'observacions' => $observacions,
             'datas' => [[
-                'data_ini' => $e->data,
-                'data_fin' => $e->data
+                'data_ini' => $data_ini,
+                'data_fin' => $data_fin
             ]]
         ];
 
-         $data['tipo'] = str_contains($e->competicion, 'Feile')
+         $r['tipo'] = str_contains($e->competicion, 'Feile')
            ? ['codigo' => 'GE', 'descricion' => 'Gaélico Escolas']
            : ['codigo' => 'CL', 'descricion' => 'Competicion clubes'];
 
-        $res[] = $data;
+        $res[] = $r;
     }
 }
 
 function cmp($a, $b) {
-    // return strcmp($a['datas'][0]['data_ini'], $b['datas'][0]['data_ini']);
     return strcmp($a['data']->format('Y-m-d'), $b['data']->format('Y-m-d'));
 }
 
@@ -99,7 +117,6 @@ usort($res, "cmp");
 if(!empty($iniParam)) {
     $res_aux = [];
     foreach($res as $r) {
-        //echo $r['data']->format('Y-m-d')." VS ".$iniParam." == ".strcmp($r['data']->format('Y-m-d'), $iniParam)."<br/>";
         if(strcmp($r['data']->format('Y-m-d'), $iniParam) >= 0) {
             $res_aux[] = $r;
         }

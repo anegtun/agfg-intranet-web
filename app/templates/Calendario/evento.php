@@ -40,6 +40,12 @@ $emptyTemplates = [
 
         <div class="row">
             <div class="form-group col-lg-12">
+                <?= $this->Form->control('imaxe', ['label'=>'Imaxe']) ?>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group col-lg-12">
                 <?= $this->Form->control('observacions', ['label'=>'Observacións']) ?>
             </div>
         </div>
