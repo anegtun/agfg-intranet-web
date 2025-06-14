@@ -46,6 +46,12 @@ $emptyTemplates = [
 
         <div class="row">
             <div class="form-group col-lg-12">
+                <?= $this->Form->control('resumo', ['label'=>'Resumo']) ?>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group col-lg-12">
                 <?= $this->Form->control('observacions', ['label'=>'Observacións']) ?>
             </div>
         </div>
@@ -116,6 +122,15 @@ $emptyTemplates = [
 
     ClassicEditor
         .create(document.querySelector('#observacions'), {
+            licenseKey: 'GPL',
+            plugins: [ Essentials, Paragraph, Bold, Italic, List, Alignment, AutoLink, Link, Image, ImageResizeEditing, ImageResizeHandles, ImageInsert ],
+            toolbar: [ 'bold', 'italic', '|', 'alignment', '|', 'bulletedList', 'numberedList', '|', 'link', 'insertImage' ]
+        })
+        .then(newEditor => window.editor = newEditor)
+        .catch(error => console.error(error));
+
+    ClassicEditor
+        .create(document.querySelector('#resumo'), {
             licenseKey: 'GPL',
             plugins: [ Essentials, Paragraph, Bold, Italic, List, Alignment, AutoLink, Link, Image, ImageResizeEditing, ImageResizeHandles, ImageInsert ],
             toolbar: [ 'bold', 'italic', '|', 'alignment', '|', 'bulletedList', 'numberedList', '|', 'link', 'insertImage' ]

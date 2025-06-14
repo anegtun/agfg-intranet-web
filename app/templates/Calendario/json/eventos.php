@@ -12,6 +12,7 @@ foreach($eventos as $e) {
             'codigo' => $e->tipo,
             'descricion' => $tipos[$e->tipo]
         ],
+        'resumo' => $e->resumo,
         'observacions' => $e->observacions,
         'datas' => []
     ];
@@ -93,6 +94,7 @@ foreach($partidos_agrupados as $pa) {
             'data' => $data_ini,
             'lugar' => '',
             'imaxe' => '',
+            'resumo' => $observacions,
             'observacions' => $observacions,
             'datas' => [[
                 'data_ini' => $data_ini,
