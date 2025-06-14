@@ -1,4 +1,5 @@
 <?php
+use App\Model\EventosTipo;
 
 $res = [];
 
@@ -44,22 +45,22 @@ foreach($partidos as $p) {
         $data = $data->modify('-1 day');
     }
 
-    $data_str = $data->format('Y-m-d');
+    $data_str = $p->fase->competicion->tipo=='torneo' ? 'all' : $data->format('Y-m-d');
     $id_comp = $p->fase->competicion->id;
 
-    if(empty($partidos_agrupados[$data_str])) {
-        $partidos_agrupados[$data_str] = [];
+    if(empty($partidos_agrupados[$id_comp])) {
+        $partidos_agrupados[$id_comp] = [];
     }
 
-    if(empty($partidos_agrupados[$data_str][$id_comp])) {
-        $partidos_agrupados[$data_str][$id_comp] = (object) [
+    if(empty($partidos_agrupados[$id_comp][$data_str])) {
+        $partidos_agrupados[$id_comp][$data_str] = (object) [
             'data' => $data,
-            'competicion' => $p->fase->competicion->nome,
+            'fase' => $p->fase,
             'partidos' => []
         ];
     }
 
-    $partidos_agrupados[$data_str][$id_comp]->partidos[] = $p;
+    $partidos_agrupados[$id_comp][$data_str]->partidos[] = $p;
 }
 
 foreach($partidos_agrupados as $pa) {
@@ -78,7 +79,7 @@ foreach($partidos_agrupados as $pa) {
 
             $observacions .= "<p>";
             if(!empty($p->hora_partido)) {
-                $dia = str_replace("Sat", "Sáb", str_replace("Sun", "Dom", $data->format('D')));
+                $dia = str_replace("Mon", "Lun", str_replace("Tue", "Mar", str_replace("Wed", "Mér", str_replace("Thu", "Xov", str_replace("Fri", "Ven", str_replace("Sat", "Sáb", str_replace("Sun", "Dom", $data->format('D'))))))));
                 $observacions .= "$dia {$p->hora_partido}: ";
             }
             $observacions .= "{$p->equipa1->nome} VS {$p->equipa2->nome}";
@@ -90,7 +91,7 @@ foreach($partidos_agrupados as $pa) {
 
 
         $r = [
-            'nome' => $e->competicion,
+            'nome' => $e->fase->competicion->nome,
             'data' => $data_ini,
             'lugar' => '',
             'imaxe' => '',
@@ -102,9 +103,13 @@ foreach($partidos_agrupados as $pa) {
             ]]
         ];
 
-         $r['tipo'] = str_contains($e->competicion, 'Feile')
-           ? ['codigo' => 'GE', 'descricion' => 'Gaélico Escolas']
-           : ['codigo' => 'CL', 'descricion' => 'Competicion clubes'];
+        if ($e->fase->categoria === 'E') {
+            $r['tipo'] = EventosTipo::GAELICO_ESCOLAS;   
+        } else if (in_array($e->fase->competicion->id_federacion, [3, 5])) {
+            $r['tipo'] = EventosTipo::SELECCION;
+        } else {
+            $r['tipo'] = EventosTipo::CLUBES;
+        }
 
         $res[] = $r;
     }
