@@ -6,7 +6,6 @@ $res = [];
 foreach($eventos as $e) {
     $data = [
         'nome' => $e->nome,
-        'data' => $e->data,
         'lugar' => $e->lugar,
         'imaxe' => $e->imaxe,
         'tipo' => [
@@ -54,7 +53,6 @@ foreach($partidos as $p) {
 
     if(empty($partidos_agrupados[$id_comp][$data_str])) {
         $partidos_agrupados[$id_comp][$data_str] = (object) [
-            'data' => $data,
             'fase' => $p->fase,
             'partidos' => []
         ];
@@ -92,7 +90,6 @@ foreach($partidos_agrupados as $pa) {
 
         $r = [
             'nome' => $e->fase->competicion->nome,
-            'data' => $data_ini,
             'lugar' => '',
             'imaxe' => '',
             'resumo' => $observacions,
@@ -116,7 +113,7 @@ foreach($partidos_agrupados as $pa) {
 }
 
 function cmp($a, $b) {
-    return strcmp($a['data']->format('Y-m-d'), $b['data']->format('Y-m-d'));
+    return strcmp($a['datas'][0]['data_ini']->format('Y-m-d'), $b['datas'][0]['data_ini']->format('Y-m-d'));
 }
 
 usort($res, "cmp");
@@ -124,8 +121,10 @@ usort($res, "cmp");
 if(!empty($iniParam)) {
     $res_aux = [];
     foreach($res as $r) {
-        if(strcmp($r['data']->format('Y-m-d'), $iniParam) >= 0) {
-            $res_aux[] = $r;
+        foreach ($r['datas'] as $d) {
+            if(strcmp($d['data_fin']->format('Y-m-d'), $iniParam) >= 0) {
+                $res_aux[] = $r;
+            }
         }
     }
     $res = $res_aux;
