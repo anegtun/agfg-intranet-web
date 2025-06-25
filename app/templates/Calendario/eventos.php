@@ -21,6 +21,7 @@ $agora = $this->Time->fromString(time());
                     <th class="celda-titulo">Lugar</th>
                     <th class="celda-titulo">Tipo</th>
                     <th class="celda-titulo"></th>
+                    <th class="celda-titulo"></th>
                 </tr>
             </thead>
             <tbody>
@@ -30,6 +31,7 @@ $agora = $this->Time->fromString(time());
                         <td><?= $e->data->format('Y-m-d') ?></td>
                         <td><?= $e->lugar ?></td>
                         <td><?= $tipos[$e->tipo] ?></td>
+                        <td class="text-center"><?= $this->Html->link('', ['action'=>'clonarEvento', $e->id], ['class'=>'glyphicon glyphicon-duplicate']) ?></td>
                         <td class="text-center"><?= $this->AgfgForm->deleteButton(['action'=>'borrarEvento', $e->id]) ?></td>
                     </tr>
                 <?php endforeach ?>

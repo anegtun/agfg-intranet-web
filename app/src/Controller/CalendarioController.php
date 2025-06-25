@@ -53,6 +53,14 @@ class CalendarioController extends AppController {
         $this->set(compact('evento', 'tipos'));
     }
 
+    public function clonarEvento($id) {
+        $evento = $this->Eventos->get($id);
+        $evento->id = NULL;
+        $tipos = $this->EventosTipo->getAllWithEmpty();
+        $this->set(compact('evento', 'tipos'));
+        $this->render('evento');
+    }
+
     public function gardarEvento() {
         $data = $this->request->getData();
         $evento = $this->Eventos->getOrNew($data['id']);
