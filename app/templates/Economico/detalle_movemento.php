@@ -81,6 +81,12 @@ if(!empty($movemento->id_subarea)) {
             </div>
         </div>
 
+        <div class="row">
+            <div class="form-group col-lg-6">
+                <?= $this->Form->control('id_factura', ['options'=>$this->AgfgForm->objectToKeyValue($facturas,'id','{$e->data->format("Y-m-d")} - {$e->entidade} - {$e->importe} - {$e->descricion}',true,false), 'label'=>'Factura', 'templates'=>$emptyTemplates]) ?>
+            </div>
+        </div>
+
         <?php if($subarea_activa) : ?>
             <?= $this->Form->button('Gardar', ['class'=>'btn btn-primary glyphicon glyphicon-saved']); ?>
         <?php endif ?>

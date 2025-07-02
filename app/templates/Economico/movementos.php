@@ -45,12 +45,18 @@ foreach($partidasOrzamentarias as $po) {
                 <?= $this->Form->control('id_area', ['options'=>$this->AgfgForm->objectToKeyValue($areas,'id','{$e->partidaOrzamentaria->nome} - {$e->nome}'), 'label'=>'Área', 'templates'=>$emptyTemplates]) ?>
             </div>
             <div class="col-lg-2">
+                <?= $this->Form->control('tempada', ['options'=>$tempadas, 'label'=>'Tempada', 'class'=>'form-control']) ?>
+            </div>
+            <div class="col-lg-2">
                 <?= $this->Form->control('subarea_activa', ['options'=>['0'=>'Non', '1'=>'Si'], 'default'=>'1']) ?>
             </div>
         </div>
         <div class="row">
             <div class="col-lg-2">
-                <?= $this->Form->control('tempada', ['options'=>$tempadas, 'label'=>'Tempada', 'class'=>'form-control']) ?>
+                <?= $this->Form->control('importe', ['options'=>[''=>'Todos', 'P'=>'Positivo', 'N'=>'Negativo'], 'default'=>'', 'class'=>'form-control']) ?>
+            </div>
+            <div class="col-lg-2">
+                <?= $this->Form->control('factura', ['options'=>[''=>'Todos', 'S'=>'Si', 'N'=>'Non'], 'default'=>'', 'class'=>'form-control']) ?>
             </div>
             <div class="col-lg-2">
                 <?= $this->Form->control('data_ini', ['type'=>'text', 'class'=>'form-control fld-date', 'label'=>'Data inicio', 'templates'=>$emptyTemplates]) ?>
@@ -128,6 +134,9 @@ foreach($partidasOrzamentarias as $po) {
                             <?php endif ?>
                         </td>
                         <td class="text-center">
+                            <?php if(!empty($m->factura)) : ?>
+                                <a title="<?= $m->factura->entidade ?> - <?= $m->factura->descricion ?>" class="glyphicon glyphicon-barcode" href="javascript:void(0)" data-toggle="tooltip"></a>
+                            <?php endif ?>
                             <?php if(!empty($m->referencia)) : ?>
                                 <a title="<?= $m->referencia ?>" class="glyphicon glyphicon-info-sign" href="javascript:void(0)" data-toggle="tooltip"></a>
                             <?php endif ?>

@@ -60,7 +60,8 @@ class EconomicoController extends AppController {
         } else {
             $subareas->where(['EconomicoSubareas.activa' => 1]);
         }
-        $this->set(compact('movemento', 'contas', 'tempadas', 'clubes', 'subareas'));
+        $facturas = $this->Facturas->findAbertas($movemento->id_factura);
+        $this->set(compact('movemento', 'contas', 'tempadas', 'clubes', 'subareas', 'facturas'));
     }
 
     public function clonarMovemento($id) {
@@ -70,7 +71,8 @@ class EconomicoController extends AppController {
         $tempadas = $this->Tempadas->getTempadasWithEmpty();
         $clubes = $this->Clubes->find()->order('nome');
         $subareas = $this->Subareas->find()->contain(['Area' => 'PartidaOrzamentaria'])->order('PartidaOrzamentaria.nome', 'Area.nome');
-        $this->set(compact('movemento', 'contas', 'tempadas', 'clubes', 'subareas'));
+        $facturas = $this->Facturas->findAbertas($movemento->id_factura);
+        $this->set(compact('movemento', 'contas', 'tempadas', 'clubes', 'subareas', 'facturas'));
         $this->render('detalleMovemento');
     }
 
@@ -130,10 +132,6 @@ class EconomicoController extends AppController {
             }
         }
 
-        //uasort($filas, function($a, $b) {
-        //    return $a->data->diffInDays($b->data);
-        //});
-
         $movementos = $this->Movementos
             ->find()
             ->contain(['Subarea' => ['Area' => ['PartidaOrzamentaria']], 'Clube'])
@@ -171,21 +169,34 @@ class EconomicoController extends AppController {
 
     public function facturas() {
         $estados = $this->FacturaEstado->getAll();
-        $facturas = $this->Facturas->find()->order('data desc');
+        $facturas = $this->Facturas->find()->contain('Movementos')->order('data desc');
         if(!empty($this->request->getQuery('data_ini'))) {
             $facturas->where(['data >=' => FrozenDate::createFromFormat('d-m-Y', $this->request->getQuery('data_ini'))]);
         }
         if(!empty($this->request->getQuery('data_fin'))) {
             $facturas->where(['data <=' => FrozenDate::createFromFormat('d-m-Y', $this->request->getQuery('data_fin'))]);
         }
+        $facturas = $facturas->toArray();
+        foreach($facturas as $f) {
+            $f->arquivos = $this->EconomicoFactura->list($f);
+        }
         $this->set(compact('facturas', 'estados'));
     }
 
     public function detalleFactura($id=null) {
         $estados = $this->FacturaEstado->getAll();
-        $factura = $this->Facturas->getOrNew($id);
+        $factura = $this->Facturas->getOrNew($id, ['contain' => 'Movementos']);
         $arquivos = empty($id) ? [] : $this->EconomicoFactura->list($factura);
         $this->set(compact('factura', 'arquivos', 'estados'));
+    }
+
+    public function clonarFactura($id) {
+        $estados = $this->FacturaEstado->getAll();
+        $factura = $this->Facturas->get($id);
+        $factura->id = null;
+        $factura->estado = 'A';
+        $this->set(compact('factura', 'estados'));
+        $this->render('detalleFactura');
     }
 
     public function gardarFactura() {

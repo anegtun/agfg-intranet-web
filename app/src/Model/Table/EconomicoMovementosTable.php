@@ -19,6 +19,12 @@ class EconomicoMovementosTable extends AgfgTable {
             'foreignKey' => 'id_clube',
             'propertyName' => 'clube'
         ]);
+
+        $this->belongsTo('Factura', [
+        	'className' => 'EconomicoFacturas',
+            'foreignKey' => 'id_factura',
+            'propertyName' => 'factura'
+        ]);
     }
 
     public function validationDefault(Validator $validator): Validator {

@@ -5,8 +5,9 @@ class EconomicoFacturaEstado {
     
     public function getAll() {
         return [
-            'P' => 'Pendente',
-            'F' => 'Finalizada'
+            'A' => 'Aberta',
+            'P' => 'Pechada',
+            'D' => 'Descartada'
         ];
     }
 }

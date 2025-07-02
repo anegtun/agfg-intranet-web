@@ -57,6 +57,55 @@ $emptyTemplates = [
 
 
 <?php if(!empty($factura->id)) : ?>
+
+    <div class="row" style="margin-top:2em;">
+        <h3>Pagos</h3>
+
+        <?php $diff = $factura->diffImporteMovementos() ?>
+
+        <?php if (!$factura->isDescartada()) : ?>
+            <?php if (((int)$diff) == 0) : ?>
+                <div class="alert alert-success" role="alert">A factura está completamente paga.</div>
+            <?php elseif ($diff > 0) : ?>
+                <div class="alert alert-warning" role="alert">A factura ten un sobrepago de <?= $this->Number->currency($diff,'EUR') ?>.</div>
+            <?php elseif ($diff < 0) : ?>
+                <div class="alert alert-danger" role="alert">Á factura fáltanlle por pagar <?= $this->Number->currency($diff,'EUR') ?>.</div>
+            <?php endif ?>
+        <?php endif ?>
+
+        <?php if(!empty($factura->movementos)) : ?>
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th class="celda-titulo">Data</th>
+                        <th class="celda-titulo">Importe</th>
+                        <th class="celda-titulo">Descrición</th>
+                        <th class="celda-titulo"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach($factura->movementos as $m) : ?>
+                        <tr>
+                            <td><?= $m->data->format('Y-m-d') ?></td>
+                            <td class="<?= $m->importe<0 ? 'text-danger' : ''?>">
+                                <?php if (!empty($m->comision)) : ?>
+                                    <a title="Comisión: <?= $this->Number->currency($m->comision, 'EUR') ?>" class="glyphicon glyphicon-euro" href="javascript:void(0)" data-toggle="tooltip">&nbsp;</a>
+                                <?php endif ?>
+                                <?= $this->Number->currency($m->importe, 'EUR') ?>
+                            </td>
+                            <td><?= $m->descricion ?></td>
+                            <td class="text-center"><?= $this->AgfgForm->editButton(['action'=>'detalleMovemento', $m->id]) ?></td>
+                        </tr>
+                    <?php endforeach ?>
+                <tbody>
+            </table>
+        <?php else : ?>
+            <p>Non hai ningún pago asociado.</p>
+        <?php endif ?>
+    </div>
+
+
+
     <div class="row" style="margin-top:2em;">
         <h3>Arquivos</h3>
         <table class="table table-striped table-hover">
@@ -85,4 +134,5 @@ $emptyTemplates = [
             <?= $this->Form->button('Subir', ['class'=>'btn btn-default glyphicon glyphicon-upload']); ?>
         <?= $this->Form->end() ?>
     </div>
+
 <?php endif ?>
