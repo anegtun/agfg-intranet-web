@@ -56,7 +56,7 @@ foreach($partidasOrzamentarias as $po) {
                 <?= $this->Form->control('importe', ['options'=>[''=>'Todos', 'P'=>'Positivo', 'N'=>'Negativo'], 'default'=>'', 'class'=>'form-control']) ?>
             </div>
             <div class="col-lg-2">
-                <?= $this->Form->control('factura', ['options'=>[''=>'Todos', 'S'=>'Si', 'N'=>'Non'], 'default'=>'', 'class'=>'form-control']) ?>
+                <?= $this->Form->control('factura', ['options'=>[''=>'Todos', 'SF'=>'Sen factura', 'CF'=>'Con factura', 'NA'=>'Non aplica'], 'default'=>'', 'class'=>'form-control']) ?>
             </div>
             <div class="col-lg-2">
                 <?= $this->Form->control('data_ini', ['type'=>'text', 'class'=>'form-control fld-date', 'label'=>'Data inicio', 'templates'=>$emptyTemplates]) ?>
@@ -92,9 +92,11 @@ foreach($partidasOrzamentarias as $po) {
         <table class="table table-striped table-hover">
             <thead>
                 <tr>
+                    <th class="celda-titulo"></th>
+                    <th class="celda-titulo"></th>
+                    <th class="celda-titulo"></th>
                     <th class="celda-titulo text-center" style="min-width: 100px;">Data</th>
                     <th class="celda-titulo text-center">Importe</th>
-                    <th class="celda-titulo text-center">Acumulado</th>
                     <th class="celda-titulo text-center">Tempada</th>
                     <?php if(empty($prevision)) : ?>
                         <th class="celda-titulo text-center">Conta</th>
@@ -106,27 +108,49 @@ foreach($partidasOrzamentarias as $po) {
                     <th class="celda-titulo"></th>
                     <th class="celda-titulo"></th>
                     <th class="celda-titulo"></th>
-                    <th class="celda-titulo"></th>
                 </tr>
             </thead>
             <tbody>
                 <?php foreach($movementos as $m) : ?>
                     <tr>
-                        <td class="text-center"><?= $m->data->format('Y-m-d') ?></td>
-                        <td class="text-right <?= $m->importe<0 ? 'text-danger' : ''?>">
-                            <?php if (!empty($m->comision)) : ?>
-                                <a title="Comisión: <?= $this->Number->currency($m->comision, 'EUR') ?>" class="glyphicon glyphicon-euro" href="javascript:void(0)" data-toggle="tooltip">&nbsp;</a>
+                        <td class="text-center">
+                            <?php if(!empty($m->sen_factura)) : ?>
+                                <a title="Non aplica factura" class="glyphicon glyphicon-barcode text-muted" href="javascript:void(0)" data-toggle="tooltip" style="cursor:default;"></a>
+                            <?php elseif(!empty($m->factura)) : ?>
+                                <?= $this->Html->link('', ['action'=>'detalleFactura', $m->factura->id], ['class'=>'glyphicon glyphicon-barcode', 'title'=>"{$m->factura->entidade} - {$m->factura->descricion}"]) ?>
                             <?php endif ?>
+                        </td>
+                        <td class="text-center">
+                            <?php if (!empty($m->comision)) : ?>
+                                <a title="Comisión: <?= $this->Number->currency($m->comision, 'EUR') ?>" class="glyphicon glyphicon-euro" href="javascript:void(0)" data-toggle="tooltip" style="cursor:default;"></a>
+                            <?php endif ?>
+                        </td>
+                        <td class="text-center">
+                            <?php if(!empty($m->referencia)) : ?>
+                                <a title="<?= $m->referencia ?>" class="glyphicon glyphicon-info-sign" href="javascript:void(0)" data-toggle="tooltip" style="cursor:default;"></a>
+                            <?php endif ?>
+                        </td>
+                        <td class="text-center">
+                            <?= $m->data->format('Y-m-d') ?>
+                        </td>
+                        <td class="text-right <?= $m->importe<0 ? 'text-danger' : ''?>">
                             <?= $this->Number->currency($m->importe, 'EUR') ?>
                         </td>
-                        <td class="text-right"><?= $this->Number->currency($acumulado, 'EUR') ?></td>
-                        <td class="text-center"><?= $tempadas[$m->tempada] ?></td>
+                        <td class="text-center">
+                            <?= $tempadas[$m->tempada] ?>
+                        </td>
                         <?php if(empty($prevision)) : ?>
                             <td class="text-center"><?= empty($m->conta) ? '' : $this->Html->image("/images/conta-{$m->conta}-logo.png", ['width'=>30,'height'=>30]) ?></td>
                         <?php endif ?>
-                        <td class="text-center"><?= $m->subarea->area->partidaOrzamentaria->nome ?></td>
-                        <td class="text-center"><?= $m->subarea->area->nome ?></td>
-                        <td class="text-center"><?= $m->subarea->nome ?></td>
+                        <td class="text-center">
+                            <?= $m->subarea->area->partidaOrzamentaria->nome ?>
+                        </td>
+                        <td class="text-center">
+                            <?= $m->subarea->area->nome ?>
+                        </td>
+                        <td class="text-center">
+                            <?= $m->subarea->nome ?>
+                        </td>
                         <td>
                             <?= $m->descricion ?>
                             <?php if(!empty($m->clube)) : ?>
@@ -134,22 +158,17 @@ foreach($partidasOrzamentarias as $po) {
                             <?php endif ?>
                         </td>
                         <td class="text-center">
-                            <?php if(!empty($m->factura)) : ?>
-                                <a title="<?= $m->factura->entidade ?> - <?= $m->factura->descricion ?>" class="glyphicon glyphicon-barcode" href="javascript:void(0)" data-toggle="tooltip"></a>
-                            <?php endif ?>
-                            <?php if(!empty($m->referencia)) : ?>
-                                <a title="<?= $m->referencia ?>" class="glyphicon glyphicon-info-sign" href="javascript:void(0)" data-toggle="tooltip"></a>
-                            <?php endif ?>
+                            <?= $this->AgfgForm->editButton(['action'=>'detalleMovemento', $m->id]) ?>
                         </td>
-                        <td class="text-center"><?= $this->AgfgForm->editButton(['action'=>'detalleMovemento', $m->id]) ?></td>
-                        <td class="text-center"><?= $this->Html->link('', ['action'=>'clonarMovemento', $m->id], ['class'=>'glyphicon glyphicon-duplicate']) ?></td>
+                        <td class="text-center">
+                            <?= $this->Html->link('', ['action'=>'clonarMovemento', $m->id], ['class'=>'glyphicon glyphicon-duplicate']) ?>
+                        </td>
                         <td class="text-center">
                             <?php if(!empty($m->subarea->activa)) : ?>
                                 <?= $this->AgfgForm->deleteButton(['action'=>'borrarMovemento', $m->id]) ?>
                             <?php endif ?>
                         </td>
                     </tr>
-                    <?php $acumulado -= $m->getImporteConComision() ?>
                 <?php endforeach ?>
             </tbody>
         </table>

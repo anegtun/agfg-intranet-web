@@ -28,10 +28,12 @@ class MovementosEconomicosComponent extends Component {
             }
         }
         if(!empty($request->getQuery('factura'))) {
-            if($request->getQuery('factura') === 'S') {
+            if($request->getQuery('factura') === 'CF') {
                 $movementos->where(['EconomicoMovementos.id_factura IS NOT' => null]);
-            } else if ($request->getQuery('factura') === 'N') {
-                $movementos->where(['EconomicoMovementos.id_factura IS' => null]);
+            } else if ($request->getQuery('factura') === 'SF') {
+                $movementos->where(['EconomicoMovementos.id_factura IS' => null, 'EconomicoMovementos.sen_factura' => 0]);
+            } else if ($request->getQuery('factura') === 'NA') {
+                $movementos->where(['EconomicoMovementos.sen_factura' => 1]);
             }
         }
         if(!empty($request->getQuery('data_ini'))) {

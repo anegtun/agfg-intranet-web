@@ -85,6 +85,10 @@ if(!empty($movemento->id_subarea)) {
             <div class="form-group col-lg-6">
                 <?= $this->Form->control('id_factura', ['options'=>$this->AgfgForm->objectToKeyValue($facturas,'id','{$e->data->format("Y-m-d")} - {$e->entidade} - {$e->importe} - {$e->descricion}',true,false), 'label'=>'Factura', 'templates'=>$emptyTemplates]) ?>
             </div>
+            <div class="form-group col-lg-2">
+                <?= $this->Form->checkbox('sen_factura', ['id'=>'sen_factura']) ?>
+                <label for="sen_factura">Non aplica factura</label>
+            </div>
         </div>
 
         <?php if($subarea_activa) : ?>
