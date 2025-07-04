@@ -70,6 +70,11 @@ foreach($partidasOrzamentarias as $po) {
                 </div>
             <?php endif ?>
         </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <?= $this->Form->control('texto', ['type'=>'text', 'class'=>'form-control', 'label'=>'Texto']) ?>
+            </div>
+        </div>
 
         <div style="margin-top:1em">
             <?= $this->Form->button('Buscar', ['class'=>'btn btn-primary']); ?>
@@ -92,9 +97,11 @@ foreach($partidasOrzamentarias as $po) {
         <table class="table table-striped table-hover">
             <thead>
                 <tr>
-                    <th class="celda-titulo"></th>
-                    <th class="celda-titulo"></th>
-                    <th class="celda-titulo"></th>
+                    <?php if(empty($prevision)) : ?>
+                        <th class="column-button"></th>
+                    <?php endif ?>
+                    <th class="column-button"></th>
+                    <th class="column-button"></th>
                     <th class="celda-titulo text-center" style="min-width: 100px;">Data</th>
                     <th class="celda-titulo text-center">Importe</th>
                     <th class="celda-titulo text-center">Tempada</th>
@@ -105,27 +112,31 @@ foreach($partidasOrzamentarias as $po) {
                     <th class="celda-titulo text-center">Área</th>
                     <th class="celda-titulo text-center">Subárea</th>
                     <th class="celda-titulo">Descricición</th>
-                    <th class="celda-titulo"></th>
-                    <th class="celda-titulo"></th>
-                    <th class="celda-titulo"></th>
+                    <th class="column-button"></th>
+                    <th class="column-button"></th>
+                    <th class="column-button"></th>
                 </tr>
             </thead>
             <tbody>
                 <?php foreach($movementos as $m) : ?>
                     <tr>
-                        <td class="text-center">
-                            <?php if(!empty($m->sen_factura)) : ?>
-                                <a title="Non aplica factura" class="glyphicon glyphicon-barcode text-muted" href="javascript:void(0)" data-toggle="tooltip" style="cursor:default;"></a>
-                            <?php elseif(!empty($m->factura)) : ?>
-                                <?= $this->Html->link('', ['action'=>'detalleFactura', $m->factura->id], ['class'=>'glyphicon glyphicon-barcode', 'title'=>"{$m->factura->entidade} - {$m->factura->descricion}"]) ?>
-                            <?php endif ?>
-                        </td>
-                        <td class="text-center">
+                        <?php if(empty($prevision)) : ?>
+                            <td class="column-button">
+                                <?php if(!empty($m->sen_factura)) : ?>
+                                    <a title="Non aplica factura" class="glyphicon glyphicon-barcode text-muted" href="javascript:void(0)" data-toggle="tooltip" style="cursor:default;"></a>
+                                <?php elseif(!empty($m->factura)) : ?>
+                                    <?= $this->Html->link('', ['action'=>'detalleFactura', $m->factura->id], ['class'=>'glyphicon glyphicon-barcode', 'title'=>"{$m->factura->entidade} - {$m->factura->descricion}"]) ?>
+                                <?php elseif($m->importe<0) : ?>
+                                    <a title="Sen factura" class="glyphicon glyphicon-barcode text-danger" href="javascript:void(0)" data-toggle="tooltip" style="cursor:default;"></a>
+                                <?php endif ?>
+                            </td>
+                        <?php endif ?>
+                        <td class="column-button">
                             <?php if (!empty($m->comision)) : ?>
                                 <a title="Comisión: <?= $this->Number->currency($m->comision, 'EUR') ?>" class="glyphicon glyphicon-euro" href="javascript:void(0)" data-toggle="tooltip" style="cursor:default;"></a>
                             <?php endif ?>
                         </td>
-                        <td class="text-center">
+                        <td class="column-button">
                             <?php if(!empty($m->referencia)) : ?>
                                 <a title="<?= $m->referencia ?>" class="glyphicon glyphicon-info-sign" href="javascript:void(0)" data-toggle="tooltip" style="cursor:default;"></a>
                             <?php endif ?>
@@ -157,13 +168,13 @@ foreach($partidasOrzamentarias as $po) {
                                 - <?= $this->Html->image($m->clube->logo, ['width'=>25,'height'=>25]) . ' ' . $m->clube->codigo ?>
                             <?php endif ?>
                         </td>
-                        <td class="text-center">
+                        <td class="column-button">
                             <?= $this->AgfgForm->editButton(['action'=>'detalleMovemento', $m->id]) ?>
                         </td>
-                        <td class="text-center">
+                        <td class="column-button">
                             <?= $this->Html->link('', ['action'=>'clonarMovemento', $m->id], ['class'=>'glyphicon glyphicon-duplicate']) ?>
                         </td>
-                        <td class="text-center">
+                        <td class="column-button">
                             <?php if(!empty($m->subarea->activa)) : ?>
                                 <?= $this->AgfgForm->deleteButton(['action'=>'borrarMovemento', $m->id]) ?>
                             <?php endif ?>
