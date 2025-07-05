@@ -83,8 +83,7 @@ class EconomicoMovementosTable extends AgfgTable {
                 'UPPER(EconomicoMovementos.referencia) LIKE' => "%$texto%"
             ]]);
         }
-        $subarea_activa = $query['subarea_activa'];
-        if(!isset($subarea_activa) || !empty($subarea_activa)) {
+        if(!isset($query['subarea_activa']) || !empty($query['subarea_activa'])) {
             $movementos->where(['Subarea.activa' => 1]);
         }
         return $movementos;

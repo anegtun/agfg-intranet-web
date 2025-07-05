@@ -115,17 +115,33 @@ class EconomicoController extends AppController {
         $filas = [];
         $fin = null;
         $inicio = null;
+        $ix_data = $ix_importe = $ix_desc = -1;
         foreach($xlsx->rows() as $row) {
             try {
-                $data = FrozenDate::createFromFormat('Y-m-d H:i:s', $row[0], 'Europe/Madrid');
+                if ($row[0] === 'FECHA CONTABLE') {
+                    foreach($row as $i=>$col) {
+                        switch($col) {
+                            case 'FECHA CONTABLE': $ix_data = $i; break;
+                            case 'IMPORTE': $ix_importe = $i; break;
+                            case 'DESCRIPCIÓN': $ix_desc = $i; break;
+                        }
+                    }
+                    continue;
+                }
+
+                if ($ix_data < 0) {
+                    continue;
+                }
+
+                $data = FrozenDate::createFromFormat('Y-m-d H:i:s', $row[$ix_data], 'Europe/Madrid');
                 $inicio = $data;
                 if(empty($fin)) {
                     $fin = $data;
                 }
                 $filas[] = (object) [
                     'data' => $data,
-                    'importe' => $row[8],
-                    'descricion' => $row[5]
+                    'importe' => $row[$ix_importe],
+                    'descricion' => $row[$ix_desc]
                 ];
             } catch (InvalidArgumentException $ex) {
             }
@@ -136,7 +152,7 @@ class EconomicoController extends AppController {
             ->contain(['Subarea' => ['Area' => ['PartidaOrzamentaria']], 'Clube'])
             ->where(['and' => ['data >= ' => $inicio, 'data <= ' => $fin]]);
 
-        $contas = $this->Contas->getAllWithEmpty();
+        $facturas = $this->Facturas->findAbertas();
         $tempadas = $this->Tempadas->getTempadasWithEmpty();
         $clubes = $this->Clubes->findAGFG();
         $subareas = $this->Subareas
@@ -145,7 +161,7 @@ class EconomicoController extends AppController {
             ->where(['activa' => 1])
             ->order('PartidaOrzamentaria.nome', 'Area.nome');
 
-        $this->set(compact('filas', 'movementos', 'contas', 'tempadas', 'clubes', 'subareas'));
+        $this->set(compact('filas', 'movementos', 'facturas', 'tempadas', 'clubes', 'subareas'));
     }
 
     public function importarMovementos() {
@@ -156,6 +172,12 @@ class EconomicoController extends AppController {
                 $movemento = $this->Movementos->newEntity($fila);
                 if(empty($fila['id_clube'])) {
                     $movemento->id_clube = NULL;
+                }
+                if(empty($fila['id_factura'])) {
+                    $movemento->id_factura = NULL;
+                } elseif($fila['id_factura'] == -1) {
+                    $movemento->id_factura = NULL;
+                    $movemento->sen_factura = 1;
                 }
                 $movemento->data = empty($fila['data']) ? NULL : Time::createFromFormat('d-m-Y', $fila['data']);
                 $this->Movementos->save($movemento);

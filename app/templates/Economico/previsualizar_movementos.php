@@ -13,6 +13,10 @@ $emptyTemplates = [
     'input' => '<input type="{{type}}" name="{{name}}" {{attrs}}/>',
 ];
 
+$facturas_opts = [''=>'', -1 => 'Non aplica'];
+foreach ($facturas as $f) {
+    $facturas_opts[$f->id] = $f->data->format("Y-m-d")." - ".$f->entidade." - ".$f->importe." - ".$f->descricion;
+}
 $ids_movementos_existentes = [];
 ?>
 
@@ -30,11 +34,11 @@ $ids_movementos_existentes = [];
                         <th class="celda-titulo text-center" style="min-width: 100px;">Data</th>
                         <th class="celda-titulo text-center">Importe</th>
                         <th class="celda-titulo text-center">Tempada</th>
-                        <th class="celda-titulo text-center">Conta</th>
                         <th class="celda-titulo text-center">Subárea</th>
                         <th class="celda-titulo text-center">Clube</th>
-                        <th class="celda-titulo">Descricición</th>
-                        <th class="celda-titulo">Referencia</th>
+                        <th class="celda-titulo text-center">Descricición</th>
+                        <th class="celda-titulo text-center">Referencia</th>
+                        <th class="celda-titulo text-center">Factura</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -67,18 +71,19 @@ $ids_movementos_existentes = [];
                                     <?= $this->Number->currency($f->importe, 'EUR') ?>
                                 </td>
                                 <td class="text-center"><?= $tempadas[$movemento->tempada] ?></td>
-                                <td class="text-center"><?= $contas[$movemento->conta] ?></td>
                                 <td class="text-center"><?= "{$movemento->subarea->area->partidaOrzamentaria->nome} - {$movemento->subarea->area->nome} - {$movemento->subarea->nome}" ?></td>
                                 <td class="text-center"><?= empty($movemento->clube) ? '' : $movemento->clube->nome ?></td>
                                 <td class="text-center"><?= $movemento->descricion ?></td>
                                 <td class="text-center"><?= $movemento->referencia ?></td>
+                                <td class="text-center"><?= $movemento->factura->entidade ?></td>
                             </tr>
 
                         <?php else : ?>
 
                             <tr>
                                 <td class="text-center">
-                                <?= $this->Form->checkbox('fila.'.$i.'.importar', ['checked'=>false]) ?>
+                                    <?= $this->Form->checkbox('fila.'.$i.'.importar', ['checked'=>false]) ?>
+                                    <?= $this->Form->hidden('fila.'.$i.'.conta', ['value'=>'B']) ?>
                                 </td>
                                 <td class="text-center">
                                     <?= $f->data->format('Y-m-d') ?>
@@ -92,9 +97,6 @@ $ids_movementos_existentes = [];
                                     <?= $this->Form->control('fila.'.$i.'.tempada', ['options'=>$tempadas, 'label'=>false, 'templates'=>$emptyTemplates]) ?>
                                 </td>
                                 <td class="text-center">
-                                    <?= $this->Form->control('fila.'.$i.'.conta', ['options'=>$contas, 'label'=>false, 'templates'=>$emptyTemplates, 'value'=>'B']) ?>
-                                </td>
-                                <td class="text-center">
                                     <?= $this->Form->control('fila.'.$i.'.id_subarea', ['options'=>$this->AgfgForm->objectToKeyValue($subareas,'id','{$e->area->partidaOrzamentaria->nome} - {$e->area->nome} - {$e->nome}'), 'label'=>false, 'templates'=>$emptyTemplates]) ?>
                                 </td>
                                 <td class="text-center">
@@ -105,6 +107,9 @@ $ids_movementos_existentes = [];
                                 </td>
                                 <td>
                                     <?= $this->Form->control('fila.'.$i.'.referencia', ['label'=>false, 'value' => $f->descricion]) ?>
+                                </td>
+                                <td class="text-center">
+                                    <?= $this->Form->control('fila.'.$i.'.id_factura', ['options'=>$facturas_opts, 'label'=>false, 'templates'=>$emptyTemplates]) ?>
                                 </td>
                             </tr>
 

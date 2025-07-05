@@ -79,17 +79,38 @@ foreach($partidasOrzamentarias as $po) {
         <div style="margin-top:1em">
             <?= $this->Form->button('Buscar', ['class'=>'btn btn-primary']); ?>
             <?= $this->Html->link(__($prevision ? 'Nova previsión' : 'Novo movemento'), ['action'=>'detalleMovemento', '?'=>['prevision'=>$prevision]], ['class'=>'btn btn-success']) ?>
+            <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalImportar">Importar</button>
         </div>
 
     <?= $this->Form->end() ?>
 
-    <?= $this->Form->create(null, ['type'=>'post', 'enctype' => 'multipart/form-data', 'url'=>['action'=>'previsualizarMovementos']]) ?>
-        <div class="row">
-            <?php echo $this->Form->input('file', ['type'=>'file', 'label'=>'Arquivo', 'class'=>'form-control', 'accept'=>".xlsx"]) ?>
-        </div>
-        <?= $this->Form->button('Subir', ['class'=>'btn btn-default glyphicon glyphicon-upload']); ?>
-    <?= $this->Form->end() ?>
 </div>
+
+
+<div id="modalImportar" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <?= $this->Form->create(null, ['type'=>'post', 'enctype' => 'multipart/form-data', 'url'=>['action'=>'previsualizarMovementos']]) ?>
+                <div class="modal-header">
+                    <h5 class="modal-title">Importar</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <?php echo $this->Form->input('file', ['type'=>'file', 'label'=>'Arquivo', 'class'=>'form-control', 'accept'=>".xlsx"]) ?>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Descartar</button>
+                    <?= $this->Form->button('Importar', ['class'=>'btn btn-success glyphicon glyphicon-upload']); ?>
+                </div>
+            </div>
+        <?= $this->Form->end() ?>
+    </div>
+
+    
+</div>
+
 
 
 <div class="row" style="margin-top:2em">
