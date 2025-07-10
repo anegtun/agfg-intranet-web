@@ -1,6 +1,7 @@
 <?php
 namespace App\Model\Table;
 
+use Cake\I18n\FrozenDate;
 use Cake\Validation\Validator;
 
 class EconomicoMovementosTable extends AgfgTable {

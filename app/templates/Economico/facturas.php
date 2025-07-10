@@ -27,7 +27,16 @@ $estado_param = $this->request->getQuery('estado');
                 <?= $this->Form->control('data_fin', ['type'=>'text', 'class'=>'form-control fld-date', 'label'=>'Data fin', 'templates'=>$emptyTemplates]) ?>
             </div>
             <div class="col-lg-2">
-                <?= $this->Form->control('estado', ['options'=>[''=>'Todas', 'A'=>'Abertas', 'F'=>'Finalizadas', 'S'=>'Pechadas sen pagos', 'I'=>'Pechadas pagos inconsistentes']]) ?>
+                <?= $this->Form->control('estado', ['options'=>[''=>'', 'A'=>'Abertas', 'F'=>'Finalizadas', 'S'=>'Pechadas sen pagos', 'I'=>'Pechadas pagos inconsistentes']]) ?>
+            </div>
+            <div class="col-lg-2">
+                <?= $this->Form->control('entidade', ['options'=>$entidades]) ?>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <?= $this->Form->control('texto', ['type'=>'text', 'class'=>'form-control', 'label'=>'Texto']) ?>
             </div>
         </div>
 
@@ -50,7 +59,7 @@ $estado_param = $this->request->getQuery('estado');
                     <th class="celda-titulo text-center">Data</th>
                     <th class="celda-titulo text-center">Importe</th>
                     <th class="celda-titulo text-center">Entidade</th>
-                    <th class="celda-titulo text-center">Referencia</th>
+                    <th class="celda-titulo text-center">Subárea</th>
                     <th class="celda-titulo text-center">Descrición</th>
                     <th class="celda-titulo"></th>
                     <th class="celda-titulo"></th>
@@ -58,19 +67,7 @@ $estado_param = $this->request->getQuery('estado');
             </thead>
             <tbody>
                 <?php foreach($facturas as $f) : ?>
-                    <?php
-                        $diff = $f->diffImporteMovementos();
-                        switch($estado_param) {
-                            case 'A': $fn_match = function($fac) { return $fac->isAberta(); }; break;
-                            case 'F': $fn_match = function($fac) { return !$fac->isAberta(); }; break;
-                            case 'S': $fn_match = function($fac) { return $fac->isPechada() && empty($fac->movementos); }; break;
-                            case 'I': $fn_match = function($fac) { return $fac->isPechada() && !empty($fac->movementos) && ((int)$fac->diffImporteMovementos()) != 0; }; break;
-                            default:  $fn_match = function($fac) { return true; }; break;
-                        }
-                        if(!$fn_match($f)) {
-                            continue;
-                        }
-                    ?>
+                    <?php $diff = $f->diffImporteMovementos() ?>
                     <tr>
                         <td class="text-center">
                             <?php
@@ -108,14 +105,39 @@ $estado_param = $this->request->getQuery('estado');
                                 <a class="glyphicon glyphicon-paperclip text-danger" href="javascript:void(0)"></a>
                             <?php endif ?>
                         </td>
-                        <td class="text-center"><?= $f->data->format('Y-m-d') ?></td>
-                        <td class="text-right"><?= $this->Number->currency($f->importe, 'EUR') ?></td>
-                        <td class="text-center"><?= $f->entidade ?></td>
-                        <td class="text-center"><?= $f->referencia ?></td>
-                        <td class="text-center"><?= $f->descricion ?></td>
-                        <td class="text-center"><?= $this->AgfgForm->editButton(['action'=>'detalleFactura', $f->id]) ?></td>
-                        <td class="text-center"><?= $this->Html->link('', ['action'=>'clonarFactura', $f->id], ['class'=>'glyphicon glyphicon-duplicate']) ?></td>
-                        <td class="text-center"><?= $this->AgfgForm->deleteButton(['action'=>'borrarFactura', $f->id]) ?></td>
+                        <td class="text-center">
+                            <?= $f->data->format('Y-m-d') ?>
+                        </td>
+                        <td class="text-right">
+                            <?= $this->Number->currency($f->importe, 'EUR') ?>
+                        </td>
+                        <td class="text-center">
+                            <?= $f->entidade ?>
+                        </td>
+                        <td class="text-center">
+                            <?php
+                                $subareas = [];
+                                foreach ($f->movementos as $m) {
+                                    $subarea = "{$m->subarea->area->partidaOrzamentaria->nome} - {$m->subarea->area->nome} - {$m->subarea->nome}";
+                                    if (!in_array($subarea, $subareas)) {
+                                        $subareas[] = $subarea;
+                                    }
+                                }
+                                echo implode(", ", $subareas);
+                            ?>
+                        </td>
+                        <td class="text-center">
+                            <?= $f->descricion ?>
+                        </td>
+                        <td class="text-center">
+                            <?= $this->AgfgForm->editButton(['action'=>'detalleFactura', $f->id]) ?>
+                        </td>
+                        <td class="text-center">
+                            <?= $this->Html->link('', ['action'=>'clonarFactura', $f->id], ['class'=>'glyphicon glyphicon-duplicate']) ?>
+                        </td>
+                        <td class="text-center">
+                            <?= $this->AgfgForm->deleteButton(['action'=>'borrarFactura', $f->id]) ?>
+                        </td>
                     </tr>
                 <?php endforeach ?>
             </tbody>
