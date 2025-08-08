@@ -2,7 +2,6 @@
 namespace App\Controller;
 
 use App\Model\Categorias;
-use App\Model\Tempadas;
 use App\Model\TiposCompeticion;
 use Cake\Collection\CollectionInterface;
 use Cake\Database\Expression\QueryExpression;
@@ -17,7 +16,6 @@ class ResultadosController extends AppController {
     public function initialize(): void {
         parent::initialize();
         $this->Categorias = new Categorias();
-        $this->Tempadas = new Tempadas();
         $this->TiposCompeticion = new TiposCompeticion();
         $this->Arbitros = TableRegistry::get('Arbitros');
         $this->Campos = TableRegistry::get('Campos');
@@ -26,6 +24,7 @@ class ResultadosController extends AppController {
         $this->Equipas = TableRegistry::get('Equipas');
         $this->Fases = TableRegistry::get('Fases');
         $this->Partidos = TableRegistry::get('Partidos');
+        $this->Tempadas = TableRegistry::get('Tempadas');
         $this->Xornadas = TableRegistry::get('Xornadas');
     }
 

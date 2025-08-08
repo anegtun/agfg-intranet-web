@@ -31,7 +31,8 @@ $authUser = $this->request->getAttribute('identity');
         'icono' => 'calendar',
         'auth' => ['admin'],
         'submenus' => [
-            [ 'id' => 'eventos', 'nome' => 'Eventos', 'url' => ['controller'=>'Calendario', 'action'=>'eventos'] ]
+            [ 'id' => 'eventos', 'nome' => 'Eventos', 'url' => ['controller'=>'Calendario', 'action'=>'eventos'] ],
+            [ 'id' => 'tempadas', 'nome' => 'Tempadas', 'url' => ['controller'=>'Calendario', 'action'=>'tempadas'] ]
         ],
         'menu_option'=>$menu_option, 
         'submenu_option'=>$submenu_option]) ?>

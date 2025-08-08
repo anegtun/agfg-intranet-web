@@ -19,11 +19,12 @@ class CalendarioController extends AppController {
         $this->Arbitros = TableRegistry::get('Arbitros');
         $this->Campos = TableRegistry::get('Campos');
         $this->Competicions = TableRegistry::get('Competicions');
+        $this->Equipas = TableRegistry::get('Equipas');
         $this->Eventos = TableRegistry::get('Eventos');
         $this->EventosDatas = TableRegistry::get('EventosDatas');
         $this->Fases = TableRegistry::get('Fases');
-        $this->Equipas = TableRegistry::get('Equipas');
         $this->Partidos = TableRegistry::get('Partidos');
+        $this->Tempadas = TableRegistry::get('Tempadas');
         $this->Xornadas = TableRegistry::get('Xornadas');
     }
 
@@ -110,6 +111,47 @@ class CalendarioController extends AppController {
         }
         return $this->redirect(['action'=>'evento', $evento_data->id_evento]);
     }
+
+
+
+    public function tempadas() {
+        $tempadas = $this->Tempadas->find()->order('codigo DESC');
+        $this->set(compact('tempadas'));
+    }
+
+    public function tempada($codigo=null) {
+        $tempada = $this->Tempadas->getOrNew($codigo);
+        $this->set(compact('tempada'));
+    }
+
+    public function gardarTempada() {
+        $data = $this->request->getData();
+        try {
+            $tempada = $this->Tempadas->getOrNew($data['codigo']);
+        } catch(Exception $ex) {
+            $tempada = $this->Tempadas->newEntity([]);
+        }
+        $tempada = $this->Tempadas->patchEntity($tempada, $data);
+        if ($this->Tempadas->save($tempada)) {
+            $this->Flash->success(__('Gardouse a tempada correctamente.'));
+            return $this->redirect(['action'=>'tempadas']);
+        }
+        $this->Flash->error(__('Erro ao gardar a tempada.'));
+        $this->set(compact('tempada'));
+        $this->render('tempada');
+    }
+
+    public function borrarTempada($codigo) {
+        $tempada = $this->Tempadas->get($codigo);
+        if($this->Tempadas->delete($tempada)) {
+            $this->Flash->success(__('Eliminouse a tempada correctamente.'));
+        } else {
+            $this->Flash->error(__('Erro ao eliminar a tempada.'));
+        }
+        return $this->redirect(['action'=>'tempadas']);
+    }
+
+
 
     public function competicion($codigo) {
         $categoriaParam = $this->request->getQuery('categoria');

@@ -4,7 +4,6 @@ namespace App\Controller;
 use App\Model\Contas;
 use App\Model\EconomicoFacturaEstado;
 use App\Model\ResumoEconomico;
-use App\Model\Tempadas;
 use Cake\Filesystem\Folder;
 use Cake\I18n\FrozenDate;
 use Cake\I18n\Time;
@@ -17,7 +16,6 @@ class EconomicoController extends AppController {
     public function initialize(): void {
         parent::initialize();
         $this->Contas = new Contas();
-        $this->Tempadas = new Tempadas();
         $this->FacturaEstado = new EconomicoFacturaEstado();
         $this->Clubes = TableRegistry::get('Clubes');
         $this->PartidasOrzamentarias = TableRegistry::get('EconomicoPartidasOrzamentarias');
@@ -25,6 +23,7 @@ class EconomicoController extends AppController {
         $this->Subareas = TableRegistry::get('EconomicoSubareas');
         $this->Facturas = TableRegistry::get('EconomicoFacturas');
         $this->Movementos = TableRegistry::get('EconomicoMovementos');
+        $this->Tempadas = TableRegistry::get('Tempadas');
         $this->loadComponent('EconomicoFactura');
         $this->loadComponent('ResumoEconomicoPdf');
     }

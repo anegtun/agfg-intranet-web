@@ -2,7 +2,6 @@
 namespace App\Controller;
 
 use App\Model\Categorias;
-use App\Model\Tempadas;
 use App\Model\TiposCompeticion;
 use Cake\Event\Event;
 use Cake\I18n\Time;
@@ -13,7 +12,6 @@ class CompeticionsController extends AppController {
     public function initialize(): void {
         parent::initialize();
         $this->Categorias = new Categorias();
-        $this->Tempadas = new Tempadas();
         $this->TiposCompeticion = new TiposCompeticion();
         $this->Clubes = TableRegistry::get('Clubes');
         $this->Fases = TableRegistry::get('Fases');
@@ -21,6 +19,7 @@ class CompeticionsController extends AppController {
         $this->FasesEquipas = TableRegistry::get('FasesEquipas');
         $this->Federacions = TableRegistry::get('Federacions');
         $this->Partidos = TableRegistry::get('Partidos');
+        $this->Tempadas = TableRegistry::get('Tempadas');
         $this->Xornadas = TableRegistry::get('Xornadas');
     }
 
