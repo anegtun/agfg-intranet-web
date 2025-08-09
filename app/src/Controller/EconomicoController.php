@@ -50,7 +50,7 @@ class EconomicoController extends AppController {
             $movemento = $this->Movementos->get($id);
         }
         $contas = $this->Contas->getAllWithEmpty();
-        $tempadas = $this->Tempadas->getTempadasWithEmpty();
+        $tempadas = $this->Tempadas->findSorted();
         $clubes = $this->Clubes->find()->order('nome');
         $subareas = $this->Subareas->find()->contain(['Area' => 'PartidaOrzamentaria'])->order('PartidaOrzamentaria.nome', 'Area.nome');
         if ($movemento->id_subarea) {
@@ -66,7 +66,7 @@ class EconomicoController extends AppController {
         $movemento = $this->Movementos->get($id);
         $movemento->id = NULL;
         $contas = $this->Contas->getAllWithEmpty();
-        $tempadas = $this->Tempadas->getTempadasWithEmpty();
+        $tempadas = $this->Tempadas->findSorted();
         $clubes = $this->Clubes->find()->order('nome');
         $subareas = $this->Subareas->find()->contain(['Area' => 'PartidaOrzamentaria'])->order('PartidaOrzamentaria.nome', 'Area.nome');
         $facturas = $this->Facturas->findAbertas($movemento->id_factura);
@@ -152,7 +152,7 @@ class EconomicoController extends AppController {
             ->where(['and' => ['data >= ' => $inicio, 'data <= ' => $fin]]);
 
         $facturas = $this->Facturas->findAbertas();
-        $tempadas = $this->Tempadas->getTempadasWithEmpty();
+        $tempadas = $this->Tempadas->findSorted();
         $clubes = $this->Clubes->findAGFG();
         $subareas = $this->Subareas
             ->find()
@@ -317,7 +317,7 @@ class EconomicoController extends AppController {
         $resumo = new ResumoEconomico($movementos, $previsions);
 
         $partidasOrzamentarias = $this->PartidasOrzamentarias->findComplete();
-        $tempadas = $this->Tempadas->getTempadasWithEmpty();
+        $tempadas = $this->Tempadas->findOptions();
 
         if($this->request->getQuery('accion') === 'pdf') {
             $content = $this->ResumoEconomicoPdf->generate($resumo, $tempadas, $this->request);
@@ -337,7 +337,7 @@ class EconomicoController extends AppController {
         $movementos = $this->Movementos->findBy($query, false);
         $previsions = $this->Movementos->findBy($query, true);
         $resumo = new ResumoEconomico($movementos, $previsions);
-        $tempadas = $this->Tempadas->getTempadasWithEmpty();
+        $tempadas = $this->Tempadas->findOptions();
         $clubes = $this->Clubes->find()->order('nome');
         $this->set(compact('resumo', 'clubes', 'tempadas'));
     }
@@ -404,7 +404,7 @@ class EconomicoController extends AppController {
         $subarea = $this->Subareas->getOrNew($id, ['contain' => ['Movementos'=>['Factura','Clube'], 'Previsions'=>['Clube']]]);
         $areas = $this->Areas->find()->contain(['PartidaOrzamentaria'])->order(['PartidaOrzamentaria.nome', 'EconomicoAreas.nome']);
         $contas = $this->Contas->getAllWithEmpty();
-        $tempadas = $this->Tempadas->getTempadasWithEmpty();
+        $tempadas = $this->Tempadas->findOptions();
         $this->set(compact('subarea', 'areas', 'contas', 'tempadas'));
     }
 
@@ -430,7 +430,7 @@ class EconomicoController extends AppController {
 
     private function listarMovementos($prevision) {
         $contas = $this->Contas->getAllWithEmpty();
-        $tempadas = $this->Tempadas->getTempadasWithEmpty();
+        $tempadas = $this->Tempadas->findOptions();
         $partidasOrzamentarias = $this->PartidasOrzamentarias->findComplete();
         $movementos = $this->Movementos->findBy($this->queryToArray($this->request), $prevision);
         $this->set(compact('prevision', 'contas', 'tempadas', 'partidasOrzamentarias', 'movementos'));

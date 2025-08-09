@@ -28,7 +28,7 @@ class CompeticionsController extends AppController {
             ->contain('Federacion')
             ->order(['Competicions.tempada DESC','Competicions.nome ASC']);
 
-        $tempadas = $this->Tempadas->getTempadas();
+        $tempadas = $this->Tempadas->findOptions();
         $tiposCompeticion = $this->TiposCompeticion->getTipos();
 
         $this->set(compact('competicions', 'tempadas', 'tiposCompeticion'));
@@ -37,7 +37,7 @@ class CompeticionsController extends AppController {
     public function detalle($id=null) {
         $competicion = $this->Competicions->getOrNew($id, ['contain' => ['Fases' => ['sort'=>['Fases.categoria', 'Fases.nome']], 'Fases.FasePai']]);
         $categorias = $this->Categorias->getCategoriasWithEmpty();
-        $tempadas = $this->Tempadas->getTempadasWithEmpty();
+        $tempadas = $this->Tempadas->findSorted();
         $tiposCompeticion = $this->TiposCompeticion->getTiposWithEmpty();
         $federacions = $this->Federacions->find();
         $this->set(compact('competicion', 'categorias', 'federacions', 'tempadas', 'tiposCompeticion'));

@@ -10,21 +10,16 @@ class TempadasTable extends AgfgTable {
         $this->setPrimaryKey('codigo');
     }
     
-    public function getTempadas() {
-        $list = $this->find('all', ['order' => 'codigo DESC']);
+    public function findOptions() {
+        $list = $this->findSorted();
         $result = [];
         foreach($list as $t) {
             $result[$t->codigo] = $t->nome;
         }
         return $result;
     }
-
-    public function getTempadasWithEmpty() {
-        return array_merge([''=>''], $this->getTempadas());
-    }
-
-    public function getTempada($key) {
-        $list = $this->getTempadas();
-        return $list[$key];
+    
+    public function findSorted() {
+        return $this->find('all', ['order' => 'codigo DESC']);
     }
 }

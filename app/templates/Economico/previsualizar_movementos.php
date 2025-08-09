@@ -94,7 +94,7 @@ $ids_movementos_existentes = [];
                                     <?= $this->Form->hidden('fila.'.$i.'.importe', ['value' => $f->importe]) ?>
                                 </td>
                                 <td class="text-center">
-                                    <?= $this->Form->control('fila.'.$i.'.tempada', ['options'=>$tempadas, 'label'=>false, 'templates'=>$emptyTemplates]) ?>
+                                    <?= $this->Form->control('fila.'.$i.'.tempada', ['options'=>$this->AgfgForm->objectToKeyValue($tempadas,'codigo','nome',true,false), 'label'=>false, 'templates'=>$emptyTemplates]) ?>
                                 </td>
                                 <td class="text-center">
                                     <?= $this->Form->control('fila.'.$i.'.id_subarea', ['options'=>$this->AgfgForm->objectToKeyValue($subareas,'id','{$e->area->partidaOrzamentaria->nome} - {$e->area->nome} - {$e->nome}'), 'label'=>false, 'templates'=>$emptyTemplates]) ?>

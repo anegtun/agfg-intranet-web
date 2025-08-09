@@ -34,7 +34,7 @@ class ResultadosController extends AppController {
             ->contain('Federacion')
             ->order(['Competicions.tempada DESC','Competicions.nome ASC']);
 
-        $tempadas = $this->Tempadas->getTempadas();
+        $tempadas = $this->Tempadas->findOptions();
         $tiposCompeticion = $this->TiposCompeticion->getTipos();
 
         $this->set(compact('competicions', 'tempadas', 'tiposCompeticion'));

@@ -57,7 +57,7 @@ if(!empty($movemento->id_subarea)) {
 
         <div class="row">
             <div class="form-group col-lg-3">
-                <?= $this->Form->control('tempada', ['options'=>$tempadas, 'label'=>'Tempada', 'templates'=>$emptyTemplates]) ?>
+                <?= $this->Form->control('tempada', ['options'=>$this->AgfgForm->objectToKeyValue($tempadas,'codigo','nome',true,false), 'label'=>'Tempada', 'templates'=>$emptyTemplates]) ?>
             </div>
             <div class="form-group col-lg-3">
                 <?= $this->Form->control('id_subarea', ['options'=>$this->AgfgForm->objectToKeyValue($subareas,'id','{$e->area->partidaOrzamentaria->nome} - {$e->area->nome} - {$e->nome}'), 'label'=>'Subárea', 'templates'=>$emptyTemplates]) ?>
