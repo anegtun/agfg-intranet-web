@@ -152,7 +152,7 @@ class EconomicoController extends AppController {
             ->where(['and' => ['data >= ' => $inicio, 'data <= ' => $fin]]);
 
         $facturas = $this->Facturas->findAbertas();
-        $tempadas = $this->Tempadas->findSorted();
+        $tempadas = $this->Tempadas->findOptions();
         $clubes = $this->Clubes->findAGFG();
         $subareas = $this->Subareas
             ->find()
