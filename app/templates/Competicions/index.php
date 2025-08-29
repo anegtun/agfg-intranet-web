@@ -12,11 +12,11 @@ $this->set('cabeceiraMigas', [
         <table class="table table-hover">
             <thead>
                 <tr>
-                    <th class="celda-titulo">Nome</th>
-                    <th class="celda-titulo">Código</th>
-                    <th class="celda-titulo">Tipo</th>
-                    <th class="celda-titulo">Federación</th>
-                    <th class="celda-titulo"></th>
+                    <th class="column-s"></th>
+                    <th>Nome</th>
+                    <th>Tipo</th>
+                    <th>Código</th>
+                    <th class="column-button"></th>
                 </tr>
             </thead>
             <tbody>
@@ -31,10 +31,10 @@ $this->set('cabeceiraMigas', [
                     <?php endif ?>
                     
                     <tr>
+                        <td><?= $this->AgfgForm->logo($c->federacion) ?></td>
                         <td><?= $this->Html->link($c->nome, ['action'=>'detalle', $c->id]) ?></td>
-                        <td><?= $c->codigo ?></td>
                         <td><?= empty($c->tipo) ? '' : $tiposCompeticion[$c->tipo] ?></td>
-                        <td><?= empty($c->federacion) ? '' : $c->federacion->codigo ?></td>
+                        <td><?= $c->codigo ?></td>
                         <td class="text-center"><?= $this->AgfgForm->deleteButton(['action'=>'borrar', $c->id]) ?></td>
                     </tr>
                 <?php endforeach ?>

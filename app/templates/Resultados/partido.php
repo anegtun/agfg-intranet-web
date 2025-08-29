@@ -2,11 +2,8 @@
 $this->extend('template');
 $this->set('cabeceiraTitulo', $partido->fase->competicion->nome);
 
-$nome1 = empty($partido->equipa1) ? $partido->provisional_equipa1 : $partido->equipa1->nome;
-$nome2 = empty($partido->equipa2) ? $partido->provisional_equipa2 : $partido->equipa2->nome;
-
-$logo1 = empty($partido->equipa1) ? '' : $partido->equipa1->getLogo();
-$logo2 = empty($partido->equipa2) ? '' : $partido->equipa2->getLogo();
+$nome1 = $partido->getNomeEquipa1();
+$nome2 = $partido->getNomeEquipa2();
 
 $this->set('cabeceiraMigas', [
     ['label'=>'Competicións'],
@@ -72,9 +69,7 @@ $data_partido_str = empty($partido->data_partido) ? NULL : $partido->data_partid
             <div class="col-lg-6">
                 <div class="row">
                     <h3>
-                        <?php if(!empty($logo1)) : ?>
-                            <?= $this->Html->image($logo1, ['width'=>30]) ?>&nbsp;
-                        <?php endif ?>
+                        <?= $this->AgfgForm->logo($partido->equipa1) ?>&nbsp;
                         <?= $nome1 ?>
                     </h3>
                 </div>
@@ -108,9 +103,7 @@ $data_partido_str = empty($partido->data_partido) ? NULL : $partido->data_partid
             <div class="col-lg-6">
                 <div class="row">
                     <h3>
-                        <?php if(!empty($logo2)) : ?>
-                            <?= $this->Html->image($logo2, ['width'=>30]) ?>&nbsp;
-                        <?php endif ?>
+                        <?= $this->AgfgForm->logo($partido->equipa2) ?>&nbsp;
                         <?= $nome2 ?>
                     </h3>
                 </div>

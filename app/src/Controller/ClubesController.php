@@ -15,7 +15,7 @@ class ClubesController extends AppController {
 
     public function index() {
         $federacions = $this->Federacions->find()->order('codigo');
-        $clubes = $this->Clubes->find()->contain('Federacions')->order('Clubes.codigo');
+        $clubes = $this->Clubes->find()->contain(['Equipas', 'Federacions'])->order('Clubes.codigo');
 
         if (!empty($this->request->getQuery('id_federacion'))) {
             $clubes->matching('Federacions', function ($q) {

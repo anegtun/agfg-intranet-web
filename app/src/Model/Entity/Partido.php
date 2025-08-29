@@ -42,6 +42,30 @@ class Partido extends Entity {
         return $time;
     }
 
+    public function hasEquipa1() {
+        return !empty($this->equipa1) || !empty($this->provisional_equipa1);
+    }
+
+    public function hasEquipa2() {
+        return !empty($this->equipa2) || !empty($this->provisional_equipa2);
+    }
+
+    public function getNomeEquipa1() {
+        return empty($this->equipa1) ? $this->provisional_equipa1 : $this->equipa1->nome;
+    }
+
+    public function getNomeEquipa2() {
+        return empty($this->equipa2) ? $this->provisional_equipa2 : $this->equipa2->nome;
+    }
+
+    public function getNomeCurtoEquipa1() {
+        return empty($this->equipa1) ? $this->provisional_equipa1 : $this->equipa1->nome_curto;
+    }
+
+    public function getNomeCurtoEquipa2() {
+        return empty($this->equipa2) ? $this->provisional_equipa2 : $this->equipa2->nome_curto;
+    }
+
     public function hasPuntuacionTotalEquipa1() {
         return $this->getPuntuacionTotalEquipa1() !== NULL;
     }

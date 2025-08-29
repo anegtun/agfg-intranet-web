@@ -22,11 +22,11 @@ foreach($partidos as $p) {
         'ganador' => $p->getGanador()
     ];
 
-    if(!empty($p->equipa1) || !empty($p->provisional_equipa1)) {
+    if($p->hasEquipa1()) {
         $resP['equipa1'] = [
             'codigo' => empty($p->equipa1) ? '' : $p->equipa1->codigo,
-            'nome' => empty($p->equipa1) ? $p->provisional_equipa1 : $p->equipa1->nome,
-            'nome_curto' => empty($p->equipa1) ? $p->provisional_equipa1 : $p->equipa1->nome_curto,
+            'nome' => $p->getNomeEquipa1(),
+            'nome_curto' => $p->getNomeCurtoEquipa1(),
             'logo' => empty($p->equipa1) ? '' : $p->equipa1->getLogo(),
             'goles' => $p->goles_equipa1,
             'tantos' => $p->tantos_equipa1,
@@ -35,11 +35,11 @@ foreach($partidos as $p) {
         ];
     }
    
-    if(!empty($p->equipa2) || !empty($p->provisional_equipa2)) {
+    if($p->hasEquipa2()) {
         $resP['equipa2'] = [
             'codigo' => empty($p->equipa2) ? '' : $p->equipa2->codigo,
-            'nome' => empty($p->equipa2) ? $p->provisional_equipa2 : $p->equipa2->nome,
-            'nome_curto' => empty($p->equipa2) ? $p->provisional_equipa2 : $p->equipa2->nome_curto,
+            'nome' => $p->getNomeEquipa2(),
+            'nome_curto' => $p->getNomeCurtoEquipa2(),
             'logo' => empty($p->equipa2) ? '' : $p->equipa2->getLogo(),
             'goles' => $p->goles_equipa2,
             'tantos' => $p->tantos_equipa2,

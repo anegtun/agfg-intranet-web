@@ -28,15 +28,15 @@ $this->set('cabeceiraMigas', [
         <table class="table table-striped table-hover">
             <thead>
                 <tr>
-                    <th class="celda-titulo"></th>
-                    <th class="celda-titulo">Código</th>
-                    <th class="celda-titulo">Nome</th>
+                    <th class="column-s"></th>
+                    <th class="column-s">Código</th>
+                    <th>Nome</th>
                 </tr>
             </thead>
             <tbody>
                 <?php foreach($federacion->clubes as $c) : ?>
                     <tr>
-                        <td class="text-center"><?= empty($c->logo) ? '' : $this->Html->image($c->logo, ['width'=>30,'height'=>30]) ?></td>
+                        <td class="text-center"><?= $this->AgfgForm->logo($c) ?></td>
                         <td><?= $c->codigo ?></td>
                         <td><?= $c->nome ?></td>
                     </tr>

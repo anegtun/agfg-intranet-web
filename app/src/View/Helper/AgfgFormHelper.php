@@ -16,6 +16,26 @@ class AgfgFormHelper extends Helper {
         return $this->Html->link('', $url, ['class'=>'glyphicon glyphicon-trash', 'confirm'=>'Seguro que queres borrar o rexistro?']);
     }
     
+    public function logo($clube, $opts=[]) {
+        if(empty($clube)) {
+            return '';
+        }
+
+        $logo = '';
+        if(method_exists($clube,'getLogo')) {
+            $logo = $clube->getLogo();
+        } else {
+            $logo = $clube->logo;
+        }
+
+        if(empty($logo)) {
+            return '';
+        }
+
+        $size = empty($opts['size']) ? 30 : $opts['size'];
+        return $this->Html->image($logo, ['width'=>$size]);
+    }
+    
     public function objectToKeyValue($array, $key, $value, $allowEmpty=true, $order=true) {
         $tmp = $allowEmpty ? [''=>''] : [];
         foreach($array as $e) {

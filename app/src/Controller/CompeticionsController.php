@@ -81,8 +81,7 @@ class CompeticionsController extends AppController {
         }
         $categorias = $this->Categorias->getCategoriasWithEmpty();
         $competicion = $this->Competicions->get($fase->id_competicion);
-        $equipas_map = $this->Equipas->find()->find('list', ['keyField'=>'id','valueField'=>'nome'])->toArray();
-        $this->set(compact('fase','competicion','categorias','equipas','equipas_map','outras_fases'));
+        $this->set(compact('fase','competicion','categorias','equipas','outras_fases'));
     }
 
     public function gardarFase() {

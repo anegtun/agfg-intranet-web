@@ -84,8 +84,8 @@ $this->Html->script('detalle-fase', ['block' => 'script']);
                         <?php foreach($x->partidos as $p) : ?>
                             <tr>
                                 <td>&nbsp;</td>
-                                <td><?= empty($p->id_equipa1) ? $p->provisional_equipa1 : $equipas_map[$p->id_equipa1] ?></td>
-                                <td><?= empty($p->id_equipa2) ? $p->provisional_equipa2 : $equipas_map[$p->id_equipa2] ?></td>
+                                <td><?= $this->AgfgForm->logo($p->equipa1, ['size'=>20]) ?> <?= $p->getNomeEquipa1() ?></td>
+                                <td><?= $this->AgfgForm->logo($p->equipa2, ['size'=>20]) ?> <?= $p->getNomeEquipa2() ?></td>
                                 <td><?= $p->formatDataHora() ?></td>
                                 <td class="text-center">
                                     <?= $this->AgfgForm->editButton('#', [

@@ -33,13 +33,10 @@ $emptyTemplates = [
                 <td><?= $hora ?></td>
                 <td><?= $p->fase->categoria ?></td>
                 <td><?= $fase ?></td>
-                <td><?= empty($p->equipa1) ? $p->provisional_equipa1 : $p->equipa1->nome_curto ?></td>
-                <td>
-                        <?= $p->formatDesglose1() ?> (<?= $p->getPuntuacionTotalEquipa1() ?>)</td>
-                <td>
-                        <?= $p->formatDesglose2() ?> (<?= $p->getPuntuacionTotalEquipa2() ?>)
-                </td>
-                <td><?= empty($p->equipa2) ? $p->provisional_equipa2 : $p->equipa2->nome_curto ?></td>
+                <td><?= $p->getNomeCurtoEquipa1() ?></td>
+                <td><?= $p->formatDesglose1() ?> (<?= $p->getPuntuacionTotalEquipa1() ?>)</td>
+                <td><?= $p->formatDesglose2() ?> (<?= $p->getPuntuacionTotalEquipa2() ?>)</td>
+                <td><?= $p->getNomeCurtoEquipa2() ?></td>
             </tr>
         <?php endforeach ?>
     </table>

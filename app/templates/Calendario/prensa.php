@@ -50,10 +50,10 @@ $this->Html->script('prensa', ['block' => 'script']);
                 <?php if($p->fase->categoria == $c) : ?>
                     <p>
                         -
-                        <?= empty($p->equipa1) ? $p->provisional_equipa1 : $p->equipa1->nome ?>
+                        <?= $p->getNomeEquipa1() ?>
                         (<?= $p->getPuntuacionTotalEquipa1() ?>)
                         VS
-                        <?= empty($p->equipa2) ? $p->provisional_equipa2 : $p->equipa2->nome ?>
+                        <?= $p->getNomeEquipa2() ?>
                         (<?= $p->getPuntuacionTotalEquipa2() ?>)
                         , <?= $p->getDataHora() ?>
                         , <?= $p->campo->nome ?> (<?= $p->campo->pobo ?>)
@@ -78,9 +78,9 @@ $this->Html->script('prensa', ['block' => 'script']);
                 <?php if($p->fase->categoria == $c) : ?>
                     <p>
                         -
-                        <?= empty($p->equipa1) ? $p->provisional_equipa1 : $p->equipa1->nome ?>
+                        <?= $p->getNomeEquipa1() ?>
                         VS
-                        <?= empty($p->equipa2) ? $p->provisional_equipa2 : $p->equipa2->nome ?>
+                        <?= $p->getNomeEquipa2() ?>
                         <?php if(!empty($p->data_partido)) : ?>
                             , <?= $p->getDataHora() ?>
                         <?php endif ?>

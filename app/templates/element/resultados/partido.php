@@ -16,8 +16,8 @@
     
     <div class="agfg-partido-equipas">
         <div class='agfg-partido-equipa'>
-            <div><figure><?= empty($partido->equipa1) ? '' : $this->Html->image($partido->equipa1->getLogo(), ['width'=>25]) ?></figure></div>
-            <div class='agfg-partido-equipa-nome'><?= empty($partido->equipa1) ? $partido->provisional_equipa1 : $partido->equipa1->nome_curto ?></div>
+            <div><figure><?= $this->AgfgForm->logo($partido->equipa1, ['size'=>25]) ?></figure></div>
+            <div class='agfg-partido-equipa-nome'><?= $partido->getNomeCurtoEquipa1() ?></div>
             <div class='agfg-partido-resultado-equipa1 <?= $partido->getGanador()==='L'?'agfg-partido-resultado-ganador':'' ?>'>
                 <div><?= $partido->hasPuntuacionTotalEquipa1() ? $partido->getPuntuacionTotalEquipa1() : '-' ?></div>
                 <?php if($partido->hasDesglose()) : ?>
@@ -26,8 +26,8 @@
             </div>
         </div>
         <div class='agfg-partido-equipa'>
-            <div><figure><?= empty($partido->equipa2) ? '' : $this->Html->image($partido->equipa2->getLogo(), ['width'=>25]) ?></figure></div>
-            <div class='agfg-partido-equipa-nome'><?= empty($partido->equipa2) ? $partido->provisional_equipa2 : $partido->equipa2->nome_curto ?></div>
+            <div><figure><?= $this->AgfgForm->logo($partido->equipa2, ['size'=>25]) ?></figure></div>
+            <div class='agfg-partido-equipa-nome'><?= $partido->getNomeCurtoEquipa2() ?></div>
             <div class='agfg-partido-resultado-equipa2 <?= $partido->getGanador()==='V'?'agfg-partido-resultado-ganador':'' ?>'>
                 <div><?= $partido->hasPuntuacionTotalEquipa2() ? $partido->getPuntuacionTotalEquipa2() : '-' ?></div>
                 <?php if($partido->hasDesglose()) : ?>

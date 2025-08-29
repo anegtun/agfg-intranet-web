@@ -15,6 +15,10 @@ td.border-right, th.border-right {
     padding-right: 0;
 }
 
+.table>tbody>tr>td.column-s, .table>thead>tr>th.column-s {
+    width: 25px;
+}
+
 .partido-check {
     height: 67px;
     padding-top: 2em;
