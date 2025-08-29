@@ -6,8 +6,7 @@ $nome1 = $partido->getNomeEquipa1();
 $nome2 = $partido->getNomeEquipa2();
 
 $this->set('cabeceiraMigas', [
-    ['label'=>'Competicións'],
-    ['label'=>'Horarios e resultados', 'url'=>['controller'=>'Resultados', 'action'=>'index']],
+    ['label'=>'Competicións', 'url'=>['controller'=>'Competicions', 'action'=>'index']],
     ['label'=>$partido->fase->competicion->nome, 'url'=>['controller'=>'Resultados', 'action'=>'competicion', $partido->fase->competicion->id]],
     ['label'=>$nome1.' - '.$nome2]
 ]);

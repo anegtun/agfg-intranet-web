@@ -16,9 +16,8 @@ $authUser = $this->request->getAttribute('identity');
         'icono' => 'fire',
         'auth' => ['admin','comp','euro22'],
         'submenus' => [
-            [ 'id' => 'resultados', 'nome' => 'Horarios e resultados', 'url' => ['controller'=>'Resultados', 'action'=>'index'] ],
+            [ 'id' => 'listado', 'nome' => 'Listado competicións', 'url' => ['controller'=>'Competicions', 'action'=>'index']],
             [ 'id' => 'prensa', 'nome' => 'Prensa', 'url' => ['controller'=>'Calendario', 'action'=>'prensa'], 'auth' => ['admin','comp'] ],
-            [ 'id' => 'administracion', 'nome' => 'Administrar competicións', 'url' => ['controller'=>'Competicions', 'action'=>'index'], 'auth' => ['admin'] ],
             [ 'id' => 'arbitros', 'nome' => 'Árbitros', 'url' => ['controller'=>'Arbitros', 'action'=>'index'], 'auth' => ['admin','comp'] ],
             [ 'id' => 'campos', 'nome' => 'Campos', 'url' => ['controller'=>'Campos', 'action'=>'index'], 'auth' => ['admin','comp'] ],
         ],

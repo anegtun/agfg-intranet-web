@@ -2,7 +2,6 @@
 namespace App\Controller;
 
 use App\Model\Categorias;
-use App\Model\TiposCompeticion;
 use Cake\Collection\CollectionInterface;
 use Cake\Database\Expression\QueryExpression;
 use Cake\Event\Event;
@@ -16,28 +15,11 @@ class ResultadosController extends AppController {
     public function initialize(): void {
         parent::initialize();
         $this->Categorias = new Categorias();
-        $this->TiposCompeticion = new TiposCompeticion();
         $this->Arbitros = TableRegistry::get('Arbitros');
         $this->Campos = TableRegistry::get('Campos');
-        $this->Clubes = TableRegistry::get('Clubes');
         $this->Competicions = TableRegistry::get('Competicions');
         $this->Equipas = TableRegistry::get('Equipas');
-        $this->Fases = TableRegistry::get('Fases');
         $this->Partidos = TableRegistry::get('Partidos');
-        $this->Tempadas = TableRegistry::get('Tempadas');
-        $this->Xornadas = TableRegistry::get('Xornadas');
-    }
-
-    public function index() {
-        $competicions = $this->Competicions
-            ->find()
-            ->contain('Federacion')
-            ->order(['Competicions.tempada DESC','Competicions.nome ASC']);
-
-        $tempadas = $this->Tempadas->findOptions();
-        $tiposCompeticion = $this->TiposCompeticion->getTipos();
-
-        $this->set(compact('competicions', 'tempadas', 'tiposCompeticion'));
     }
 
     public function competicion($id) {
