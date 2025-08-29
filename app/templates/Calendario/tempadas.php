@@ -14,9 +14,10 @@ $this->set('cabeceiraMigas', [
         <table class="table table-striped table-hover">
             <thead>
                 <tr>
-                    <th class="celda-titulo">Código</th>
-                    <th class="celda-titulo">Nome</th>
-                    <th class="celda-titulo"></th>
+                    <th>Código</th>
+                    <th>Nome</th>
+                    <th>Nome curto</th>
+                    <th class="column-button"></th>
                 </tr>
             </thead>
             <tbody>
@@ -24,6 +25,7 @@ $this->set('cabeceiraMigas', [
                     <tr>
                         <td><?= $this->Html->link($t->codigo, ['action'=>'tempada', $t->codigo]) ?></td>
                         <td><?= $t->nome ?></td>
+                        <td><?= $t->nome_curto ?></td>
                         <td class="text-center"><?= $this->AgfgForm->deleteButton(['action'=>'borrarTempada', $t->codigo]) ?></td>
                     </tr>
                 <?php endforeach ?>

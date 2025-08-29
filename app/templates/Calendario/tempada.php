@@ -21,6 +21,9 @@ $this->set('cabeceiraMigas', [
             <div class="form-group col-lg-3">
                 <?= $this->Form->control('nome', ['label'=>'Nome']) ?>
             </div>
+            <div class="form-group col-lg-3">
+                <?= $this->Form->control('nome_curto', ['label'=>'Nome curto']) ?>
+            </div>
         </div>
 
         <?= $this->Form->button('Gardar', ['class'=>'btn btn-primary glyphicon glyphicon-saved']); ?>

@@ -40,11 +40,10 @@ $this->set('cabeceiraMigas', [
                 <table class="table table-striped table-hover">
                     <thead>
                         <tr>
-                            <th class="celda-titulo"></th>
-                            <th class="celda-titulo">Produto</th>
-                            <th class="celda-titulo">Estado</th>
-                            <th class="celda-titulo">Demanda</th>
-                            <th class="celda-titulo">Stock</th>
+                            <th class="column-button"></th>
+                            <th>Produto</th>
+                            <th class="column-s">Demanda</th>
+                            <th class="column-s">Stock</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -58,7 +57,6 @@ $this->set('cabeceiraMigas', [
                                     <a href="javascript:void(0)"><em class="glyphicon glyphicon-shopping-cart" data-toggle="modal" data-target="#modal-pedidos-<?= "{$id_estado}_{$item->id_sku}" ?>"></em></a>
                                 </td>
                                 <td><?= $item->nome ?></td>
-                                <td><?= $item->estado ?></td>
                                 <td><?= $item->demanda ?> <?= empty($item->persoalizado) ? "" : " *" ?></td>
                                 <td><?= $item->stock ?></td>
                             </tr>
@@ -66,11 +64,10 @@ $this->set('cabeceiraMigas', [
                     </tbody>
                     <tfoot>
                         <tr>
-                            <th class="celda-titulo"></th>
-                            <th class="celda-titulo">TOTAL</th>
-                            <th class="celda-titulo"></th>
-                            <th class="celda-titulo"><?= $totalDemanda ?></th>
-                            <th class="celda-titulo"><?= $totalStock ?></th>
+                            <th></th>
+                            <th>TOTAL</th>
+                            <th><?= $totalDemanda ?></th>
+                            <th><?= $totalStock ?></th>
                         </tr>
                     </tfoot>
                 </table>
@@ -93,13 +90,13 @@ $this->set('cabeceiraMigas', [
                                 <table class="table table-striped table-hover">
                                     <thead>
                                         <tr>
-                                            <th class="celda-titulo"></th>
-                                            <th class="celda-titulo">Data</th>
-                                            <th class="celda-titulo">Nome</th>
-                                            <th class="celda-titulo">Cantidade</th>
-                                            <th class="celda-titulo">Persoalización</th>
-                                            <th class="celda-titulo">T. envío</th>
-                                            <th class="celda-titulo">Pago</th>
+                                            <th class="column-button"></th>
+                                            <th>Data</th>
+                                            <th>Nome</th>
+                                            <th class="column-s">Cantidade</th>
+                                            <th>Persoalización</th>
+                                            <th>T. envío</th>
+                                            <th>Pago</th>
                                         </tr>
                                     </thead>
                                     <tbody>

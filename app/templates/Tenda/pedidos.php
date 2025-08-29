@@ -26,16 +26,16 @@ $this->set('cabeceiraMigas', [
         <table class="table table-striped table-hover">
             <thead>
                 <tr>
-                    <th class="celda-titulo" style="width:5px"></th>
-                    <th class="celda-titulo" style="width:5px"></th>
-                    <th class="celda-titulo">Data</th>
-                    <th class="celda-titulo">Nome</th>
-                    <th class="celda-titulo">Estado</th>
-                    <th class="celda-titulo">Pago</th>
-                    <th class="celda-titulo">Nº items</th>
-                    <th class="celda-titulo text-right">Total</th>
-                    <th class="celda-titulo">T. envío</th>
-                    <th class="celda-titulo text-right">G. envío</th>
+                    <th class="column-button"></th>
+                    <th class="column-button"></th>
+                    <th>Data</th>
+                    <th>Nome</th>
+                    <th>Estado</th>
+                    <th>Pago</th>
+                    <th>Nº items</th>
+                    <th class="text-right">Total</th>
+                    <th>T. envío</th>
+                    <th class="text-right">G. envío</th>
                 </tr>
             </thead>
             <tbody>
@@ -65,9 +65,8 @@ $this->set('cabeceiraMigas', [
                 <?php endforeach ?>
             </tbody>
         </table>
-
-        <?= $this->Html->link(__('Crear'), array('action'=>'pedido'), array('class'=>'btn btn-primary')) ?>
     </div>
+    <?= $this->Html->link(__('Crear'), ['action'=>'pedido'], ['class'=>'btn btn-primary']) ?>
 </div>
 
 
@@ -86,11 +85,11 @@ $this->set('cabeceiraMigas', [
                         <table class="table table-striped table-hover">
                             <thead>
                                 <tr>
-                                    <th class="celda-titulo">Produto</th>
-                                    <th class="celda-titulo">Cantidade</th>
-                                    <th class="celda-titulo">Persoalización</th>
-                                    <th class="celda-titulo text-right">Prezo</th>
-                                    <th class="celda-titulo text-right">Prezo extra</th>
+                                    <th>Produto</th>
+                                    <th>Cantidade</th>
+                                    <th>Persoalización</th>
+                                    <th class="text-right">Prezo</th>
+                                    <th class="text-right">Prezo extra</th>
                                 </tr>
                             </thead>
                             <tbody>

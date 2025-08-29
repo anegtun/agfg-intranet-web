@@ -38,18 +38,16 @@ $emptyTemplates = [
         <table class="table table-striped table-hover">
             <thead>
                 <tr>
-                    <th class="celda-titulo">Nome</th>
-                    <th class="celda-titulo">Stock</th>
-                    <th class="celda-titulo"></th>
-                    <th class="celda-titulo"></th>
+                    <th>Nome</th>
+                    <th>Stock</th>
+                    <th class="column-button"></th>
                 </tr>
             </thead>
             <tbody>
                 <?php foreach($produto->skus as $s) : ?>
                     <tr>
-                        <td><?= $s->nome ?></td>
+                        <td><?= $this->Html->link($s->nome, ['action'=>'sku', $s->id]) ?></td>
                         <td><?= $s->stock ?></td>
-                        <td class="text-center"><?= $this->AgfgForm->editButton(['action'=>'sku', $s->id]) ?></td>
                         <td class="text-center"><?= $this->AgfgForm->deleteButton(['action'=>'borrarSku', $s->id]) ?></td>
                     </tr>
                 <?php endforeach ?>
@@ -63,20 +61,17 @@ $emptyTemplates = [
         <table class="table table-striped table-hover">
             <thead>
                 <tr>
-                    <th class="celda-titulo">Data inicio</th>
-                    <th class="celda-titulo">Data fin</th>
-                    <th class="celda-titulo">Prezo</th>
-                    <th class="celda-titulo"></th>
-                    <th class="celda-titulo"></th>
+                    <th>Rango</th>
+                    <th>Prezo</th>
+                    <th class="column-button"></th>
+                    <th class="column-button"></th>
                 </tr>
             </thead>
             <tbody>
                 <?php foreach($produto->prezos as $p) : ?>
                     <tr>
-                        <td><?= $p->data_inicio->format('Y-m-d') ?></td>
-                        <td><?= $p->data_fin->format('Y-m-d') ?></td>
+                        <td><?= $this->Html->link($p->data_inicio->format('Y-m-d').' / '.$p->data_fin->format('Y-m-d'), ['action'=>'prezo', $p->id]) ?></td>
                         <td><?= $p->prezo ?></td>
-                        <td class="text-center"><?= $this->AgfgForm->editButton(['action'=>'prezo', $p->id]) ?></td>
                         <td class="text-center"><?= $this->AgfgForm->deleteButton(['action'=>'borrarPrezo', $p->id]) ?></td>
                     </tr>
                 <?php endforeach ?>

@@ -54,15 +54,16 @@ $estado_param = $this->request->getQuery('estado');
         <table class="table table-striped table-hover">
             <thead>
                 <tr>
-                    <th class="celda-titulo"></th>
-                    <th class="celda-titulo"></th>
-                    <th class="celda-titulo text-center">Data</th>
-                    <th class="celda-titulo text-center">Importe</th>
-                    <th class="celda-titulo text-center">Entidade</th>
-                    <th class="celda-titulo text-center">Subárea</th>
-                    <th class="celda-titulo text-center">Descrición</th>
-                    <th class="celda-titulo"></th>
-                    <th class="celda-titulo"></th>
+                    <th class="column-button"></th>
+                    <th class="column-button"></th>
+                    <th class="text-center">Data</th>
+                    <th class="text-center">Importe</th>
+                    <th class="text-center">Entidade</th>
+                    <th class="text-center">Subárea</th>
+                    <th class="text-center">Descrición</th>
+                    <th class="column-button"></th>
+                    <th class="column-button"></th>
+                    <th class="column-button"></th>
                 </tr>
             </thead>
             <tbody>

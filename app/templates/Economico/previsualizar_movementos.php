@@ -30,15 +30,15 @@ $ids_movementos_existentes = [];
             <table class="table table-striped table-hover">
                 <thead>
                     <tr>
-                        <th class="celda-titulo text-center"></th>
-                        <th class="celda-titulo text-center" style="min-width: 100px;">Data</th>
-                        <th class="celda-titulo text-center">Importe</th>
-                        <th class="celda-titulo text-center">Tempada</th>
-                        <th class="celda-titulo text-center">Subárea</th>
-                        <th class="celda-titulo text-center">Clube</th>
-                        <th class="celda-titulo text-center">Descricición</th>
-                        <th class="celda-titulo text-center">Referencia</th>
-                        <th class="celda-titulo text-center">Factura</th>
+                        <th class="column-button"></th>
+                        <th class="text-center column-date">Data</th>
+                        <th class="text-center">Importe</th>
+                        <th class="text-center">Tempada</th>
+                        <th class="text-center">Subárea</th>
+                        <th class="text-center">Clube</th>
+                        <th class="text-center">Descricición</th>
+                        <th class="text-center">Referencia</th>
+                        <th class="text-center">Factura</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -136,21 +136,19 @@ $ids_movementos_existentes = [];
         <table class="table table-striped table-hover">
             <thead>
                 <tr>
-                    <th class="celda-titulo text-center"></th>
-                    <th class="celda-titulo text-center" style="min-width: 100px;">Data</th>
-                    <th class="celda-titulo text-center">Importe</th>
-                    <th class="celda-titulo text-center">Tempada</th>
-                    <th class="celda-titulo text-center">Conta</th>
-                    <th class="celda-titulo text-center">Subárea</th>
-                    <th class="celda-titulo text-center">Clube</th>
-                    <th class="celda-titulo">Descricición</th>
+                    <th class="text-center column-date">Data</th>
+                    <th class="text-center">Importe</th>
+                    <th class="text-center">Tempada</th>
+                    <th class="text-center">Conta</th>
+                    <th class="text-center">Subárea</th>
+                    <th class="text-center">Clube</th>
+                    <th>Descricición</th>
                 </tr>
             </thead>
             <tbody>
                 <?php foreach($movementos as $m) : ?>
                     <?php if (!in_array($m->id, $ids_movementos_existentes)) : ?>
                         <tr>
-                            <td class="text-center">&nbsp;</td>
                             <td class="text-center"><?= $m->data->format('Y-m-d') ?></td>
                             <td class="text-right <?= $m->importe<0 ? 'text-danger' : ''?>">
                                 <?= $this->Number->currency($m->importe, 'EUR') ?>
@@ -162,7 +160,6 @@ $ids_movementos_existentes = [];
                             <td class="text-center"><?= $m->descricion ?></td>
                         </tr>
                     <?php endif ?>
-
                 <?php endforeach ?>
             </tbody>
         </table>

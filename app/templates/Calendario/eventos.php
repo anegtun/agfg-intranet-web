@@ -16,12 +16,12 @@ $agora = $this->Time->fromString(time());
         <table class="table table-striped table-hover">
             <thead>
                 <tr>
-                    <th class="celda-titulo">Nome</th>
-                    <th class="celda-titulo">Data</th>
-                    <th class="celda-titulo">Lugar</th>
-                    <th class="celda-titulo">Tipo</th>
-                    <th class="celda-titulo"></th>
-                    <th class="celda-titulo"></th>
+                    <th>Nome</th>
+                    <th>Data</th>
+                    <th>Lugar</th>
+                    <th>Tipo</th>
+                    <th class="column-button"></th>
+                    <th class="column-button"></th>
                 </tr>
             </thead>
             <tbody>
@@ -37,7 +37,6 @@ $agora = $this->Time->fromString(time());
                 <?php endforeach ?>
             </tbody>
         </table>
-
-        <?= $this->Html->link(__('Crear'), array('action'=>'evento'), array('class'=>'btn btn-primary')) ?>
     </div>
+    <?= $this->Html->link(__('Crear'), ['action'=>'evento'], ['class'=>'btn btn-primary']) ?>
 </div>

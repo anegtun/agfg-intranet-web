@@ -51,12 +51,12 @@ $data_str = empty($pedido->data) ? NULL : $pedido->data->format('d-m-Y');
                     <table class="table table-striped table-hover">
                         <thead>
                             <tr>
-                                <th class="celda-titulo" style="width:5px"></th>
-                                <th class="celda-titulo">Produto</th>
-                                <th class="celda-titulo">Cantidade</th>
-                                <th class="celda-titulo">Persoalización</th>
-                                <th class="celda-titulo text-right">Prezo</th>
-                                <th class="celda-titulo text-right">Prezo extra</th>
+                                <th class="column-button"></th>
+                                <th>Produto</th>
+                                <th>Cantidade</th>
+                                <th>Persoalización</th>
+                                <th class="text-right">Prezo</th>
+                                <th class="text-right">Prezo extra</th>
                             </tr>
                         </thead>
                         <tbody>

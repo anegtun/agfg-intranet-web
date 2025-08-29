@@ -77,10 +77,10 @@ $emptyTemplates = [
             <table class="table table-striped table-hover">
                 <thead>
                     <tr>
-                        <th class="celda-titulo">Data</th>
-                        <th class="celda-titulo">Importe</th>
-                        <th class="celda-titulo">Descrición</th>
-                        <th class="celda-titulo"></th>
+                        <th>Data</th>
+                        <th>Importe</th>
+                        <th>Descrición</th>
+                        <th class="column-button"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -111,8 +111,8 @@ $emptyTemplates = [
         <table class="table table-striped table-hover">
             <thead>
                 <tr>
-                    <th class="celda-titulo">Nome</th>
-                    <th class="celda-titulo"></th>
+                    <th>Nome</th>
+                    <th class="column-button"></th>
                 </tr>
             </thead>
             <tbody>

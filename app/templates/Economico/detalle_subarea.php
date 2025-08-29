@@ -38,10 +38,10 @@ $emptyTemplates = [
                 <thead>
                     <tr>
                         <th class="column-button"></th>
-                        <th class="celda-titulo text-center">Data</th>
-                        <th class="celda-titulo text-center">Importe</th>
-                        <th class="celda-titulo text-center">Tempada</th>
-                        <th class="celda-titulo">Descricición</th>
+                        <th class="text-center">Data</th>
+                        <th class="text-center">Importe</th>
+                        <th class="text-center">Tempada</th>
+                        <th>Descricición</th>
                         <th class="column-button"></th>
                         <th class="column-button"></th>
                     </tr>
@@ -95,11 +95,11 @@ $emptyTemplates = [
                         <th class="column-button"></th>
                         <th class="column-button"></th>
                         <th class="column-button"></th>
-                        <th class="celda-titulo text-center">Data</th>
-                        <th class="celda-titulo text-center">Importe</th>
-                        <th class="celda-titulo text-center">Tempada</th>
-                        <th class="celda-titulo text-center">Conta</th>
-                        <th class="celda-titulo">Descricición</th>
+                        <th class="text-center">Data</th>
+                        <th class="text-center">Importe</th>
+                        <th class="text-center">Tempada</th>
+                        <th class="text-center">Conta</th>
+                        <th>Descricición</th>
                         <th class="column-button"></th>
                         <th class="column-button"></th>
                     </tr>

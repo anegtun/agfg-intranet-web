@@ -14,9 +14,9 @@ $this->set('cabeceiraMigas', [
         <fieldset>
             <legend>Árbitro</legend>
             <?= $this->Form->control('alcume', ['label'=>'Alcume']) ?>
-            <?= $this->Form->control('nif', ['label'=>'NIF']) ?>
-            <?= $this->Form->control('nome', ['label'=>'Nome completo']) ?>
             <?= $this->Form->control('nome_publico', ['label'=>'Nome público']) ?>
+            <?= $this->Form->control('nome', ['label'=>'Nome completo']) ?>
+            <?= $this->Form->control('nif', ['label'=>'NIF']) ?>
             <div class="form-group">
                 <?= $this->Form->checkbox('activo', ['id'=>'activo']) ?>
                 <label for="activo">Activo</label>

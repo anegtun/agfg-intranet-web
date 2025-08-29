@@ -15,7 +15,7 @@ $this->Html->script('detalle-fase', ['block' => 'script']);
 ?>
 
 <div class="row">
-    <?= $this->Form->create($fase, array('type'=>'post', 'url'=>array('action'=>'gardarFase'))) ?>
+    <?= $this->Form->create($fase, ['type'=>'post', 'url'=>['action'=>'gardarFase']]) ?>
         <?= $this->Form->hidden('id') ?>
         <?= $this->Form->hidden('id_competicion') ?>
         <fieldset>
@@ -115,7 +115,7 @@ $this->Html->script('detalle-fase', ['block' => 'script']);
 
 
 <div id="modalXornada" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <?= $this->Form->create($fase, array('type'=>'post', 'url'=>array('action'=>'gardarXornada'))) ?>
+    <?= $this->Form->create($fase, ['type'=>'post', 'url'=>['action'=>'gardarXornada']]) ?>
         <?= $this->Form->hidden('id_fase', ['value'=>$fase->id]) ?>
         <?= $this->Form->hidden('id') ?>
         <div class="modal-dialog modal-lg">
@@ -145,7 +145,7 @@ $this->Html->script('detalle-fase', ['block' => 'script']);
 
 
 <div id="modalPartido" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <?= $this->Form->create($fase, array('type'=>'post', 'url'=>array('action'=>'gardarPartido'))) ?>
+    <?= $this->Form->create($fase, ['type'=>'post', 'url'=>['action'=>'gardarPartido']]) ?>
         <?= $this->Form->hidden('id_fase', ['value'=>$fase->id]) ?>
         <?= $this->Form->hidden('id') ?>
         <div class="modal-dialog modal-lg">

@@ -10,14 +10,14 @@
                     <table class="table table-hover">
                         <thead>
                             <tr>
-                                <th class="celda-titulo text-center">Data</th>
-                                <th class="celda-titulo text-center">Importe</th>
-                                <th class="celda-titulo text-center">Comisión</th>
-                                <th class="celda-titulo text-center">Subarea</th>
-                                <th class="celda-titulo text-center">Tempada</th>
-                                <th class="celda-titulo text-center">Observacións</th>
-                                <th class="celda-titulo text-center">Referencia</th>
-                                <th class="celda-titulo"></th>
+                                <th class="text-center column-date">Data</th>
+                                <th class="text-center">Importe</th>
+                                <th class="text-center">Comisión</th>
+                                <th class="text-center">Subarea</th>
+                                <th class="text-center">Tempada</th>
+                                <th class="text-center">Observacións</th>
+                                <th class="text-center">Referencia</th>
+                                <th class="column-button"></th>
                             </tr>
                         </thead>
                         <tbody>

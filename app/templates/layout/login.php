@@ -34,7 +34,7 @@
                                         <div class="col-xs-7 col-md-12 row">
                                             <!-- Login logo -->
                                             <div class="text-center login-logo">
-                                                <?= $this->Html->image("/images/agfg-logo.png", array('alt'=>'AGFG')); ?>
+                                                <?= $this->Html->image("/images/agfg-logo.png", ['alt'=>'AGFG']); ?>
                                             </div>
 
                                             <!-- Content -->
@@ -48,7 +48,7 @@
                                     <div class="hidden-xs hidden-sm col-md-6 col-sm-8 login-right">
                                         <!-- Main logo -->
                                         <div class="col-xs-12 text-center login-right-content">
-                                            <?= $this->Html->image("/images/agfg-logo-main.png", array('alt'=>'AGFG', 'style'=>'width:200px; margin-bottom:200px')); ?>
+                                            <?= $this->Html->image("/images/agfg-logo-main.png", ['alt'=>'AGFG', 'style'=>'width:200px; margin-bottom:200px']); ?>
                                         </div>
 
                                         <!-- Disclaimer -->

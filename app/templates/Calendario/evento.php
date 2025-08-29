@@ -68,9 +68,9 @@ $emptyTemplates = [
         <table class="table table-striped table-hover">
             <thead>
                 <tr>
-                    <th class="celda-titulo">Data inicio</th>
-                    <th class="celda-titulo">Data fin</th>
-                    <th class="celda-titulo"></th>
+                    <th>Data inicio</th>
+                    <th>Data fin</th>
+                    <th class="column-button"></th>
                 </tr>
             </thead>
             <tbody>

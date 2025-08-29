@@ -123,16 +123,16 @@ foreach($partidasOrzamentarias as $po) {
                     <?php endif ?>
                     <th class="column-button"></th>
                     <th class="column-button"></th>
-                    <th class="celda-titulo text-center" style="min-width: 100px;">Data</th>
-                    <th class="celda-titulo text-center">Importe</th>
-                    <th class="celda-titulo text-center">Tempada</th>
+                    <th class="column-date text-center">Data</th>
+                    <th class="text-center">Importe</th>
+                    <th class="text-center">Tempada</th>
                     <?php if(empty($prevision)) : ?>
-                        <th class="celda-titulo text-center">Conta</th>
+                        <th class="text-center">Conta</th>
                     <?php endif ?>
-                    <th class="celda-titulo text-center">Partida Orz.</th>
-                    <th class="celda-titulo text-center">Área</th>
-                    <th class="celda-titulo text-center">Subárea</th>
-                    <th class="celda-titulo">Descricición</th>
+                    <th class="text-center">Partida Orz.</th>
+                    <th class="text-center">Área</th>
+                    <th class="text-center">Subárea</th>
+                    <th>Descricición</th>
                     <th class="column-button"></th>
                     <th class="column-button"></th>
                     <th class="column-button"></th>

@@ -48,9 +48,9 @@ $submenu_option = empty($submenu_option) ? '' : $submenu_option;
             <header id="main-header" class="row">
                 <div id="header-controls">
                     <?= $this->Html->link(
-                        $this->Html->image("/images/agfg-logo.png", array('alt'=>'AGFG', 'width'=>'95')) . '<span class="sr-only">AGFG</span>',
-                        array('controller'=>'Main', 'action'=>'index'),
-                        array('escape'=>false, 'id'=>'header-logo')) ?>
+                        $this->Html->image("/images/agfg-logo.png", ['alt'=>'AGFG', 'width'=>'95']) . '<span class="sr-only">AGFG</span>',
+                        ['controller'=>'Main', 'action'=>'index'],
+                        ['escape'=>false, 'id'=>'header-logo']) ?>
                     <div id="header-left-menu-toggler">
                         <span class="glyphicon glyphicon-menu-hamburger"></span>
                     </div>
@@ -73,7 +73,7 @@ $submenu_option = empty($submenu_option) ? '' : $submenu_option;
                                     <div class="dropdown" id="header-profile-data">
                                         <div class="dropdown-toggle no-selectable" data-toggle="dropdown" >
                                             <div id="header-user-image">
-                                                <?= $this->Html->image("/images/user/user-image-mini.png", array('alt'=>$authUser['nome'])); ?>
+                                                <?= $this->Html->image("/images/user/user-image-mini.png", ['alt'=>$authUser['nome']]); ?>
                                             </div>
                                             <div id="header-user-info">
                                                 <div id="header-user-name" class="hidden-xs hidden-sm"><?= $authUser['nome'] ?></div>
@@ -154,8 +154,8 @@ $submenu_option = empty($submenu_option) ? '' : $submenu_option;
 
             <footer id="main-footer" class="row">
                 <div id="footer-logo">
-                <a href="https://gaelicogalego.gal">
-                        <?= $this->Html->image('/images/agfg-logo-footer.png', array('width'=>'150')) ?>
+                    <a href="https://gaelicogalego.gal">
+                        <?= $this->Html->image('/images/agfg-logo-footer.png', ['width'=>'150']) ?>
                     </a>
                 </div>
                 <div id="footer-info">

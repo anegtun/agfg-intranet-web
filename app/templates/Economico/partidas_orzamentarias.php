@@ -20,11 +20,11 @@ $this->set('cabeceiraMigas', [
             <table class="table table-striped table-hover">
                 <thead>
                     <tr>
-                        <th class="celda-titulo">Área</th>
-                        <th class="celda-titulo">Subárea</th>
-                        <th class="celda-titulo">Activa</th>
-                        <th class="celda-titulo"></th>
-                        <th class="celda-titulo"></th>
+                        <th>Área</th>
+                        <th>Subárea</th>
+                        <th class="column-button">Activa</th>
+                        <th class="column-button"></th>
+                        <th class="column-button"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -40,7 +40,7 @@ $this->set('cabeceiraMigas', [
                             <tr>
                                 <td></td>
                                 <td><?= $s->nome ?></td>
-                                <td>
+                                <td class="text-success">
                                     <?php if(!empty($s->activa)) : ?>
                                         <span class="glyphicon glyphicon-euro">&nbsp;</span>
                                     <?php endif ?>

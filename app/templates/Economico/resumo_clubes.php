@@ -55,11 +55,11 @@ $emptyTemplates = [
                 <table class="table table-hover">
                     <thead>
                         <tr>
-                            <th class="celda-titulo text-center">Clube</th>
+                            <th class="text-center">Clube</th>
                             <?php foreach($subareas as $sa) : ?>
-                                <th class="celda-titulo text-center"><?= $sa->nome ?></th>
+                                <th class="text-center"><?= $sa->nome ?></th>
                             <?php endforeach ?>
-                            <th class="celda-titulo text-center">TOTAL</th>
+                            <th class="text-center">TOTAL</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -72,7 +72,7 @@ $emptyTemplates = [
                                     <?php foreach($subareas as $sa) : ?>
                                         <?php $subtotal = $resumo->getTotalSubareaClube($sa, $clube) ?>
                                         <?php $total += $subtotal->balance ?>
-                                        <td class="celda-titulo text-center <?= $subtotal->balance<0?'text-danger':'' ?>"><?= $this->Number->currency($subtotal->balance, 'EUR') ?></td>
+                                        <td class="text-center <?= $subtotal->balance<0?'text-danger':'' ?>"><?= $this->Number->currency($subtotal->balance, 'EUR') ?></td>
                                     <?php endforeach ?>
                                     <td class="text-center <?= $total<0?'text-danger':'' ?>"><strong><?= $this->Number->currency($total, 'EUR') ?></strong></td>
                                 </tr>

@@ -6,8 +6,8 @@ $authUser = $this->request->getAttribute('identity');
     <li data-toggle="tooltip">
         <?= $this->Html->link(
             "<span class='glyphicon glyphicon-home'><span class='sr-only'>Inicio</span></span> Inicio",
-            array('controller'=>'Main', 'action'=>'index'),
-            array('escape'=>false)) ?>
+            ['controller'=>'Main', 'action'=>'index'],
+            ['escape'=>false]) ?>
     </li>
 
     <?= $this->element('layout/menu_option', [

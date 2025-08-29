@@ -56,15 +56,15 @@ $id_regexp = "/[ ñÑºª,'~()\*\.\/\?\+]/i";
         <table class="table table-hover">
             <thead>
                 <tr>
-                    <th class="celda-titulo text-center">Subarea</th>
-                    <th class="celda-titulo text-center border-right">Tempada</th>
-                    <th class="celda-titulo text-center">Ingresos</th>
-                    <th class="celda-titulo text-center">Gastos</th>
-                    <th class="celda-titulo text-center">Comisión</th>
-                    <th class="celda-titulo text-center border-right">Balance</th>
-                    <th class="celda-titulo text-center">Prev. ingresos</th>
-                    <th class="celda-titulo text-center border-right">Prev. gastos</th>
-                    <th class="celda-titulo"></th>
+                    <th class="text-center">Subarea</th>
+                    <th class="text-center border-right">Tempada</th>
+                    <th class="text-center">Ingresos</th>
+                    <th class="text-center">Gastos</th>
+                    <th class="text-center">Comisión</th>
+                    <th class="text-center border-right">Balance</th>
+                    <th class="text-center">Prev. ingresos</th>
+                    <th class="text-center border-right">Prev. gastos</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -74,7 +74,7 @@ $id_regexp = "/[ ñÑºª,'~()\*\.\/\?\+]/i";
                         <th colspan="9">&nbsp;</th>
                     </tr>
                     <tr style="background-color: #f9f9f9;">
-                        <th class="celda-titulo text-center" colspan="9"><?= $area->partidaOrzamentaria->nome ?> - <?= $area->nome ?></th>
+                        <th class="text-center" colspan="9"><?= $area->partidaOrzamentaria->nome ?> - <?= $area->nome ?></th>
                     </tr>
 
                     <?php foreach($resumo->getSubareas($area) as $subarea) : ?>
@@ -99,14 +99,14 @@ $id_regexp = "/[ ñÑºª,'~()\*\.\/\?\+]/i";
                     <?php endforeach ?>
 
                     <tr>
-                        <th class="celda-titulo text-center">Subtotal</th>
+                        <th class="text-center">Subtotal</th>
                         <th class="border-right"></th>
-                        <th class="celda-titulo text-right"><?= $this->Number->currency($total_area->ingresos, 'EUR') ?></th>
-                        <th class="celda-titulo text-right text-danger"><?= $this->Number->currency($total_area->gastos, 'EUR') ?></th>
-                        <th class="celda-titulo text-right <?= $total_area->comision<0 ? 'text-danger' : ''?>"><?= $this->Number->currency($total_area->comision, 'EUR') ?></th>
-                        <th class="celda-titulo text-right border-right <?= $total_area->balance<0 ? 'text-danger' : ''?>"><strong><?= $this->Number->currency($total_area->balance, 'EUR') ?></strong></th>
-                        <td class="celda-titulo text-right"><strong><?= empty($total_area->ingresos_previstos) ? '-' : $this->Number->currency($total_area->ingresos_previstos, 'EUR') ?></strong></td>
-                        <td class="celda-titulo text-right text-danger border-right"><strong><?= empty($total_area->gastos_previstos) ? '-' : $this->Number->currency($total_area->gastos_previstos, 'EUR') ?></strong></td>
+                        <th class="text-right"><?= $this->Number->currency($total_area->ingresos, 'EUR') ?></th>
+                        <th class="text-right text-danger"><?= $this->Number->currency($total_area->gastos, 'EUR') ?></th>
+                        <th class="text-right <?= $total_area->comision<0 ? 'text-danger' : ''?>"><?= $this->Number->currency($total_area->comision, 'EUR') ?></th>
+                        <th class="text-right border-right <?= $total_area->balance<0 ? 'text-danger' : ''?>"><strong><?= $this->Number->currency($total_area->balance, 'EUR') ?></strong></th>
+                        <td class="text-right"><strong><?= empty($total_area->ingresos_previstos) ? '-' : $this->Number->currency($total_area->ingresos_previstos, 'EUR') ?></strong></td>
+                        <td class="text-right text-danger border-right"><strong><?= empty($total_area->gastos_previstos) ? '-' : $this->Number->currency($total_area->gastos_previstos, 'EUR') ?></strong></td>
                         <th class="text-center">
                             <a href="javascript:void(0)"><em class="glyphicon glyphicon-th-list" data-toggle="modal" data-target="#modal-movementos-area-<?= $area->id ?>"></em></a>
                             &nbsp;

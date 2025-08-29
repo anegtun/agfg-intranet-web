@@ -61,7 +61,7 @@ class CompeticionsController extends AppController {
         } else {
             $this->Flash->error(__('Erro ao eliminar a competición.'));
         }
-        return $this->redirect(array('action'=>'index'));
+        return $this->redirect(['action'=>'index']);
     }
 
 

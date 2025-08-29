@@ -14,10 +14,10 @@ $authUser = $this->request->getAttribute('identity');
         <table class="table table-striped table-hover">
             <thead>
                 <tr>
-                    <th class="celda-titulo">Nome</th>
-                    <th class="celda-titulo">Código</th>
-                    <th class="celda-titulo">Tipo</th>
-                    <th class="celda-titulo">Federacion</th>
+                    <th class="column-s"></th>
+                    <th>Nome</th>
+                    <th>Tipo</th>
+                    <th>Código</th>
                 </tr>
             </thead>
             <tbody>
@@ -33,10 +33,10 @@ $authUser = $this->request->getAttribute('identity');
                     
                     <tr>
                         <?php if($authUser['rol'] !== 'euro22' || $c->codigo === 'euro22') : ?>
+                            <td><?= $this->AgfgForm->logo($c->federacion) ?></td>
                             <td><?= $this->Html->link($c->nome, ['action'=>'competicion', $c->id]) ?></td>
-                            <td><?= $c->codigo ?></td>
                             <td><?= empty($c->tipo) ? '' : $tiposCompeticion[$c->tipo] ?></td>
-                            <td><?= empty($c->federacion) ? '' : $c->federacion->codigo ?></td>
+                            <td><?= $c->codigo ?></td>
                         <?php endif ?>
                     </tr>
                 <?php endforeach ?>

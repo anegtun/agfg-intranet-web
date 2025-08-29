@@ -13,28 +13,27 @@ $this->set('cabeceiraMigas', [
         <table class="table table-striped table-hover">
             <thead>
                 <tr>
-                    <th class="celda-titulo">Nome</th>
-                    <th class="celda-titulo text-center">Stock total</th>
-                    <th class="celda-titulo text-center">Activo</th>
-                    <th class="celda-titulo"></th>
+                    <th class="column-button"></th>
+                    <th>Nome</th>
+                    <th class="text-center">Stock total</th>
+                    <th class="column-button"></th>
                 </tr>
             </thead>
             <tbody>
                 <?php foreach($produtos as $p) : ?>
                     <tr>
-                        <td><?= $this->Html->link($p->nome, ['action'=>'produto', $p->id]) ?></td>
-                        <td class="text-center"><?= $p->getStockTotal() ?></td>
                         <td class="text-center">
                             <?php if($p->activo) : ?>
                                 <a href="javascript:void(0)"><em class="glyphicon glyphicon-shopping-cart"></em></a>
                             <?php endif ?>
                         </td>
+                        <td><?= $this->Html->link($p->nome, ['action'=>'produto', $p->id]) ?></td>
+                        <td class="text-center"><?= $p->getStockTotal() ?></td>
                         <td class="text-center"><?= $this->AgfgForm->deleteButton(['action'=>'borrarProduto', $p->id]) ?></td>
                     </tr>
                 <?php endforeach ?>
             </tbody>
         </table>
-
-        <?= $this->Html->link(__('Crear'), array('action'=>'produto'), array('class'=>'btn btn-primary')) ?>
     </div>
+    <?= $this->Html->link(__('Crear'), ['action'=>'produto'], ['class'=>'btn btn-primary']) ?>
 </div>

@@ -12,32 +12,31 @@ $this->set('cabeceiraMigas', [
         <table class="table table-striped table-hover">
             <thead>
                 <tr>
-                    <th class="celda-titulo">Alcume</th>
-                    <th class="celda-titulo">NIF</th>
-                    <th class="celda-titulo">Nome</th>
-                    <th class="celda-titulo">Nome público</th>
-                    <th class="celda-titulo"></th>
-                    <th class="celda-titulo"></th>
+                    <th class="column-button"></th>
+                    <th>Alcume</th>
+                    <th>Nome público</th>
+                    <th>Nome</th>
+                    <th>NIF</th>
+                    <th class="column-button"></th>
                 </tr>
             </thead>
             <tbody>
                 <?php foreach($arbitros as $a) : ?>
                     <tr>
-                        <td><?= $this->Html->link($a->alcume, ['action'=>'detalle', $a->id]) ?></td>
-                        <td><?= $a->nif ?></td>
-                        <td><?= $a->nome ?></td>
-                        <td><?= $a->nome_publico ?></td>
                         <td class="text-center">
                             <?php if($a->activo) : ?>
                                 <a href="javascript:void(0)"><em class="glyphicon glyphicon-user"></em></a>
                             <?php endif ?>
                         </td>
+                        <td><?= $this->Html->link($a->alcume, ['action'=>'detalle', $a->id]) ?></td>
+                        <td><?= $a->nome_publico ?></td>
+                        <td><?= $a->nome ?></td>
+                        <td><?= $a->nif ?></td>
                         <td class="text-center"><?= $this->AgfgForm->deleteButton(['action'=>'borrar', $a->id]) ?></td>
                     </tr>
                 <?php endforeach ?>
             </tbody>
         </table>
-
-        <?= $this->Html->link(__('Crear'), array('action'=>'detalle'), array('class'=>'btn btn-primary')) ?>
     </div>
+    <?= $this->Html->link(__('Crear'), ['action'=>'detalle'], ['class'=>'btn btn-primary']) ?>
 </div>
