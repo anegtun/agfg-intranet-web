@@ -13,7 +13,6 @@ class CompeticionsController extends AppController {
         parent::initialize();
         $this->Categorias = new Categorias();
         $this->TiposCompeticion = new TiposCompeticion();
-        $this->Clubes = TableRegistry::get('Clubes');
         $this->Fases = TableRegistry::get('Fases');
         $this->Equipas = TableRegistry::get('Equipas');
         $this->FasesEquipas = TableRegistry::get('FasesEquipas');
