@@ -11,7 +11,7 @@ class ClasificacionController extends AppController {
         parent::initialize();
         $this->Competicions = TableRegistry::get('Competicions');
         $this->Fases = TableRegistry::get('Fases');
-        $this->loadComponent('ClasificacionCalculator');
+        $this->loadComponent('ClasificacionFetcher');
     }
 
     public function beforeFilter(EventInterface $event) {
@@ -26,7 +26,8 @@ class ClasificacionController extends AppController {
 
         $competicion = $this->Competicions->findByCodigoOrFail($codCompeticion);
 
-        $clasificacion = $this->ClasificacionCalculator->calcular($competicion->id, $categoria);
+        $clasificacion = $this->ClasificacionFetcher->get($competicion->id, $categoria);
+        $clasificacion->build();
 
         $this->set(compact('clasificacion'));
         $this->render('clasificacion');
@@ -44,7 +45,8 @@ class ClasificacionController extends AppController {
             ->where(['id_competicion'=>$competicion->id, 'categoria'=>$categoria, 'codigo'=>$codFase])
             ->first();
 
-        $clasificacion = $this->ClasificacionCalculator->calcular($competicion->id, $categoria, $fase);
+        $clasificacion = $this->ClasificacionFetcher->get($competicion->id, $categoria);
+        $clasificacion->build($fase);
 
         $this->set(compact('clasificacion'));
         $this->render('clasificacion');

@@ -2,6 +2,8 @@
 namespace App\Controller;
 
 use App\Model\Categorias;
+use Cake\Core\Exception\Exception;
+use Cake\Event\EventInterface;
 use Cake\ORM\TableRegistry;
 
 class ClubesController extends AppController {
@@ -9,8 +11,16 @@ class ClubesController extends AppController {
     public function initialize(): void {
         parent::initialize();
         $this->Categorias = new Categorias();
+        $this->Competicions = TableRegistry::get('Competicions');
         $this->Equipas = TableRegistry::get('Equipas');
+        $this->FasesEquipas = TableRegistry::get('FasesEquipas');
         $this->Federacions = TableRegistry::get('Federacions');
+        $this->loadComponent('ClasificacionFetcher');
+    }
+
+    public function beforeFilter(EventInterface $event) {
+        parent::beforeFilter($event);
+        $this->Authentication->allowUnauthenticated(['palmares']);
     }
 
     public function index() {
@@ -89,6 +99,53 @@ class ClubesController extends AppController {
             $this->Flash->error(__('Erro ao eliminar a equipa.'));
         }
         return $this->redirect(['action'=>'detalle', $equipa->id_clube]);
+    }
+
+    public function palmares($codigo) {
+        if(empty($codigo)) {
+            throw new Exception("Hai que especificar un clube");
+        }
+
+        $categorias = $this->Categorias->getCategoriasWithEmpty();
+
+        $clube = $this->Clubes
+            ->find()
+            ->contain(['Equipas', 'Federacions'])
+            ->where(['Clubes.codigo' => $codigo])
+            ->first();
+
+        foreach($clube->equipas as $e) {
+            $e->competicions = [];
+
+            $equipasFases = $this->FasesEquipas
+                ->find()
+                ->contain(['Fases' => ['Competicion' => ['Federacion', 'Fases']]])
+                ->where(['id_equipa' => $e->id])
+                ->toArray();
+
+            foreach($equipasFases as $ef) {
+                $c = $ef->fase->competicion;
+                $e->competicions[$c->id] = $c;
+                if(!$c->isLiga()) {
+                    continue;
+                }
+
+                $clasificacion = $this->ClasificacionFetcher->get($c->id, $e->categoria);
+                $clasificacion->build();
+                $c->clasificacion = $clasificacion->getClasificacionEquipo($codigo);
+
+                foreach($c->fases as $f) {
+                    if($f->categoria != $e->categoria) {
+                        continue;
+                    }   
+                    
+                    $clasificacion->build($f);
+                    $f->clasificacion = $clasificacion->getClasificacionEquipo($codigo);
+                }
+            }
+        }
+
+        $this->set(compact('categorias', 'clube'));
     }
 
 }

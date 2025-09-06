@@ -4,7 +4,6 @@ namespace App\Model;
 class Clasificacion {
     
     private $_partidos;
-    private $_fase;
     private $_equipasFase;
     private $_equipasMap;
     private $_clasificacion;
@@ -15,32 +14,41 @@ class Clasificacion {
         $this->_equipasMap = $equipasMap;
     }
 
-    public function forFase($fase) {
-        $this->_fase = $fase;
+    public function getClasificacion() {
+        return $this->_clasificacion;
+    }
+
+    public function getClasificacionEquipo($codigo) {
+        foreach($this->_clasificacion as $e) {
+            if($e->codigo === $codigo) {
+                return $e;
+            }
+        }
+        return NULL;
     }
     
-    public function build() {
+    public function build($fase = NULL) {
         $this->_clasificacion = [];
 
-        $partidos = empty($this->_fase) ? $this->_partidos : $this->_filtrarPartidos($this->_fase->id);
+        $partidos = empty($fase) ? $this->_partidos : $this->_filtrarPartidos($fase->id);
         foreach($partidos as $p) {
             $this->_procesarPartido($this->_clasificacion, $p);
         }
 
         $this->_sort();
 
-        if(!empty($this->_fase) && !empty($this->_fase->id_fase_pai)) {
-            $partidos_pai = $this->_filtrarPartidos($this->_fase->id_fase_pai);
+        if(!empty($fase) && !empty($fase->id_fase_pai)) {
+            $partidos_pai = $this->_filtrarPartidos($fase->id_fase_pai);
             $clasificacionPai = new Clasificacion($partidos_pai, $this->_equipasFase, $this->_equipasMap);
             $clasificacionPai->build();
             $this->_addData($clasificacionPai->getClasificacion());
         }
 
         $equipasFase = $this->_equipasFase;
-        if(!empty($this->_fase)) {
+        if(!empty($fase)) {
             $equipasFase = [];
             foreach($this->_equipasFase as $ef) {
-                if($ef->id_fase === $this->_fase->id) {
+                if($ef->id_fase === $fase->id) {
                     $equipasFase[] = $ef;
                 }
             }
@@ -109,7 +117,7 @@ class Clasificacion {
         foreach($this->_clasificacion as $e) {
             $agrupacionPuntos[$e->puntos][$e->id] = $e;
         }
-    
+
         foreach($agrupacionPuntos as $puntosClasificacion=>$equipas) {
             // Miramos aqueles casos onde hai empate de puntos (>1 equipo)
             if(count($equipas)>1) {
@@ -244,10 +252,6 @@ class Clasificacion {
             'tantosContra' => 0,
             'totalContra' => 0,
         ];
-    }
-
-    public function getClasificacion() {
-        return $this->_clasificacion;
     }
 
     public static function init($id) {
