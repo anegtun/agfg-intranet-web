@@ -17,24 +17,20 @@ class ClasificacionCalculatorComponent extends Component {
 
         $equipas = $this->Equipas->findMap();
 
-        $partidos_conditions = ['Fase.id_competicion'=>$id_competicion, 'Fase.categoria'=>$categoria];
         $fases_conditions = ['Fases.id_competicion'=>$id_competicion];
         if(!empty($fase)) {
-            $partidos_conditions['Fase.id'] = $fase->id;
             $fases_conditions['Fases.id'] = $fase->id;
         }
 
-        $partidos = $this->Partidos->find()->contain(['Fase'])->where($partidos_conditions)->toArray();
-        $equipasFase = $this->FasesEquipas->find()->contain(['Fases'])->where($fases_conditions);
+        $partidos = $this->Partidos->find()->contain(['Fase'])->where(['Fase.id_competicion'=>$id_competicion, 'Fase.categoria'=>$categoria])->toArray();
+        $equipasFase = $this->FasesEquipas->find()->contain(['Fases'])->where($fases_conditions)->toArray();
 
-        $clasificacion = $this->_buildClasificacion($equipas, $partidos);
-
-        if(!empty($fase) && !empty($fase->id_fase_pai)) {
-            $partidos_pai = $this->Partidos->find()->where(['id_fase'=>$fase->id_fase_pai])->toArray();
-            $clasificacionAcumulada = $this->_buildClasificacion($equipas, $partidos_pai);
-            $clasificacion->add($clasificacionAcumulada);
-            $clasificacion->desempatar();
+        $clasificacion = new Clasificacion($partidos, $equipasFase, $equipas);
+        if(!empty($fase)) {
+            $clasificacion->forFase($fase);
         }
+
+        $clasificacion->build();
 
         $equipasPuntos = [];
         foreach($equipasFase as $fe) {
@@ -50,13 +46,6 @@ class ClasificacionCalculatorComponent extends Component {
         $clasificacion->desempatar();
 
         return $clasificacion;
-    }
-
-    private function _buildClasificacion($equipas, $partidos) {
-        $clsf = new Clasificacion($equipas, $partidos);
-        $clsf->build();
-        $clsf->desempatar();
-        return $clsf;
     }
 
 }

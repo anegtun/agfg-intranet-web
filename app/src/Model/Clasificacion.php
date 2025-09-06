@@ -3,28 +3,59 @@ namespace App\Model;
 
 class Clasificacion {
     
-    private $_equipas;
     private $_partidos;
+    private $_fase;
+    private $_equipasFase;
+    private $_equipasMap;
     private $_clasificacion;
     
-    public function __construct($equipas, $partidos) {
-        $this->_equipas = $equipas;
+    public function __construct($partidos, $equipasFase, $equipasMap) {
         $this->_partidos = $partidos;
+        $this->_equipasFase = $equipasFase;
+        $this->_equipasMap = $equipasMap;
+    }
+
+    public function forFase($fase) {
+        $this->_fase = $fase;
     }
     
     public function build() {
         $this->_clasificacion = [];
-        foreach($this->_partidos as $p) {
+
+        $partidos = $this->_partidos;
+        if(!empty($this->_fase)) {
+            $partidos = [];
+            foreach($this->_partidos as $p) {
+                if($p->id_fase === $this->_fase->id) {
+                    $partidos[] = $p;
+                }
+            }
+        }
+        
+        foreach($partidos as $p) {
             $this->_processGame($this->_clasificacion, $p);
         }
+
         $this->_sort();
+        $this->desempatar();
+
+        if(!empty($this->_fase) && !empty($this->_fase->id_fase_pai)) {
+            $partidos_pai = [];
+            foreach($this->_partidos as $p) {
+                if($p->id_fase === $this->_fase->id_fase_pai) {
+                    $partidos_pai[] = $p;
+                }
+            }
+            $this->add($partidos_pai);
+        }
     }
     
-    public function add($clasificacionAnterior) {
+    public function add($partidos_pai) {
+        $clasificacionAnterior = new Clasificacion($partidos_pai, $this->_equipasFase, $this->_equipasMap);
+        $clasificacionAnterior->build();
+
         $this->addData($clasificacionAnterior->getClasificacion());
-        foreach($clasificacionAnterior->getPartidos() as $p) {
-            $this->_partidos[] = $p;
-        }
+        $this->desempatar();
     }
     
     public function addData($clsfAnterior) {
@@ -180,11 +211,11 @@ class Clasificacion {
 
     private function _initClasificacion($id) {
         return (object) [
-            'id' => $this->_equipas[$id]->id,
-            'codigo' => $this->_equipas[$id]->codigo,
-            'nome' => $this->_equipas[$id]->nome,
-            'nome_curto' => $this->_equipas[$id]->nome_curto,
-            'logo' => $this->_equipas[$id]->getLogo(),
+            'id' => $this->_equipasMap[$id]->id,
+            'codigo' => $this->_equipasMap[$id]->codigo,
+            'nome' => $this->_equipasMap[$id]->nome,
+            'nome_curto' => $this->_equipasMap[$id]->nome_curto,
+            'logo' => $this->_equipasMap[$id]->getLogo(),
             'posicion' => 0,
             'puntos' => 0,
             'puntos_sen_sancion' => 0,
