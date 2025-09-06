@@ -55,7 +55,7 @@ class EquipasTable extends AgfgTable {
             ->contain(['Clube'])
             ->order('Equipas.nome');
         
-            $res = [];
+        $res = [];
         foreach($bd as $e) {
             $res[$e->id] = $e;
         }

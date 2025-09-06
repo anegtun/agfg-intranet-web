@@ -37,7 +37,6 @@ class Clasificacion {
         }
 
         $this->_sort();
-        $this->desempatar();
 
         if(!empty($this->_fase) && !empty($this->_fase->id_fase_pai)) {
             $partidos_pai = [];
@@ -48,6 +47,28 @@ class Clasificacion {
             }
             $this->add($partidos_pai);
         }
+
+        $equipasFase = $this->_equipasFase;
+        if(!empty($this->_fase)) {
+            $equipasFase = [];
+            foreach($this->_equipasFase as $ef) {
+                if($ef->id_fase === $this->_fase->id) {
+                    $equipasFase[] = $ef;
+                }
+            }
+        }
+
+        $equipasPuntos = [];
+        foreach($equipasFase as $fe) {
+            if(empty($equipasPuntos[$fe->id_equipa])) {
+                $equipasPuntos[$fe->id_equipa] = Clasificacion::init($fe->id_equipa);
+            }
+            if(!empty($fe->puntos)) {
+                $equipasPuntos[$fe->id_equipa]->puntos_sen_sancion += $fe->puntos;
+            }
+        }
+
+        $this->addData(array_values($equipasPuntos));
     }
     
     public function add($partidos_pai) {
@@ -55,7 +76,6 @@ class Clasificacion {
         $clasificacionAnterior->build();
 
         $this->addData($clasificacionAnterior->getClasificacion());
-        $this->desempatar();
     }
     
     public function addData($clsfAnterior) {
@@ -85,12 +105,14 @@ class Clasificacion {
         foreach($this->_clasificacion as $e) {
             $e->posicion = $i++;
         }
+
+        $this->_desempatar();
     }
 
     /**
      * Desempata mirando enfrontamentos particulares
      */
-    public function desempatar() {
+    private function _desempatar() {
         // Agrupamos equipos pola súa puntuación
         $agrupacionPuntos = [];
         foreach($this->_clasificacion as $e) {

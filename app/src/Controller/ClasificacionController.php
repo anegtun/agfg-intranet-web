@@ -26,7 +26,7 @@ class ClasificacionController extends AppController {
 
         $competicion = $this->Competicions->findByCodigoOrFail($codCompeticion);
 
-        $clasificacion = $this->ClasificacionCalculator->fase($competicion->id, $categoria);
+        $clasificacion = $this->ClasificacionCalculator->calcular($competicion->id, $categoria);
 
         $this->set(compact('clasificacion'));
         $this->render('clasificacion');
@@ -44,7 +44,7 @@ class ClasificacionController extends AppController {
             ->where(['id_competicion'=>$competicion->id, 'categoria'=>$categoria, 'codigo'=>$codFase])
             ->first();
 
-        $clasificacion = $this->ClasificacionCalculator->fase($competicion->id, $categoria, $fase);
+        $clasificacion = $this->ClasificacionCalculator->calcular($competicion->id, $categoria, $fase);
 
         $this->set(compact('clasificacion'));
         $this->render('clasificacion');
