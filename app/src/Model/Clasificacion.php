@@ -22,30 +22,18 @@ class Clasificacion {
     public function build() {
         $this->_clasificacion = [];
 
-        $partidos = $this->_partidos;
-        if(!empty($this->_fase)) {
-            $partidos = [];
-            foreach($this->_partidos as $p) {
-                if($p->id_fase === $this->_fase->id) {
-                    $partidos[] = $p;
-                }
-            }
-        }
-        
+        $partidos = empty($this->_fase) ? $this->_partidos : $this->_filtrarPartidos($this->_fase->id);
         foreach($partidos as $p) {
-            $this->_processGame($this->_clasificacion, $p);
+            $this->_procesarPartido($this->_clasificacion, $p);
         }
 
         $this->_sort();
 
         if(!empty($this->_fase) && !empty($this->_fase->id_fase_pai)) {
-            $partidos_pai = [];
-            foreach($this->_partidos as $p) {
-                if($p->id_fase === $this->_fase->id_fase_pai) {
-                    $partidos_pai[] = $p;
-                }
-            }
-            $this->add($partidos_pai);
+            $partidos_pai = $this->_filtrarPartidos($this->_fase->id_fase_pai);
+            $clasificacionPai = new Clasificacion($partidos_pai, $this->_equipasFase, $this->_equipasMap);
+            $clasificacionPai->build();
+            $this->_addData($clasificacionPai->getClasificacion());
         }
 
         $equipasFase = $this->_equipasFase;
@@ -68,17 +56,20 @@ class Clasificacion {
             }
         }
 
-        $this->addData(array_values($equipasPuntos));
+        $this->_addData(array_values($equipasPuntos));
     }
-    
-    public function add($partidos_pai) {
-        $clasificacionAnterior = new Clasificacion($partidos_pai, $this->_equipasFase, $this->_equipasMap);
-        $clasificacionAnterior->build();
 
-        $this->addData($clasificacionAnterior->getClasificacion());
+    private function _filtrarPartidos($id_fase) {
+        $partidos = [];
+        foreach($this->_partidos as $p) {
+            if($p->id_fase === $id_fase) {
+                $partidos[] = $p;
+            }
+        }
+        return $partidos;
     }
     
-    public function addData($clsfAnterior) {
+    private function _addData($clsfAnterior) {
         for($i=0; $i<count($this->_clasificacion); $i++) {
             for($j=0; $j<count($clsfAnterior); $j++) {
                 if($this->_clasificacion[$i]->id===$clsfAnterior[$j]->id) {
@@ -105,7 +96,7 @@ class Clasificacion {
         foreach($this->_clasificacion as $e) {
             $e->posicion = $i++;
         }
-
+        // Lóxica de desempate
         $this->_desempatar();
     }
 
@@ -127,7 +118,7 @@ class Clasificacion {
                 $clasificacionParticular = [];
                 foreach($this->_partidos as $p) {
                     if(in_array($p->id_equipa1, $idsEquipas) && in_array($p->id_equipa2, $idsEquipas)) {
-                        $this->_processGame($clasificacionParticular, $p);
+                        $this->_procesarPartido($clasificacionParticular, $p);
                     }
                 }
                 // Ordeamos segundo estes criterios:
@@ -168,7 +159,7 @@ class Clasificacion {
         });
     }
 
-    private function _processGame(&$clsf, $partido) {
+    private function _procesarPartido(&$clsf, $partido) {
         if(empty($clsf[$partido->id_equipa1])) {
             $clsf[$partido->id_equipa1] = $this->_initClasificacion($partido->id_equipa1);
         }
@@ -257,10 +248,6 @@ class Clasificacion {
 
     public function getClasificacion() {
         return $this->_clasificacion;
-    }
-
-    public function getPartidos() {
-        return $this->_partidos;
     }
 
     public static function init($id) {
