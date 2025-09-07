@@ -123,8 +123,19 @@ class ClubesController extends AppController {
                 ->where(['id_equipa' => $e->id])
                 ->toArray();
 
+            $ids_competicions = $ids_fases = [];
             foreach($equipasFases as $ef) {
-                $c = $ef->fase->competicion;
+                $ids_competicions[] = $ef->fase->competicion->id;
+                $ids_fases[] = $ef->fase->id;
+            }
+
+            $competicions = $this->Competicions
+                ->find()
+                ->contain(['Federacion', 'Fases'])
+                ->where(['Competicions.id IN' => $ids_competicions])
+                ->toArray();
+
+            foreach($competicions as $c) {
                 $e->competicions[$c->id] = $c;
                 if(!$c->isLiga()) {
                     continue;
@@ -135,10 +146,9 @@ class ClubesController extends AppController {
                 $c->clasificacion = $clasificacion->getClasificacionEquipo($codigo);
 
                 foreach($c->fases as $f) {
-                    if($f->categoria != $e->categoria) {
+                    if(!in_array($f->id, $ids_fases)) {
                         continue;
-                    }   
-                    
+                    }
                     $clasificacion->build($f);
                     $f->clasificacion = $clasificacion->getClasificacionEquipo($codigo);
                 }

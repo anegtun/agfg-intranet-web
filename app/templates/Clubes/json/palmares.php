@@ -35,7 +35,6 @@ foreach($clube->equipas as $e) {
             }
 
             $res_fase = [
-                'categoria' => $fase->categoria,
                 'nome' => $fase->nome,
                 'posicion' => $fase->clasificacion->posicion
             ];
