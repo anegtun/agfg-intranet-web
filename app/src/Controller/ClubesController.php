@@ -136,12 +136,7 @@ class ClubesController extends AppController {
                 ->toArray();
 
             foreach($competicions as $c) {
-                $e->competicions[$c->id] = $c;
-                if(!$c->isLiga()) {
-                    continue;
-                }
-
-                $clasificacion = $this->ClasificacionFetcher->get($c->id, $e->categoria);
+                $clasificacion = $this->ClasificacionFetcher->get($c, $e->categoria);
                 $clasificacion->build();
                 $c->clasificacion = $clasificacion->getClasificacionEquipo($codigo);
 
@@ -152,6 +147,8 @@ class ClubesController extends AppController {
                     $clasificacion->build($f);
                     $f->clasificacion = $clasificacion->getClasificacionEquipo($codigo);
                 }
+
+                $e->competicions[$c->id] = $c;
             }
         }
 
