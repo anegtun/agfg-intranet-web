@@ -16,8 +16,23 @@ class ClasificacionFetcherComponent extends Component {
         $this->loadModel('Partidos');
 
         $equipas = $this->Equipas->findMap();
-        $partidos = $this->Partidos->find()->contain(['Fase'])->where(['Fase.id_competicion'=>$competicion->id, 'Fase.categoria'=>$categoria])->toArray();
-        $equipasFase = $this->FasesEquipas->find()->contain(['Fases'])->where(['Fases.id_competicion'=>$competicion->id])->toArray();
+        
+        $partidos = $this->Partidos
+            ->find()
+            ->contain(['Fase'])
+            ->where(['Fase.id_competicion'=>$competicion->id, 'Fase.categoria'=>$categoria])
+            ->toArray();
+        
+        $ids_fases = [];
+        foreach($partidos as $p) {
+            $ids_fases[] = $p->id_fase;
+        }
+
+        $equipasFase = $this->FasesEquipas
+            ->find()
+            ->contain(['Fases'])
+            ->where(['Fases.id IN' => array_unique($ids_fases)])
+            ->toArray();
 
         return Clasificacion::create($competicion, $partidos, $equipasFase, $equipas);
     }

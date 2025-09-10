@@ -30,7 +30,11 @@ class ClasificacionLiga extends Clasificacion {
     public function build($fase = NULL) {
         $this->_clasificacion = [];
 
-        $partidos = empty($fase) ? $this->_partidos : $this->_filtrarPartidos($fase->id);
+        if (empty($fase) && !$this->_tenClasificacionGlobal()) {
+            return;
+        }
+
+        $partidos = array_filter($this->_partidos, function ($p) use ($fase) { return empty($fase) || $p->id_fase === $fase->id; });
         foreach($partidos as $p) {
             $this->_procesarPartido($this->_clasificacion, $p);
         }
@@ -38,7 +42,7 @@ class ClasificacionLiga extends Clasificacion {
         $this->_sort();
 
         if(!empty($fase) && !empty($fase->id_fase_pai)) {
-            $partidos_pai = $this->_filtrarPartidos($fase->id_fase_pai);
+            $partidos_pai = array_filter($this->_partidos, function ($p) use ($fase) { return $p->id_fase === $fase->id_fase_pai; });
             $clasificacionPai = new ClasificacionLiga($partidos_pai, $this->_equipasFase, $this->_equipasMap);
             $clasificacionPai->build();
             $this->_addData($clasificacionPai->getClasificacion());
@@ -67,16 +71,29 @@ class ClasificacionLiga extends Clasificacion {
         $this->_addData(array_values($equipasPuntos));
     }
 
-    private function _filtrarPartidos($id_fase) {
-        $partidos = [];
-        foreach($this->_partidos as $p) {
-            if($p->id_fase === $id_fase) {
-                $partidos[] = $p;
+    private function _tenClasificacionGlobal() {
+        $id_equipas = $equipas_fase = [];
+
+        foreach ($this->_equipasFase as $ef) {
+            $id_equipas[] = $ef->id_equipa;
+            $id_equipas = array_unique($id_equipas);
+            
+            if(empty($equipas_fase[$ef->fase->id])) {
+                $equipas_fase[$ef->fase->id] = [];
+            }
+            $equipas_fase[$ef->fase->id][] = $ef->id_equipa;
+            $equipas_fase[$ef->fase->id] = array_unique($equipas_fase[$ef->fase->id]);
+        }
+
+        foreach ($equipas_fase as $fase=>$equipas) {
+            if (count($equipas) === count($id_equipas)) {
+                return true;
             }
         }
-        return $partidos;
+
+        return false;
     }
-    
+
     private function _addData($clsfAnterior) {
         for($i=0; $i<count($this->_clasificacion); $i++) {
             for($j=0; $j<count($clsfAnterior); $j++) {

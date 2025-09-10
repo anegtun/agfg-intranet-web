@@ -6,13 +6,13 @@ $res = [
     'palmares' => []
 ];
 
-foreach($tempadas as $t) {
+foreach ($tempadas as $t) {
     $res_tempada = [
         'tempada' => ['codigo' => $t['codigo'], 'nome' => $t['nome']],
         'equipas' => []
     ];
 
-    foreach($clube->equipas as $equipa) {
+    foreach ($clube->equipas as $equipa) {
         $competicions = array_filter($equipa->competicions, function ($e) use ($t) { return $e->tempada === $t['codigo']; });
         if (empty($competicions)) {
             continue;
@@ -27,7 +27,7 @@ foreach($tempadas as $t) {
             'competicions' => []
         ];
 
-        foreach($competicions as $competicion) {
+        foreach ($competicions as $competicion) {
             $res_competicion = [
                 'nome' => $competicion->nome,
                 'tipo' => $competicion->tipo,
@@ -41,8 +41,8 @@ foreach($tempadas as $t) {
             $fases = array_filter($competicion->fases, function ($e) use ($equipa) { return $e->categoria == $equipa->categoria; });
             if ($competicion->isLiga() && count($fases) > 1) {
                 $res_competicion['fases'] = [];
-                foreach($fases as $fase) {
-                    if(!empty($fase->clasificacion->posicion)) {
+                foreach ($fases as $fase) {
+                    if ($fase->codigo !== 'promocion' && !empty($fase->clasificacion->posicion)) {
                         $res_competicion['fases'][] = [
                             'nome' => $fase->nome,
                             'posicion' => $fase->clasificacion->posicion
