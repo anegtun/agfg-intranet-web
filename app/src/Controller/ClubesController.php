@@ -107,6 +107,10 @@ class ClubesController extends AppController {
             throw new Exception("Hai que especificar un clube");
         }
 
+        $categoria = $this->request->getQuery('categoria');
+        $tipo = $this->request->getQuery('tipo');
+        $tempada = $this->request->getQuery('tempada');
+
         $categorias = $this->Categorias->getCategoriasWithEmpty();
         $tempadas = $this->Tempadas->find()->order('codigo DESC');
 
@@ -118,6 +122,10 @@ class ClubesController extends AppController {
 
         foreach($clube->equipas as $e) {
             $e->competicions = [];
+
+            if(!empty($categoria) && $categoria != $e->categoria) {
+                continue;
+            }
 
             $equipasFases = $this->FasesEquipas
                 ->find()
@@ -131,23 +139,31 @@ class ClubesController extends AppController {
                 $ids_fases[] = $ef->fase->id;
             }
 
+            $competicions_query = ['Competicions.id IN' => $ids_competicions];
+            if(!empty($tempada)) {
+                $competicions_query['Competicions.tempada'] = $tempada;
+            }
+            if(!empty($tipo)) {
+                $competicions_query['Competicions.tipo'] = $tipo;
+            }
+
             $competicions = $this->Competicions
                 ->find()
                 ->contain(['Federacion', 'Fases'])
-                ->where(['Competicions.id IN' => $ids_competicions])
+                ->where($competicions_query)
                 ->toArray();
 
             foreach($competicions as $c) {
                 $clasificacion = $this->ClasificacionFetcher->get($c, $e->categoria);
                 $clasificacion->build();
-                $c->clasificacion = $clasificacion->getClasificacionEquipo($codigo);
+                $c->clasificacion = $clasificacion->getClasificacionEquipa($e->id);
 
                 foreach($c->fases as $f) {
                     if(!in_array($f->id, $ids_fases)) {
                         continue;
                     }
                     $clasificacion->build($f);
-                    $f->clasificacion = $clasificacion->getClasificacionEquipo($codigo);
+                    $f->clasificacion = $clasificacion->getClasificacionEquipa($e->id);
                 }
 
                 $e->competicions[$c->id] = $c;

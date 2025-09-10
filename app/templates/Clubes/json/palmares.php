@@ -1,7 +1,5 @@
 <?php
 
-$categoria = $this->request->getQuery('categoria');
-
 $res = [
     'codigo' => $clube->codigo,
     'nome' => $clube->nome,
@@ -11,16 +9,17 @@ $res = [
 foreach($tempadas as $t) {
     $res_tempada = [
         'tempada' => ['codigo' => $t['codigo'], 'nome' => $t['nome']],
-        'categorias' => []
+        'equipas' => []
     ];
 
     foreach($clube->equipas as $equipa) {
         $competicions = array_filter($equipa->competicions, function ($e) use ($t) { return $e->tempada === $t['codigo']; });
-        if (empty($competicions) || (!empty($categoria) && $categoria != $equipa->categoria)) {
+        if (empty($competicions)) {
             continue;
         }
 
         $res_equipa = [
+            'nome' => $equipa->nome,
             'categoria' => [
                 'codigo' => $equipa->categoria,
                 'nome' => $categorias[$equipa->categoria]
@@ -55,10 +54,10 @@ foreach($tempadas as $t) {
             $res_equipa['competicions'][] = $res_competicion;
         }
 
-        $res_tempada['categorias'][] = $res_equipa;
+        $res_tempada['equipas'][] = $res_equipa;
     }
 
-    if (empty($res_tempada['categorias'])) {
+    if (empty($res_tempada['equipas'])) {
        continue; 
     }
 

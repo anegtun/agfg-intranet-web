@@ -7,7 +7,7 @@ class ClasificacionBaleira extends Clasificacion {
         return [];
     }
 
-    public function getClasificacionEquipo($codigo) {
+    public function getClasificacionEquipa($codigo) {
         return NULL;
     }
     

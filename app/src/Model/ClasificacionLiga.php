@@ -18,9 +18,9 @@ class ClasificacionLiga extends Clasificacion {
         return $this->_clasificacion;
     }
 
-    public function getClasificacionEquipo($codigo) {
+    public function getClasificacionEquipa($id) {
         foreach($this->_clasificacion as $e) {
-            if($e->codigo === $codigo) {
+            if($e->id === $id) {
                 return $e;
             }
         }

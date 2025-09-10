@@ -12,7 +12,7 @@ abstract class Clasificacion {
 
     abstract public function getClasificacion();
 
-    abstract public function getClasificacionEquipo($codigo);
+    abstract public function getClasificacionEquipa($codigo);
     
     abstract public function build($fase = NULL);
 }
