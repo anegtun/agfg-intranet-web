@@ -15,6 +15,7 @@ class ClubesController extends AppController {
         $this->Equipas = TableRegistry::get('Equipas');
         $this->FasesEquipas = TableRegistry::get('FasesEquipas');
         $this->Federacions = TableRegistry::get('Federacions');
+        $this->Tempadas = TableRegistry::get('Tempadas');
         $this->loadComponent('ClasificacionFetcher');
     }
 
@@ -107,6 +108,7 @@ class ClubesController extends AppController {
         }
 
         $categorias = $this->Categorias->getCategoriasWithEmpty();
+        $tempadas = $this->Tempadas->find()->order('codigo DESC');
 
         $clube = $this->Clubes
             ->find()
@@ -152,7 +154,7 @@ class ClubesController extends AppController {
             }
         }
 
-        $this->set(compact('categorias', 'clube'));
+        $this->set(compact('categorias', 'clube', 'tempadas'));
     }
 
 }
