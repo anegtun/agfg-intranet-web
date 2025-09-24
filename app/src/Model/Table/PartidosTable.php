@@ -46,9 +46,9 @@ class PartidosTable extends AgfgTable {
 
     public function validationDefault(Validator $validator): Validator {
         return $validator
-            ->notEmpty('id_fase', 'A fase da competición é obrigatoria')
-            ->notEmpty('id_equipa1', 'O equipo local é obrigatorio')
-            ->notEmpty('id_equipa2', 'O equipo visitante é obrigatorio');
+            ->notEmptyString('id_fase', 'A fase da competición é obrigatoria')
+            ->notEmptyString('id_equipa1', 'O equipo local é obrigatorio')
+            ->notEmptyString('id_equipa2', 'O equipo visitante é obrigatorio');
     }
 
     public function getDetalle($id) {

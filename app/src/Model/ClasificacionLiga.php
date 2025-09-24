@@ -69,6 +69,10 @@ class ClasificacionLiga extends Clasificacion {
         }
 
         $this->_addData(array_values($equipasPuntos));
+
+        if(empty($fase)) {
+            // Fix global clasification
+        }
     }
 
     private function _tenClasificacionGlobal() {

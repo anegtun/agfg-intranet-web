@@ -16,7 +16,7 @@ class EconomicoPartidasOrzamentariasTable extends AgfgTable {
     }
 
     public function validationDefault(Validator $validator): Validator {
-        return $validator->notEmpty('nome', 'O nome é obrigatorio');
+        return $validator->notEmptyString('nome', 'O nome é obrigatorio');
     }
 
     public function findComplete() {

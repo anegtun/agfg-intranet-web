@@ -16,7 +16,7 @@ class EconomicoFacturasTable extends AgfgTable {
     }
 
     public function validationDefault(Validator $validator): Validator {
-        return $validator->notEmpty('importe', 'O importe é obrigatorio');
+        return $validator->notEmptyString('importe', 'O importe é obrigatorio');
     }
 
     public function findAbertas($id = null) {

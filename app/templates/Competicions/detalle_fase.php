@@ -24,6 +24,7 @@ $this->Html->script('detalle-fase', ['block' => 'script']);
             <?= $this->Form->control('codigo', ['label'=>'Codigo']) ?>
             <?= $this->Form->control('nome', ['label'=>'Nome']) ?>
             <?= $this->Form->control('id_fase_pai', ['options'=>$this->AgfgForm->objectToKeyValue($outras_fases,'id','nome'), 'label'=>'Fase pai']) ?>
+            <?= $this->Form->control('prioridade', ['label'=>'Prioridade']) ?>
 
             <?php if(!empty($fase->id)) : ?>
                 <label for="equipas">Equipas participantes</label>

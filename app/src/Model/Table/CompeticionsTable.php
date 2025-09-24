@@ -25,9 +25,8 @@ class CompeticionsTable extends AgfgTable {
 
     public function validationDefault(Validator $validator): Validator {
         return $validator
-            ->notEmpty('nome', 'O nome é obrigatorio')
-            ->notEmpty('tipo', 'O tipo é obrigatorio')
-            ->notEmpty('ano', 'O ano é obrigatorio');
+            ->notEmptyString('nome', 'O nome é obrigatorio')
+            ->notEmptyString('tipo', 'O tipo é obrigatorio');
     }
 
     public function findByCodigoOrFail($codigo) {

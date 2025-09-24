@@ -23,9 +23,9 @@ class XornadasTable extends AgfgTable {
 
     public function validationDefault(Validator $validator): Validator {
         return $validator
-            ->notEmpty('id_fase', 'A fase é obrigatoria')
-            ->notEmpty('data', 'A data é obrigatoria')
-            ->notEmpty('numero', 'O número de xornada é obrigatorio');
+            ->notEmptyString('id_fase', 'A fase é obrigatoria')
+            ->notEmptyDate('data', 'A data é obrigatoria')
+            ->notEmptyString('numero', 'O número de xornada é obrigatorio');
     }
 
     public function findWithPartidos($id_fase) {

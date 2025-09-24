@@ -34,6 +34,7 @@ $this->set('cabeceiraMigas', [
                     <th>Nome</th>
                     <th>Código</th>
                     <th>Fase pai</th>
+                    <th>Prioridade</th>
                     <th></th>
                 </tr>
             </thead>
@@ -44,6 +45,7 @@ $this->set('cabeceiraMigas', [
                         <td><?= $this->Html->link($f->nome, ['action'=>'detalleFase', $f->id]) ?></td>
                         <td><?= $f->codigo ?></td>
                         <td><?= empty($f->fasePai) ? '' : $f->fasePai->nome ?></td>
+                        <td><?= $f->prioridade ?></td>
                         <td class="text-center"><?= $this->AgfgForm->deleteButton(['action'=>'borrarFase', $f->id]) ?></td>
                     </tr>
                 <?php endforeach ?>

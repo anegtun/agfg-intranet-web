@@ -29,7 +29,7 @@ class EconomicoMovementosTable extends AgfgTable {
     }
 
     public function validationDefault(Validator $validator): Validator {
-        return $validator->notEmpty('importe', 'O importe é obrigatorio');
+        return $validator->notEmptyString('importe', 'O importe é obrigatorio');
     }
 
     public function findbY($query, $prevision = false) {

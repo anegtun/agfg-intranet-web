@@ -17,6 +17,6 @@ class TendaPedidosTable extends AgfgTable {
 
     public function validationDefault(Validator $validator): Validator {
         return $validator
-            ->notEmpty('data', 'A data é obrigatoria');
+            ->notEmptyDate('data', 'A data é obrigatoria');
     }
 }

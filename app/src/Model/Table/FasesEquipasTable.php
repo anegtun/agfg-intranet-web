@@ -16,8 +16,8 @@ class FasesEquipasTable extends AgfgTable {
 
     public function validationDefault(Validator $validator): Validator {
         return $validator
-            ->notEmpty('id_fase', 'A fase é obrigatoria')
-            ->notEmpty('id_equipa', 'A equipa é obrigatoria');
+            ->notEmptyString('id_fase', 'A fase é obrigatoria')
+            ->notEmptyString('id_equipa', 'A equipa é obrigatoria');
     }
 
 }

@@ -6,7 +6,7 @@ use Cake\Collection\CollectionInterface;
 use Cake\Database\Expression\QueryExpression;
 use Cake\Event\Event;
 use Cake\I18n\FrozenDate;
-use Cake\I18n\Time;
+use Cake\I18n\FrozenTime;
 use Cake\ORM\Query;
 use Cake\ORM\TableRegistry;
 
@@ -140,8 +140,8 @@ class ResultadosController extends AppController {
     }
 
     public function gardar() {
-        $partido = $this->Competicions->newEntity([]);
         $data = $this->request->getData();
+        $partido = $this->Partidos->get($data['id']);
         $partido = $this->processGameForm($partido, $data);
         if ($this->Partidos->save($partido)) {
             $this->Flash->success(__('Gardáronse os datos do partido correctamente.'));
@@ -157,7 +157,7 @@ class ResultadosController extends AppController {
      */
     private function processGameForm($partido, $data) {
         $p = $this->Partidos->patchEntity($partido, $data);
-        $p->data_partido = empty($data['data']) ? NULL : Time::createFromFormat('d-m-Y', $data['data']);
+        $p->data_partido = empty($data['data']) ? NULL : FrozenTime::createFromFormat('d-m-Y', $data['data']);
         $p->id_campo = $this->clean($data['id_campo']);
         $p->id_arbitro = $this->clean($data['id_arbitro']);
         $p->goles_equipa1 = isset($data['goles_equipa1']) ? $this->clean($data['goles_equipa1']) : NULL;

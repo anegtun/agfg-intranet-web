@@ -22,8 +22,8 @@ class ClubesTable extends AgfgTable {
 
     public function validationDefault(Validator $validator): Validator {
         return $validator
-            ->notEmpty('codigo', 'O código é obrigatorio')
-            ->notEmpty('name', 'O nome é obrigatorio');
+            ->notEmptyString('codigo', 'O código é obrigatorio')
+            ->notEmptyString('name', 'O nome é obrigatorio');
     }
 
     public function findAGFG() {

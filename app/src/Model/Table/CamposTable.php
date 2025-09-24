@@ -11,8 +11,8 @@ class CamposTable extends AgfgTable {
 
     public function validationDefault(Validator $validator): Validator {
         return $validator
-            ->notEmpty('nome', 'O nome é obrigatorio')
-            ->notEmpty('pobo', 'O pobo é obrigatorio');
+            ->notEmptyString('nome', 'O nome é obrigatorio')
+            ->notEmptyString('pobo', 'O pobo é obrigatorio');
     }
 
     public function findMap($soloActivo = false) {

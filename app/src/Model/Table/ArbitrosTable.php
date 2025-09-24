@@ -11,7 +11,7 @@ class ArbitrosTable extends AgfgTable {
 
     public function validationDefault(Validator $validator): Validator {
         return $validator
-            ->notEmpty('alcume', 'O alcume é obrigatorio');
+            ->notEmptyString('alcume', 'O alcume é obrigatorio');
     }
 
     public function findMap($soloActivo = false) {

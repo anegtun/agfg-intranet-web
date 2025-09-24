@@ -17,6 +17,6 @@ class TendaProdutoPrezosTable extends AgfgTable {
 
     public function validationDefault(Validator $validator): Validator {
         return $validator
-            ->notEmpty('nome', 'O nome é obrigatorio');
+            ->notEmptyString('nome', 'O nome é obrigatorio');
     }
 }
