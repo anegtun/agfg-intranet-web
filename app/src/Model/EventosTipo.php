@@ -10,6 +10,7 @@ class EventosTipo {
     public function getAll() {
         return [
             'CL' => 'Competicion clubes',
+            'FE' => 'Festivo',
             'FO' => 'Formación',
             'GE' => 'Gaélico Escolas',
             'SE' => 'Selección',
