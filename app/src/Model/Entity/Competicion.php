@@ -14,4 +14,8 @@ class Competicion extends Entity {
     public function isLiga() {
         return $this->tipo === 'liga';
     }
+
+    public function isTorneo() {
+        return $this->tipo === 'torneo';
+    }
 }
