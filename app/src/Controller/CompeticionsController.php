@@ -43,7 +43,9 @@ class CompeticionsController extends AppController {
     }
 
     public function gardar() {
-        $competicion = $this->Competicions->newEntity($this->request->getData());
+        $data = $this->request->getData();
+        $competicion = $this->Competicions->getOrNew($data['id']);
+        $competicion = $this->Competicions->patchEntity($competicion, $data);
         if ($this->Competicions->save($competicion)) {
             $this->Flash->success(__('Gardouse a competición correctamente.'));
             return $this->redirect(['action'=>'detalle', $competicion->id]);
