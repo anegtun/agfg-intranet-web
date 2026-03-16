@@ -59,7 +59,7 @@ $ids_movementos_existentes = [];
                                     $movemento = $m;
                                     break;
                                 }
-                            } 
+                            }
                         ?>
 
                         <?php if (!empty($movemento)) : ?>
@@ -129,25 +129,36 @@ $ids_movementos_existentes = [];
 
 
 
-<h2>Existentes fóra do Excel</h2>
+<?php
+$movementos_existentes_fora_excel = [];
+foreach($movementos as $m) {
+    if (!in_array($m->id, $ids_movementos_existentes)) {
+        $movementos_existentes_fora_excel[] = $m;
+    }
+}
+?>
 
-<div class="row" style="margin-top:2em">
-    <div class="col-xs-12 table-responsive">
-        <table class="table table-striped table-hover">
-            <thead>
-                <tr>
-                    <th class="text-center column-date">Data</th>
-                    <th class="text-center">Importe</th>
-                    <th class="text-center">Tempada</th>
-                    <th class="text-center">Conta</th>
-                    <th class="text-center">Subárea</th>
-                    <th class="text-center">Clube</th>
-                    <th>Descricición</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach($movementos as $m) : ?>
-                    <?php if (!in_array($m->id, $ids_movementos_existentes)) : ?>
+
+<?php if(!empty($movementos_existentes_fora_excel)) : ?>
+
+    <h2>Existentes fóra do Excel</h2>
+
+    <div class="row" style="margin-top:2em">
+        <div class="col-xs-12 table-responsive">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th class="text-center column-date">Data</th>
+                        <th class="text-center">Importe</th>
+                        <th class="text-center">Tempada</th>
+                        <th class="text-center">Conta</th>
+                        <th class="text-center">Subárea</th>
+                        <th class="text-center">Clube</th>
+                        <th>Descricición</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach($movementos_existentes_fora_excel as $m) : ?>
                         <tr>
                             <td class="text-center"><?= $m->data->format('Y-m-d') ?></td>
                             <td class="text-right <?= $m->importe<0 ? 'text-danger' : ''?>">
@@ -159,9 +170,10 @@ $ids_movementos_existentes = [];
                             <td class="text-center"><?= empty($m->clube) ? '' : $m->clube->nome ?></td>
                             <td class="text-center"><?= $m->descricion ?></td>
                         </tr>
-                    <?php endif ?>
-                <?php endforeach ?>
-            </tbody>
-        </table>
+                    <?php endforeach ?>
+                </tbody>
+            </table>
+        </div>
     </div>
-</div>
+
+<?php endif ?>

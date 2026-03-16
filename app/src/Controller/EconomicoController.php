@@ -149,7 +149,8 @@ class EconomicoController extends AppController {
         $movementos = $this->Movementos
             ->find()
             ->contain(['Subarea' => ['Area' => ['PartidaOrzamentaria']], 'Clube'])
-            ->where(['and' => ['data >= ' => $inicio, 'data <= ' => $fin]]);
+            ->where(['and' => ['data >= ' => $inicio, 'data <= ' => $fin, 'prevision' => false]])
+            ->order('data DESC');
 
         $facturas = $this->Facturas->findAbertas();
         $tempadas = $this->Tempadas->findOptions();
