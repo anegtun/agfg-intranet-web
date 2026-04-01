@@ -1,0 +1,40 @@
+2026-03-16 11:18:08 error: [PDOException] SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'celtic-cup-26' for key 'codigo_UNIQUE' in /home/gaelicogalego/intranet/vendor/cakephp/cakephp/src/Database/Statement/MysqlStatement.php on line 39
+Stack Trace:
+- /home/gaelicogalego/intranet/vendor/cakephp/cakephp/src/Database/Statement/MysqlStatement.php:39
+- /home/gaelicogalego/intranet/vendor/cakephp/cakephp/src/Database/Connection.php:448
+- /home/gaelicogalego/intranet/vendor/cakephp/cakephp/src/Core/Retry/CommandRetry.php:70
+- /home/gaelicogalego/intranet/vendor/cakephp/cakephp/src/Database/Connection.php:445
+- /home/gaelicogalego/intranet/vendor/cakephp/cakephp/src/Database/Query.php:274
+- /home/gaelicogalego/intranet/vendor/cakephp/cakephp/src/ORM/Table.php:2149
+- /home/gaelicogalego/intranet/vendor/cakephp/cakephp/src/ORM/Table.php:2041
+- /home/gaelicogalego/intranet/vendor/cakephp/cakephp/src/ORM/Table.php:1940
+- /home/gaelicogalego/intranet/vendor/cakephp/cakephp/src/ORM/Table.php:1582
+- /home/gaelicogalego/intranet/vendor/cakephp/cakephp/src/Database/Connection.php:896
+- /home/gaelicogalego/intranet/vendor/cakephp/cakephp/src/ORM/Table.php:1581
+- /home/gaelicogalego/intranet/vendor/cakephp/cakephp/src/ORM/Table.php:1939
+- /home/gaelicogalego/intranet/src/Controller/CompeticionsController.php:47
+- /home/gaelicogalego/intranet/vendor/cakephp/cakephp/src/Controller/Controller.php:560
+- /home/gaelicogalego/intranet/vendor/cakephp/cakephp/src/Controller/ControllerFactory.php:140
+- /home/gaelicogalego/intranet/vendor/cakephp/cakephp/src/Controller/ControllerFactory.php:115
+- /home/gaelicogalego/intranet/vendor/cakephp/cakephp/src/Http/BaseApplication.php:325
+- /home/gaelicogalego/intranet/vendor/cakephp/cakephp/src/Http/Runner.php:86
+- /home/gaelicogalego/intranet/vendor/cakephp/authentication/src/Middleware/AuthenticationMiddleware.php:124
+- /home/gaelicogalego/intranet/vendor/cakephp/cakephp/src/Http/Runner.php:82
+- /home/gaelicogalego/intranet/vendor/cakephp/cakephp/src/Http/Middleware/CsrfProtectionMiddleware.php:176
+- /home/gaelicogalego/intranet/vendor/cakephp/cakephp/src/Http/Runner.php:82
+- /home/gaelicogalego/intranet/vendor/cakephp/cakephp/src/Http/Middleware/BodyParserMiddleware.php:162
+- /home/gaelicogalego/intranet/vendor/cakephp/cakephp/src/Http/Runner.php:82
+- /home/gaelicogalego/intranet/vendor/cakephp/cakephp/src/Routing/Middleware/RoutingMiddleware.php:189
+- /home/gaelicogalego/intranet/vendor/cakephp/cakephp/src/Http/Runner.php:82
+- /home/gaelicogalego/intranet/vendor/cakephp/cakephp/src/Routing/Middleware/AssetMiddleware.php:68
+- /home/gaelicogalego/intranet/vendor/cakephp/cakephp/src/Http/Runner.php:82
+- /home/gaelicogalego/intranet/vendor/cakephp/cakephp/src/Error/Middleware/ErrorHandlerMiddleware.php:149
+- /home/gaelicogalego/intranet/vendor/cakephp/cakephp/src/Http/Runner.php:82
+- /home/gaelicogalego/intranet/vendor/cakephp/cakephp/src/Http/Runner.php:67
+- /home/gaelicogalego/intranet/vendor/cakephp/cakephp/src/Http/Server.php:99
+- /home/gaelicogalego/intranet/webroot/index.php:40
+- [main]:
+
+Request URL: /competicions/gardar
+Referer URL: https://intranet.gaelicogalego.gal/competicions/detalle/54
+Client IP: 83.37.225.50
