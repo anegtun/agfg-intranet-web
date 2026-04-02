@@ -14,6 +14,7 @@ $this->set('cabeceiraMigas', [
         <fieldset>
             <legend>Partida Orzamentaria</legend>
             <?= $this->Form->control('nome', ['label'=>'Nome']) ?>
+            <?= $this->Form->control('logo', ['label'=>'Logo']) ?>
             <?= $this->Form->button('Gardar', ['class'=>'btn btn-primary']); ?>
         </fieldset>
     <?= $this->Form->end() ?>

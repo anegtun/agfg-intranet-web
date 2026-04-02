@@ -42,6 +42,16 @@ class EconomicoController extends AppController {
         $this->render('movementos');
     }
 
+    public function movementosBanco() {
+        $contas = $this->Contas->getAllWithEmpty();
+        $tempadas = $this->Tempadas->findOptions();
+        $partidasOrzamentarias = $this->PartidasOrzamentarias->findComplete();
+        $query = $this->queryToArray($this->request);
+        $query['subarea_activa'] = false;
+        $movementos = $this->Movementos->findBy($query, false);
+        $this->set(compact('contas', 'tempadas', 'partidasOrzamentarias', 'movementos'));
+    }
+
     public function detalleMovemento($id=null) {
         if(empty($id)) {
             $movemento = $this->Movementos->newEntity([]);

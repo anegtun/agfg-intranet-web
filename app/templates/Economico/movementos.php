@@ -175,7 +175,7 @@ foreach($partidasOrzamentarias as $po) {
                             <td class="text-center"><?= empty($m->conta) ? '' : $this->Html->image("/images/conta-{$m->conta}-logo.png", ['width'=>30,'height'=>30]) ?></td>
                         <?php endif ?>
                         <td class="text-center">
-                            <?= $m->subarea->area->partidaOrzamentaria->nome ?>
+                            <?= empty($m->subarea->area->partidaOrzamentaria->logo) ? $m->subarea->area->partidaOrzamentaria->nome : $this->Html->image($m->subarea->area->partidaOrzamentaria->logo, ['height'=>25]) ?>
                         </td>
                         <td class="text-center">
                             <?= $m->subarea->area->nome ?>

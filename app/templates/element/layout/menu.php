@@ -44,6 +44,7 @@ $authUser = $this->request->getAttribute('identity');
         'submenus' => [
             [ 'id' => 'movementos', 'nome' => 'Movementos', 'url' => ['controller'=>'Economico', 'action'=>'movementos'] ],
             [ 'id' => 'previsions', 'nome' => 'Previsións', 'url' => ['controller'=>'Economico', 'action'=>'previsions'] ],
+            [ 'id' => 'movementos_banco', 'nome' => 'Movementos banco', 'url' => ['controller'=>'Economico', 'action'=>'movementos_banco'] ],
             [ 'id' => 'facturas', 'nome' => 'Facturas', 'url' => ['controller'=>'Economico', 'action'=>'facturas'] ],
             [ 'id' => 'resumo', 'nome' => 'Resumo xeral', 'url' => ['controller'=>'Economico', 'action'=>'resumo'] ],
             [ 'id' => 'resumoClubes', 'nome' => 'Resumo clubes', 'url' => ['controller'=>'Economico', 'action'=>'resumoClubes'] ],
