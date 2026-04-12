@@ -14,11 +14,21 @@ class EconomicoAreasTable extends AgfgTable {
             'propertyName' => 'partidaOrzamentaria'
         ]);
 
-        $this->hasMany('Subareas', array(
-        	'className' => 'EconomicoSubareas',
+        $this->hasMany('Movementos', [
+        	'className' => 'EconomicoMovementos',
             'foreignKey' => 'id_area',
-            'propertyName' => 'subareas'
-        ));
+            'propertyName' => 'movementos',
+            'conditions'=> ['prevision' => false],
+            'sort' => 'Movementos.data DESC'
+        ]);
+
+        $this->hasMany('Previsions', [
+        	'className' => 'EconomicoMovementos',
+            'foreignKey' => 'id_area',
+            'propertyName' => 'previsions',
+            'conditions'=> ['prevision' => true],
+            'sort' => 'Previsions.data ASC'
+        ]);
     }
 
     public function validationDefault(Validator $validator): Validator {

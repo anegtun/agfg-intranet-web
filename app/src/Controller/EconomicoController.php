@@ -20,7 +20,6 @@ class EconomicoController extends AppController {
         $this->Clubes = TableRegistry::get('Clubes');
         $this->PartidasOrzamentarias = TableRegistry::get('EconomicoPartidasOrzamentarias');
         $this->Areas = TableRegistry::get('EconomicoAreas');
-        $this->Subareas = TableRegistry::get('EconomicoSubareas');
         $this->Facturas = TableRegistry::get('EconomicoFacturas');
         $this->Movementos = TableRegistry::get('EconomicoMovementos');
         $this->Tempadas = TableRegistry::get('Tempadas');
@@ -47,7 +46,7 @@ class EconomicoController extends AppController {
         $tempadas = $this->Tempadas->findOptions();
         $partidasOrzamentarias = $this->PartidasOrzamentarias->findComplete();
         $query = $this->queryToArray($this->request);
-        $query['subarea_activa'] = false;
+        $query['conta'] = empty($query['conta']) ? 'NONE' : $query['conta'];
         $movementos = $this->Movementos->findBy($query, false);
         $this->set(compact('contas', 'tempadas', 'partidasOrzamentarias', 'movementos'));
     }
@@ -62,14 +61,9 @@ class EconomicoController extends AppController {
         $contas = $this->Contas->getAllWithEmpty();
         $tempadas = $this->Tempadas->findSorted();
         $clubes = $this->Clubes->find()->order('nome');
-        $subareas = $this->Subareas->find()->contain(['Area' => 'PartidaOrzamentaria'])->order('PartidaOrzamentaria.nome', 'Area.nome');
-        if ($movemento->id_subarea) {
-            $subareas->where(['OR' => ['EconomicoSubareas.activa' => 1, 'EconomicoSubareas.id' => $movemento->id_subarea]]);
-        } else {
-            $subareas->where(['EconomicoSubareas.activa' => 1]);
-        }
+        $areas = $this->Areas->find()->contain(['PartidaOrzamentaria'])->order('PartidaOrzamentaria.nome', 'Area.nome');
         $facturas = $this->Facturas->findAbertas($movemento->id_factura);
-        $this->set(compact('movemento', 'contas', 'tempadas', 'clubes', 'subareas', 'facturas'));
+        $this->set(compact('movemento', 'contas', 'tempadas', 'clubes', 'areas', 'facturas'));
     }
 
     public function clonarMovemento($id) {
@@ -78,9 +72,9 @@ class EconomicoController extends AppController {
         $contas = $this->Contas->getAllWithEmpty();
         $tempadas = $this->Tempadas->findSorted();
         $clubes = $this->Clubes->find()->order('nome');
-        $subareas = $this->Subareas->find()->contain(['Area' => 'PartidaOrzamentaria'])->order('PartidaOrzamentaria.nome', 'Area.nome');
+        $areas = $this->Areas->find()->contain(['PartidaOrzamentaria'])->order('PartidaOrzamentaria.nome', 'Area.nome');
         $facturas = $this->Facturas->findAbertas($movemento->id_factura);
-        $this->set(compact('movemento', 'contas', 'tempadas', 'clubes', 'subareas', 'facturas'));
+        $this->set(compact('movemento', 'contas', 'tempadas', 'clubes', 'areas', 'facturas'));
         $this->render('detalleMovemento');
     }
 
@@ -158,20 +152,19 @@ class EconomicoController extends AppController {
 
         $movementos = $this->Movementos
             ->find()
-            ->contain(['Subarea' => ['Area' => ['PartidaOrzamentaria']], 'Clube'])
+            ->contain(['Area' => ['PartidaOrzamentaria'], 'Clube'])
             ->where(['and' => ['data >= ' => $inicio, 'data <= ' => $fin, 'prevision' => false]])
             ->order('data DESC');
 
         $facturas = $this->Facturas->findAbertas();
         $tempadas = $this->Tempadas->findOptions();
         $clubes = $this->Clubes->findAGFG();
-        $subareas = $this->Subareas
+        $areas = $this->Areas
             ->find()
-            ->contain(['Area' => 'PartidaOrzamentaria'])
-            ->where(['activa' => 1])
+            ->contain('PartidaOrzamentaria')
             ->order('PartidaOrzamentaria.nome', 'Area.nome');
 
-        $this->set(compact('filas', 'movementos', 'facturas', 'tempadas', 'clubes', 'subareas'));
+        $this->set(compact('filas', 'movementos', 'facturas', 'tempadas', 'clubes', 'areas'));
     }
 
     public function importarMovementos() {
@@ -202,7 +195,7 @@ class EconomicoController extends AppController {
         $estados = $this->FacturaEstado->getAll();
         $facturas_query = $this->Facturas
             ->find()
-            ->contain(['Movementos' => ['Subarea' => ['Area' => ['PartidaOrzamentaria']]]])
+            ->contain(['Movementos' => ['Area' => 'PartidaOrzamentaria']])
             ->order('data desc');
 
         $all_facturas = $facturas_query->toArray();
@@ -234,7 +227,7 @@ class EconomicoController extends AppController {
 
         $facturas = [];
 
-        $estado_param = $this->request->getQuery('estado');
+        $estado_param = $this->request->getQuery('estado') ?: 'A';
         foreach($facturas_query->toArray() as $f) {
             $diff = $f->diffImporteMovementos();
             switch($estado_param) {
@@ -322,7 +315,10 @@ class EconomicoController extends AppController {
 
     public function resumo() {
         $query = $this->queryToArray($this->request);
-        $query['subarea_activa'] = false;
+        if(empty($query['tempada'])) {
+            $query['tempada'] = $this->Tempadas->findLast()->codigo;
+        }
+
         $movementos = $this->Movementos->findBy($query, false);
         $previsions = $this->Movementos->findBy($query, true);
         $resumo = new ResumoEconomico($movementos, $previsions);
@@ -340,17 +336,6 @@ class EconomicoController extends AppController {
         }
 
         $this->set(compact('resumo', 'partidasOrzamentarias', 'tempadas'));
-    }
-
-    public function resumoClubes() {
-        $query = $this->queryToArray($this->request);
-        $query['subarea_activa'] = false;
-        $movementos = $this->Movementos->findBy($query, false);
-        $previsions = $this->Movementos->findBy($query, true);
-        $resumo = new ResumoEconomico($movementos, $previsions);
-        $tempadas = $this->Tempadas->findOptions();
-        $clubes = $this->Clubes->find()->order('nome');
-        $this->set(compact('resumo', 'clubes', 'tempadas'));
     }
 
 
@@ -386,9 +371,10 @@ class EconomicoController extends AppController {
     }
 
     public function detalleArea($id=null) {
-        $area = $this->Areas->getOrNew($id);
+        $area = $this->Areas->getOrNew($id, ['contain' => ['Movementos'=>['Factura','Clube'], 'Previsions'=>['Clube']]]);
         $partidasOrzamentarias = $this->PartidasOrzamentarias->find()->order('nome');
-        $this->set(compact('area', 'partidasOrzamentarias'));
+        $tempadas = $this->Tempadas->findOptions();
+        $this->set(compact('area', 'partidasOrzamentarias', 'tempadas'));
     }
 
     public function gardarArea() {
@@ -411,56 +397,27 @@ class EconomicoController extends AppController {
         return $this->redirect(['action'=>'partidasOrzamentarias']);
     }
 
-    public function detalleSubarea($id=null) {
-        $subarea = $this->Subareas->getOrNew($id, ['contain' => ['Movementos'=>['Factura','Clube'], 'Previsions'=>['Clube']]]);
-        $areas = $this->Areas->find()->contain(['PartidaOrzamentaria'])->order(['PartidaOrzamentaria.nome', 'EconomicoAreas.nome']);
-        $contas = $this->Contas->getAllWithEmpty();
-        $tempadas = $this->Tempadas->findOptions();
-        $this->set(compact('subarea', 'areas', 'contas', 'tempadas'));
-    }
-
-    public function gardarSubarea() {
-        $subarea = $this->Subareas->newEntity($this->request->getData());
-        if ($this->Subareas->save($subarea)) {
-            $this->Flash->success(__('Gardouse a subárea correctamente.'));
-            return $this->redirect(['action'=>'partidasOrzamentarias']);
-        }
-        $this->Flash->error(__('Erro ao gardar a subárea.'));
-        $this->set(compact('subarea'));
-        $this->render('detalleSubarea');
-    }
-
-    public function borrarSubarea($id) {
-        if($this->Subareas->deleteById($id)) {
-            $this->Flash->success(__('Eliminouse a subárea correctamente.'));
-        } else {
-            $this->Flash->error(__('Erro ao eliminar a subárea.'));
-        }
-        return $this->redirect(['action'=>'partidasOrzamentarias']);
-    }
-
     private function listarMovementos($prevision) {
         $contas = $this->Contas->getAllWithEmpty();
         $tempadas = $this->Tempadas->findOptions();
         $partidasOrzamentarias = $this->PartidasOrzamentarias->findComplete();
-        $movementos = $this->Movementos->findBy($this->queryToArray($this->request), $prevision);
+        $query = $this->queryToArray($this->request);
+        if(empty($query['tempada'])) {
+            $query['tempada'] = $this->Tempadas->findLast()->codigo;
+        }
+        $movementos = $this->Movementos->findBy($query, $prevision);
         $this->set(compact('prevision', 'contas', 'tempadas', 'partidasOrzamentarias', 'movementos'));
     }
 
     private function queryToArray($request) {
         $array = [];
 
-        $params = ['importe', 'factura', 'data_ini', 'data_fin', 'conta', 'tempada', 'id_partida_orzamentaria', 'id_area', 'id_subarea', 'texto'];
+        $params = ['importe', 'factura', 'data_ini', 'data_fin', 'conta', 'tempada', 'id_partida_orzamentaria', 'id_area', 'texto'];
         foreach($params as $p) {
             $valor = $request->getQuery($p);
             if(!empty($valor)) {
                 $array[$p] = $valor;
             }
-        }
-
-        $subarea_activa = $request->getQuery('subarea_activa');
-        if(isset($subarea_activa)) {
-            $array['subarea_activa'] = $subarea_activa;
         }
 
         return $array;

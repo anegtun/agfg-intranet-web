@@ -26,13 +26,10 @@ $id_regexp = "/[ ñÑºª,'~()\*\.\/\?\+]/i";
 
         <div class="row">
             <div class="col-lg-2">
-                <?= $this->Form->control('id_partida_orzamentaria', ['options'=>$this->AgfgForm->objectToKeyValue($partidasOrzamentarias,'id','nome'), 'label'=>'Partida orzamentaria', 'class'=>'form-control']) ?>
-            </div>
-            <div class="col-lg-2">
-                <?= $this->Form->control('id_area', ['options'=>$this->AgfgForm->objectToKeyValue($areas,'id','{$e->partidaOrzamentaria->nome} - {$e->nome}'), 'label'=>'Area', 'class'=>'form-control']) ?>
-            </div>
-            <div class="col-lg-2">
                 <?= $this->Form->control('tempada', ['options'=>$tempadas, 'label'=>'Tempada', 'class'=>'form-control']) ?>
+            </div>
+            <div class="col-lg-2">
+                <?= $this->Form->control('id_partida_orzamentaria', ['options'=>$this->AgfgForm->objectToKeyValue($partidasOrzamentarias,'id','nome'), 'label'=>'Partida orzamentaria', 'class'=>'form-control']) ?>
             </div>
             <div class="col-lg-2">
                 <?= $this->Form->control('data_ini', ['type'=>'text', 'class'=>'form-control fld-date', 'label'=>'Data inicio', 'templates'=>$emptyTemplates]) ?>
@@ -56,14 +53,14 @@ $id_regexp = "/[ ñÑºª,'~()\*\.\/\?\+]/i";
         <table class="table table-hover">
             <thead>
                 <tr>
-                    <th class="text-center">Subarea</th>
-                    <th class="text-center border-right">Tempada</th>
+                    <th class="text-center border-right">Concepto</th>
                     <th class="text-center">Ingresos</th>
                     <th class="text-center">Gastos</th>
                     <th class="text-center">Comisión</th>
                     <th class="text-center border-right">Balance</th>
                     <th class="text-center">Prev. ingresos</th>
                     <th class="text-center border-right">Prev. gastos</th>
+                    <th></th>
                     <th></th>
                 </tr>
             </thead>
@@ -77,30 +74,31 @@ $id_regexp = "/[ ñÑºª,'~()\*\.\/\?\+]/i";
                         <th class="text-center" colspan="9"><?= $area->partidaOrzamentaria->nome ?> - <?= $area->nome ?></th>
                     </tr>
 
-                    <?php foreach($resumo->getSubareas($area) as $subarea) : ?>
-                        <?php foreach($resumo->getConceptos($subarea) as $concepto) : ?>
-                            <?php $total_concepto = $resumo->getTotalConcepto($subarea, $concepto) ?>
-                            <tr>
-                                <td class="text-center"><?= $subarea->nome ?></td>
-                                <td class="text-center border-right"><?= $concepto ?></td>
-                                <td class="text-right"><?= empty($total_concepto->ingresos) ? '-' : $this->Number->currency($total_concepto->ingresos, 'EUR') ?></td>
-                                <td class="text-right text-danger"><?= empty($total_concepto->gastos) ? '-' : $this->Number->currency($total_concepto->gastos, 'EUR') ?></td>
-                                <td class="text-right <?= !empty($total_concepto->comision) && $total_concepto->comision<0 ? 'text-danger' : ''?>"><?= empty($total_concepto->comision) ? '-' : $this->Number->currency($total_concepto->comision, 'EUR') ?></td>
-                                <td class="text-right border-right <?= !empty($total_concepto->balance) && $total_concepto->balance<0 ? 'text-danger' : ''?>"><strong><?= empty($total_concepto->balance) ? '-' : $this->Number->currency($total_concepto->balance, 'EUR') ?></strong></td>
-                                <td class="text-right"><strong><?= empty($total_concepto->ingresos_previstos) ? '-' : $this->Number->currency($total_concepto->ingresos_previstos, 'EUR') ?></strong></td>
-                                <td class="text-right text-danger border-right"><strong><?= empty($total_concepto->gastos_previstos) ? '-' : $this->Number->currency($total_concepto->gastos_previstos, 'EUR') ?></strong></td>
-                                <td class="text-center">
-                                    <a href="javascript:void(0)"><em class="glyphicon glyphicon-th-list" data-toggle="modal" data-target="#modal-movementos-subarea-<?= $subarea->id."_".preg_replace($id_regexp, "_", $concepto) ?>"></em></a>
-                                    &nbsp;
-                                    <a href="javascript:void(0)"><em class="glyphicon glyphicon-time" data-toggle="modal" data-target="#modal-previsions-subarea-<?= $subarea->id."_".preg_replace($id_regexp, "_", $concepto) ?>"></em></a>
-                                </td>
-                            </tr>
-                        <?php endforeach ?>
+                    <?php foreach($resumo->getConceptos($area) as $concepto) : ?>
+                        <?php $total_concepto = $resumo->getTotalConcepto($area, $concepto) ?>
+                        <tr>
+                            <td class="text-center border-right"><?= $concepto ?></td>
+                            <td class="text-right"><?= empty($total_concepto->ingresos) ? '-' : $this->Number->currency($total_concepto->ingresos, 'EUR') ?></td>
+                            <td class="text-right text-danger"><?= empty($total_concepto->gastos) ? '-' : $this->Number->currency($total_concepto->gastos, 'EUR') ?></td>
+                            <td class="text-right <?= !empty($total_concepto->comision) && $total_concepto->comision<0 ? 'text-danger' : ''?>"><?= empty($total_concepto->comision) ? '-' : $this->Number->currency($total_concepto->comision, 'EUR') ?></td>
+                            <td class="text-right border-right <?= !empty($total_concepto->balance) && $total_concepto->balance<0 ? 'text-danger' : ''?>"><strong><?= empty($total_concepto->balance) ? '-' : $this->Number->currency($total_concepto->balance, 'EUR') ?></strong></td>
+                            <td class="text-right"><strong><?= empty($total_concepto->ingresos_previstos) ? '-' : $this->Number->currency($total_concepto->ingresos_previstos, 'EUR') ?></strong></td>
+                            <td class="text-right text-danger border-right"><strong><?= empty($total_concepto->gastos_previstos) ? '-' : $this->Number->currency($total_concepto->gastos_previstos, 'EUR') ?></strong></td>
+                            <td class="text-center">
+                                <?php if(!empty($resumo->getMovementosAreaConcepto(false, $area, $concepto))) : ?>
+                                    <a href="javascript:void(0)"><em class="glyphicon glyphicon-th-list" data-toggle="modal" data-target="#modal-movementos-area-<?= $area->id."_".preg_replace($id_regexp, "_", $concepto) ?>"></em></a>
+                                <?php endif ?>
+                            </td>
+                            <td class="text-center">
+                                <?php if(!empty($resumo->getMovementosAreaConcepto(true, $area, $concepto))) : ?>
+                                    <a href="javascript:void(0)"><em class="glyphicon glyphicon-time" data-toggle="modal" data-target="#modal-previsions-area-<?= $area->id."_".preg_replace($id_regexp, "_", $concepto) ?>"></em></a>
+                                <?php endif ?>
+                            </td>
+                        </tr>
                     <?php endforeach ?>
 
                     <tr>
                         <th class="text-center">Subtotal</th>
-                        <th class="border-right"></th>
                         <th class="text-right"><?= $this->Number->currency($total_area->ingresos, 'EUR') ?></th>
                         <th class="text-right text-danger"><?= $this->Number->currency($total_area->gastos, 'EUR') ?></th>
                         <th class="text-right <?= $total_area->comision<0 ? 'text-danger' : ''?>"><?= $this->Number->currency($total_area->comision, 'EUR') ?></th>
@@ -108,9 +106,13 @@ $id_regexp = "/[ ñÑºª,'~()\*\.\/\?\+]/i";
                         <td class="text-right"><strong><?= empty($total_area->ingresos_previstos) ? '-' : $this->Number->currency($total_area->ingresos_previstos, 'EUR') ?></strong></td>
                         <td class="text-right text-danger border-right"><strong><?= empty($total_area->gastos_previstos) ? '-' : $this->Number->currency($total_area->gastos_previstos, 'EUR') ?></strong></td>
                         <th class="text-center">
-                            <a href="javascript:void(0)"><em class="glyphicon glyphicon-th-list" data-toggle="modal" data-target="#modal-movementos-area-<?= $area->id ?>"></em></a>
-                            &nbsp;
-                            <a href="javascript:void(0)"><em class="glyphicon glyphicon-time" data-toggle="modal" data-target="#modal-previsions-area-<?= $area->id ?>"></em></a>
+                            <?php if(!empty($resumo->getMovementosArea(false, $area))) : ?>
+                                <a href="javascript:void(0)"><em class="glyphicon glyphicon-th-list" data-toggle="modal" data-target="#modal-movementos-area-<?= $area->id ?>"></em></a></th>
+                            <?php endif ?>
+                        <th class="text-center">
+                            <?php if(!empty($resumo->getMovementosArea(true, $area))) : ?>
+                                <a href="javascript:void(0)"><em class="glyphicon glyphicon-time" data-toggle="modal" data-target="#modal-previsions-area-<?= $area->id ?>"></em></a>
+                            <?php endif ?>
                         </th>
                     </tr>
                 <?php endforeach ?>
@@ -121,14 +123,14 @@ $id_regexp = "/[ ñÑºª,'~()\*\.\/\?\+]/i";
                     <td colspan="9">&nbsp;</td>
                 </tr>
                 <tr style="background-color: #f9f9f9;">
-                    <td class="text-center"><strong>TOTAL</strong></td>
-                    <td class="border-right"></td>
+                    <td class="text-center border-right"><strong>TOTAL</strong></td>
                     <td class="text-right"><strong><?= $this->Number->currency($total->ingresos, 'EUR') ?></strong></td>
                     <td class="text-right text-danger"><strong><?= $this->Number->currency($total->gastos, 'EUR') ?></strong></td>
                     <td class="text-right <?= $total->comision<0 ? 'text-danger' : ''?>"><strong><?= $this->Number->currency($total->comision, 'EUR') ?></strong></td>
                     <td class="text-right border-right <?= $total->balance<0 ? 'text-danger' : ''?>"><strong><?= $this->Number->currency($total->balance, 'EUR') ?></strong></td>
                     <td class="text-right"><strong><?= $this->Number->currency($total->ingresos_previstos, 'EUR') ?></strong></td>
                     <td class="text-right border-right text-danger"><strong><?= $this->Number->currency($total->gastos_previstos, 'EUR') ?></strong></td>
+                    <td></td>
                     <td></td>
                 </tr>
             </tfoot>
@@ -150,22 +152,20 @@ $id_regexp = "/[ ñÑºª,'~()\*\.\/\?\+]/i";
         'movementos' => $resumo->getMovementosArea(true, $area)
     ]) ?>
 
-    <?php foreach($resumo->getSubareas($area) as $subarea) : ?>
-        <?php foreach($resumo->getConceptos($subarea) as $concepto) : ?>
+    <?php foreach($resumo->getConceptos($area) as $concepto) : ?>
 
-            <?= $this->element('economico/modal_movemento', [
-                'id' => "modal-movementos-subarea-" . $subarea->id . "_" . preg_replace($id_regexp, "_", $concepto),
-                'titulo' => "{$subarea->nome} ($concepto)",
-                'movementos' => $resumo->getMovementosSubareaConcepto(false, $subarea, $concepto)
-            ]) ?>
+        <?= $this->element('economico/modal_movemento', [
+            'id' => "modal-movementos-area-" . $area->id . "_" . preg_replace($id_regexp, "_", $concepto),
+            'titulo' => "{$area->nome} ($concepto)",
+            'movementos' => $resumo->getMovementosAreaConcepto(false, $area, $concepto)
+        ]) ?>
 
-            <?= $this->element('economico/modal_movemento', [
-                'id' => "modal-previsions-subarea-" . $subarea->id . "_" . preg_replace($id_regexp, "_", $concepto),
-                'titulo' => "Previsións {$subarea->nome} ($concepto)",
-                'movementos' => $resumo->getMovementosSubareaConcepto(true, $subarea, $concepto)
-            ]) ?>
+        <?= $this->element('economico/modal_movemento', [
+            'id' => "modal-previsions-area-" . $area->id . "_" . preg_replace($id_regexp, "_", $concepto),
+            'titulo' => "Previsións {$area->nome} ($concepto)",
+            'movementos' => $resumo->getMovementosAreaConcepto(true, $area, $concepto)
+        ]) ?>
 
-        <?php endforeach ?>
     <?php endforeach ?>
 
 <?php endforeach ?>

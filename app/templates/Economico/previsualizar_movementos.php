@@ -34,7 +34,7 @@ $ids_movementos_existentes = [];
                         <th class="text-center column-date">Data</th>
                         <th class="text-center">Importe</th>
                         <th class="text-center">Tempada</th>
-                        <th class="text-center">Subárea</th>
+                        <th class="text-center">Área</th>
                         <th class="text-center">Clube</th>
                         <th class="text-center">Descricición</th>
                         <th class="text-center">Referencia</th>
@@ -71,7 +71,7 @@ $ids_movementos_existentes = [];
                                     <?= $this->Number->currency($f->importe, 'EUR') ?>
                                 </td>
                                 <td class="text-center"><?= $tempadas[$movemento->tempada] ?></td>
-                                <td class="text-center"><?= "{$movemento->subarea->area->partidaOrzamentaria->nome} - {$movemento->subarea->area->nome} - {$movemento->subarea->nome}" ?></td>
+                                <td class="text-center"><?= $this->Html->image($movemento->area->partidaOrzamentaria->logo, ['height'=>25]) . " {$movemento->area->nome}" ?></td>
                                 <td class="text-center"><?= empty($movemento->clube) ? '' : $movemento->clube->nome ?></td>
                                 <td class="text-center"><?= $movemento->descricion ?></td>
                                 <td class="text-center"><?= $movemento->referencia ?></td>
@@ -97,7 +97,7 @@ $ids_movementos_existentes = [];
                                     <?= $this->Form->control('fila.'.$i.'.tempada', ['options'=>$tempadas, 'label'=>false, 'templates'=>$emptyTemplates]) ?>
                                 </td>
                                 <td class="text-center">
-                                    <?= $this->Form->control('fila.'.$i.'.id_subarea', ['options'=>$this->AgfgForm->objectToKeyValue($subareas,'id','{$e->area->partidaOrzamentaria->nome} - {$e->area->nome} - {$e->nome}'), 'label'=>false, 'templates'=>$emptyTemplates]) ?>
+                                    <?= $this->Form->control('fila.'.$i.'.id_area', ['options'=>$this->AgfgForm->objectToKeyValue($areas,'id','{$e->partidaOrzamentaria->nome} - {$e->nome}'), 'label'=>false, 'templates'=>$emptyTemplates]) ?>
                                 </td>
                                 <td class="text-center">
                                     <?= $this->Form->control('fila.'.$i.'.id_clube', ['options'=>$this->AgfgForm->objectToKeyValue($clubes,'id','{$e->nome}'), 'label'=>false, 'templates'=>$emptyTemplates]) ?>
@@ -166,7 +166,7 @@ foreach($movementos as $m) {
                             </td>
                             <td class="text-center"><?= $tempadas[$m->tempada] ?></td>
                             <td class="text-center"><?= $contas[$m->conta] ?></td>
-                            <td class="text-center"><?= "{$m->subarea->area->partidaOrzamentaria->nome} - {$m->subarea->area->nome} - {$m->subarea->nome}" ?></td>
+                            <td class="text-center"><?= "{$m->area->partidaOrzamentaria->nome} - {$m->area->nome}" ?></td>
                             <td class="text-center"><?= empty($m->clube) ? '' : $m->clube->nome ?></td>
                             <td class="text-center"><?= $m->descricion ?></td>
                         </tr>

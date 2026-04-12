@@ -14,10 +14,10 @@ class ResumoEconomico {
     public function getPartidasOrzanentarias() {
         $result = [];
         foreach($this->movementos as $e) {
-            $result[$e->subarea->area->partidaOrzamentaria->id] = $e->subarea->area->partidaOrzamentaria;
+            $result[$e->area->partidaOrzamentaria->id] = $e->area->partidaOrzamentaria;
         }
         foreach($this->previsions as $e) {
-            $result[$e->subarea->area->partidaOrzamentaria->id] = $e->subarea->area->partidaOrzamentaria;
+            $result[$e->area->partidaOrzamentaria->id] = $e->area->partidaOrzamentaria;
         }
         usort($result, ["self", "cmpNome"]);
         return $result;
@@ -26,44 +26,28 @@ class ResumoEconomico {
     public function getAreas($partidaOrzamentaria = null) {
         $result = [];
         foreach($this->movementos as $e) {
-            if (empty($partidaOrzamentaria) || $e->subarea->area->partidaOrzamentaria->id === $partidaOrzamentaria->id) {
-                $result[$e->subarea->area->id] = $e->subarea->area;
+            if (empty($partidaOrzamentaria) || $e->area->partidaOrzamentaria->id === $partidaOrzamentaria->id) {
+                $result[$e->area->id] = $e->area;
             }
         }
         foreach($this->previsions as $e) {
-            if (empty($partidaOrzamentaria) || $e->subarea->area->partidaOrzamentaria->id === $partidaOrzamentaria->id) {
-                $result[$e->subarea->area->id] = $e->subarea->area;
+            if (empty($partidaOrzamentaria) || $e->area->partidaOrzamentaria->id === $partidaOrzamentaria->id) {
+                $result[$e->area->id] = $e->area;
             }
         }
         usort($result, ["self", "cmpArea"]);
         return $result;
     }
 
-    public function getSubareas($area) {
+    public function getConceptos($area) {
         $result = [];
         foreach($this->movementos as $e) {
-            if ($e->subarea->area->id === $area->id) {
-                $result[$e->subarea->id] = $e->subarea;
-            }
-        }
-        foreach($this->previsions as $e) {
-            if ($e->subarea->area->id === $area->id) {
-                $result[$e->subarea->id] = $e->subarea;
-            }
-        }
-        usort($result, ["self", "cmpNome"]);
-        return $result;
-    }
-
-    public function getConceptos($subarea) {
-        $result = [];
-        foreach($this->movementos as $e) {
-            if ($e->subarea->id === $subarea->id) {
+            if ($e->area->id === $area->id) {
                 $result[$e->descricion] = $e->descricion;
             }
         }
         foreach($this->previsions as $e) {
-            if ($e->subarea->id === $subarea->id) {
+            if ($e->area->id === $area->id) {
                 $result[$e->descricion] = $e->descricion;
             }
         }
@@ -72,11 +56,11 @@ class ResumoEconomico {
     }
 
     public function getMovementosArea($prevision, $area) {
-        return $this->filter($prevision, fn($e) => $e->subarea->area->id === $area->id);
+        return $this->filter($prevision, fn($e) => $e->area->id === $area->id);
     }
 
-    public function getMovementosSubareaConcepto($prevision, $subarea, $concepto) {
-        return $this->filter($prevision, fn($e) => $e->subarea->id === $subarea->id && $e->descricion === $concepto);
+    public function getMovementosAreaConcepto($prevision, $area, $concepto) {
+        return $this->filter($prevision, fn($e) => $e->area->id === $area->id && $e->descricion === $concepto);
     }
 
     public function getTotal() {
@@ -84,27 +68,19 @@ class ResumoEconomico {
     }
 
     public function getTotalPartidaOrzamentaria($partidaOrzamentaria) {
-        return $this->sum(fn($e) => $e->subarea->area->partidaOrzamentaria->id === $partidaOrzamentaria->id);
+        return $this->sum(fn($e) => $e->area->partidaOrzamentaria->id === $partidaOrzamentaria->id);
     }
 
     public function getTotalArea($area) {
-        return $this->sum(fn($e) => $e->subarea->area->id === $area->id);
-    }
-
-    public function getTotalSubarea($subarea) {
-        return $this->sum(fn($e) => $e->subarea->id === $subarea->id);
+        return $this->sum(fn($e) => $e->area->id === $area->id);
     }
 
     public function getTotalAreaClube($area, $clube = NULL) {
-        return $this->sum(fn($e) => $e->subarea->area->id === $area->id && !empty($e->id_clube) && (empty($clube) || $e->id_clube === $clube->id));
+        return $this->sum(fn($e) => $e->area->id === $area->id && !empty($e->id_clube) && (empty($clube) || $e->id_clube === $clube->id));
     }
 
-    public function getTotalSubareaClube($subarea, $clube = NULL) {
-        return $this->sum(fn($e) => $e->subarea->id === $subarea->id && !empty($e->id_clube) && (empty($clube) || $e->id_clube === $clube->id));
-    }
-
-    public function getTotalConcepto($subarea, $concepto) {
-        return $this->sum(fn($e) => $e->subarea->id === $subarea->id && $e->descricion === $concepto);
+    public function getTotalConcepto($area, $concepto) {
+        return $this->sum(fn($e) => $e->area->id === $area->id && $e->descricion === $concepto);
     }
 
     private function filter($prevision, $filter) {

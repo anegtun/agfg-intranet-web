@@ -9,10 +9,10 @@ class EconomicoMovementosTable extends AgfgTable {
     public function initialize(array $config): void {
         $this->setTable('agfg_economico_movementos');
 
-        $this->belongsTo('Subarea', [
-        	'className' => 'EconomicoSubareas',
-            'foreignKey' => 'id_subarea',
-            'propertyName' => 'subarea'
+        $this->belongsTo('Area', [
+        	'className' => 'EconomicoAreas',
+            'foreignKey' => 'id_area',
+            'propertyName' => 'area'
         ]);
 
         $this->belongsTo('Clube', [
@@ -36,7 +36,7 @@ class EconomicoMovementosTable extends AgfgTable {
         $sort = $prevision ? 'asc' : 'desc';
         $movementos = $this
             ->find()
-            ->contain(['Subarea' => ['Area' => ['PartidaOrzamentaria']], 'Clube', 'Factura'])
+            ->contain(['Area' => 'PartidaOrzamentaria', 'Clube', 'Factura'])
             ->where(['prevision' => $prevision])
             ->order(["EconomicoMovementos.data $sort", "EconomicoMovementos.id $sort"]);
 
@@ -72,10 +72,7 @@ class EconomicoMovementosTable extends AgfgTable {
             $movementos->where(['Area.id_partida_orzamentaria' => $query['id_partida_orzamentaria']]);
         }
         if(!empty($query['id_area'])) {
-            $movementos->where(['Subarea.id_area' => $query['id_area']]);
-        }
-        if(!empty($query['id_subarea'])) {
-            $movementos->where(['EconomicoMovementos.id_subarea' => $query['id_subarea']]);
+            $movementos->where(['Area.id' => $query['id_area']]);
         }
         if(!empty($query['texto'])) {
             $texto = strtoupper($query['texto']);
@@ -83,9 +80,6 @@ class EconomicoMovementosTable extends AgfgTable {
                 'UPPER(EconomicoMovementos.descricion) LIKE' => "%$texto%",
                 'UPPER(EconomicoMovementos.referencia) LIKE' => "%$texto%"
             ]]);
-        }
-        if(!isset($query['subarea_activa']) || !empty($query['subarea_activa'])) {
-            $movementos->where(['Subarea.activa' => 1]);
         }
         return $movementos;
     }

@@ -13,7 +13,6 @@
                                 <th class="text-center column-date">Data</th>
                                 <th class="text-center">Importe</th>
                                 <th class="text-center">Comisión</th>
-                                <th class="text-center">Subarea</th>
                                 <th class="text-center">Tempada</th>
                                 <th class="text-center">Observacións</th>
                                 <th class="text-center">Referencia</th>
@@ -26,7 +25,6 @@
                                     <td class="text-center"><?= $m->data->format('Y-m-d') ?></td>
                                     <td class="text-right <?= $m->importe<0 ? 'text-danger' : ''?>"><?= $this->Number->currency($m->importe, 'EUR') ?></td>
                                     <td class="text-right <?= $m->comision<0 ? 'text-danger' : ''?>"><?= empty($m->comision) ? '' : $this->Number->currency($m->comision, 'EUR') ?></td>
-                                    <td class="text-center"><?= $m->subarea->nome ?></td>
                                     <td class="text-center"><?= $tempadas[$m->tempada] ?></td>
                                     <td><?= $m->descricion ?></td>
                                     <td><?= $m->referencia ?></td>

@@ -22,4 +22,8 @@ class TempadasTable extends AgfgTable {
     public function findSorted() {
         return $this->find('all', ['order' => 'codigo DESC']);
     }
+    
+    public function findLast() {
+        return $this->findSorted()->toArray()[0];
+    }
 }

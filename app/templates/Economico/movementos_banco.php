@@ -42,7 +42,6 @@ $movementos_ar = $movementos->toArray();
                     <th class="text-center">Partida Orz.</th>
                     <th class="text-center">Tempada</th>
                     <th class="text-center">Área</th>
-                    <th class="text-center">Subárea</th>
                     <th>Descricición</th>
                     <th class="column-button"></th>
                     <th class="column-button"></th>
@@ -79,16 +78,13 @@ $movementos_ar = $movementos->toArray();
                             <?= $this->Number->currency($acumulado, 'EUR') ?>
                         </td>
                         <td class="text-center">
-                            <?= empty($m->subarea->area->partidaOrzamentaria->logo) ? $m->subarea->area->partidaOrzamentaria->nome : $this->Html->image($m->subarea->area->partidaOrzamentaria->logo, ['height'=>25]) ?>
+                            <?= $this->Html->image($m->area->partidaOrzamentaria->logo, ['height'=>25]) ?>
                         </td>
                         <td class="text-center">
                             <?= $tempadas[$m->tempada] ?>
                         </td>
                         <td class="text-center">
-                            <?= $m->subarea->area->nome ?>
-                        </td>
-                        <td class="text-center">
-                            <?= $m->subarea->nome ?>
+                            <?= $m->area->nome ?>
                         </td>
                         <td>
                             <?= $m->descricion ?>
@@ -100,9 +96,7 @@ $movementos_ar = $movementos->toArray();
                             <?= $this->AgfgForm->editButton(['action'=>'detalleMovemento', $m->id]) ?>
                         </td>
                         <td class="column-button">
-                            <?php if(!empty($m->subarea->activa)) : ?>
-                                <?= $this->AgfgForm->deleteButton(['action'=>'borrarMovemento', $m->id]) ?>
-                            <?php endif ?>
+                            <?= $this->AgfgForm->deleteButton(['action'=>'borrarMovemento', $m->id]) ?>
                         </td>
                     </tr>
                 <?php endforeach ?>

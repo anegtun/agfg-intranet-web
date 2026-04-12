@@ -21,13 +21,13 @@ $estado_param = $this->request->getQuery('estado');
 
         <div class="row">
             <div class="col-lg-2">
+                <?= $this->Form->control('estado', ['options'=>['T'=>'Todas', 'A'=>'Abertas', 'F'=>'Finalizadas', 'S'=>'Pechadas sen pagos', 'I'=>'Pechadas pagos inconsistentes'], 'default'=>'A']) ?>
+            </div>
+            <div class="col-lg-2">
                 <?= $this->Form->control('data_ini', ['type'=>'text', 'class'=>'form-control fld-date', 'label'=>'Data inicio', 'templates'=>$emptyTemplates]) ?>
             </div>
             <div class="col-lg-2">
                 <?= $this->Form->control('data_fin', ['type'=>'text', 'class'=>'form-control fld-date', 'label'=>'Data fin', 'templates'=>$emptyTemplates]) ?>
-            </div>
-            <div class="col-lg-2">
-                <?= $this->Form->control('estado', ['options'=>[''=>'', 'A'=>'Abertas', 'F'=>'Finalizadas', 'S'=>'Pechadas sen pagos', 'I'=>'Pechadas pagos inconsistentes']]) ?>
             </div>
             <div class="col-lg-2">
                 <?= $this->Form->control('entidade', ['options'=>$entidades]) ?>
@@ -59,7 +59,7 @@ $estado_param = $this->request->getQuery('estado');
                     <th class="text-center">Data</th>
                     <th class="text-center">Importe</th>
                     <th class="text-center">Entidade</th>
-                    <th class="text-center">Subárea</th>
+                    <th class="text-center">Área</th>
                     <th class="text-center">Descrición</th>
                     <th class="column-button"></th>
                     <th class="column-button"></th>
@@ -117,14 +117,14 @@ $estado_param = $this->request->getQuery('estado');
                         </td>
                         <td class="text-center">
                             <?php
-                                $subareas = [];
+                                $areas = [];
                                 foreach ($f->movementos as $m) {
-                                    $subarea = "{$m->subarea->area->partidaOrzamentaria->nome} - {$m->subarea->area->nome} - {$m->subarea->nome}";
-                                    if (!in_array($subarea, $subareas)) {
-                                        $subareas[] = $subarea;
+                                    $area = $this->Html->image($m->area->partidaOrzamentaria->logo, ['height'=>25]) . " {$m->area->nome}";
+                                    if (!in_array($area, $areas)) {
+                                        $areas[] = $area;
                                     }
                                 }
-                                echo implode(", ", $subareas);
+                                echo implode(", ", $areas);
                             ?>
                         </td>
                         <td class="text-center">

@@ -20,11 +20,6 @@ $emptyTemplates = [
     'input' => '<input type="{{type}}" name="{{name}}" {{attrs}}/>',
 ];
 
-$acumulado = 0;
-foreach($movementos as $m) {
-    $acumulado += $m->getImporteConComision();
-}
-
 $areas = [];
 foreach($partidasOrzamentarias as $po) {
     foreach($po->areas as $a) {
@@ -39,16 +34,13 @@ foreach($partidasOrzamentarias as $po) {
 
         <div class="row">
             <div class="col-lg-2">
+                <?= $this->Form->control('tempada', ['options'=>$tempadas, 'label'=>'Tempada', 'class'=>'form-control']) ?>
+            </div>
+            <div class="col-lg-2">
                 <?= $this->Form->control('id_partida_orzamentaria', ['options'=>$this->AgfgForm->objectToKeyValue($partidasOrzamentarias,'id','{$e->nome}'), 'label'=>'Part. Orzamentaria', 'templates'=>$emptyTemplates]) ?>
             </div>
             <div class="col-lg-4">
                 <?= $this->Form->control('id_area', ['options'=>$this->AgfgForm->objectToKeyValue($areas,'id','{$e->partidaOrzamentaria->nome} - {$e->nome}'), 'label'=>'Área', 'templates'=>$emptyTemplates]) ?>
-            </div>
-            <div class="col-lg-2">
-                <?= $this->Form->control('tempada', ['options'=>$tempadas, 'label'=>'Tempada', 'class'=>'form-control']) ?>
-            </div>
-            <div class="col-lg-2">
-                <?= $this->Form->control('subarea_activa', ['options'=>['0'=>'Non', '1'=>'Si'], 'default'=>'1']) ?>
             </div>
         </div>
         <div class="row">
@@ -131,7 +123,6 @@ foreach($partidasOrzamentarias as $po) {
                     <?php endif ?>
                     <th class="text-center">Partida Orz.</th>
                     <th class="text-center">Área</th>
-                    <th class="text-center">Subárea</th>
                     <th>Descricición</th>
                     <th class="column-button"></th>
                     <th class="column-button"></th>
@@ -175,13 +166,10 @@ foreach($partidasOrzamentarias as $po) {
                             <td class="text-center"><?= empty($m->conta) ? '' : $this->Html->image("/images/conta-{$m->conta}-logo.png", ['width'=>30,'height'=>30]) ?></td>
                         <?php endif ?>
                         <td class="text-center">
-                            <?= empty($m->subarea->area->partidaOrzamentaria->logo) ? $m->subarea->area->partidaOrzamentaria->nome : $this->Html->image($m->subarea->area->partidaOrzamentaria->logo, ['height'=>25]) ?>
+                            <?= $this->Html->image($m->area->partidaOrzamentaria->logo, ['height'=>25]) ?>
                         </td>
                         <td class="text-center">
-                            <?= $m->subarea->area->nome ?>
-                        </td>
-                        <td class="text-center">
-                            <?= $m->subarea->nome ?>
+                            <?= $m->area->nome ?>
                         </td>
                         <td>
                             <?= $m->descricion ?>
@@ -196,9 +184,7 @@ foreach($partidasOrzamentarias as $po) {
                             <?= $this->Html->link('', ['action'=>'clonarMovemento', $m->id], ['class'=>'glyphicon glyphicon-duplicate']) ?>
                         </td>
                         <td class="column-button">
-                            <?php if(!empty($m->subarea->activa)) : ?>
-                                <?= $this->AgfgForm->deleteButton(['action'=>'borrarMovemento', $m->id]) ?>
-                            <?php endif ?>
+                            <?= $this->AgfgForm->deleteButton(['action'=>'borrarMovemento', $m->id]) ?>
                         </td>
                     </tr>
                 <?php endforeach ?>

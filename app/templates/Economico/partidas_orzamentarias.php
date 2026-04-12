@@ -21,8 +21,7 @@ $this->set('cabeceiraMigas', [
                 <thead>
                     <tr>
                         <th>Área</th>
-                        <th>Subárea</th>
-                        <th class="column-button">Activa</th>
+                        <th>Movementos</th>
                         <th class="column-button"></th>
                         <th class="column-button"></th>
                     </tr>
@@ -31,24 +30,10 @@ $this->set('cabeceiraMigas', [
                     <?php foreach($po->areas as $a) : ?>
                         <tr>
                             <td><?= $a->nome ?></td>
-                            <td></td>
-                            <td></td>
+                            <td><?= count($a->movementos) ?></td>
                             <td class="text-center"><?= $this->AgfgForm->editButton(['action'=>'detalleArea', $a->id]) ?></td>
                             <td class="text-center"><?= $this->AgfgForm->deleteButton(['action'=>'borrarArea', $a->id]) ?></td>
                         </tr>
-                        <?php foreach($a->subareas as $s) : ?>
-                            <tr>
-                                <td></td>
-                                <td><?= $s->nome ?></td>
-                                <td class="text-success">
-                                    <?php if(!empty($s->activa)) : ?>
-                                        <span class="glyphicon glyphicon-euro">&nbsp;</span>
-                                    <?php endif ?>
-                                </td>
-                                <td class="text-center"><?= $this->AgfgForm->editButton(['action'=>'detalleSubarea', $s->id]) ?></td>
-                                <td class="text-center"><?= $this->AgfgForm->deleteButton(['action'=>'borrarSubarea', $s->id]) ?></td>
-                            </tr>
-                        <?php endforeach ?>
                     <?php endforeach ?>
                 </tbody>
             </table>
@@ -62,5 +47,4 @@ $this->set('cabeceiraMigas', [
 <div class="row">
     <?= $this->Html->link(__('Crear partida orzamentaria'), ['action'=>'detallePartidaOrzamentaria'], ['class'=>'btn btn-primary']) ?>
     <?= $this->Html->link(__('Crear área'), ['action'=>'detalleArea'], ['class'=>'btn btn-secondary']) ?>
-    <?= $this->Html->link(__('Crear subárea'), ['action'=>'detalleSubarea'], ['class'=>'btn btn-secondary']) ?>
 </div>

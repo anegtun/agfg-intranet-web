@@ -16,7 +16,7 @@ $authUser = $this->request->getAttribute('identity');
         'icono' => 'fire',
         'auth' => ['admin','comp','euro22'],
         'submenus' => [
-            [ 'id' => 'listado', 'nome' => 'Listado competicións', 'url' => ['controller'=>'Competicions', 'action'=>'index']],
+            [ 'id' => 'listado', 'nome' => 'Competicións', 'url' => ['controller'=>'Competicions', 'action'=>'index']],
             [ 'id' => 'prensa', 'nome' => 'Prensa', 'url' => ['controller'=>'Calendario', 'action'=>'prensa'], 'auth' => ['admin','comp'] ],
             [ 'id' => 'arbitros', 'nome' => 'Árbitros', 'url' => ['controller'=>'Arbitros', 'action'=>'index'], 'auth' => ['admin','comp'] ],
             [ 'id' => 'campos', 'nome' => 'Campos', 'url' => ['controller'=>'Campos', 'action'=>'index'], 'auth' => ['admin','comp'] ],
@@ -47,7 +47,6 @@ $authUser = $this->request->getAttribute('identity');
             [ 'id' => 'movementos_banco', 'nome' => 'Movementos banco', 'url' => ['controller'=>'Economico', 'action'=>'movementos_banco'] ],
             [ 'id' => 'facturas', 'nome' => 'Facturas', 'url' => ['controller'=>'Economico', 'action'=>'facturas'] ],
             [ 'id' => 'resumo', 'nome' => 'Resumo xeral', 'url' => ['controller'=>'Economico', 'action'=>'resumo'] ],
-            [ 'id' => 'resumoClubes', 'nome' => 'Resumo clubes', 'url' => ['controller'=>'Economico', 'action'=>'resumoClubes'] ],
             [ 'id' => 'partidas', 'nome' => 'Partidas orzamentarias', 'url' => ['controller'=>'Economico', 'action'=>'partidasOrzamentarias'] ]
         ],
         'menu_option'=>$menu_option, 
