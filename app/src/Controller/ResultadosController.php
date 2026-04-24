@@ -23,6 +23,7 @@ class ResultadosController extends AppController {
     }
 
     public function competicion($id) {
+        $categorias = $this->Categorias->getCategorias();
         $competicion = $this->Competicions->get($id, ['contain'=>['Fases']]);
 
         $partidos_competicion = $this->Partidos->find()
@@ -44,6 +45,9 @@ class ResultadosController extends AppController {
                     return $row;
                 });
             });
+        if(!empty($this->request->getQuery('categoria'))) {
+            $partidos_filtrados->where(['Fase.categoria' => $this->request->getQuery('categoria')]);
+        }
         if(!empty($this->request->getQuery('id_fase'))) {
             $partidos_filtrados->where(['Partidos.id_fase' => $this->request->getQuery('id_fase')]);
         }
@@ -60,7 +64,7 @@ class ResultadosController extends AppController {
             });
         }
 
-        $this->set(compact('competicion', 'partidos_filtrados', 'partidos_competicion'));
+        $this->set(compact('categorias', 'competicion', 'partidos_filtrados', 'partidos_competicion'));
     }
 
     public function resumo($id) {

@@ -30,7 +30,7 @@ class XornadasTable extends AgfgTable {
 
     public function findWithPartidos($id_fase) {
         return $this->find()
-            ->contain(['Partidos' => [ 'Equipa1' => 'Clube', 'Equipa2' => 'Clube' ]])
+            ->contain(['Partidos' => [ 'Equipa1' => 'Clube', 'Equipa2' => 'Clube', 'Campo' ]])
             ->where(['id_fase'=>$id_fase])
             ->order('numero');
     }

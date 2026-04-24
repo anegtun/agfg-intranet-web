@@ -13,6 +13,7 @@ class CompeticionsController extends AppController {
         parent::initialize();
         $this->Categorias = new Categorias();
         $this->TiposCompeticion = new TiposCompeticion();
+        $this->Campos = TableRegistry::get('Campos');
         $this->Fases = TableRegistry::get('Fases');
         $this->Equipas = TableRegistry::get('Equipas');
         $this->FasesEquipas = TableRegistry::get('FasesEquipas');
@@ -80,9 +81,10 @@ class CompeticionsController extends AppController {
             $equipas = $this->Equipas->findInFase($fase);
             $outras_fases = $this->Fases->find()->where(['id_competicion'=>$fase->id_competicion, 'id !='=>$id]);
         }
+        $campos = $this->Campos->find()->where(['activo' => 1])->order(['pobo', 'nome']);
         $categorias = $this->Categorias->getCategoriasWithEmpty();
         $competicion = $this->Competicions->get($fase->id_competicion);
-        $this->set(compact('fase','competicion','categorias','equipas','outras_fases'));
+        $this->set(compact('fase','campos','competicion','categorias','equipas','outras_fases'));
     }
 
     public function gardarFase() {

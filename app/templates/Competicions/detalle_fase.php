@@ -65,7 +65,7 @@ $this->Html->script('detalle-fase', ['block' => 'script']);
             <tbody>
                 <?php foreach($fase->xornadas as $x) : ?>
                     <tr>
-                        <td colspan="4">
+                        <td colspan="5">
                             <?= empty($x->descricion) ? "Xornada $x->numero" : $x->descricion ?>
                             <?= empty($x->data) ? "" : " ({$x->data->format('Y-m-d')})" ?>
                         </td>
@@ -88,6 +88,7 @@ $this->Html->script('detalle-fase', ['block' => 'script']);
                                 <td><?= $this->AgfgForm->logo($p->equipa1, ['size'=>20]) ?> <?= $p->getNomeEquipa1() ?></td>
                                 <td><?= $this->AgfgForm->logo($p->equipa2, ['size'=>20]) ?> <?= $p->getNomeEquipa2() ?></td>
                                 <td><?= $p->formatDataHora() ?></td>
+                                <td><?= $p->campo->nome ?></td>
                                 <td class="text-center">
                                     <?= $this->AgfgForm->editButton('#', [
                                         'data-partido-id'=>$p->id,
@@ -97,7 +98,8 @@ $this->Html->script('detalle-fase', ['block' => 'script']);
                                         'data-partido-provisional-equipo1' => $p->provisional_equipa1,
                                         'data-partido-provisional-equipo2' => $p->provisional_equipa2,
                                         'data-partido-data' => empty($p->data_partido) ? '' : $p->data_partido->format('d-m-Y'),
-                                        'data-partido-hora' => $p->hora_partido
+                                        'data-partido-hora' => $p->hora_partido,
+                                        'data-partido-id-campo' => $p->campo->id
                                     ]) ?>
                                 </td>
                                 <td class="text-center">
@@ -169,6 +171,7 @@ $this->Html->script('detalle-fase', ['block' => 'script']);
                         ?>
                         <?= $this->Form->control('data_partido', ['class'=>'form-control fld-date', 'label'=>'Data', 'templates'=>$emptyTemplates]) ?>
                         <?= $this->Form->control('hora_partido', ['class'=>'form-control fld-time', 'label'=>'Hora', 'templates'=>$emptyTemplates]) ?>
+                        <?= $this->Form->control('id_campo', ['options'=>$this->AgfgForm->objectToKeyValue($campos,'id','{$e->pobo} - {$e->nome}'), 'label'=>'Campo']) ?>
                     </fieldset>
                 </div>
                 <div class="modal-footer">

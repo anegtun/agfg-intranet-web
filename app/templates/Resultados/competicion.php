@@ -28,6 +28,9 @@ foreach($partidos_competicion as $p) {
 <div class="row form-group">
     <?= $this->Form->setValueSources(['query','context'])->create(null, ['type'=>'get']) ?>
         <div class="row">
+            <div class="col-lg-2">
+                <?= $this->Form->control('categoria', ['options'=>array_merge([''=>''], $categorias), 'label'=>'Categoría']) ?>
+            </div>
             <div class="col-lg-3">
                 <?= $this->Form->control('id_fase', ['options'=>$this->AgfgForm->objectToKeyValue($fases,'id','$e->categoria - $e->nome'), 'label'=>'Fase']) ?>
             </div>
@@ -37,7 +40,7 @@ foreach($partidos_competicion as $p) {
             <div class="col-lg-3">
                 <?= $this->Form->control('pendente', ['options'=>['0'=>'Non', '1'=>'Si'], 'default'=>'1']) ?>
             </div>
-            <div class="col-lg-3">
+            <div class="col-lg-2">
                 <?= $this->Form->button('Buscar', ['class'=>'btn btn-primary', 'style'=> ['margin-top: 1.7em']]); ?>
             </div>
         </div>

@@ -44,6 +44,7 @@ $(document).ready(function() {
         modalPartido.find('[name=provisional_equipa2]').val($(this).attr('data-partido-provisional-equipo2'));
         modalPartido.find('[name=data_partido]').val($(this).attr('data-partido-data'));
         modalPartido.find('[name=hora_partido]').val($(this).attr('data-partido-hora'));
+        modalPartido.find('[name=id_campo]').val($(this).attr('data-partido-id-campo'));
         modalPartido.modal("show");
     });
 });
