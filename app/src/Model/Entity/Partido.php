@@ -23,7 +23,7 @@ class Partido extends Entity {
     }
 
     public function formatDiaHora() {
-        if(empty($this->hora_partido)) {
+        if(empty($this->hora_partido) || empty($this->data_partido)) {
             return NULL;
         }
         return $this->diasSemana[$this->data_partido->format('w')].' '.$this->hora_partido;
