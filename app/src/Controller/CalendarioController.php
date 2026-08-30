@@ -44,9 +44,15 @@ class CalendarioController extends AppController {
         $limitParam = $this->request->getQuery('limit');
         $omitirParam = $this->request->getQuery('omitir_tipo');
         $omitirParam = empty($omitirParam) ? [] : explode(',', $omitirParam);
-        $eventos = $this->Eventos->find()->contain('Datas')->order('data DESC');
+
         $tipos = $this->EventosTipo->getAll();
         $partidos = $this->Partidos->findByDatas(FrozenDate::createFromFormat('Y-m-d', '2010-01-01'), FrozenDate::createFromFormat('Y-m-d', '2030-12-31'));
+
+        $eventos = $this->Eventos->find()->contain('Datas')->order('data DESC');
+        if(!empty($this->request->getQuery('tipo'))) {
+            $eventos->where(['tipo' => $this->request->getQuery('tipo')]);
+        }
+
         $this->set(compact('eventos', 'tipos', 'partidos', 'iniParam', 'limitParam', 'omitirParam'));
     }
 
