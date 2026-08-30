@@ -4,6 +4,10 @@ use App\Model\EventosTipo;
 $res = [];
 
 foreach($eventos as $e) {
+    if(!empty($omitirParam) && in_array($e->tipo, $omitirParam)) {
+        continue;
+    }
+
     $data = [
         'nome' => $e->nome,
         'lugar' => $e->lugar,
