@@ -191,67 +191,30 @@ class EconomicoController extends AppController {
 
 
 
-    public function facturas() {
+    public function facturasProveedores() {
         $estados = $this->FacturaEstado->getAll();
-        $facturas_query = $this->Facturas
-            ->find()
-            ->contain(['Movementos' => ['Area' => 'PartidaOrzamentaria']])
-            ->order('data desc');
+        $entidades = $this->Facturas->findAllEntidades('E');
+        $facturas_query = $this->Facturas->search('E');
+        $facturas = $this->aplicarFiltrosFacturas($facturas_query);
+        $this->set(compact('facturas', 'estados', 'entidades'));
+    }
 
-        $all_facturas = $facturas_query->toArray();
-
-        $entidades = [''=>''];
-        foreach($all_facturas as $f) {
-            $entidades[$f->entidade] = $f->entidade;
-        }
-        asort($entidades);
-
-        if(!empty($this->request->getQuery('data_ini'))) {
-            $facturas_query->where(['data >=' => FrozenDate::createFromFormat('d-m-Y', $this->request->getQuery('data_ini'))]);
-        }
-        if(!empty($this->request->getQuery('data_fin'))) {
-            $facturas_query->where(['data <=' => FrozenDate::createFromFormat('d-m-Y', $this->request->getQuery('data_fin'))]);
-        }
-        if(!empty($this->request->getQuery('entidade'))) {
-            $facturas_query->where(['entidade' => $this->request->getQuery('entidade')]);
-        }
-        if(!empty($this->request->getQuery('texto'))) {
-            $texto = strtoupper($this->request->getQuery('texto'));
-            $facturas_query->where(['OR' =>[
-                'UPPER(entidade) LIKE' => "%$texto%",
-                'UPPER(referencia) LIKE' => "%$texto%",
-                'UPPER(descricion) LIKE' => "%$texto%",
-                'UPPER(observacions) LIKE' => "%$texto%"
-            ]]);
-        }
-
-        $facturas = [];
-
-        $estado_param = $this->request->getQuery('estado') ?: 'A';
-        foreach($facturas_query->toArray() as $f) {
-            $diff = $f->diffImporteMovementos();
-            switch($estado_param) {
-                case 'A': $fn_match = function($fac) { return $fac->isAberta(); }; break;
-                case 'F': $fn_match = function($fac) { return !$fac->isAberta(); }; break;
-                case 'S': $fn_match = function($fac) { return $fac->isPechada() && empty($fac->movementos); }; break;
-                case 'I': $fn_match = function($fac) { return $fac->isPechada() && !empty($fac->movementos) && ((int)$fac->diffImporteMovementos()) != 0; }; break;
-                default:  $fn_match = function($fac) { return true; }; break;
-            }
-            if($fn_match($f)) {
-                $facturas[] = $f;
-            }
-        }
-
-        foreach($facturas as $f) {
-            $f->arquivos = $this->EconomicoFactura->list($f);
-        }
-
+    public function facturasAgfg() {
+        $estados = $this->FacturaEstado->getAll();
+        $entidades = $this->Facturas->findAllEntidades('S');
+        $facturas_query = $this->Facturas->search('S');
+        $facturas = $this->aplicarFiltrosFacturas($facturas_query);
         $this->set(compact('facturas', 'estados', 'entidades'));
     }
 
     public function detalleFactura($id=null) {
         $estados = $this->FacturaEstado->getAll();
         $factura = $this->Facturas->getOrNew($id, ['contain' => 'Movementos']);
+        $direccion = $this->request->getQuery('direccion');
+        if(empty($id)) {
+            $factura->direccion = $direccion;
+            $factura->estado = 'A';
+        }
         $arquivos = empty($id) ? [] : $this->EconomicoFactura->list($factura);
         $this->set(compact('factura', 'arquivos', 'estados'));
     }
@@ -272,7 +235,7 @@ class EconomicoController extends AppController {
 
         if ($this->Facturas->save($factura)) {
             $this->Flash->success(__('Gardáronse os datos da factura correctamente.'));
-            return $this->redirect(['action' => 'facturas']);
+            return $this->redirect(['action' => $factura->isProveedor() ? 'facturas_proveedores' : 'facturas_agfg']);
         }
         $this->Flash->error(__('Erro ao gardar os datos da factura.'));
         $this->set(compact('factura'));
@@ -295,7 +258,7 @@ class EconomicoController extends AppController {
         } else {
             $this->Flash->error(__('Erro ao eliminar a factura.'));
         }
-        return $this->redirect(['action' => 'facturas']);
+        return $this->redirect(['action' => $factura->isProveedor() ? 'facturas_proveedores' : 'facturas_agfg']);
     }
 
     public function descargarFacturaArquivo($id_factura, $arquivo) {
@@ -407,6 +370,50 @@ class EconomicoController extends AppController {
         }
         $movementos = $this->Movementos->findBy($query, $prevision);
         $this->set(compact('prevision', 'contas', 'tempadas', 'partidasOrzamentarias', 'movementos'));
+    }
+
+    private function aplicarFiltrosFacturas($facturas_query) {
+        if(!empty($this->request->getQuery('data_ini'))) {
+            $facturas_query->where(['data >=' => FrozenDate::createFromFormat('d-m-Y', $this->request->getQuery('data_ini'))]);
+        }
+        if(!empty($this->request->getQuery('data_fin'))) {
+            $facturas_query->where(['data <=' => FrozenDate::createFromFormat('d-m-Y', $this->request->getQuery('data_fin'))]);
+        }
+        if(!empty($this->request->getQuery('entidade'))) {
+            $facturas_query->where(['entidade' => $this->request->getQuery('entidade')]);
+        }
+        if(!empty($this->request->getQuery('texto'))) {
+            $texto = strtoupper($this->request->getQuery('texto'));
+            $facturas_query->where(['OR' =>[
+                'UPPER(entidade) LIKE' => "%$texto%",
+                'UPPER(referencia) LIKE' => "%$texto%",
+                'UPPER(descricion) LIKE' => "%$texto%",
+                'UPPER(observacions) LIKE' => "%$texto%"
+            ]]);
+        }
+
+        $facturas = [];
+
+        $estado_param = $this->request->getQuery('estado') ?: 'A';
+        foreach($facturas_query->toArray() as $f) {
+            $diff = $f->diffImporteMovementos();
+            switch($estado_param) {
+                case 'A': $fn_match = function($fac) { return $fac->isAberta(); }; break;
+                case 'F': $fn_match = function($fac) { return !$fac->isAberta(); }; break;
+                case 'S': $fn_match = function($fac) { return $fac->isPechada() && empty($fac->movementos); }; break;
+                case 'I': $fn_match = function($fac) { return $fac->isPechada() && !empty($fac->movementos) && ((int)$fac->diffImporteMovementos()) != 0; }; break;
+                default:  $fn_match = function($fac) { return true; }; break;
+            }
+            if($fn_match($f)) {
+                $facturas[] = $f;
+            }
+        }
+
+        foreach($facturas as $f) {
+            $f->arquivos = $this->EconomicoFactura->list($f);
+        }
+
+        return $facturas;
     }
 
     private function queryToArray($request) {

@@ -1,0 +1,147 @@
+<?php
+$this->extend('template');
+$this->set('submenu_option', 'facturas_agfg');
+$this->set('cabeceiraTitulo', 'Facturas AGFG');
+$this->set('cabeceiraMigas', [
+    ['label'=>'Contabilidade'],
+    ['label'=>'Facturas AGFG']
+]);
+
+$emptyTemplates = [
+    'inputContainer' => '{{content}}',
+    'input' => '<input type="{{type}}" name="{{name}}" {{attrs}}/>',
+];
+
+$estado_param = $this->request->getQuery('estado');
+?>
+
+
+<div class="row form-group">
+    <?= $this->Form->setValueSources(['query','context'])->create(null, ['type'=>'get']) ?>
+
+        <div class="row">
+            <div class="col-lg-2">
+                <?= $this->Form->control('estado', ['options'=>['T'=>'Todas', 'A'=>'Abertas', 'F'=>'Finalizadas', 'S'=>'Pechadas sen pagos', 'I'=>'Pechadas pagos inconsistentes'], 'default'=>'A']) ?>
+            </div>
+            <div class="col-lg-2">
+                <?= $this->Form->control('data_ini', ['type'=>'text', 'class'=>'form-control fld-date', 'label'=>'Data inicio', 'templates'=>$emptyTemplates]) ?>
+            </div>
+            <div class="col-lg-2">
+                <?= $this->Form->control('data_fin', ['type'=>'text', 'class'=>'form-control fld-date', 'label'=>'Data fin', 'templates'=>$emptyTemplates]) ?>
+            </div>
+            <div class="col-lg-2">
+                <?= $this->Form->control('entidade', ['options'=>$entidades]) ?>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <?= $this->Form->control('texto', ['type'=>'text', 'class'=>'form-control', 'label'=>'Texto']) ?>
+            </div>
+        </div>
+
+        <div style="margin-top:1em">
+            <?= $this->Form->button('Buscar', ['class'=>'btn btn-primary']); ?>
+            <?= $this->Html->link(__('Nova factura'), ['action'=>'detalleFactura', '?'=>['direccion'=>'S']], ['class'=>'btn btn-success']) ?>
+        </div>
+
+    <?= $this->Form->end() ?>
+</div>
+
+
+<div class="row" style="margin-top:2em">
+    <div class="col-xs-12 table-responsive">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th class="column-button"></th>
+                    <th class="column-button"></th>
+                    <th class="text-center">Data</th>
+                    <th class="text-center">Importe</th>
+                    <th class="text-center">Entidade</th>
+                    <th class="text-center">Área</th>
+                    <th class="text-center">Descrición</th>
+                    <th class="column-button"></th>
+                    <th class="column-button"></th>
+                    <th class="column-button"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach($facturas as $f) : ?>
+                    <?php $diff = $f->diffImporteMovementos() ?>
+                    <tr>
+                        <td class="text-center">
+                            <?php
+                                $icon = '';
+                                $color = '';
+                                $tooltip = '';
+
+                                if (((int)$diff) == 0) {
+                                    $color = 'text-success';
+                                } else if (abs($diff) == $f->importe) {
+                                    $color = 'text-danger';
+                                    $tooltip = 'Sen pagos';
+                                } else if ($diff < 0) {
+                                    $color = 'text-warning';
+                                    $tooltip = 'Pago a medias ('.$this->Number->currency($diff,'EUR').')';
+                                } else if ($diff > 0) {
+                                    $color = 'text-info';
+                                    $tooltip = 'Pago de máis ('.$this->Number->currency($diff,'EUR').')';
+                                }
+
+                                if ($f->isAberta()) {
+                                    $icon = 'list-alt';
+                                } else if ($f->isPechada()) {
+                                    $icon = 'ok';
+                                } else if ($f->isDescartada()) {
+                                    $icon = 'remove';
+                                    $color = 'text-muted';
+                                    $tooltip = 'Descartada';
+                                }
+                            ?>
+                            <a title="<?= $tooltip ?>" class="glyphicon glyphicon-<?= $icon ?> <?= $color ?>" href="javascript:void(0)" data-toggle="tooltip"></a>
+                        </td>
+                        <td class="text-center">
+                            <?php if(empty($f->arquivos)) : ?>
+                                <a class="glyphicon glyphicon-paperclip text-danger" href="javascript:void(0)"></a>
+                            <?php endif ?>
+                        </td>
+                        <td class="text-center">
+                            <?= $f->data->format('Y-m-d') ?>
+                        </td>
+                        <td class="text-right">
+                            <?= $this->Number->currency($f->importe, 'EUR') ?>
+                        </td>
+                        <td class="text-center">
+                            <?= $f->entidade ?>
+                        </td>
+                        <td class="text-center">
+                            <?php
+                                $areas = [];
+                                foreach ($f->movementos as $m) {
+                                    $area = $this->Html->image($m->area->partidaOrzamentaria->logo, ['height'=>25]) . " {$m->area->nome}";
+                                    if (!in_array($area, $areas)) {
+                                        $areas[] = $area;
+                                    }
+                                }
+                                echo implode(", ", $areas);
+                            ?>
+                        </td>
+                        <td class="text-center">
+                            <?= $f->descricion ?>
+                        </td>
+                        <td class="text-center">
+                            <?= $this->AgfgForm->editButton(['action'=>'detalleFactura', $f->id]) ?>
+                        </td>
+                        <td class="text-center">
+                            <?= $this->Html->link('', ['action'=>'clonarFactura', $f->id], ['class'=>'glyphicon glyphicon-duplicate']) ?>
+                        </td>
+                        <td class="text-center">
+                            <?= $this->AgfgForm->deleteButton(['action'=>'borrarFactura', $f->id]) ?>
+                        </td>
+                    </tr>
+                <?php endforeach ?>
+            </tbody>
+        </table>
+    </div>
+</div>

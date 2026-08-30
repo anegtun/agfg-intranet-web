@@ -1,10 +1,10 @@
 <?php
 $this->extend('template');
-$this->set('submenu_option', 'facturas');
-$this->set('cabeceiraTitulo', 'Facturas');
+$this->set('submenu_option', 'facturas_proveedores');
+$this->set('cabeceiraTitulo', 'Facturas proveedores');
 $this->set('cabeceiraMigas', [
     ['label'=>'Contabilidade'],
-    ['label'=>'Facturas']
+    ['label'=>'Facturas proveedores']
 ]);
 
 $emptyTemplates = [
@@ -42,7 +42,7 @@ $estado_param = $this->request->getQuery('estado');
 
         <div style="margin-top:1em">
             <?= $this->Form->button('Buscar', ['class'=>'btn btn-primary']); ?>
-            <?= $this->Html->link(__('Nova factura'), ['action'=>'detalleFactura'], ['class'=>'btn btn-success']) ?>
+            <?= $this->Html->link(__('Nova factura'), ['action'=>'detalleFactura', '?'=>['direccion'=>'E']], ['class'=>'btn btn-success']) ?>
         </div>
 
     <?= $this->Form->end() ?>

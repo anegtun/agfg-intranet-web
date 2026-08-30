@@ -33,4 +33,8 @@ class EconomicoFactura extends Entity {
         return $this->estado === 'D';
     }
 
+    public function isProveedor() {
+        return $this->direccion === 'E';
+    }
+
 }

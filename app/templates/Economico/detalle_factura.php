@@ -3,12 +3,13 @@ $this->extend('template');
 
 // Hack para que o datepicker non a líe formateando a data (alterna dia/mes). Asi forzamos o noso formato.
 $data_str = empty($factura->data) ? NULL : $factura->data->format('d-m-Y');
+$isProveedor = $factura->isProveedor();
 
-$this->set('submenu_option', 'facturas');
+$this->set('submenu_option', $isProveedor ? 'facturas_proveedores' : 'facturas_agfg');
 $this->set('cabeceiraTitulo', empty($factura->id) ? 'Nova factura' : $data_str);
 $this->set('cabeceiraMigas', [
     ['label'=>'Contabilidade'],
-    ['label'=>'Facturas', 'url'=>['action'=>'facturas']],
+    ['label'=>$isProveedor?'Facturas proveedores':'Facturas AGFG', 'url' => ['action' => $isProveedor?'facturas_proveedores':'facturas_agfg']],
     ['label'=>empty($factura->id) ? 'Nova factura' : $data_str]
 ]);
 
@@ -20,6 +21,7 @@ $emptyTemplates = [
 
 <?= $this->Form->create($factura, ['type'=>'post', 'url'=>['action'=>'gardarFactura']]) ?>
     <?= $this->Form->hidden('id') ?>
+    <?= $this->Form->hidden('direccion') ?>
     <fieldset>
         <legend>Factura</legend>
 

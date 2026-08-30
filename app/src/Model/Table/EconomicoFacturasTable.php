@@ -31,4 +31,25 @@ class EconomicoFacturasTable extends AgfgTable {
         return $this->find()->where($where)->order(['data'=>'DESC']);
     }
 
+    public function search($direccion) {
+        return $this
+            ->find()
+            ->where(['direccion' => $direccion])
+            ->contain(['Movementos' => ['Area' => 'PartidaOrzamentaria']])
+            ->order('data desc');
+    }
+
+    public function findAllEntidades($direccion) {
+        $query = $this->search($direccion);
+        $all = $query->toArray();
+
+        $entidades = [''=>''];
+        foreach($all as $f) {
+            $entidades[$f->entidade] = $f->entidade;
+        }
+        asort($entidades);
+        
+        return $entidades;
+    }
+
 }
