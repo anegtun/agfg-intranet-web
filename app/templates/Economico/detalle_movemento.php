@@ -71,7 +71,7 @@ $emptyTemplates = [
 
         <div class="row">
             <div class="form-group col-lg-6">
-                <?= $this->Form->control('id_factura', ['options'=>$this->AgfgForm->objectToKeyValue($facturas,'id','{$e->data->format("Y-m-d")} - {$e->entidade} - {$e->importe} - {$e->descricion}',true,false), 'label'=>'Factura', 'templates'=>$emptyTemplates]) ?>
+                <?= $this->Form->control('id_factura', ['options'=>$this->AgfgForm->objectToKeyValue($facturas,'id','{$e->direccion} - {$e->data->format("Y-m-d")} - {$e->entidade} - {$e->importe} - {$e->descricion}',true,false), 'label'=>'Factura', 'templates'=>$emptyTemplates]) ?>
             </div>
             <div class="form-group col-lg-2">
                 <?= $this->Form->checkbox('sen_factura', ['id'=>'sen_factura']) ?>

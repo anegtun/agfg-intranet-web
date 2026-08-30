@@ -14,7 +14,11 @@ class EconomicoFactura extends Entity {
         
         if(!empty($this->movementos)) {
             foreach($this->movementos as $m) {
-                $sumado += -$m->importe;
+                if($this->isProveedor()) {
+                    $sumado += -$m->importe;
+                } else {
+                    $sumado += $m->importe;
+                }
             }
         }
 
