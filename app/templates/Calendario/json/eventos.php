@@ -18,18 +18,17 @@ foreach($eventos as $e) {
     ];
     if(!empty($e->datas)) {
         foreach($e->datas as $d) {
-            $data['datas'][] = [
-                'data_ini' => $d->data_ini,
-                'data_fin' => $d->data_fin
-            ];
+            if(empty($iniParam) || strcmp($d->data_fin->format('Y-m-d'), $iniParam) >= 0) {
+                $data['datas'][] = ['data_ini' => $d->data_ini, 'data_fin' => $d->data_fin];   
+            }
         }
-    } else {
-        $data['datas'][] = [
-            'data_ini' => $e->data,
-            'data_fin' => $e->data
-        ];
+    } else if(empty($iniParam) || strcmp($e->data->format('Y-m-d'), $iniParam) >= 0) {
+        $data['datas'][] = ['data_ini' => $e->data, 'data_fin' => $e->data];
     }
-    $res[] = $data;
+
+    if(!empty($data['datas'])) {
+        $res[] = $data;
+    }
 }
 
 $partidos_agrupados = [];
