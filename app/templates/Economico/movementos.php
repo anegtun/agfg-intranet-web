@@ -138,7 +138,7 @@ foreach($partidasOrzamentarias as $po) {
                                     <a title="Non aplica factura" class="glyphicon glyphicon-barcode text-muted" href="javascript:void(0)" data-toggle="tooltip" style="cursor:default;"></a>
                                 <?php elseif(!empty($m->factura)) : ?>
                                     <?= $this->Html->link('', ['action'=>'detalleFactura', $m->factura->id], ['class'=>'glyphicon glyphicon-barcode', 'title'=>"{$m->factura->entidade} - {$m->factura->descricion}"]) ?>
-                                <?php elseif($m->importe<0) : ?>
+                                <?php else : ?>
                                     <a title="Sen factura" class="glyphicon glyphicon-barcode text-danger" href="javascript:void(0)" data-toggle="tooltip" style="cursor:default;"></a>
                                 <?php endif ?>
                             </td>

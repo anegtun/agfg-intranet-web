@@ -56,6 +56,7 @@ $estado_param = $this->request->getQuery('estado');
                 <tr>
                     <th class="column-button"></th>
                     <th class="column-button"></th>
+                    <th class="text-center">Nº</th>
                     <th class="text-center">Data</th>
                     <th class="text-center">Importe</th>
                     <th class="text-center">Entidade</th>
@@ -105,6 +106,9 @@ $estado_param = $this->request->getQuery('estado');
                             <?php if(empty($f->arquivos)) : ?>
                                 <a class="glyphicon glyphicon-paperclip text-danger" href="javascript:void(0)"></a>
                             <?php endif ?>
+                        </td>
+                        <td class="text-center">
+                            <?= $f->referencia ?>
                         </td>
                         <td class="text-center">
                             <?= $f->data->format('Y-m-d') ?>

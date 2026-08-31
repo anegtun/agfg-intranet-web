@@ -194,7 +194,7 @@ class EconomicoController extends AppController {
     public function facturasProveedores() {
         $estados = $this->FacturaEstado->getAll();
         $entidades = $this->Facturas->findAllEntidades('E');
-        $facturas_query = $this->Facturas->search('E');
+        $facturas_query = $this->Facturas->search('E')->order('data desc');
         $facturas = $this->aplicarFiltrosFacturas($facturas_query);
         $this->set(compact('facturas', 'estados', 'entidades'));
     }
@@ -202,7 +202,7 @@ class EconomicoController extends AppController {
     public function facturasAgfg() {
         $estados = $this->FacturaEstado->getAll();
         $entidades = $this->Facturas->findAllEntidades('S');
-        $facturas_query = $this->Facturas->search('S');
+        $facturas_query = $this->Facturas->search('S')->order('referencia desc');
         $facturas = $this->aplicarFiltrosFacturas($facturas_query);
         $this->set(compact('facturas', 'estados', 'entidades'));
     }
