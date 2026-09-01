@@ -1,10 +1,10 @@
 <?php
 $this->extend('template');
 $this->set('submenu_option', 'movementos_banco');
-$this->set('cabeceiraTitulo', 'Movementos');
+$this->set('cabeceiraTitulo', 'Revisión banco');
 $this->set('cabeceiraMigas', [
     ['label'=>'Xestión Económica', 'url'=>['controller'=>'Economico', 'action'=>'index']],
-    ['label'=>'Movementos']
+    ['label'=>'Revisión banco']
 ]);
 $emptyTemplates = [
     'inputContainer' => '{{content}}',

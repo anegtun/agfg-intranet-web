@@ -32,13 +32,23 @@ class EconomicoController extends AppController {
     }
 
     public function movementos() {
-        $this->listarMovementos(false);
-        $this->render('movementos');
+        $contas = $this->Contas->getAllWithEmpty();
+        $tempadas = $this->Tempadas->findOptions();
+        $partidasOrzamentarias = $this->PartidasOrzamentarias->findComplete();
+        $query = $this->queryToArray($this->request);
+        if(empty($query['tempada'])) {
+            $query['tempada'] = $this->Tempadas->findLast()->codigo;
+        }
+        $movementos = $this->Movementos->findBy($query, false);
+        $this->set(compact('prevision', 'contas', 'tempadas', 'partidasOrzamentarias', 'movementos'));
     }
 
     public function previsions() {
-        $this->listarMovementos(true);
-        $this->render('movementos');
+        $tempadas = $this->Tempadas->findOptions();
+        $partidasOrzamentarias = $this->PartidasOrzamentarias->findComplete();
+        $query = $this->queryToArray($this->request);
+        $movementos = $this->Movementos->findBy($query, true);
+        $this->set(compact('prevision', 'tempadas', 'partidasOrzamentarias', 'movementos'));
     }
 
     public function movementosBanco() {
@@ -358,18 +368,6 @@ class EconomicoController extends AppController {
             $this->Flash->error(__('Erro ao eliminar a área.'));
         }
         return $this->redirect(['action'=>'partidasOrzamentarias']);
-    }
-
-    private function listarMovementos($prevision) {
-        $contas = $this->Contas->getAllWithEmpty();
-        $tempadas = $this->Tempadas->findOptions();
-        $partidasOrzamentarias = $this->PartidasOrzamentarias->findComplete();
-        $query = $this->queryToArray($this->request);
-        if(empty($query['tempada'])) {
-            $query['tempada'] = $this->Tempadas->findLast()->codigo;
-        }
-        $movementos = $this->Movementos->findBy($query, $prevision);
-        $this->set(compact('prevision', 'contas', 'tempadas', 'partidasOrzamentarias', 'movementos'));
     }
 
     private function aplicarFiltrosFacturas($facturas_query) {

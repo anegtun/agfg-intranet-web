@@ -1,20 +1,12 @@
 <?php
 $this->extend('template');
-if($prevision) {
-    $this->set('submenu_option', 'previsions');
-    $this->set('cabeceiraTitulo', 'Previsións');
-    $this->set('cabeceiraMigas', [
-        ['label'=>'Xestión Económica', 'url'=>['controller'=>'Economico', 'action'=>'index']],
-        ['label'=>'Previsións']
-    ]);
-} else {
-    $this->set('submenu_option', 'movementos');
-    $this->set('cabeceiraTitulo', 'Movementos');
-    $this->set('cabeceiraMigas', [
-        ['label'=>'Xestión Económica', 'url'=>['controller'=>'Economico', 'action'=>'index']],
-        ['label'=>'Movementos']
-    ]);
-}
+$this->set('submenu_option', 'movementos');
+$this->set('cabeceiraTitulo', 'Movementos');
+$this->set('cabeceiraMigas', [
+    ['label'=>'Xestión Económica', 'url'=>['controller'=>'Economico', 'action'=>'index']],
+    ['label'=>'Movementos']
+]);
+
 $emptyTemplates = [
     'inputContainer' => '{{content}}',
     'input' => '<input type="{{type}}" name="{{name}}" {{attrs}}/>',
@@ -48,7 +40,7 @@ foreach($partidasOrzamentarias as $po) {
                 <?= $this->Form->control('importe', ['options'=>[''=>'Todos', 'P'=>'Positivo', 'N'=>'Negativo'], 'default'=>'', 'class'=>'form-control']) ?>
             </div>
             <div class="col-lg-2">
-                <?= $this->Form->control('factura', ['options'=>[''=>'Todos', 'SF'=>'Sen factura', 'CF'=>'Con factura', 'NA'=>'Non aplica'], 'default'=>'', 'class'=>'form-control']) ?>
+                <?= $this->Form->control('factura', ['options'=>[''=>'Todos', 'SF'=>'Falta factura', 'CF'=>'Con factura', 'NA'=>'Non aplica factura'], 'default'=>'', 'class'=>'form-control']) ?>
             </div>
             <div class="col-lg-2">
                 <?= $this->Form->control('data_ini', ['type'=>'text', 'class'=>'form-control fld-date', 'label'=>'Data inicio', 'templates'=>$emptyTemplates]) ?>
@@ -56,11 +48,9 @@ foreach($partidasOrzamentarias as $po) {
             <div class="col-lg-2">
                 <?= $this->Form->control('data_fin', ['type'=>'text', 'class'=>'form-control fld-date', 'label'=>'Data fin', 'templates'=>$emptyTemplates]) ?>
             </div>
-            <?php if(empty($prevision)) : ?>
-                <div class="col-lg-2">
-                    <?= $this->Form->control('conta', ['options'=>$contas, 'label'=>'Conta', 'class'=>'form-control']) ?>
-                </div>
-            <?php endif ?>
+            <div class="col-lg-2">
+                <?= $this->Form->control('conta', ['options'=>$contas, 'label'=>'Conta', 'class'=>'form-control']) ?>
+            </div>
         </div>
         <div class="row">
             <div class="col-lg-12">
@@ -70,7 +60,7 @@ foreach($partidasOrzamentarias as $po) {
 
         <div style="margin-top:1em">
             <?= $this->Form->button('Buscar', ['class'=>'btn btn-primary']); ?>
-            <?= $this->Html->link(__($prevision ? 'Nova previsión' : 'Novo movemento'), ['action'=>'detalleMovemento', '?'=>['prevision'=>$prevision]], ['class'=>'btn btn-success']) ?>
+            <?= $this->Html->link(__('Novo movemento'), ['action'=>'detalleMovemento', '?'=>['prevision'=>false]], ['class'=>'btn btn-success']) ?>
             <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalImportar">Importar</button>
         </div>
 
@@ -110,17 +100,13 @@ foreach($partidasOrzamentarias as $po) {
         <table class="table table-striped table-hover">
             <thead>
                 <tr>
-                    <?php if(empty($prevision)) : ?>
-                        <th class="column-button"></th>
-                    <?php endif ?>
+                    <th class="column-button"></th>
                     <th class="column-button"></th>
                     <th class="column-button"></th>
                     <th class="column-date text-center">Data</th>
                     <th class="text-center">Importe</th>
                     <th class="text-center">Tempada</th>
-                    <?php if(empty($prevision)) : ?>
-                        <th class="text-center">Conta</th>
-                    <?php endif ?>
+                    <th class="text-center">Conta</th>
                     <th class="text-center">Partida Orz.</th>
                     <th class="text-center">Área</th>
                     <th>Descricición</th>
@@ -132,17 +118,15 @@ foreach($partidasOrzamentarias as $po) {
             <tbody>
                 <?php foreach($movementos as $m) : ?>
                     <tr>
-                        <?php if(empty($prevision)) : ?>
-                            <td class="column-button">
-                                <?php if(!empty($m->sen_factura)) : ?>
-                                    <a title="Non aplica factura" class="glyphicon glyphicon-barcode text-muted" href="javascript:void(0)" data-toggle="tooltip" style="cursor:default;"></a>
-                                <?php elseif(!empty($m->factura)) : ?>
-                                    <?= $this->Html->link('', ['action'=>'detalleFactura', $m->factura->id], ['class'=>'glyphicon glyphicon-barcode', 'title'=>"{$m->factura->entidade} - {$m->factura->descricion}"]) ?>
-                                <?php else : ?>
-                                    <a title="Sen factura" class="glyphicon glyphicon-barcode text-danger" href="javascript:void(0)" data-toggle="tooltip" style="cursor:default;"></a>
-                                <?php endif ?>
-                            </td>
-                        <?php endif ?>
+                        <td class="column-button">
+                            <?php if(!empty($m->sen_factura)) : ?>
+                                <a title="Non aplica factura" class="glyphicon glyphicon-barcode text-muted" href="javascript:void(0)" data-toggle="tooltip" style="cursor:default;"></a>
+                            <?php elseif(!empty($m->factura)) : ?>
+                                <?= $this->Html->link('', ['action'=>'detalleFactura', $m->factura->id], ['class'=>'glyphicon glyphicon-barcode', 'title'=>"{$m->factura->entidade} - {$m->factura->descricion}"]) ?>
+                            <?php else : ?>
+                                <a title="Sen factura" class="glyphicon glyphicon-barcode text-danger" href="javascript:void(0)" data-toggle="tooltip" style="cursor:default;"></a>
+                            <?php endif ?>
+                        </td>
                         <td class="column-button">
                             <?php if (!empty($m->comision)) : ?>
                                 <a title="Comisión: <?= $this->Number->currency($m->comision, 'EUR') ?>" class="glyphicon glyphicon-euro" href="javascript:void(0)" data-toggle="tooltip" style="cursor:default;"></a>
@@ -162,9 +146,9 @@ foreach($partidasOrzamentarias as $po) {
                         <td class="text-center">
                             <?= $tempadas[$m->tempada] ?>
                         </td>
-                        <?php if(empty($prevision)) : ?>
-                            <td class="text-center"><?= empty($m->conta) ? '' : $this->Html->image("/images/conta-{$m->conta}-logo.png", ['width'=>30,'height'=>30]) ?></td>
-                        <?php endif ?>
+                        <td class="text-center">
+                            <?= empty($m->conta) ? '' : $this->Html->image("/images/conta-{$m->conta}-logo.png", ['width'=>30,'height'=>30]) ?>
+                        </td>
                         <td class="text-center">
                             <?= $this->Html->image($m->area->partidaOrzamentaria->logo, ['height'=>25]) ?>
                         </td>

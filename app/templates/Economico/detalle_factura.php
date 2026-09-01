@@ -52,7 +52,11 @@ $emptyTemplates = [
             </div>
         </div>
 
-        <?= $this->Form->button('Gardar', ['class'=>'btn btn-primary glyphicon glyphicon-saved']); ?>
+        <?php if(empty($factura->id)) : ?>
+            <?= $this->Form->button('Crear', ['class'=>'btn btn-success glyphicon glyphicon-saved']); ?>
+        <?php else : ?>
+            <?= $this->Form->button('Gardar', ['class'=>'btn btn-primary glyphicon glyphicon-saved']); ?>
+        <?php endif ?>
     </fieldset>
 <?= $this->Form->end() ?>
 
