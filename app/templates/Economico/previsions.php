@@ -99,6 +99,7 @@ foreach($partidasOrzamentarias as $po) {
                     <th class="column-button"></th>
                     <th class="column-button"></th>
                     <th class="column-button"></th>
+                    <th class="column-button"></th>
                 </tr>
             </thead>
             <tbody>
@@ -140,6 +141,9 @@ foreach($partidasOrzamentarias as $po) {
                         </td>
                         <td class="column-button">
                             <?= $this->Html->link('', ['action'=>'clonarMovemento', $m->id], ['class'=>'glyphicon glyphicon-duplicate']) ?>
+                        </td>
+                        <td class="column-button">
+                            <?= $this->Html->link('', ['action'=>'consolidarPrevision', $m->id], ['class'=>'glyphicon glyphicon-thumbs-up']) ?>
                         </td>
                         <td class="column-button">
                             <?= $this->AgfgForm->deleteButton(['action'=>'borrarMovemento', $m->id]) ?>

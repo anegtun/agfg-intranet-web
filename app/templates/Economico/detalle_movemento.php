@@ -4,7 +4,14 @@ $this->extend('template');
 // Hack para que o datepicker non a líe formateando a data (alterna dia/mes). Asi forzamos o noso formato.
 $data_str = empty($movemento->data) ? NULL : $movemento->data->format('d-m-Y');
 
-if($movemento->prevision) {
+if ($movemento->consolidar) {
+    $this->set('submenu_option', 'previsions');
+    $this->set('cabeceiraTitulo', 'Consolidar prevision');
+    $this->set('cabeceiraMigas', [
+        ['label'=>'Previsións', 'url'=>['action'=>'previsions']],
+        ['label'=>'Consolidar prevision']
+    ]);
+} elseif ($movemento->prevision) {
     $this->set('submenu_option', 'previsions');
     $this->set('cabeceiraTitulo', empty($movemento->id) ? 'Nova previsión' : $data_str);
     $this->set('cabeceiraMigas', [
@@ -79,7 +86,9 @@ $emptyTemplates = [
             </div>
         </div>
 
-        <?php if(empty($movemento->id)) : ?>
+        <?php if(!empty($movemento->consolidar)) : ?>
+            <?= $this->Form->button('Consolidar', ['class'=>'btn btn-success glyphicon glyphicon-saved']); ?>
+        <?php elseif(empty($movemento->id)) : ?>
             <?= $this->Form->button('Crear', ['class'=>'btn btn-success glyphicon glyphicon-saved']); ?>
         <?php else : ?>
             <?= $this->Form->button('Gardar', ['class'=>'btn btn-primary glyphicon glyphicon-saved']); ?>

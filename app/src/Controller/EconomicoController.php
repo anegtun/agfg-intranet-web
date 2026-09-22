@@ -68,23 +68,25 @@ class EconomicoController extends AppController {
         } else {
             $movemento = $this->Movementos->get($id);
         }
-        $contas = $this->Contas->getAllWithEmpty();
-        $tempadas = $this->Tempadas->findSorted();
-        $clubes = $this->Clubes->find()->order('nome');
-        $areas = $this->Areas->find()->contain(['PartidaOrzamentaria'])->order('PartidaOrzamentaria.nome', 'Area.nome');
-        $facturas = $this->Facturas->findAbertas($movemento->id_factura);
-        $this->set(compact('movemento', 'contas', 'tempadas', 'clubes', 'areas', 'facturas'));
+        $this->setMovementoMestras($movemento);
+        $this->set(compact('movemento'));
     }
 
     public function clonarMovemento($id) {
         $movemento = $this->Movementos->get($id);
         $movemento->id = NULL;
-        $contas = $this->Contas->getAllWithEmpty();
-        $tempadas = $this->Tempadas->findSorted();
-        $clubes = $this->Clubes->find()->order('nome');
-        $areas = $this->Areas->find()->contain(['PartidaOrzamentaria'])->order('PartidaOrzamentaria.nome', 'Area.nome');
-        $facturas = $this->Facturas->findAbertas($movemento->id_factura);
-        $this->set(compact('movemento', 'contas', 'tempadas', 'clubes', 'areas', 'facturas'));
+        $this->setMovementoMestras($movemento);
+        $this->set(compact('movemento'));
+        $this->render('detalleMovemento');
+    }
+
+    public function consolidarPrevision($id) {
+        $movemento = $this->Movementos->get($id);
+        $movemento->prevision = false;
+        $movemento->data = null;
+        $movemento->consolidar = true;
+        $this->setMovementoMestras($movemento);
+        $this->set(compact('movemento'));
         $this->render('detalleMovemento');
     }
 
@@ -112,6 +114,15 @@ class EconomicoController extends AppController {
             $this->Flash->error(__('Erro ao eliminar o movemento.'));
         }
         return $this->redirect(['action' => $movemento->prevision ? 'previsions' : 'index']);
+    }
+
+    private function setMovementoMestras($movemento) {
+        $contas = $this->Contas->getAllWithEmpty();
+        $tempadas = $this->Tempadas->findSorted();
+        $clubes = $this->Clubes->find()->order('nome');
+        $areas = $this->Areas->find()->contain(['PartidaOrzamentaria'])->order('PartidaOrzamentaria.nome', 'Area.nome');
+        $facturas = $this->Facturas->findAbertas($movemento->id_factura);
+        $this->set(compact('contas', 'tempadas', 'clubes', 'areas', 'facturas'));
     }
 
     public function previsualizarMovementos() {
