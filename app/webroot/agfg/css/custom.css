@@ -28,6 +28,10 @@ td.border-right, th.border-right {
     padding-top: 2em;
 }
 
+.inicio-partidos {
+    row-gap: 20em;
+}
+
 @media (min-width: 1200px) {
     .modal-lg {
         width: 1100px;

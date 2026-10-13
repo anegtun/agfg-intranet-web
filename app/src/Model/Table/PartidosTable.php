@@ -1,6 +1,7 @@
 <?php
 namespace App\Model\Table;
 
+use Cake\I18n\FrozenDate;
 use Cake\Validation\Validator;
 
 class PartidosTable extends AgfgTable {
@@ -70,6 +71,80 @@ class PartidosTable extends AgfgTable {
                 ['Partidos.data_partido >='=>$inicioYMD, 'Partidos.data_partido <='=>$finYMD]
             ]])
             ->order(['-Partidos.data_partido DESC', 'Partidos.hora_partido']);
+    }
+
+    public function findDashboardMatchesBetween($inicio, $fin, $tempada) {
+        $inicioYMD = $inicio->format('Y-m-d');
+        $finYMD = $fin->format('Y-m-d');
+
+        return $this->findDashboardMatches()
+            ->where([
+                'Competicion.tempada' => $tempada,
+                'Partidos.cancelado' => 0,
+                'OR' => [
+                    [
+                        'Partidos.data_partido >=' => $inicioYMD,
+                        'Partidos.data_partido <=' => $finYMD,
+                    ],
+                    [
+                        'Partidos.data_partido IS' => null,
+                        'Xornada.data >=' => $inicioYMD,
+                        'Xornada.data <=' => $finYMD,
+                    ],
+                ],
+            ])
+            ->order(['data_calendario' => 'ASC', 'Partidos.hora_partido' => 'ASC']);
+    }
+
+    public function findDashboardRecentMatches($inicio, $fin, $tempada) {
+        $inicioYMD = $inicio->format('Y-m-d');
+        $finYMD = $fin->format('Y-m-d');
+
+        return $this->findDashboardMatches()
+            ->where([
+                'Competicion.tempada' => $tempada,
+                'Partidos.cancelado' => 0,
+                'OR' => [
+                    [
+                        'Partidos.data_partido IS NOT' => null,
+                        'Partidos.data_partido >=' => $inicioYMD,
+                        'Partidos.data_partido <=' => $finYMD,
+                    ],
+                    [
+                        'Partidos.data_partido IS' => null,
+                        'Partidos.adiado' => 0,
+                        'Xornada.data >=' => $inicioYMD,
+                        'Xornada.data <=' => $finYMD,
+                    ],
+                ],
+            ])
+            ->order(['data_calendario' => 'ASC', 'Partidos.hora_partido' => 'ASC']);
+    }
+
+    public function findPostponedWithoutDate($tempada) {
+        return $this->findDashboardMatches()
+            ->where([
+                'Competicion.tempada' => $tempada,
+                'Partidos.adiado' => 1,
+                'Partidos.cancelado' => 0,
+                'Partidos.data_partido IS' => null,
+            ])
+            ->order(['data_calendario' => 'ASC', 'Partidos.hora_partido' => 'ASC']);
+    }
+
+    private function findDashboardMatches() {
+        return $this->find()
+            ->contain(['Fase' => 'Competicion', 'Xornada', 'Equipa1' => 'Clube', 'Equipa2' => 'Clube', 'Campo', 'Arbitro', 'Umpire' => 'Clube'])
+            ->select(['data_calendario' => 'COALESCE(Partidos.data_partido, Xornada.data)'])
+            ->enableAutoFields(true)
+            ->formatResults(function ($results) {
+                return $results->map(function ($row) {
+                    if (!empty($row['data_calendario'])) {
+                        $row['data_calendario'] = FrozenDate::createFromFormat('Y-m-d', $row['data_calendario']);
+                    }
+                    return $row;
+                });
+            });
     }
 
 }

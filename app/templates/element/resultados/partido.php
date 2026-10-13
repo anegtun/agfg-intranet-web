@@ -55,7 +55,7 @@
 
     <div class='agfg-partido-botons'>
         <div class='agfg-partido-edit'>
-            <?= $this->Html->link('Editar', ['action'=>'partido', $partido->id], ['class'=>'glyphicon glyphicon-edit']); ?>
+            <?= $this->Html->link('Editar', ['controller' => 'Resultados', 'action' => 'partido', $partido->id], ['class'=>'glyphicon glyphicon-edit']); ?>
         </div>
         <?php if(!empty($partido->observacions)) : ?>
             <div class="agfg-partido-observacions">

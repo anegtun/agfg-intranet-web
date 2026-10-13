@@ -3,6 +3,7 @@ namespace App\Controller;
 
 use App\Model\Contas;
 use Cake\Event\EventInterface;
+use Cake\I18n\FrozenDate;
 use Cake\ORM\TableRegistry;
 
 class MainController extends AppController {
@@ -11,6 +12,8 @@ class MainController extends AppController {
         parent::initialize();
         $this->Contas = new Contas();
         $this->Movementos = TableRegistry::get('EconomicoMovementos');
+        $this->Partidos = TableRegistry::get('Partidos');
+        $this->Tempadas = TableRegistry::get('Tempadas');
     }
 
     public function beforeFilter(EventInterface $event) {
@@ -43,6 +46,23 @@ class MainController extends AppController {
             }
 
             $this->set(compact('saldos'));
+        }
+
+        if (in_array($identity['rol'], ['admin', 'comp', 'euro22'], true)) {
+            $hoxe = FrozenDate::today();
+            $tempadaActual = $this->Tempadas->findLast()->codigo;
+            $partidosProximos = $this->Partidos
+                ->findDashboardMatchesBetween($hoxe, $hoxe->modify('+6 days'), $tempadaActual)
+                ->toArray();
+            $partidosAplazadosSenData = $this->Partidos
+                ->findPostponedWithoutDate($tempadaActual)
+                ->toArray();
+
+            $partidosUltimosSeteDias = $this->Partidos
+                ->findDashboardRecentMatches($hoxe->modify('-6 days'), $hoxe, $tempadaActual)
+                ->toArray();
+
+            $this->set(compact('partidosProximos', 'partidosUltimosSeteDias', 'partidosAplazadosSenData'));
         }
     }
 }
