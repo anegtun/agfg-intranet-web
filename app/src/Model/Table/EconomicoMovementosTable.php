@@ -84,4 +84,27 @@ class EconomicoMovementosTable extends AgfgTable {
         return $movementos;
     }
 
+    public function saldosActualesPorConta(): array {
+        $movementos = $this
+            ->find()
+            ->select(['conta', 'data', 'importe', 'comision'])
+            ->where(['prevision' => false])
+            ->order(['EconomicoMovementos.data' => 'DESC', 'EconomicoMovementos.id' => 'DESC']);
+
+        $saldos = [];
+        foreach ($movementos as $movemento) {
+            $conta = $movemento->conta;
+            if (!isset($saldos[$conta])) {
+                $saldos[$conta] = ['saldo' => 0, 'data' => $movemento->data];
+            }
+            $saldos[$conta]['saldo'] += $movemento->importe + $movemento->comision;
+        }
+
+        foreach ($saldos as $conta => $saldo) {
+            $saldos[$conta]['saldo'] = round($saldo['saldo'], 2);
+        }
+
+        return $saldos;
+    }
+
 }
