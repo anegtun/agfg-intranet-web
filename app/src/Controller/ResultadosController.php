@@ -129,6 +129,7 @@ class ResultadosController extends AppController {
 
     public function partido($id) {
         $partido = $this->Partidos->getDetalle($id);
+        $urlReferrer = $this->getSafeUrlReferrer($this->request->getQuery('urlReferrer'));
 
         $arbitros = $this->Arbitros->findMap(true);
         if ($partido->id_arbitro) {
@@ -140,20 +141,38 @@ class ResultadosController extends AppController {
         }
         $umpires = $this->Equipas->findInFederacion($partido->fase->competicion->id_federacion);
         $categorias = $this->Categorias->getCategorias();
-        $this->set(compact('partido', 'arbitros', 'campos', 'umpires', 'categorias'));
+        $this->set(compact('partido', 'arbitros', 'campos', 'umpires', 'categorias', 'urlReferrer'));
     }
 
     public function gardar() {
         $data = $this->request->getData();
+        $urlReferrer = $this->getSafeUrlReferrer($data['urlReferrer'] ?? null);
+        unset($data['urlReferrer']);
         $partido = $this->Partidos->get($data['id']);
         $partido = $this->processGameForm($partido, $data);
         if ($this->Partidos->save($partido)) {
             $this->Flash->success(__('Gardáronse os datos do partido correctamente.'));
+            if ($urlReferrer !== null) {
+                return $this->redirect($urlReferrer);
+            }
             return $this->redirect(['action'=>'competicion', $data['id_competicion']]);
         }
         $this->Flash->error(__('Erro ao gardar os datos do partido.'));
-        $this->set(compact('partido'));
+        $this->set(compact('partido', 'urlReferrer'));
         $this->render('partido');
+    }
+
+    private function getSafeUrlReferrer($urlReferrer): ?string {
+        if (!is_string($urlReferrer) || $urlReferrer === '' || $urlReferrer[0] !== '/' || str_starts_with($urlReferrer, '//') || strpos($urlReferrer, '\\') !== false || preg_match('/[\r\n]/', $urlReferrer)) {
+            return null;
+        }
+
+        $parts = parse_url($urlReferrer);
+        if ($parts === false || isset($parts['scheme']) || isset($parts['host'])) {
+            return null;
+        }
+
+        return $urlReferrer;
     }
 
     /**

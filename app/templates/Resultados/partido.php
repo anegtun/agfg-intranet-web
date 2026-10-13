@@ -23,6 +23,7 @@ $data_partido_str = empty($partido->data_partido) ? NULL : $partido->data_partid
 <?= $this->Form->create($partido, ['type'=>'post', 'url'=>['action'=>'gardar']]) ?>
     <?= $this->Form->hidden('id') ?>
     <?= $this->Form->hidden('id_competicion', ['value'=>$partido->fase->competicion->id]) ?>
+    <?= $this->Form->hidden('urlReferrer', ['value'=>$urlReferrer]) ?>
     <fieldset>
         <legend>
             <?=$partido->fase->competicion->nome?>
