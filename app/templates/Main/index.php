@@ -1,6 +1,7 @@
 <?php
 $this->set('cabeceiraTitulo', 'Inicio');
 $this->set('cabeceiraMigas', []);
+$this->set('menu_option', 'inicio');
 ?>
 
 <?php if (isset($partidosUltimosSeteDias)) : ?>

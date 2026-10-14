@@ -3,7 +3,7 @@ $authUser = $this->request->getAttribute('identity');
 ?>
 
 <ul class="nav nav-pills nav-stacked" id="left-menu-content" role="navigation">
-    <li data-toggle="tooltip">
+    <li data-toggle="tooltip" <?= $menu_option === 'inicio' ? 'class="active"' : '' ?>>
         <?= $this->Html->link(
             "<span class='glyphicon glyphicon-home'><span class='sr-only'>Inicio</span></span> Inicio",
             ['controller'=>'Main', 'action'=>'index'],
