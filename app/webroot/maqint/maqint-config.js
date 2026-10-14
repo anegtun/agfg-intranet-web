@@ -15,7 +15,7 @@ customConfig = {
     }
   },
   lang: {
-    default: false,
+    default: 'gl',
     enableLangSelector: true
   },
   env: {

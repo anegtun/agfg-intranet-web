@@ -28,8 +28,8 @@ td.border-right, th.border-right {
     padding-top: 2em;
 }
 
-.inicio-partidos {
-    row-gap: 20em;
+.inicio-seccion + .inicio-seccion {
+    margin-top: 4em;
 }
 
 @media (min-width: 1200px) {

@@ -4,13 +4,13 @@ $this->set('cabeceiraMigas', []);
 ?>
 
 <?php if (isset($partidosUltimosSeteDias)) : ?>
-    <div class="row">
+    <div class="row inicio-seccion">
         <div class="col-xs-12">
             <h2>Partidos da última xornada</h2>
             <?php if (empty($partidosUltimosSeteDias)) : ?>
                 <p>Non hai partidos na última xornada.</p>
             <?php else : ?>
-                <div class="agfg-competicion inicio-partidos">
+                <div class="agfg-competicion">
                 <?php foreach ($partidosUltimosSeteDias as $partido) : ?>
                     <?php
                         $fase = $partido->fase->competicion->tipo === 'torneo'
@@ -34,13 +34,13 @@ $this->set('cabeceiraMigas', []);
 <?php endif ?>
 
 <?php if (isset($partidosProximos)) : ?>
-    <div class="row">
+    <div class="row inicio-seccion">
         <div class="col-xs-12">
             <h2>Próximos partidos</h2>
             <?php if (empty($partidosProximos)) : ?>
                 <p>Non hai partidos programados nos próximos sete días.</p>
             <?php else : ?>
-                <div class="agfg-competicion inicio-partidos">
+                <div class="agfg-competicion">
                 <?php foreach ($partidosProximos as $partido) : ?>
                     <?php
                         $fase = $partido->fase->competicion->tipo === 'torneo'
@@ -64,13 +64,13 @@ $this->set('cabeceiraMigas', []);
 <?php endif ?>
 
 <?php if (isset($partidosAplazadosSenData)) : ?>
-    <div class="row">
+    <div class="row inicio-seccion">
         <div class="col-xs-12">
             <h2>Partidos aprazados sen data asignada</h2>
             <?php if (empty($partidosAplazadosSenData)) : ?>
                 <p>Non hai partidos aprazados sen data asignada.</p>
             <?php else : ?>
-                <div class="agfg-competicion inicio-partidos">
+                <div class="agfg-competicion">
                     <?php foreach ($partidosAplazadosSenData as $partido) : ?>
                         <?php
                             $fase = $partido->fase->competicion->tipo === 'torneo'
@@ -90,7 +90,7 @@ $this->set('cabeceiraMigas', []);
 <?php endif ?>
 
 <?php if (isset($saldos)) : ?>
-    <div class="row">
+    <div class="row inicio-seccion">
         <div class="col-xs-12">
             <h2>Saldo actual das contas</h2>
             <?php if (empty($saldos)) : ?>

@@ -4,6 +4,7 @@
 
 - Aplicación interna da Asociación Galega de Fútbol Gaélico, desenvolvida con CakePHP 4.5 e PHP >= 8.1. O espazo de nomes PSR-4 `App\` apunta a `src/`.
 - Sigue o fluxo existente entre `config/routes.php`, `src/Controller/`, `src/Model/Table/`, as entidades e `templates/`. Non introduzas outra arquitectura para cambios locais.
+- A estrutura HTML e os compoñentes da interface usan Bootstrap; segue os patróns e as clases Bootstrap xa presentes nos templates.
 - Todos os textos visibles para as persoas usuarias deben estar sempre en galego; respecta tamén o idioma ao engadir etiquetas, mensaxes de validación e avisos.
 - Nos controladores, declara no método `initialize()` as dependencias das clases de `App\Model` e as táboas obtidas con `TableRegistry`; gárdaas como propiedades e accede a elas mediante `$this->` nas accións. Non crees nin recuperes estas dependencias dentro das accións.
 - Respecta `.editorconfig` e o estilo dos ficheiros próximos.
