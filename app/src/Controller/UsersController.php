@@ -13,7 +13,8 @@ class UsersController extends AppController {
     public function login() {
         $user = $this->Authentication->getResult();
         if ($user->isValid()) {
-            return $this->redirect(['controller'=>'Main', 'action'=>'index']);
+            $target = $this->Authentication->getLoginRedirect() ?? ['controller'=>'Main', 'action'=>'index'];
+            return $this->redirect($target);
         }
 
         if ($this->request->is('post')) {

@@ -49,6 +49,9 @@ foreach($partidos_filtrados as $p) {
                 <?= $this->Form->control('id_campo', ['options'=>$this->AgfgForm->objectToKeyValue($campos,'id','nome'), 'label'=>'Campo']) ?>
             </div>
             <div class="col-lg-3">
+                <?= $this->Form->control('id_equipa', ['options'=>$this->AgfgForm->objectToKeyValue($equipas,'id','$e->nome [$e->categoria]',true,false), 'label'=>'Equipa']) ?>
+            </div>
+            <div class="col-lg-3">
                 <?= $this->Form->control('pendente', ['options'=>['0'=>'Non', '1'=>'Si'], 'default'=>'1']) ?>
             </div>
         </div>

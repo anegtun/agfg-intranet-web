@@ -24,7 +24,17 @@ class ResultadosController extends AppController {
 
     public function competicion($id) {
         $categorias = $this->Categorias->getCategorias();
-        $competicion = $this->Competicions->get($id, ['contain'=>['Fases']]);
+        $competicion = $this->Competicions->get($id, ['contain'=>['Fases.Equipas']]);
+        $equipas = [];
+        foreach ($competicion->fases as $fase) {
+            foreach ($fase->equipas as $equipa) {
+                $equipas[$equipa->id] = $equipa;
+            }
+        }
+        $collator = new \Collator('gl_ES');
+        usort($equipas, function ($equipaA, $equipaB) use ($collator) {
+            return $collator->compare($equipaA->nome, $equipaB->nome);
+        });
 
         $partidos_competicion = $this->Partidos->find()
             ->contain(['Fase', 'Campo'])
@@ -54,6 +64,13 @@ class ResultadosController extends AppController {
         if(!empty($this->request->getQuery('id_campo'))) {
             $partidos_filtrados->where(['Partidos.id_campo' => $this->request->getQuery('id_campo')]);
         }
+        if(!empty($this->request->getQuery('id_equipa'))) {
+            $id_equipa = $this->request->getQuery('id_equipa');
+            $partidos_filtrados->where(['OR' => [
+                'Partidos.id_equipa1' => $id_equipa,
+                'Partidos.id_equipa2' => $id_equipa,
+            ]]);
+        }
         $pendente = $this->request->getQuery('pendente');
         if(!isset($pendente) || !empty($pendente)) {
             $partidos_filtrados->where(function (QueryExpression $exp, Query $query) {
@@ -64,7 +81,7 @@ class ResultadosController extends AppController {
             });
         }
 
-        $this->set(compact('categorias', 'competicion', 'partidos_filtrados', 'partidos_competicion'));
+        $this->set(compact('categorias', 'equipas', 'competicion', 'partidos_filtrados', 'partidos_competicion'));
     }
 
     public function resumo($id) {

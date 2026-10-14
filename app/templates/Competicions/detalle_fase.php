@@ -12,6 +12,14 @@ $emptyTemplates = [
     'input' => '<input type="{{type}}" name="{{name}}" {{attrs}}/>',
 ];
 $this->Html->script('detalle-fase', ['block' => 'script']);
+$opciones_xornadas = ['' => ''];
+foreach ($fase->xornadas as $xornada) {
+    $nome_xornada = "Xornada {$xornada->numero}";
+    if (!empty($xornada->data)) {
+        $nome_xornada .= ' - ' . $xornada->data->format('Y-m-d');
+    }
+    $opciones_xornadas[$xornada->id] = $nome_xornada;
+}
 ?>
 
 <div class="row">
@@ -83,7 +91,7 @@ $this->Html->script('detalle-fase', ['block' => 'script']);
                     </tr>
                     <?php if(!empty($x->partidos)) : ?>
                         <?php foreach($x->partidos as $p) : ?>
-                            <tr>
+                            <tr class="<?= $p->adiado ? 'warning' : '' ?>">
                                 <td>&nbsp;</td>
                                 <td><?= $this->AgfgForm->logo($p->equipa1, ['size'=>20]) ?> <?= $p->getNomeEquipa1() ?></td>
                                 <td><?= $this->AgfgForm->logo($p->equipa2, ['size'=>20]) ?> <?= $p->getNomeEquipa2() ?></td>
@@ -161,7 +169,7 @@ $this->Html->script('detalle-fase', ['block' => 'script']);
                 </div>
                 <div class="modal-body">
                     <fieldset>
-                        <?= $this->Form->control('id_xornada', ['options'=>$this->AgfgForm->objectToKeyValue($fase->xornadas,'id','Xornada $e->numero'), 'label'=>'Xornada']) ?>
+                        <?= $this->Form->control('id_xornada', ['options'=>$opciones_xornadas, 'label'=>'Xornada']) ?>
                         <?php
                             $equipasHelper = $this->AgfgForm->objectToKeyValue($fase->equipas,'id','nome');
                             echo $this->Form->control('id_equipa1', ['options'=>$equipasHelper, 'label'=>'Equipa local']);
