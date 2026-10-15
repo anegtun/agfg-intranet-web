@@ -54,6 +54,9 @@ foreach ($fase->xornadas as $xornada) {
                             <input type="checkbox" name="equipas[<?= $e->id ?>]" id="equipas-<?= $e->id ?>" value="<?= $e->id ?>" <?= empty($equipa) ? '' : 'checked="checked"' ?> />
                             <?= $e->nome ?>
                             <input type="number" name="puntos[<?= $e->id ?>]" id="puntos-<?= $e->id ?>" value="<?= empty($equipa->_joinData->puntos) ? '' : $equipa->_joinData->puntos ?>" />
+                            <?php if($competicion->isTorneo()) : ?>
+                                <input type="number" name="posicions[<?= $e->id ?>]" id="posicions-<?= $e->id ?>" min="1" step="1" placeholder="Posición final" value="<?= empty($equipa->_joinData->posicion) ? '' : $equipa->_joinData->posicion ?>" />
+                            <?php endif ?>
                         </label>
                         <br/>
                     <?php endforeach ?>

@@ -35,7 +35,7 @@ foreach ($tempadas as $t) {
                     'codigo' => $competicion->federacion->codigo,
                     'nome' => $competicion->federacion->nome
                 ],
-                'posicion' => $competicion->clasificacion->posicion
+                'posicion' => $competicion->clasificacion->posicion ?? NULL
             ];
 
             $fases = array_filter($competicion->fases, function ($e) use ($equipa) { return $e->categoria == $equipa->categoria; });
@@ -50,10 +50,11 @@ foreach ($tempadas as $t) {
 
                 $res_competicion['fases'] = [];
                 foreach ($fases as $fase) {
-                    if ($fase->codigo !== 'promocion' && !empty($fase->clasificacion->posicion) && !in_array($fase->id, $ids_fases_pai)) {
+                    if ($fase->codigo !== 'promocion' && isset($fase->clasificacion->posicion) && !empty($fase->clasificacion->posicion) && !in_array($fase->id, $ids_fases_pai)) {
                         $res_competicion['fases'][] = [
                             'nome' => $fase->nome,
-                            'posicion' => $fase->clasificacion->posicion
+                            'posicion' => $fase->clasificacion->posicion,
+                            'prioridade' => $fase->prioridade
                         ];
                     }
                 }

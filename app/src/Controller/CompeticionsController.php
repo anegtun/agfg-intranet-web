@@ -89,6 +89,26 @@ class CompeticionsController extends AppController {
 
     public function gardarFase() {
         $data = $this->request->getData();
+        $competicion = $this->Competicions->get($data['id_competicion']);
+        if ($competicion->isTorneo() && !empty($data['equipas'])) {
+            $posicions = $data['posicions'] ?? [];
+            if (!is_array($posicions)) {
+                $this->Flash->error(__('As posicións indicadas non son válidas.'));
+                return $this->redirect(['action'=>'detalleFase', $data['id']]);
+            }
+            foreach ($data['equipas'] as $idEquipa) {
+                $posicion = $posicions[$idEquipa] ?? '';
+                if ($posicion !== '' && $posicion !== NULL && (
+                    (!is_string($posicion) && !is_int($posicion)) ||
+                    filter_var($posicion, FILTER_VALIDATE_INT) === false ||
+                    (int)$posicion < 1
+                )) {
+                    $this->Flash->error(__('A posición debe ser un número enteiro maior que cero.'));
+                    return $this->redirect(['action'=>'detalleFase', $data['id']]);
+                }
+            }
+        }
+
         $fase = $this->Fases->newEntity($data);
         // Gardamos datos de fase
         if (!$this->Fases->save($fase)) {
@@ -104,6 +124,10 @@ class CompeticionsController extends AppController {
                 $faseEquipa->id_fase = $fase->id;
                 $faseEquipa->id_equipa = $idE;
                 $faseEquipa->puntos = empty($data['puntos'][$idE]) ? 0 : $data['puntos'][$idE];
+                if ($competicion->isTorneo()) {
+                    $posicion = $posicions[$idE] ?? '';
+                    $faseEquipa->posicion = $posicion === '' || $posicion === NULL ? NULL : (int)$posicion;
+                }
                 $this->FasesEquipas->save($faseEquipa);
             }
         }
