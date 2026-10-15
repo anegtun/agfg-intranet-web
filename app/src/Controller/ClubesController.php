@@ -139,7 +139,10 @@ class ClubesController extends AppController {
                 $ids_fases[] = $ef->fase->id;
             }
 
-            $competicions_query = ['Competicions.id IN' => $ids_competicions];
+            $competicions_query = [
+                'Competicions.id IN' => $ids_competicions,
+                'Federacion.codigo' => 'AGFG'
+            ];
             if(!empty($tempada)) {
                 $competicions_query['Competicions.tempada'] = $tempada;
             }
