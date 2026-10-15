@@ -112,7 +112,11 @@ class ClubesController extends AppController {
         $tempada = $this->request->getQuery('tempada');
 
         $categorias = $this->Categorias->getCategoriasWithEmpty();
-        $tempadas = $this->Tempadas->find()->order('codigo DESC');
+        $tempadaActual = $this->Tempadas->findLast()->codigo;
+        $tempadas = $this->Tempadas
+            ->find()
+            ->where(['codigo !=' => $tempadaActual])
+            ->order('codigo DESC');
 
         $clube = $this->Clubes
             ->find()
@@ -141,7 +145,8 @@ class ClubesController extends AppController {
 
             $competicions_query = [
                 'Competicions.id IN' => $ids_competicions,
-                'Federacion.codigo' => 'AGFG'
+                'Federacion.codigo' => 'AGFG',
+                'Competicions.tempada !=' => $tempadaActual
             ];
             if(!empty($tempada)) {
                 $competicions_query['Competicions.tempada'] = $tempada;
