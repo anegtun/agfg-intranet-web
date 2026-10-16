@@ -7,11 +7,20 @@ class EquipasTable extends AgfgTable {
 
     public function initialize(array $config): void {
         $this->setTable('agfg_equipas');
+        $this->getSchema()->setColumnType('amalgama', 'boolean');
 
         $this->belongsTo('Clube', [
         	'className' => 'Clubes',
             'foreignKey' => 'id_clube',
             'propertyName' => 'clube'
+        ]);
+
+        $this->belongsToMany('ClubesAmalgamas', [
+            'className' => 'Clubes',
+            'joinTable' => 'agfg_equipas_amalgamas',
+            'foreignKey' => 'id_equipa',
+            'targetForeignKey' => 'id_clube',
+            'propertyName' => 'clubes_amalgamas'
         ]);
     }
 

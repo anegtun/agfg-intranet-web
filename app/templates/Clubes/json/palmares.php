@@ -33,6 +33,7 @@ foreach ($tempadas as $t) {
 
             $res_equipa = [
                 'nome' => $equipa->nome,
+                'amalgama' => $equipa->palmares_amalgama,
                 'categoria' => [
                     'codigo' => $equipa->categoria,
                     'nome' => $categorias[$equipa->categoria]
@@ -55,8 +56,8 @@ foreach ($tempadas as $t) {
                     if ($fase->codigo !== 'promocion' && isset($fase->clasificacion->posicion) && !empty($fase->clasificacion->posicion) && !in_array($fase->id, $ids_fases_pai)) {
                         $res_equipa['fases'][] = [
                             'nome' => $fase->nome,
-                            'posicion' => $fase->clasificacion->posicion,
-                            'prioridade' => $fase->prioridade
+                            'tipo' => $fase->tipo,
+                            'posicion' => $fase->clasificacion->posicion
                         ];
                     }
                 }

@@ -62,6 +62,7 @@ $this->set('cabeceiraMigas', [
                     <th>Nome</th>
                     <th>Nome curto</th>
                     <th>Categoria</th>
+                    <th>Amalgama</th>
                     <th class="column-button"></th>
                 </tr>
             </thead>
@@ -78,6 +79,26 @@ $this->set('cabeceiraMigas', [
                         <td><?= $this->Html->link($e->nome, ['action'=>'detalleEquipa', $e->id]) ?></td>
                         <td><?= $e->nome_curto ?></td>
                         <td><?= $categorias[$e->categoria] ?></td>
+                        <td>
+                            <?php if (!empty($e->amalgama)): ?>
+                                <?php
+                                $clubesDaAmalgama = $e->clubes_amalgamas;
+                                usort($clubesDaAmalgama, function ($clubeA, $clubeB) {
+                                    return strnatcasecmp($clubeA->codigo, $clubeB->codigo);
+                                });
+                                ?>
+                                <?php foreach ($clubesDaAmalgama as $clubeDaAmalgama): ?>
+                                    <?php if (!empty($clubeDaAmalgama->logo)): ?>
+                                        <?= $this->Html->image($clubeDaAmalgama->logo, [
+                                            'width' => 25,
+                                            'height' => 25,
+                                            'alt' => $clubeDaAmalgama->codigo,
+                                            'title' => $clubeDaAmalgama->codigo
+                                        ]) ?>
+                                    <?php endif; ?>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+                        </td>
                         <td class="text-center"><?= $this->AgfgForm->deleteButton(['action'=>'borrarEquipa', $e->id]) ?></td>
                     </tr>
                 <?php endforeach ?>

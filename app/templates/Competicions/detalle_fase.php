@@ -29,10 +29,11 @@ foreach ($fase->xornadas as $xornada) {
         <fieldset>
             <legend>Fase</legend>
             <?= $this->Form->control('categoria', ['options'=>$categorias, 'label'=>'Categoría']) ?>
+            <?= $this->Form->control('tipo', ['options'=>$tiposFase, 'label'=>'Tipo de fase']) ?>
             <?= $this->Form->control('codigo', ['label'=>'Codigo']) ?>
             <?= $this->Form->control('nome', ['label'=>'Nome']) ?>
-            <?= $this->Form->control('id_fase_pai', ['options'=>$this->AgfgForm->objectToKeyValue($outras_fases,'id','nome'), 'label'=>'Fase pai']) ?>
-            <?= $this->Form->control('prioridade', ['label'=>'Prioridade']) ?>
+            <?= $this->Form->control('id_fase_pai', ['options'=>$this->AgfgForm->objectToKeyValue($outras_fases, 'id', 'nome'), 'label'=>'Fase pai']) ?>
+            <?= $this->Form->control('prioridade', ['label'=>'Orde']) ?>
 
             <?php if(!empty($fase->id)) : ?>
                 <fieldset class="form-group">
@@ -76,7 +77,7 @@ foreach ($fase->xornadas as $xornada) {
                                     <?php if($competicion->isLiga()) : ?>
                                         <th>Puntos</th>
                                     <?php endif ?>
-                                    <?php if($competicion->isTorneoOuEliminatoria()) : ?>
+                                    <?php if($competicion->isLiga() || $competicion->isTorneoOuEliminatoria()) : ?>
                                         <th>Posición final</th>
                                     <?php endif ?>
                                 </tr>
@@ -96,7 +97,7 @@ foreach ($fase->xornadas as $xornada) {
                                                 <input type="number" name="puntos[<?= $e->id ?>]" id="puntos-<?= $e->id ?>" class="form-control input-sm" value="<?= empty($equipa) || empty($equipa->_joinData->puntos) ? '' : $equipa->_joinData->puntos ?>" style="max-width: 100px;" />
                                             </td>
                                         <?php endif ?>
-                                        <?php if($competicion->isTorneoOuEliminatoria()) : ?>
+                                        <?php if($competicion->isLiga() || $competicion->isTorneoOuEliminatoria()) : ?>
                                             <td>
                                                 <input type="number" name="posicions[<?= $e->id ?>]" id="posicions-<?= $e->id ?>" class="form-control input-sm" min="1" step="1" placeholder="Posición final" value="<?= empty($equipa) || empty($equipa->_joinData->posicion) ? '' : $equipa->_joinData->posicion ?>" style="max-width: 120px;" />
                                             </td>

@@ -14,6 +14,7 @@ class ClubesController extends AppController {
         $this->Categorias = new Categorias();
         $this->Competicions = TableRegistry::get('Competicions');
         $this->Equipas = TableRegistry::get('Equipas');
+        $this->EquipasAmalgamas = TableRegistry::get('EquipasAmalgamas');
         $this->FasesEquipas = TableRegistry::get('FasesEquipas');
         $this->Federacions = TableRegistry::get('Federacions');
         $this->Tempadas = TableRegistry::get('Tempadas');
@@ -41,7 +42,14 @@ class ClubesController extends AppController {
     public function detalle($id=null) {
         $categorias = $this->Categorias->getCategoriasWithEmpty();
         $federacions = $this->Federacions->find()->order('codigo');
-        $clube = $this->Clubes->getOrNew($id, ['contain' => ['Equipas' => ['sort' => 'Equipas.codigo'], 'Federacions']]);
+        $clube = $this->Clubes->getOrNew($id, ['contain' => [
+            'Equipas' => [
+                'sort' => 'Equipas.codigo',
+                'Clube',
+                'ClubesAmalgamas'
+            ],
+            'Federacions'
+        ]]);
 
         $this->set(compact('clube', 'categorias', 'federacions'));
     }
@@ -75,21 +83,99 @@ class ClubesController extends AppController {
             $equipa = $this->Equipas->newEntity([]);
             $equipa->id_clube = $this->request->getQuery('idClube');
             $equipa->clube = $this->Clubes->get($equipa->id_clube);
+            $equipa->clubes_amalgamas = [];
         } else {
             $equipa = $this->Equipas->get($id, ['contain'=>['Clube']]);
         }
         $categorias = $this->Categorias->getCategoriasWithEmpty();
-        $this->set(compact('categorias', 'equipa'));
+        $clubesAmalgamas = $this->Clubes->getClubesAmalgama($equipa->id_clube);
+        $clubesAmalgamasSeleccionados = $this->EquipasAmalgamas
+            ->getIdsClubesAmalgamaSeleccionados($equipa->id ?? null);
+        $this->set(compact('categorias', 'equipa', 'clubesAmalgamas', 'clubesAmalgamasSeleccionados'));
     }
 
     public function gardarEquipa() {
-        $equipa = $this->Equipas->newEntity($this->request->getData());
-        if ($this->Equipas->save($equipa)) {
+        $data = $this->request->getData();
+        $clubesAmalgamasSeleccionados = $data['clubes_amalgamas'] ?? [];
+        if (!is_array($clubesAmalgamasSeleccionados)) {
+            $this->Flash->error(__('A selección de clubes da amalgama non é válida.'));
+            return $this->redirect(['action'=>'detalleEquipa', $data['id'] ?? null, '?' => ['idClube' => $data['id_clube'] ?? null]]);
+        }
+
+        $idsClubesAmalgama = [];
+        foreach ($clubesAmalgamasSeleccionados as $idClube) {
+            if ($idClube === '' || $idClube === null) {
+                continue;
+            }
+            $idClubeValidado = filter_var($idClube, FILTER_VALIDATE_INT);
+            if ($idClubeValidado === false || $idClubeValidado < 1) {
+                $this->Flash->error(__('A selección de clubes da amalgama non é válida.'));
+                return $this->redirect(['action'=>'detalleEquipa', $data['id'] ?? null, '?' => ['idClube' => $data['id_clube'] ?? null]]);
+            }
+            $idsClubesAmalgama[] = $idClubeValidado;
+        }
+        $idsClubesAmalgama = array_values(array_unique($idsClubesAmalgama));
+
+        $amalgama = !empty($data['amalgama']);
+        if (!$amalgama) {
+            $idsClubesAmalgama = [];
+        }
+
+        if (!empty($idsClubesAmalgama)) {
+            $clubesValidos = $this->Clubes->find()
+                ->where([
+                    'id IN' => $idsClubesAmalgama,
+                    'id !=' => $data['id_clube']
+                ])
+                ->all()
+                ->extract('id')
+                ->toList();
+            if (count($clubesValidos) !== count($idsClubesAmalgama)) {
+                $this->Flash->error(__('A selección debe conter clubes existentes distintos do clube principal.'));
+                return $this->redirect(['action'=>'detalleEquipa', $data['id'] ?? null, '?' => ['idClube' => $data['id_clube'] ?? null]]);
+            }
+        }
+
+        $datosEquipa = $data;
+        unset($datosEquipa['clubes_amalgamas']);
+        $equipa = $this->Equipas->getOrNew($data['id'] ?? null, ['contain' => ['Clube']]);
+        $equipa = $this->Equipas->patchEntity($equipa, $datosEquipa);
+        $equipa->amalgama = $amalgama ? 1 : 0;
+
+        $gardado = $this->Equipas->getConnection()->transactional(function () use ($equipa, $idsClubesAmalgama) {
+            if (!$this->Equipas->save($equipa)) {
+                return false;
+            }
+
+            $this->EquipasAmalgamas->deleteAll(['id_equipa' => $equipa->id]);
+            foreach ($idsClubesAmalgama as $idClube) {
+                $relacion = $this->EquipasAmalgamas->newEntity([
+                    'id_equipa' => $equipa->id,
+                    'id_clube' => $idClube
+                ]);
+                if (!$this->EquipasAmalgamas->save($relacion)) {
+                    return false;
+                }
+            }
+
+            return true;
+        });
+
+        if ($gardado) {
             $this->Flash->success(__('Gardouse a equipa correctamente.'));
             return $this->redirect(['action'=>'detalle', $equipa->id_clube]);
         }
+
         $this->Flash->error(__('Erro ao gardar a equipa.'));
-        $this->set(compact('equipa'));
+        $equipa->clube = $this->Clubes->get($equipa->id_clube);
+        $equipa->clubes_amalgamas = $this->Clubes->find()->where(['id IN' => $idsClubesAmalgama])->toArray();
+        $categorias = $this->Categorias->getCategoriasWithEmpty();
+        $clubesAmalgamas = $this->Clubes->find('list', ['keyField' => 'id', 'valueField' => 'nome'])
+            ->where(['id !=' => $equipa->id_clube])
+            ->order(['nome'])
+            ->toArray();
+        $clubesAmalgamasSeleccionados = array_map('strval', $idsClubesAmalgama);
+        $this->set(compact('equipa', 'categorias', 'clubesAmalgamas', 'clubesAmalgamasSeleccionados'));
         $this->render('detalleEquipa');
     }
 
@@ -121,7 +207,31 @@ class ClubesController extends AppController {
             ->where(['Clubes.codigo' => $codigo])
             ->first();
 
+        $idsEquipasAmalgama = $this->EquipasAmalgamas->find()
+            ->select(['id_equipa'])
+            ->where(['id_clube' => $clube->id])
+            ->all()
+            ->extract('id_equipa')
+            ->toList();
+        if (!empty($idsEquipasAmalgama)) {
+            $equipasAmalgama = $this->Equipas
+                ->find()
+                ->where([
+                    'Equipas.id IN' => $idsEquipasAmalgama,
+                    'Equipas.id_clube !=' => $clube->id,
+                    'Equipas.amalgama' => true
+                ])
+                ->contain(['Clube'])
+                ->toArray();
+
+            foreach ($equipasAmalgama as $equipaAmalgama) {
+                $equipaAmalgama->palmares_amalgama = true;
+                $clube->equipas[] = $equipaAmalgama;
+            }
+        }
+
         foreach($clube->equipas as $e) {
+            $e->palmares_amalgama = $e->palmares_amalgama ?? false;
             $e->competicions = [];
 
             if(!empty($categoria) && $categoria != $e->categoria) {

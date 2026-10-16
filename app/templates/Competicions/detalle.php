@@ -28,28 +28,41 @@ $this->set('cabeceiraMigas', [
 <?php if(!empty($competicion->id)) : ?>
     <div class="row" style="margin-top:2em;">
         <h3>Fases</h3>
-        <table class="table table-striped table-hover">
-            <thead>
-                <tr>
-                    <th>Categoría</th>
-                    <th>Prioridade</th>
-                    <th>Nome</th>
-                    <th>Código</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach($competicion->fases as $f) : ?>
+        <?php
+        $fasesPorCategoria = [];
+        foreach ($competicion->fases as $fase) {
+            $codigoCategoria = $fase->categoria ?? '';
+            $fasesPorCategoria[$codigoCategoria][] = $fase;
+        }
+        ?>
+        <?php foreach ($fasesPorCategoria as $codigoCategoria => $fasesCategoria): ?>
+            <?php $nomeCategoria = empty($codigoCategoria) ? 'Sen categoría' : ($categorias[$codigoCategoria] ?? $codigoCategoria); ?>
+            <h4><?= h($nomeCategoria) ?></h4>
+            <table class="table table-striped table-hover">
+                <thead>
                     <tr>
-                        <td><?= empty($f->categoria) ? '' : $categorias[$f->categoria] ?></td>
-                        <td><?= $f->prioridade ?></td>
-                        <td><?= $this->Html->link($f->nome, ['action'=>'detalleFase', $f->id]) ?></td>
-                        <td><?= $f->codigo ?></td>
-                        <td class="text-center"><?= $this->AgfgForm->deleteButton(['action'=>'borrarFase', $f->id]) ?></td>
+                        <th>Orde</th>
+                        <th>Tipo</th>
+                        <th>Nome</th>
+                        <th>Fase pai</th>
+                        <th>Código</th>
+                        <th></th>
                     </tr>
-                <?php endforeach ?>
-            <tbody>
-        </table>
+                </thead>
+                <tbody>
+                    <?php foreach ($fasesCategoria as $f): ?>
+                        <tr>
+                            <td><?= h($f->prioridade) ?></td>
+                            <td><?= h($tiposFase[$f->tipo] ?? $f->tipo) ?></td>
+                            <td><?= $this->Html->link($f->nome, ['action'=>'detalleFase', $f->id]) ?></td>
+                            <td><?= h($f->fasePai->nome ?? '') ?></td>
+                            <td><?= h($f->codigo) ?></td>
+                            <td class="text-center"><?= $this->AgfgForm->deleteButton(['action'=>'borrarFase', $f->id]) ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        <?php endforeach; ?>
         <?= $this->Html->link('Crear', ['action'=>'detalleFase', '?'=>['idCompeticion'=>$competicion->id]], ['class'=>'btn btn-primary']) ?>
     </div>
 <?php endif ?>

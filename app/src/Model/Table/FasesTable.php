@@ -1,6 +1,7 @@
 <?php
 namespace App\Model\Table;
 
+use App\Model\TiposFase;
 use Cake\Validation\Validator;
 
 class FasesTable extends AgfgTable {
@@ -35,10 +36,13 @@ class FasesTable extends AgfgTable {
     }
 
     public function validationDefault(Validator $validator): Validator {
+        $tiposFase = new TiposFase();
+
         return $validator
             ->notEmptyString('id_competicion', 'A competición é obrigatoria')
             ->notEmptyString('nome', 'O nome é obrigatorio')
-            ->notEmptyString('tipo', 'O tipo é obrigatorio');
+            ->notEmptyString('tipo', 'O tipo é obrigatorio')
+            ->inList('tipo', array_keys($tiposFase->getTipos()), 'O tipo de fase non é válido.');
     }
 
 }

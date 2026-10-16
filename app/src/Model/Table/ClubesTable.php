@@ -35,4 +35,23 @@ class ClubesTable extends AgfgTable {
             ->order('Clubes.nome');
     }
 
+    public function getClubesAmalgama($idClube): array {
+        $clube = $this->get($idClube, ['contain' => ['Federacions']]);
+        $idsFederacions = array_map(function ($federacion) {
+            return $federacion->id;
+        }, $clube->federacions);
+        if (empty($idsFederacions)) {
+            return [];
+        }
+
+        return $this->find('list', ['keyField' => 'id', 'valueField' => 'nome'])
+            ->matching('Federacions', function ($query) use ($idsFederacions) {
+                return $query->where(['Federacions.id IN' => $idsFederacions]);
+            })
+            ->where(['Clubes.id !=' => $idClube])
+            ->distinct(['Clubes.id'])
+            ->order(['Clubes.nome'])
+            ->toArray();
+    }
+
 }

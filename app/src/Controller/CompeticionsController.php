@@ -3,6 +3,7 @@ namespace App\Controller;
 
 use App\Model\Categorias;
 use App\Model\TiposCompeticion;
+use App\Model\TiposFase;
 use Cake\Event\Event;
 use Cake\I18n\Time;
 use Cake\ORM\TableRegistry;
@@ -13,6 +14,7 @@ class CompeticionsController extends AppController {
         parent::initialize();
         $this->Categorias = new Categorias();
         $this->TiposCompeticion = new TiposCompeticion();
+        $this->TiposFase = new TiposFase();
         $this->Campos = TableRegistry::get('Campos');
         $this->Fases = TableRegistry::get('Fases');
         $this->Equipas = TableRegistry::get('Equipas');
@@ -37,10 +39,11 @@ class CompeticionsController extends AppController {
     public function detalle($id=null) {
         $competicion = $this->Competicions->getOrNew($id, ['contain' => ['Fases' => ['sort'=>['Fases.categoria', 'Fases.prioridade', 'Fases.nome']], 'Fases.FasePai']]);
         $categorias = $this->Categorias->getCategoriasWithEmpty();
+        $tiposFase = $this->TiposFase->getTipos();
         $tempadas = $this->Tempadas->findSorted();
         $tiposCompeticion = $this->TiposCompeticion->getTiposWithEmpty();
         $federacions = $this->Federacions->find();
-        $this->set(compact('competicion', 'categorias', 'federacions', 'tempadas', 'tiposCompeticion'));
+        $this->set(compact('competicion', 'categorias', 'tiposFase', 'federacions', 'tempadas', 'tiposCompeticion'));
     }
 
     public function gardar() {
@@ -83,14 +86,22 @@ class CompeticionsController extends AppController {
         }
         $campos = $this->Campos->find()->where(['activo' => 1])->order(['pobo', 'nome']);
         $categorias = $this->Categorias->getCategoriasWithEmpty();
+        $tiposFase = $this->TiposFase->getTiposWithEmpty();
         $competicion = $this->Competicions->get($fase->id_competicion);
-        $this->set(compact('fase','campos','competicion','categorias','equipas','outras_fases'));
+        $this->set(compact('fase','campos','competicion','categorias','tiposFase','equipas','outras_fases'));
     }
 
     public function gardarFase() {
         $data = $this->request->getData();
         $competicion = $this->Competicions->get($data['id_competicion']);
-        if ($competicion->isTorneoOuEliminatoria() && !empty($data['equipas'])) {
+        $tiposFase = $this->TiposFase->getTipos();
+        $tipoFase = $data['tipo'] ?? null;
+        if (!is_string($tipoFase) || !array_key_exists($tipoFase, $tiposFase)) {
+            $this->Flash->error(__('O tipo de fase indicado non é válido.'));
+            return $this->redirect(['action'=>'detalleFase', $data['id'] ?? null, '?' => ['idCompeticion' => $data['id_competicion']]]);
+        }
+        $usaPosicionsFinais = $competicion->isLiga() || $competicion->isTorneoOuEliminatoria();
+        if ($usaPosicionsFinais && !empty($data['equipas'])) {
             $posicions = $data['posicions'] ?? [];
             if (!is_array($posicions)) {
                 $this->Flash->error(__('As posicións indicadas non son válidas.'));
@@ -113,7 +124,7 @@ class CompeticionsController extends AppController {
         // Gardamos datos de fase
         if (!$this->Fases->save($fase)) {
             $this->Flash->error(__('Erro ao gardar a fase.'));
-            $this->set(compact('fase'));
+            $this->set(compact('fase', 'tiposFase'));
             return $this->render('detalleFase');
         }
         // Gardamos equipas
@@ -124,7 +135,7 @@ class CompeticionsController extends AppController {
                 $faseEquipa->id_fase = $fase->id;
                 $faseEquipa->id_equipa = $idE;
                 $faseEquipa->puntos = empty($data['puntos'][$idE]) ? 0 : $data['puntos'][$idE];
-                if ($competicion->isTorneoOuEliminatoria()) {
+                if ($usaPosicionsFinais) {
                     $posicion = $posicions[$idE] ?? '';
                     $faseEquipa->posicion = $posicion === '' || $posicion === NULL ? NULL : (int)$posicion;
                 }
