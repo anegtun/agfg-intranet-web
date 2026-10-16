@@ -35,32 +35,78 @@ foreach ($fase->xornadas as $xornada) {
             <?= $this->Form->control('prioridade', ['label'=>'Prioridade']) ?>
 
             <?php if(!empty($fase->id)) : ?>
-                <label for="equipas">Equipas participantes</label>
-                <div class="form-group">
+                <fieldset class="form-group">
+                    <legend>Equipas participantes</legend>
                     <input type="hidden" name="equipas" class="form-control" value="">
-
-                    <?php foreach($equipas as $e) : ?>
-                        <?php
-                            $equipa = null;
-                            if(!empty($fase->equipas)) {
-                                foreach($fase->equipas as $fe) {
-                                    if($fe->id == $e->id) {
-                                        $equipa = $fe;
-                                    }
-                                }
+                    <?php
+                        $equipasDaFase = [];
+                        foreach($fase->equipas as $equipaDaFase) {
+                            $equipasDaFase[$equipaDaFase->id] = $equipaDaFase;
+                        }
+                        $equipas = $equipas->toArray();
+                        $ordemAlfabetica = [];
+                        foreach($equipas as $indice => $equipaLista) {
+                            $ordemAlfabetica[$equipaLista->id] = $indice;
+                        }
+                        usort($equipas, function ($a, $b) use ($equipasDaFase, $ordemAlfabetica) {
+                            $seleccionadaA = isset($equipasDaFase[$a->id]);
+                            $seleccionadaB = isset($equipasDaFase[$b->id]);
+                            if ($seleccionadaA !== $seleccionadaB) {
+                                return $seleccionadaA ? -1 : 1;
                             }
-                        ?>
-                        <label for="equipas-<?= $e->id ?>" class="selected">
-                            <input type="checkbox" name="equipas[<?= $e->id ?>]" id="equipas-<?= $e->id ?>" value="<?= $e->id ?>" <?= empty($equipa) ? '' : 'checked="checked"' ?> />
-                            <?= $e->nome ?>
-                            <input type="number" name="puntos[<?= $e->id ?>]" id="puntos-<?= $e->id ?>" value="<?= empty($equipa->_joinData->puntos) ? '' : $equipa->_joinData->puntos ?>" />
-                            <?php if($competicion->isTorneo()) : ?>
-                                <input type="number" name="posicions[<?= $e->id ?>]" id="posicions-<?= $e->id ?>" min="1" step="1" placeholder="Posición final" value="<?= empty($equipa->_joinData->posicion) ? '' : $equipa->_joinData->posicion ?>" />
-                            <?php endif ?>
-                        </label>
-                        <br/>
-                    <?php endforeach ?>
-                </div>
+
+                            $posicionA = $equipasDaFase[$a->id]->_joinData->posicion ?? null;
+                            $posicionB = $equipasDaFase[$b->id]->_joinData->posicion ?? null;
+                            if (($posicionA === null) !== ($posicionB === null)) {
+                                return $posicionA === null ? 1 : -1;
+                            }
+                            if ($posicionA !== null && (int)$posicionA !== (int)$posicionB) {
+                                return (int)$posicionA <=> (int)$posicionB;
+                            }
+
+                            return $ordemAlfabetica[$a->id] <=> $ordemAlfabetica[$b->id];
+                        });
+                    ?>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover table-condensed">
+                            <thead>
+                                <tr>
+                                    <th style="width: 1%;"></th>
+                                    <th>Equipa</th>
+                                    <?php if($competicion->isLiga()) : ?>
+                                        <th>Puntos</th>
+                                    <?php endif ?>
+                                    <?php if($competicion->isTorneoOuEliminatoria()) : ?>
+                                        <th>Posición final</th>
+                                    <?php endif ?>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach($equipas as $e) : ?>
+                                    <?php
+                                        $equipa = $equipasDaFase[$e->id] ?? null;
+                                    ?>
+                                    <tr>
+                                        <td>
+                                            <input type="checkbox" name="equipas[<?= $e->id ?>]" id="equipas-<?= $e->id ?>" value="<?= $e->id ?>" <?= empty($equipa) ? '' : 'checked="checked"' ?> aria-label="<?= h($e->nome) ?>" style="margin: 0; vertical-align: middle;" />
+                                        </td>
+                                        <td><label for="equipas-<?= $e->id ?>" style="margin: 0;"><?= h($e->nome) ?></label></td>
+                                        <?php if($competicion->isLiga()) : ?>
+                                            <td>
+                                                <input type="number" name="puntos[<?= $e->id ?>]" id="puntos-<?= $e->id ?>" class="form-control input-sm" value="<?= empty($equipa) || empty($equipa->_joinData->puntos) ? '' : $equipa->_joinData->puntos ?>" style="max-width: 100px;" />
+                                            </td>
+                                        <?php endif ?>
+                                        <?php if($competicion->isTorneoOuEliminatoria()) : ?>
+                                            <td>
+                                                <input type="number" name="posicions[<?= $e->id ?>]" id="posicions-<?= $e->id ?>" class="form-control input-sm" min="1" step="1" placeholder="Posición final" value="<?= empty($equipa) || empty($equipa->_joinData->posicion) ? '' : $equipa->_joinData->posicion ?>" style="max-width: 120px;" />
+                                            </td>
+                                        <?php endif ?>
+                                    </tr>
+                                <?php endforeach ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </fieldset>
             <?php endif ?>
 
             <?= $this->Form->button('Gardar', ['class'=>'btn btn-primary']); ?>
@@ -76,7 +122,7 @@ foreach ($fase->xornadas as $xornada) {
             <tbody>
                 <?php foreach($fase->xornadas as $x) : ?>
                     <tr>
-                        <td colspan="5">
+                        <td colspan="6">
                             <?= empty($x->descricion) ? "Xornada $x->numero" : $x->descricion ?>
                             <?= empty($x->data) ? "" : " ({$x->data->format('Y-m-d')})" ?>
                         </td>
@@ -99,6 +145,11 @@ foreach ($fase->xornadas as $xornada) {
                                 <td><?= $this->AgfgForm->logo($p->equipa1, ['size'=>20]) ?> <?= $p->getNomeEquipa1() ?></td>
                                 <td><?= $this->AgfgForm->logo($p->equipa2, ['size'=>20]) ?> <?= $p->getNomeEquipa2() ?></td>
                                 <td><?= $p->formatDataHora() ?></td>
+                                <td>
+                                    <?= $p->hasPuntuacionTotalEquipa1() ? $p->getPuntuacionTotalEquipa1() : '-' ?>
+                                    -
+                                    <?= $p->hasPuntuacionTotalEquipa2() ? $p->getPuntuacionTotalEquipa2() : '-' ?>
+                                </td>
                                 <td><?= $p->campo->nome ?></td>
                                 <td class="text-center">
                                     <?= $this->AgfgForm->editButton('#', [

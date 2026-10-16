@@ -4,7 +4,7 @@ namespace App\Model;
 abstract class Clasificacion {
 
     public static function create($competicion, $partidos, $equipasFase, $equipasMap) {
-        if ($competicion->isTorneo()) {
+        if ($competicion->isTorneoOuEliminatoria()) {
             return new ClasificacionTorneo($equipasFase, $equipasMap);
         }
         if ($competicion->isLiga()) {

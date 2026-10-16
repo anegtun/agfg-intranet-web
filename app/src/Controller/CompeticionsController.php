@@ -35,7 +35,7 @@ class CompeticionsController extends AppController {
     }
 
     public function detalle($id=null) {
-        $competicion = $this->Competicions->getOrNew($id, ['contain' => ['Fases' => ['sort'=>['Fases.categoria', 'Fases.nome']], 'Fases.FasePai']]);
+        $competicion = $this->Competicions->getOrNew($id, ['contain' => ['Fases' => ['sort'=>['Fases.categoria', 'Fases.prioridade', 'Fases.nome']], 'Fases.FasePai']]);
         $categorias = $this->Categorias->getCategoriasWithEmpty();
         $tempadas = $this->Tempadas->findSorted();
         $tiposCompeticion = $this->TiposCompeticion->getTiposWithEmpty();
@@ -90,7 +90,7 @@ class CompeticionsController extends AppController {
     public function gardarFase() {
         $data = $this->request->getData();
         $competicion = $this->Competicions->get($data['id_competicion']);
-        if ($competicion->isTorneo() && !empty($data['equipas'])) {
+        if ($competicion->isTorneoOuEliminatoria() && !empty($data['equipas'])) {
             $posicions = $data['posicions'] ?? [];
             if (!is_array($posicions)) {
                 $this->Flash->error(__('As posicións indicadas non son válidas.'));
@@ -124,7 +124,7 @@ class CompeticionsController extends AppController {
                 $faseEquipa->id_fase = $fase->id;
                 $faseEquipa->id_equipa = $idE;
                 $faseEquipa->puntos = empty($data['puntos'][$idE]) ? 0 : $data['puntos'][$idE];
-                if ($competicion->isTorneo()) {
+                if ($competicion->isTorneoOuEliminatoria()) {
                     $posicion = $posicions[$idE] ?? '';
                     $faseEquipa->posicion = $posicion === '' || $posicion === NULL ? NULL : (int)$posicion;
                 }

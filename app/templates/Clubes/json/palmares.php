@@ -9,7 +9,7 @@ $res = [
 foreach ($tempadas as $t) {
     $res_tempada = [
         'tempada' => ['codigo' => $t['codigo'], 'nome' => $t['nome']],
-        'equipas' => []
+        'competicions' => []
     ];
 
     foreach ($clube->equipas as $equipa) {
@@ -18,22 +18,24 @@ foreach ($tempadas as $t) {
             continue;
         }
 
-        $res_equipa = [
-            'nome' => $equipa->nome,
-            'categoria' => [
-                'codigo' => $equipa->categoria,
-                'nome' => $categorias[$equipa->categoria]
-            ],
-            'competicions' => []
-        ];
-
         foreach ($competicions as $competicion) {
-            $res_competicion = [
-                'nome' => $competicion->nome,
-                'tipo' => $competicion->tipo,
-                'federacion' => [
-                    'codigo' => $competicion->federacion->codigo,
-                    'nome' => $competicion->federacion->nome
+            if (!isset($res_tempada['competicions'][$competicion->id])) {
+                $res_tempada['competicions'][$competicion->id] = [
+                    'nome' => $competicion->nome,
+                    'tipo' => $competicion->tipo,
+                    'federacion' => [
+                        'codigo' => $competicion->federacion->codigo,
+                        'nome' => $competicion->federacion->nome
+                    ],
+                    'equipas' => []
+                ];
+            }
+
+            $res_equipa = [
+                'nome' => $equipa->nome,
+                'categoria' => [
+                    'codigo' => $equipa->categoria,
+                    'nome' => $categorias[$equipa->categoria]
                 ],
                 'posicion' => $competicion->clasificacion->posicion ?? NULL
             ];
@@ -48,10 +50,10 @@ foreach ($tempadas as $t) {
                     }
                 }
 
-                $res_competicion['fases'] = [];
+                $res_equipa['fases'] = [];
                 foreach ($fases as $fase) {
                     if ($fase->codigo !== 'promocion' && isset($fase->clasificacion->posicion) && !empty($fase->clasificacion->posicion) && !in_array($fase->id, $ids_fases_pai)) {
-                        $res_competicion['fases'][] = [
+                        $res_equipa['fases'][] = [
                             'nome' => $fase->nome,
                             'posicion' => $fase->clasificacion->posicion,
                             'prioridade' => $fase->prioridade
@@ -60,16 +62,15 @@ foreach ($tempadas as $t) {
                 }
             }
 
-            $res_equipa['competicions'][] = $res_competicion;
+            $res_tempada['competicions'][$competicion->id]['equipas'][] = $res_equipa;
         }
-
-        $res_tempada['equipas'][] = $res_equipa;
     }
 
-    if (empty($res_tempada['equipas'])) {
+    if (empty($res_tempada['competicions'])) {
        continue; 
     }
 
+    $res_tempada['competicions'] = array_values($res_tempada['competicions']);
     $res['palmares'][] = $res_tempada;
 }
 

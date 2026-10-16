@@ -18,4 +18,12 @@ class Competicion extends Entity {
     public function isTorneo() {
         return $this->tipo === 'torneo';
     }
+
+    public function isEliminatoria() {
+        return $this->tipo === 'eliminatoria';
+    }
+
+    public function isTorneoOuEliminatoria() {
+        return $this->isTorneo() || $this->isEliminatoria();
+    }
 }

@@ -27,7 +27,7 @@ class ClasificacionFetcherComponent extends Component {
             ->find()
             ->contain(['Fases']);
 
-        if ($competicion->isTorneo()) {
+        if ($competicion->isTorneoOuEliminatoria()) {
             $equipasFaseQuery->where([
                 'Fases.id_competicion' => $competicion->id,
                 'Fases.categoria' => $categoria
