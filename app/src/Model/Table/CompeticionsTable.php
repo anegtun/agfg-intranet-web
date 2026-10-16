@@ -7,6 +7,7 @@ class CompeticionsTable extends AgfgTable {
 
     public function initialize(array $config): void {
         $this->setTable('agfg_competicion');
+        $this->getSchema()->setColumnType('finalizada', 'boolean');
        
         $this->hasMany('Fases', array(
         	'className' => 'Fases',

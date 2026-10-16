@@ -15,6 +15,7 @@
 - Contabilidade: movementos bancarios, previsións, facturas, áreas e partidas. Comeza por [EconomicoController](src/Controller/EconomicoController.php) e polas clases `Economico*` de `src/Model/`.
 - A tenda está en `Tenda*` e é un módulo en desuso; non a amplíes agás que a tarefa o pida expresamente.
 - Antes de cambiar a persistencia, contrasta as asociacións e os nomes explícitos `agfg_*` das táboas CakePHP co [esquema SQL](../database/schema.sql). Os volcados SQL próximos poden ser históricos; `tests/schema.sql` non é un esquema completo.
+- A base de datos é MySQL. Para cambios no esquema, non crees clases de migración: proporciona SQL compatible con MySQL para que a persoa usuaria o execute manualmente.
 
 ## Versión da aplicación
 

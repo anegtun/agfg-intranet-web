@@ -2,12 +2,15 @@
 namespace App\Model;
 
 class TiposCompeticion {
+
+    public const AMIGABLE = 'amigable';
     
     public function getTipos() {
         return array(
             'liga' => 'Liga',
             'eliminatoria' => 'Eliminatoria',
-            'torneo'  => 'Torneo'
+            'torneo'  => 'Torneo',
+            self::AMIGABLE => 'Amigable'
         );
     }
     

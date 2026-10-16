@@ -18,6 +18,7 @@ $this->set('cabeceiraMigas', [
             <?= $this->Form->control('tempada', ['options'=>$this->AgfgForm->objectToKeyValue($tempadas,'codigo','nome',true,false), 'label'=>'Tempada']) ?>
             <?= $this->Form->control('tipo', ['options'=>$tiposCompeticion, 'label'=>'Tipo competición']) ?>
             <?= $this->Form->control('id_federacion', ['options'=>$this->AgfgForm->objectToKeyValue($federacions,'id','nome'), 'label'=>'Federación']) ?>
+            <?= $this->Form->control('finalizada', ['type'=>'checkbox', 'label'=>'Competición finalizada']) ?>
             <?= $this->Form->button('Gardar', ['class'=>'btn btn-primary']); ?>
         </fieldset>
     <?= $this->Form->end() ?>

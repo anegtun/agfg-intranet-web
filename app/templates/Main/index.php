@@ -14,7 +14,7 @@ $this->set('menu_option', 'inicio');
                 <div class="agfg-competicion">
                 <?php foreach ($partidosUltimosSeteDias as $partido) : ?>
                     <?php
-                        $fase = $partido->fase->competicion->tipo === 'torneo'
+                        $fase = $partido->fase->competicion->isTorneo()
                             ? (empty($partido->xornada) || empty($partido->xornada->descricion) ? $partido->fase->nome : $partido->xornada->descricion)
                             : (empty($partido->xornada) ? $partido->fase->categoria : "{$partido->fase->categoria} [X.{$partido->xornada->numero}]");
                         $hora = $partido->data_calendario->format('Y-m-d');
@@ -44,7 +44,7 @@ $this->set('menu_option', 'inicio');
                 <div class="agfg-competicion">
                 <?php foreach ($partidosProximos as $partido) : ?>
                     <?php
-                        $fase = $partido->fase->competicion->tipo === 'torneo'
+                        $fase = $partido->fase->competicion->isTorneo()
                             ? (empty($partido->xornada) || empty($partido->xornada->descricion) ? $partido->fase->nome : $partido->xornada->descricion)
                             : (empty($partido->xornada) ? $partido->fase->categoria : "{$partido->fase->categoria} [X.{$partido->xornada->numero}]");
                         $hora = $partido->data_calendario->format('Y-m-d');
@@ -74,7 +74,7 @@ $this->set('menu_option', 'inicio');
                 <div class="agfg-competicion">
                     <?php foreach ($partidosAplazadosSenData as $partido) : ?>
                         <?php
-                            $fase = $partido->fase->competicion->tipo === 'torneo'
+                            $fase = $partido->fase->competicion->isTorneo()
                                 ? (empty($partido->xornada) || empty($partido->xornada->descricion) ? $partido->fase->nome : $partido->xornada->descricion)
                                 : (empty($partido->xornada) ? $partido->fase->categoria : "{$partido->fase->categoria} [X.{$partido->xornada->numero}]");
                         ?>

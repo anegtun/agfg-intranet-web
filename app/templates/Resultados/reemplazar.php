@@ -8,7 +8,7 @@ $this->set('cabeceiraMigas', [
 
 $this->Html->script('reemplazar-equipos', ['block' => 'script']);
 
-$is_torneo = $competicion->tipo === 'torneo';
+$is_torneo = $competicion->isTorneo();
 ?>
 
 <div class="row form-group">

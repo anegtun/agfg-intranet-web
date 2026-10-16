@@ -11,7 +11,7 @@ $emptyTemplates = [
     'input' => '<input type="{{type}}" name="{{name}}" {{attrs}}/>',
 ];
 
-$is_torneo = $competicion->tipo === 'torneo';
+$is_torneo = $competicion->isTorneo();
 
 $campos = [];
 $fases = [];

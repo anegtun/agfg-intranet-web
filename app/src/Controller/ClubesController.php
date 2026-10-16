@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Model\Categorias;
+use App\Model\TiposCompeticion;
 use Cake\Core\Exception\Exception;
 use Cake\Event\EventInterface;
 use Cake\ORM\TableRegistry;
@@ -112,11 +113,7 @@ class ClubesController extends AppController {
         $tempada = $this->request->getQuery('tempada');
 
         $categorias = $this->Categorias->getCategoriasWithEmpty();
-        $tempadaActual = $this->Tempadas->findLast()->codigo;
-        $tempadas = $this->Tempadas
-            ->find()
-            ->where(['codigo !=' => $tempadaActual])
-            ->order('codigo DESC');
+        $tempadas = $this->Tempadas->find()->order('codigo DESC');
 
         $clube = $this->Clubes
             ->find()
@@ -150,7 +147,8 @@ class ClubesController extends AppController {
             $competicions_query = [
                 'Competicions.id IN' => $ids_competicions,
                 'Federacion.codigo' => 'AGFG',
-                'Competicions.tempada !=' => $tempadaActual,
+                'Competicions.finalizada' => 1,
+                'Competicions.tipo !=' => TiposCompeticion::AMIGABLE,
             ];
             if(!empty($tempada)) {
                 $competicions_query['Competicions.tempada'] = $tempada;

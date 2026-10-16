@@ -19,6 +19,7 @@ $is_admin = $authUser['rol'] === 'admin';
                     <th>Tipo</th>
                     <th>Código</th>
                     <th class="column-button"></th>
+                    <th class="column-button"></th>
                     <?php if($is_admin) : ?>
                         <th class="column-button"></th>
                         <th class="column-button"></th>
@@ -27,7 +28,7 @@ $is_admin = $authUser['rol'] === 'admin';
             </thead>
             <tbody>
                 <?php $tempada = ""; ?>
-                <?php $colspan = $is_admin ? "7" : "5"; ?>
+                <?php $colspan = $is_admin ? "8" : "6"; ?>
                 <?php foreach($competicions as $c) : ?>
 
                     <?php if ($tempada !== $c->tempada) : ?>
@@ -42,6 +43,11 @@ $is_admin = $authUser['rol'] === 'admin';
                         <td><?= $c->nome ?></td>
                         <td><?= empty($c->tipo) ? '' : $tiposCompeticion[$c->tipo] ?></td>
                         <td><?= $c->codigo ?></td>
+                        <td class="text-center">
+                            <?php if(empty($c->finalizada)) : ?>
+                                <span class="glyphicon glyphicon-fire text-danger" title="Competición non finalizada" aria-label="Competición non finalizada"></span>
+                            <?php endif ?>
+                        </td>
                         <td><?= $this->Html->link('', ['controller'=>'Resultados', 'action'=>'competicion', $c->id], ['class'=>'glyphicon glyphicon-flag']) ?></td>
                         <?php if($is_admin) : ?>
                             <td><?= $this->Html->link('', ['action'=>'detalle', $c->id], ['class'=>'glyphicon glyphicon-cog']) ?></td>

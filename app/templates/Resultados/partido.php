@@ -44,7 +44,7 @@ $data_partido_str = empty($partido->data_partido) ? NULL : $partido->data_partid
             <div class="form-group col-lg-3">
                 <?= $this->Form->control('id_campo', ['options'=>$this->AgfgForm->objectToKeyValue($campos,'id','$e->pobo - $e->nome'), 'label'=>'Campo', 'templates'=>$emptyTemplates]) ?>
             </div>
-            <?php if ($partido->fase->competicion->tipo === 'torneo') : ?>
+            <?php if ($partido->fase->competicion->isTorneo()) : ?>
                 <div class="form-group col-lg-3">
                     <?= $this->Form->control('id_umpire', ['options'=>$this->AgfgForm->objectToKeyValue($umpires,'id','$e->nome ($e->categoria)'), 'label'=>'Umpires', 'templates'=>$emptyTemplates]) ?>
                 </div>

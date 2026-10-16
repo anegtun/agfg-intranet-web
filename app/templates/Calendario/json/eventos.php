@@ -47,7 +47,7 @@ foreach($partidos as $p) {
         $data = $data->modify('-1 day');
     }
 
-    $data_str = $p->fase->competicion->tipo=='torneo' ? 'all' : $data->format('Y-m-d');
+    $data_str = $p->fase->competicion->isTorneo() ? 'all' : $data->format('Y-m-d');
     $id_comp = $p->fase->competicion->id;
 
     if(empty($partidos_agrupados[$id_comp])) {
