@@ -42,10 +42,12 @@ $this->set('cabeceiraMigas', [
                 <thead>
                     <tr>
                         <th>Orde</th>
-                        <th>Tipo</th>
                         <th>Nome</th>
-                        <th>Fase pai</th>
                         <th>Código</th>
+                        <th>Formato</th>
+                        <th>Final</th>
+                        <th>Fase pai</th>
+                        <th>Arrastre de puntos</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -53,10 +55,12 @@ $this->set('cabeceiraMigas', [
                     <?php foreach ($fasesCategoria as $f): ?>
                         <tr>
                             <td><?= h($f->prioridade) ?></td>
-                            <td><?= h($tiposFase[$f->tipo] ?? $f->tipo) ?></td>
                             <td><?= $this->Html->link($f->nome, ['action'=>'detalleFase', $f->id]) ?></td>
-                            <td><?= h($f->fasePai->nome ?? '') ?></td>
                             <td><?= h($f->codigo) ?></td>
+                            <td><?= h($formatosFase[$f->formato] ?? $f->formato) ?></td>
+                            <td><?= empty($f->final) ? 'Non' : 'Si' ?></td>
+                            <td><?= h($f->fasePai->nome ?? '') ?></td>
+                            <td><?= empty($f->acarrear_puntos) ? 'Non' : 'Si' ?></td>
                             <td class="text-center"><?= $this->AgfgForm->deleteButton(['action'=>'borrarFase', $f->id]) ?></td>
                         </tr>
                     <?php endforeach; ?>

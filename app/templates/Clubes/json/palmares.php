@@ -56,7 +56,6 @@ foreach ($tempadas as $t) {
                     if ($fase->codigo !== 'promocion' && isset($fase->clasificacion->posicion) && !empty($fase->clasificacion->posicion) && !in_array($fase->id, $ids_fases_pai)) {
                         $res_equipa['fases'][] = [
                             'nome' => $fase->nome,
-                            'tipo' => $fase->tipo,
                             'posicion' => $fase->clasificacion->posicion
                         ];
                     }

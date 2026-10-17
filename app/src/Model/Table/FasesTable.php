@@ -1,13 +1,15 @@
 <?php
 namespace App\Model\Table;
 
-use App\Model\TiposFase;
+use App\Model\FormatosFase;
 use Cake\Validation\Validator;
 
 class FasesTable extends AgfgTable {
 
     public function initialize(array $config): void {
         $this->setTable('agfg_fase');
+        $this->getSchema()->setColumnType('acarrear_puntos', 'boolean');
+        $this->getSchema()->setColumnType('final', 'boolean');
 
         $this->belongsTo('Competicion', [
         	'className' => 'Competicions',
@@ -36,13 +38,15 @@ class FasesTable extends AgfgTable {
     }
 
     public function validationDefault(Validator $validator): Validator {
-        $tiposFase = new TiposFase();
+        $formatosFase = new FormatosFase();
 
         return $validator
             ->notEmptyString('id_competicion', 'A competición é obrigatoria')
             ->notEmptyString('nome', 'O nome é obrigatorio')
-            ->notEmptyString('tipo', 'O tipo é obrigatorio')
-            ->inList('tipo', array_keys($tiposFase->getTipos()), 'O tipo de fase non é válido.');
+            ->notEmptyString('formato', 'O formato da fase é obrigatorio')
+            ->inList('formato', array_keys($formatosFase->getFormatos()), 'O formato da fase non é válido.')
+            ->boolean('acarrear_puntos', 'O valor de arrastre de puntos non é válido.')
+            ->boolean('final', 'O indicador de fase final non é válido.');
     }
 
 }

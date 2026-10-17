@@ -27,12 +27,14 @@ foreach ($fase->xornadas as $xornada) {
         <?= $this->Form->hidden('id') ?>
         <?= $this->Form->hidden('id_competicion') ?>
         <fieldset>
-            <legend>Fase</legend>
+            <legend><?= empty($fase->id) ? 'Crear fase' : $fase->nome ?></legend>
             <?= $this->Form->control('categoria', ['options'=>$categorias, 'label'=>'Categoría']) ?>
-            <?= $this->Form->control('tipo', ['options'=>$tiposFase, 'label'=>'Tipo de fase']) ?>
-            <?= $this->Form->control('codigo', ['label'=>'Codigo']) ?>
             <?= $this->Form->control('nome', ['label'=>'Nome']) ?>
+            <?= $this->Form->control('codigo', ['label'=>'Codigo']) ?>
+            <?= $this->Form->control('formato', ['options'=>$formatosFase, 'label'=>'Formato da fase']) ?>
+            <?= $this->Form->control('final', ['type'=>'checkbox', 'label'=>'Fase final']) ?>
             <?= $this->Form->control('id_fase_pai', ['options'=>$this->AgfgForm->objectToKeyValue($outras_fases, 'id', 'nome'), 'label'=>'Fase pai']) ?>
+            <?= $this->Form->control('acarrear_puntos', ['type'=>'checkbox', 'label'=>'Arrastrar puntos da fase pai']) ?>
             <?= $this->Form->control('prioridade', ['label'=>'Orde']) ?>
 
             <?php if(!empty($fase->id)) : ?>
