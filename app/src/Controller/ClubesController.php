@@ -275,15 +275,24 @@ class ClubesController extends AppController {
 
             foreach($competicions as $c) {
                 $clasificacion = $this->ClasificacionFetcher->get($c, $e->categoria);
-                $clasificacion->build();
-                $c->clasificacion = $clasificacion->getClasificacionEquipa($e->id);
+                if ($c->isLiga()) {
+                    $clasificacionsFinais = $this->_clasificacionFinalLiga($c, $e, $clasificacion);
+                    $c->clasificacion = $clasificacionsFinais['global'];
+                } else {
+                    $clasificacion->build();
+                    $c->clasificacion = $clasificacion->getClasificacionEquipa($e->id);
+                }
 
                 foreach($c->fases as $f) {
                     if(!in_array($f->id, $ids_fases)) {
                         continue;
                     }
-                    $clasificacion->build($f);
-                    $f->clasificacion = $clasificacion->getClasificacionEquipa($e->id);
+                    if ($c->isLiga() && !empty($f->final)) {
+                        $f->clasificacion = $clasificacionsFinais['fases'][$f->id] ?? null;
+                    } else {
+                        $clasificacion->build($f);
+                        $f->clasificacion = $clasificacion->getClasificacionEquipa($e->id);
+                    }
                 }
 
                 $e->competicions[$c->id] = $c;
@@ -291,6 +300,92 @@ class ClubesController extends AppController {
         }
 
         $this->set(compact('categorias', 'clube', 'tempadas'));
+    }
+
+    private function _clasificacionFinalLiga($competicion, $equipa, $clasificacion): array {
+        $fasesFinais = array_values(array_filter($competicion->fases, function ($fase) use ($equipa) {
+            return !empty($fase->final) && $fase->categoria === $equipa->categoria;
+        }));
+        usort($fasesFinais, function ($faseA, $faseB) {
+            return (int)$faseB->prioridade <=> (int)$faseA->prioridade;
+        });
+
+        if (empty($fasesFinais)) {
+            return ['global' => null, 'fases' => []];
+        }
+
+        $idsFasesFinais = array_map(function ($fase) {
+            return $fase->id;
+        }, $fasesFinais);
+        $participacions = $this->FasesEquipas
+            ->find()
+            ->contain(['Fases'])
+            ->where([
+                'Fases.id_competicion' => $competicion->id,
+                'Fases.categoria' => $equipa->categoria,
+                'Fases.final' => 1
+            ])
+            ->toArray();
+
+        $participacionsPorFase = [];
+        $fasesFinaisDaEquipa = [];
+        foreach ($participacions as $participacion) {
+            if (!in_array($participacion->fase->id, $idsFasesFinais)) {
+                continue;
+            }
+            $participacionsPorFase[$participacion->fase->id][] = $participacion;
+            if ((string)$participacion->id_equipa === (string)$equipa->id) {
+                $fasesFinaisDaEquipa[] = $participacion->fase->id;
+            }
+        }
+
+        $fasesClasificadas = [];
+        $posicionGlobal = null;
+        $desprazamento = 0;
+        foreach ($fasesFinais as $fase) {
+            $equipasFase = $participacionsPorFase[$fase->id] ?? [];
+            $clasificacionFase = [];
+            if ($fase->formato === 'eliminatoria') {
+                foreach ($equipasFase as $participacion) {
+                    $clasificacionFase[] = (object)[
+                        'id' => $participacion->id_equipa,
+                        'posicion' => empty($participacion->posicion) ? null : (int)$participacion->posicion
+                    ];
+                }
+            } else {
+                $clasificacion->build($fase);
+                $clasificacionFase = $clasificacion->getClasificacion();
+            }
+
+            $clasificacionEquipa = null;
+            foreach ($clasificacionFase as $equipaClasificada) {
+                if ((string)$equipaClasificada->id === (string)$equipa->id) {
+                    $clasificacionEquipa = $equipaClasificada;
+                    break;
+                }
+            }
+            $fasesClasificadas[$fase->id] = $clasificacionEquipa;
+
+            if (
+                count($fasesFinaisDaEquipa) === 1 &&
+                (string)$fasesFinaisDaEquipa[0] === (string)$fase->id &&
+                $clasificacionEquipa !== null &&
+                !empty($clasificacionEquipa->posicion)
+            ) {
+                $posicionGlobal = $desprazamento + (int)$clasificacionEquipa->posicion;
+            }
+
+            $desprazamento += count($equipasFase);
+        }
+
+        $clasificacionGlobal = $posicionGlobal === null
+            ? null
+            : (object)['posicion' => $posicionGlobal];
+
+        return [
+            'global' => $clasificacionGlobal,
+            'fases' => $fasesClasificadas
+        ];
     }
 
 }

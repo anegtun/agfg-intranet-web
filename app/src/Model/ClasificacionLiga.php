@@ -41,7 +41,7 @@ class ClasificacionLiga extends Clasificacion {
 
         $this->_sort();
 
-        if(!empty($fase) && !empty($fase->id_fase_pai)) {
+        if(!empty($fase) && !empty($fase->id_fase_pai) && !empty($fase->acarrear_puntos)) {
             $partidos_pai = array_filter($this->_partidos, function ($p) use ($fase) { return $p->id_fase === $fase->id_fase_pai; });
             $clasificacionPai = new ClasificacionLiga($partidos_pai, $this->_equipasFase, $this->_equipasMap);
             $clasificacionPai->build();
