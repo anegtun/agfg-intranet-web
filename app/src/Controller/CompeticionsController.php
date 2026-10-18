@@ -30,10 +30,21 @@ class CompeticionsController extends AppController {
             ->contain('Federacion')
             ->order(['Competicions.tempada DESC','Competicions.nome ASC']);
 
-        $tempadas = $this->Tempadas->findOptions();
-        $tiposCompeticion = $this->TiposCompeticion->getTipos();
+        $idFederacion = $this->request->getQuery('id_federacion');
+        if (is_scalar($idFederacion) && $idFederacion !== '') {
+            $competicions->where(['Competicions.id_federacion' => $idFederacion]);
+        }
 
-        $this->set(compact('competicions', 'tempadas', 'tiposCompeticion'));
+        $tipo = $this->request->getQuery('tipo');
+        $tiposCompeticion = $this->TiposCompeticion->getTipos();
+        if (is_string($tipo) && array_key_exists($tipo, $tiposCompeticion)) {
+            $competicions->where(['Competicions.tipo' => $tipo]);
+        }
+
+        $federacions = $this->Federacions->find()->order('codigo');
+        $tempadas = $this->Tempadas->findOptions();
+
+        $this->set(compact('competicions', 'federacions', 'tempadas', 'tiposCompeticion'));
     }
 
     public function detalle($id=null) {

@@ -9,6 +9,28 @@ $authUser = $this->request->getAttribute('identity');
 $is_admin = $authUser['rol'] === 'admin';
 ?>
 
+<div class="row form-group">
+    <?= $this->Form->setValueSources(['query', 'context'])->create(null, ['type' => 'get']) ?>
+        <div class="row">
+            <div class="col-lg-3">
+                <?= $this->Form->control('id_federacion', [
+                    'options' => $this->AgfgForm->objectToKeyValue($federacions, 'id', 'nome'),
+                    'label' => 'Federación',
+                ]) ?>
+            </div>
+            <div class="col-lg-3">
+                <?= $this->Form->control('tipo', [
+                    'options' => array_merge(['' => ''], $tiposCompeticion),
+                    'label' => 'Tipo de competición',
+                ]) ?>
+            </div>
+        </div>
+        <div style="margin-top:1em">
+            <?= $this->Form->button('Buscar', ['class' => 'btn btn-primary']); ?>
+        </div>
+    <?= $this->Form->end() ?>
+</div>
+
 <div class="row">
     <div class="col-xs-12 table-responsive">
         <table class="table table-hover">

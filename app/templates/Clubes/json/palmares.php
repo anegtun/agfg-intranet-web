@@ -42,7 +42,7 @@ foreach ($tempadas as $t) {
             ];
 
             $fases = array_filter($competicion->fases, function ($e) use ($equipa) { return $e->categoria == $equipa->categoria; });
-            if ($competicion->isLiga() && count($fases) > 1) {
+            if (($competicion->isLiga() || $competicion->isTorneoOuEliminatoria()) && count($fases) > 1) {
 
                 $ids_fases_pai = [];
                 foreach ($fases as $fase) {
@@ -53,7 +53,7 @@ foreach ($tempadas as $t) {
 
                 $res_equipa['fases'] = [];
                 foreach ($fases as $fase) {
-                    if ($fase->codigo !== 'promocion' && isset($fase->clasificacion->posicion) && !empty($fase->clasificacion->posicion) && !in_array($fase->id, $ids_fases_pai)) {
+                    if (!empty($fase->final) && !empty($fase->clasificacion->posicion) && !in_array($fase->id, $ids_fases_pai)) {
                         $res_equipa['fases'][] = [
                             'nome' => $fase->nome,
                             'posicion' => $fase->clasificacion->posicion
