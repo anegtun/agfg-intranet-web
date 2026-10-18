@@ -70,9 +70,39 @@ class ClasificacionLiga extends Clasificacion {
 
         $this->_addData(array_values($equipasPuntos));
 
-        if(empty($fase)) {
-            // Fix global clasification
+        $posicionsManuais = $this->_posicionsManuais($equipasFase);
+        if($posicionsManuais !== null) {
+            foreach($this->_clasificacion as $equipa) {
+                $equipa->posicion = $posicionsManuais[(string)$equipa->id];
+            }
+            usort($this->_clasificacion, function($a, $b) {
+                return ($a->posicion <=> $b->posicion) ?: ($a->id <=> $b->id);
+            });
         }
+    }
+
+    private function _posicionsManuais($equipasFase) {
+        $posicions = [];
+        foreach($equipasFase as $equipaFase) {
+            if(empty($equipaFase->posicion)) {
+                continue;
+            }
+
+            $idEquipa = (string)$equipaFase->id_equipa;
+            $posicion = (int)$equipaFase->posicion;
+            if(isset($posicions[$idEquipa]) && $posicions[$idEquipa] !== $posicion) {
+                return null;
+            }
+            $posicions[$idEquipa] = $posicion;
+        }
+
+        foreach($this->_clasificacion as $equipa) {
+            if(!isset($posicions[(string)$equipa->id])) {
+                return null;
+            }
+        }
+
+        return $posicions ?: null;
     }
 
     private function _tenClasificacionGlobal() {
@@ -142,42 +172,55 @@ class ClasificacionLiga extends Clasificacion {
         foreach($agrupacionPuntos as $puntosClasificacion=>$equipas) {
             // Miramos aqueles casos onde hai empate de puntos (>1 equipo)
             if(count($equipas)>1) {
-                $idsEquipas = array_keys($equipas);
                 // Facemos unha clasificación particular entre os afectados
                 $clasificacionParticular = [];
+                foreach($equipas as $idEquipa => $_) {
+                    $clasificacionParticular[$idEquipa] = $this->_initClasificacion($idEquipa);
+                }
                 foreach($this->_partidos as $p) {
-                    if(in_array($p->id_equipa1, $idsEquipas) && in_array($p->id_equipa2, $idsEquipas)) {
+                    if(isset($clasificacionParticular[$p->id_equipa1], $clasificacionParticular[$p->id_equipa2])) {
                         $this->_procesarPartido($clasificacionParticular, $p);
                     }
                 }
-                // Ordeamos segundo estes criterios:
-                // - Puntos en partidos particulares (ponderación 1.000.000 para que prevaleza sobre o resto de criterios)
-                // - Diferenza de puntos particular (ponderación 1.000)
-                // - Mellor diferenza puntos global
-                usort($clasificacionParticular, function($a, $b) use($equipas) {
-                    $globalA = $equipas[$a->id];
-                    $globalB = $equipas[$b->id];
-                    return
-                        ($b->puntos - $a->puntos)*1000000 +
-                        (($b->totalFavor-$b->totalContra) - ($a->totalFavor-$a->totalContra))*1000 + 
-                        (($globalB->totalFavor-$globalB->totalContra) - ($globalA->totalFavor-$globalA->totalContra));
-                   
-                });
-                // Buscamos a posición máxima onde están os equipos empatados, para reaxustar posición a partir de ahí
-                $posicionMaxima = 1000;
-                foreach($this->_clasificacion as $e) {
-                    if($e->puntos === $puntosClasificacion && $e->posicion<$posicionMaxima) {
-                        $posicionMaxima = $e->posicion;
-                    }
+                foreach($clasificacionParticular as $equipa) {
+                    $equipa->puntos = max(0, $equipa->puntos_sen_sancion - $equipa->puntos_sancion);
                 }
+                $clasificacionParticular = array_values($clasificacionParticular);
+                usort($clasificacionParticular, function($a, $b) use($equipas) {
+                    $comparacionPuntos = $b->puntos <=> $a->puntos;
+                    if($comparacionPuntos !== 0) {
+                        return $comparacionPuntos;
+                    }
+
+                    $diferenzaDirectaA = $a->totalFavor - $a->totalContra;
+                    $diferenzaDirectaB = $b->totalFavor - $b->totalContra;
+                    $comparacionDiferenzaDirecta = $diferenzaDirectaB <=> $diferenzaDirectaA;
+                    if($comparacionDiferenzaDirecta !== 0) {
+                        return $comparacionDiferenzaDirecta;
+                    }
+
+                    $diferenzaGlobalA = $equipas[$a->id]->totalFavor - $equipas[$a->id]->totalContra;
+                    $diferenzaGlobalB = $equipas[$b->id]->totalFavor - $equipas[$b->id]->totalContra;
+                    return $diferenzaGlobalB <=> $diferenzaGlobalA;
+                });
+                // Calculamos as posicións usando os tres criterios de desempate.
+                $posicionBase = min(array_map(function($equipa) {
+                    return $equipa->posicion;
+                }, $equipas));
                 // Recalculamos posición en base á orde da clasificación particular
-                $offset = 0;
-                foreach($clasificacionParticular as $ep) {
-                    // array_values para forzar a reindexación, así sempre podemos coller de $result[0]
-                    $e = array_values(array_filter($this->_clasificacion, function ($v) use($ep) {
-                        return $v->id === $ep->id;
-                    }));
-                    $e[0]->posicion = $posicionMaxima + ($offset++);
+                $posicion = $posicionBase;
+                $metricasAnteriores = null;
+                foreach($clasificacionParticular as $indice => $equipa) {
+                    $metricas = [
+                        $equipa->puntos,
+                        $equipa->totalFavor - $equipa->totalContra,
+                        $equipas[$equipa->id]->totalFavor - $equipas[$equipa->id]->totalContra
+                    ];
+                    if($metricasAnteriores !== null && $metricas !== $metricasAnteriores) {
+                        $posicion = $posicionBase + $indice;
+                    }
+                    $equipas[$equipa->id]->posicion = $posicion;
+                    $metricasAnteriores = $metricas;
                 }
             }
         }

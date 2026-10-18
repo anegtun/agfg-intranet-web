@@ -405,27 +405,24 @@ class ClubesController extends AppController {
         });
 
         $fasesClasificadas = [];
-        $numeroFasesEquipa = 0;
         $desprazamento = 0;
-        $desprazamentoEquipa = 0;
-        $posicionFaseEquipa = null;
+        $posicionsGlobaisEquipa = [];
         foreach ($fasesFinais as $fase) {
             $clasificacion->build($fase);
             $clasificacionFase = $clasificacion->getClasificacion();
             $clasificacionEquipa = $clasificacion->getClasificacionEquipa($equipa->id);
             $fasesClasificadas[$fase->id] = $clasificacionEquipa;
 
-            if ($clasificacionEquipa !== null) {
-                $numeroFasesEquipa++;
-                $desprazamentoEquipa = $desprazamento;
-                $posicionFaseEquipa = $clasificacionEquipa->posicion;
+            if ($clasificacionEquipa !== null && !empty($clasificacionEquipa->posicion)) {
+                $posicionsGlobaisEquipa[] = $desprazamento + (int)$clasificacionEquipa->posicion;
             }
 
             $desprazamento += count($clasificacionFase);
         }
 
-        $posicionGlobal = $numeroFasesEquipa === 1 && !empty($posicionFaseEquipa)
-            ? $desprazamentoEquipa + (int)$posicionFaseEquipa
+        $posicionsGlobaisEquipa = array_values(array_unique($posicionsGlobaisEquipa));
+        $posicionGlobal = count($posicionsGlobaisEquipa) === 1
+            ? $posicionsGlobaisEquipa[0]
             : null;
         $clasificacionGlobal = $posicionGlobal === null
             ? null
