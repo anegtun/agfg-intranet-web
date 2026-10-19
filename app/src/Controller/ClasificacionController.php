@@ -29,7 +29,7 @@ class ClasificacionController extends AppController {
         $clasificacion = $this->ClasificacionFetcher->get($competicion, $categoria);
         $clasificacion->build();
 
-        $this->set(compact('clasificacion'));
+        $this->set(compact('competicion', 'clasificacion'));
         $this->render('clasificacion');
     }
 
@@ -45,10 +45,10 @@ class ClasificacionController extends AppController {
             ->where(['id_competicion'=>$competicion->id, 'categoria'=>$categoria, 'codigo'=>$codFase])
             ->first();
 
-        $clasificacion = $this->ClasificacionFetcher->get($competicion, $categoria);
+        $clasificacion = $this->ClasificacionFetcher->get($competicion, $categoria, $fase);
         $clasificacion->build($fase);
 
-        $this->set(compact('clasificacion'));
+        $this->set(compact('competicion', 'fase', 'clasificacion'));
         $this->render('clasificacion');
     }
 }

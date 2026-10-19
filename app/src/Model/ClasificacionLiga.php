@@ -29,12 +29,18 @@ class ClasificacionLiga extends Clasificacion {
 
     public function build($fase = NULL) {
         $this->_clasificacion = [];
+        $soFasesFinais = $fase === NULL;
 
-        if (empty($fase) && !$this->_tenClasificacionGlobal()) {
+        if (empty($fase) && !$this->_tenClasificacionGlobal($soFasesFinais)) {
             return;
         }
 
-        $partidos = array_filter($this->_partidos, function ($p) use ($fase) { return empty($fase) || $p->id_fase === $fase->id; });
+        $partidos = array_filter($this->_partidos, function ($p) use ($fase, $soFasesFinais) {
+            if(!empty($fase)) {
+                return $p->id_fase === $fase->id;
+            }
+            return !$soFasesFinais || !empty($p->fase->final);
+        });
         foreach($partidos as $p) {
             $this->_procesarPartido($this->_clasificacion, $p);
         }
@@ -44,7 +50,7 @@ class ClasificacionLiga extends Clasificacion {
         if(!empty($fase) && !empty($fase->id_fase_pai) && !empty($fase->acarrear_puntos)) {
             $partidos_pai = array_filter($this->_partidos, function ($p) use ($fase) { return $p->id_fase === $fase->id_fase_pai; });
             $clasificacionPai = new ClasificacionLiga($partidos_pai, $this->_equipasFase, $this->_equipasMap);
-            $clasificacionPai->build();
+            $clasificacionPai->build((object)['id' => $fase->id_fase_pai]);
             $this->_addData($clasificacionPai->getClasificacion());
         }
 
@@ -56,6 +62,10 @@ class ClasificacionLiga extends Clasificacion {
                     $equipasFase[] = $ef;
                 }
             }
+        } elseif($soFasesFinais) {
+            $equipasFase = array_filter($equipasFase, function ($ef) {
+                return !empty($ef->fase->final);
+            });
         }
 
         $equipasPuntos = [];
@@ -105,10 +115,13 @@ class ClasificacionLiga extends Clasificacion {
         return $posicions ?: null;
     }
 
-    private function _tenClasificacionGlobal() {
+    private function _tenClasificacionGlobal($soFasesFinais = false) {
         $id_equipas = $equipas_fase = [];
 
         foreach ($this->_equipasFase as $ef) {
+            if($soFasesFinais && empty($ef->fase->final)) {
+                continue;
+            }
             $id_equipas[] = $ef->id_equipa;
             $id_equipas = array_unique($id_equipas);
             

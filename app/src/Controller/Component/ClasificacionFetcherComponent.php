@@ -9,7 +9,7 @@ class ClasificacionFetcherComponent extends Component {
 
     use ModelAwareTrait;
 
-    public function get($competicion, $categoria) {
+    public function get($competicion, $categoria, $fase = null) {
         $this->loadModel('Competicions');
         $this->loadModel('Equipas');
         $this->loadModel('FasesEquipas');
@@ -42,7 +42,7 @@ class ClasificacionFetcherComponent extends Component {
 
         $equipasFase = $equipasFaseQuery->toArray();
 
-        return Clasificacion::create($competicion, $partidos, $equipasFase, $equipas);
+        return Clasificacion::create($competicion, $partidos, $equipasFase, $equipas, $fase);
     }
 
 }

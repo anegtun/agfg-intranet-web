@@ -3,12 +3,12 @@ namespace App\Model;
 
 abstract class Clasificacion {
 
-    public static function create($competicion, $partidos, $equipasFase, $equipasMap) {
+    public static function create($competicion, $partidos, $equipasFase, $equipasMap, $fase = null) {
+        if ($competicion->isLiga() || (!empty($fase) && $fase->formato === FormatosFase::LIGA)) {
+            return new ClasificacionLiga($partidos, $equipasFase, $equipasMap);
+        }
         if ($competicion->isTorneoOuEliminatoria()) {
             return new ClasificacionTorneo($equipasFase, $equipasMap);
-        }
-        if ($competicion->isLiga()) {
-            return new ClasificacionLiga($partidos, $equipasFase, $equipasMap);
         }
         return new ClasificacionBaleira();
     }
