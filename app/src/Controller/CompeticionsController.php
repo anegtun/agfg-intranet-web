@@ -4,7 +4,7 @@ namespace App\Controller;
 use App\Model\Categorias;
 use App\Model\FormatosFase;
 use App\Model\TiposCompeticion;
-use Cake\Event\Event;
+use Cake\Event\EventInterface;
 use Cake\I18n\Time;
 use Cake\ORM\TableRegistry;
 
@@ -23,6 +23,31 @@ class CompeticionsController extends AppController {
         $this->Partidos = TableRegistry::get('Partidos');
         $this->Tempadas = TableRegistry::get('Tempadas');
         $this->Xornadas = TableRegistry::get('Xornadas');
+        $this->loadComponent('ClasificacionFetcher');
+    }
+
+    public function beforeFilter(EventInterface $event) {
+        parent::beforeFilter($event);
+        $this->Authentication->allowUnauthenticated(['historico']);
+    }
+
+    public function historico() {
+        $competicions = $this->Competicions->find()
+            ->contain([
+                'Fases' => [
+                    'sort' => [
+                        'Fases.categoria' => 'ASC',
+                        'Fases.prioridade' => 'ASC',
+                        'Fases.nome' => 'ASC',
+                    ]
+                ]
+            ])
+            ->order(['Competicions.tempada' => 'DESC', 'Competicions.nome' => 'ASC'])
+            ->toArray();
+
+        $clasificacionFetcher = $this->ClasificacionFetcher;
+        $this->set(compact('competicions', 'clasificacionFetcher'));
+        $this->render('historico');
     }
 
     public function index() {
