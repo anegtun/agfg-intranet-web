@@ -188,7 +188,12 @@ class CalendarioController extends AppController {
                             'queryBuilder' => function ($q) use ($campoParam) {
                                 $q = $q->order(['Partidos.data_partido', 'Partidos.hora_partido']);
                                 if(!empty($campoParam)) {
-                                    $q = $q->where(['Fases.Xornadas.Partidos.Campo.codigo' => $campoParam]);
+                                    $q = $q->matching(
+                                        'Campo',
+                                        function ($q) use ($campoParam) {
+                                            return $q->where(['Campo.codigo' => $campoParam]);
+                                        }
+                                    );
                                 }
                                 return $q;
                             },
