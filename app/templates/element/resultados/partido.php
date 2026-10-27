@@ -8,24 +8,40 @@
 
     $competicion = $partido->fase->competicion;
     $categoria = $partido->fase->categoria;
+    $logoCategoria = \App\Model\Categorias::getLogo($categoria);
 
-    $logosCategoria = [
-        'M' => 'https://compartir.gaelicogalego.gal/content/logos/federacions/gaa-min.png',
-        'F' => 'https://compartir.gaelicogalego.gal/content/logos/federacions/lgfa-min.png',
-        'E' => 'https://compartir.gaelicogalego.gal/content/logos/gaelico-escolas/gaelico-escolas-min.png'
-    ];
-    $horaMostrada = preg_replace_callback(
-        '/\b(\d{4})-(\d{2})-(\d{2})(?:\s+(\d{2}:\d{2}))?/',
-        function ($coincidencias) {
-            $data = "{$coincidencias[3]}/{$coincidencias[2]}";
-            return isset($coincidencias[4]) ? "{$data} {$coincidencias[4]}" : $data;
-        },
-        $hora
-    );
+    if ($partido->adiado && empty($partido->data_partido)) {
+        $dataOrixinal = $partido->xornada->data ?? null;
+        $hora = empty($dataOrixinal)
+            ? 'Data pendente'
+            : $dataOrixinal->format('d/m') . ' (orixinal)';
+    } else {
+        $dataPartido = $partido->data_calendario ?? $partido->data_partido ?? null;
+        if ($competicion->isTorneo()) {
+            $hora = $partido->formatDiaHora();
+        } else {
+            $hora = empty($dataPartido) ? '' : $dataPartido->format('d/m');
+            if (!empty($partido->hora_partido)) {
+                $hora .= ($hora === '' ? '' : ' ') . $partido->hora_partido;
+            }
+        }
+
+        if ($partido->adiado) {
+            if ($hora === '') {
+                $hora = empty($dataPartido) ? '' : $dataPartido->format('d/m');
+            }
+            if (!str_ends_with($hora, ' (adiado)')) {
+                $hora = rtrim($hora) . ' (adiado)';
+            }
+        }
+    }
 
     $faseMostrada = '';
     if ($competicion->isTorneoOuEliminatoria()) {
-        $faseMostrada = empty($partido->xornada->descricion) ? $partido->fase->nome : $partido->xornada->descricion;
+        $faseMostrada = " - {$partido->fase->nome}";
+        if(!empty($partido->xornada->descricion)) {
+            $faseMostrada .= ", {$partido->xornada->descricion}";
+        }
     }
 
     $resaltarHora = !empty($resaltarNonConfigurado) && empty($partido->hora_partido);
@@ -37,13 +53,13 @@
 
     <div class='agfg-partido-top'>
         <div class='agfg-partido-top-data'>
-            <span class="<?= $resaltarHora ? 'bg-danger' : '' ?>"><?= h($horaMostrada) ?></span>
+            <span class="<?= $resaltarHora ? 'bg-danger' : '' ?>"><?= h($hora) ?></span>
+            <?= h($faseMostrada) ?>
         </div>
         <div class='agfg-partido-top-fase'>
-            <?php if (isset($logosCategoria[$categoria])) : ?>
-                <img src='<?= $logosCategoria[$categoria] ?>' alt='Categoría <?= h($categoria) ?>' style='max-width: 35px; height: auto;'>
+            <?php if ($logoCategoria !== null) : ?>
+                <img src='<?= h($logoCategoria) ?>' alt='Categoría <?= h($categoria) ?>' style='max-width: 35px; height: auto;'>
             <?php endif ?>
-            <?= h($faseMostrada) ?>
         </div>
     </div>
     

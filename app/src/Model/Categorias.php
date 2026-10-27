@@ -10,7 +10,7 @@ class Categorias {
             'E' => 'Escolas'
         ];
     }
-    
+
     public function getCategoriasFiltered($codes) {
         $all = $this->getCategorias();
         $res = [];
@@ -27,6 +27,16 @@ class Categorias {
     public function getCategoria($key) {
         $cats = $this->getCategorias();
         return $cats[$key];
+    }
+
+    public static function getLogo(string $categoria): ?string {
+        $logos = [
+            'M' => 'https://compartir.gaelicogalego.gal/content/logos/federacions/gaa-min.png',
+            'F' => 'https://compartir.gaelicogalego.gal/content/logos/federacions/lgfa-min.png',
+            'E' => 'https://compartir.gaelicogalego.gal/content/logos/gaelico-escolas/gaelico-escolas-min.png',
+        ];
+
+        return $logos[$categoria] ?? null;
     }
 
 }

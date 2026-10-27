@@ -75,21 +75,13 @@ foreach($partidos_filtrados as $p) {
         <div class="agfg-xornada">Adiados</div>
 
         <?php foreach($partidos_adiados as $p) : ?>
-            <?= $this->element('resultados/partido', [
-                'hora' => $p->xornada->data->format('Y-m-d') . " (orixinal)",
-                'partido' => $p
-            ]) ?>
+            <?= $this->element('resultados/partido', [ 'partido' => $p ]) ?>
         <?php endforeach ?>
 
     <?php endif ?>
 
     <?php foreach($partidos_normais as $p) : ?>
         <?php
-            $hora = $is_torneo ? $p->formatDiaHora() : $p->formatDataHora();
-            if(empty($hora) && !empty($p->adiado)) {
-                $hora = '(adiado)';
-            }
-
             $data_referencia = $p->data_partido ? $p->data_partido : $p->xornada->data;
             $sabado = empty($data_referencia) ? NULL : $data_referencia->modify('next monday')->modify('previous saturday')->format('Y-m-d');
         ?>
@@ -99,10 +91,7 @@ foreach($partidos_filtrados as $p) {
             <div class="agfg-xornada"><?= $data_xornada ?></div>
         <?php endif?>
 
-        <?= $this->element('resultados/partido', [
-            'hora' => $hora,
-            'partido' => $p
-        ]) ?>
+        <?= $this->element('resultados/partido', [ 'partido' => $p ]) ?>
     <?php endforeach ?>
 
 </div>

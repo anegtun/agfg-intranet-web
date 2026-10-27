@@ -13,14 +13,7 @@ $this->set('menu_option', 'inicio');
             <?php else : ?>
                 <div class="agfg-competicion">
                 <?php foreach ($partidosUltimosSeteDias as $partido) : ?>
-                    <?php
-                        $hora = $partido->data_calendario->format('Y-m-d');
-                        if (!empty($partido->hora_partido)) {
-                            $hora .= ' ' . $partido->hora_partido;
-                        }
-                    ?>
                     <?= $this->element('resultados/partido', [
-                        'hora' => $hora,
                         'partido' => $partido,
                         'resaltarNonConfigurado' => true,
                     ]) ?>
@@ -40,14 +33,7 @@ $this->set('menu_option', 'inicio');
             <?php else : ?>
                 <div class="agfg-competicion">
                 <?php foreach ($partidosProximos as $partido) : ?>
-                    <?php
-                        $hora = $partido->data_calendario->format('Y-m-d');
-                        if (!empty($partido->hora_partido)) {
-                            $hora .= ' ' . $partido->hora_partido;
-                        }
-                    ?>
                     <?= $this->element('resultados/partido', [
-                        'hora' => $hora,
                         'partido' => $partido,
                         'ocultarResultado' => true,
                         'resaltarNonConfigurado' => true,
@@ -69,7 +55,6 @@ $this->set('menu_option', 'inicio');
                 <div class="agfg-competicion">
                     <?php foreach ($partidosAplazadosSenData as $partido) : ?>
                         <?= $this->element('resultados/partido', [
-                            'hora' => 'Data pendente',
                             'partido' => $partido,
                             'ocultarResultado' => true
                         ]) ?>
