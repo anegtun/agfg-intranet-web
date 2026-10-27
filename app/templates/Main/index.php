@@ -14,9 +14,6 @@ $this->set('menu_option', 'inicio');
                 <div class="agfg-competicion">
                 <?php foreach ($partidosUltimosSeteDias as $partido) : ?>
                     <?php
-                        $fase = $partido->fase->competicion->isTorneo()
-                            ? (empty($partido->xornada) || empty($partido->xornada->descricion) ? $partido->fase->nome : $partido->xornada->descricion)
-                            : (empty($partido->xornada) ? $partido->fase->categoria : "{$partido->fase->categoria} [X.{$partido->xornada->numero}]");
                         $hora = $partido->data_calendario->format('Y-m-d');
                         if (!empty($partido->hora_partido)) {
                             $hora .= ' ' . $partido->hora_partido;
@@ -24,8 +21,8 @@ $this->set('menu_option', 'inicio');
                     ?>
                     <?= $this->element('resultados/partido', [
                         'hora' => $hora,
-                        'fase' => $fase,
                         'partido' => $partido,
+                        'resaltarNonConfigurado' => true,
                     ]) ?>
                 <?php endforeach ?>
                 </div>
@@ -44,9 +41,6 @@ $this->set('menu_option', 'inicio');
                 <div class="agfg-competicion">
                 <?php foreach ($partidosProximos as $partido) : ?>
                     <?php
-                        $fase = $partido->fase->competicion->isTorneo()
-                            ? (empty($partido->xornada) || empty($partido->xornada->descricion) ? $partido->fase->nome : $partido->xornada->descricion)
-                            : (empty($partido->xornada) ? $partido->fase->categoria : "{$partido->fase->categoria} [X.{$partido->xornada->numero}]");
                         $hora = $partido->data_calendario->format('Y-m-d');
                         if (!empty($partido->hora_partido)) {
                             $hora .= ' ' . $partido->hora_partido;
@@ -54,8 +48,9 @@ $this->set('menu_option', 'inicio');
                     ?>
                     <?= $this->element('resultados/partido', [
                         'hora' => $hora,
-                        'fase' => $fase,
                         'partido' => $partido,
+                        'ocultarResultado' => true,
+                        'resaltarNonConfigurado' => true,
                     ]) ?>
                 <?php endforeach ?>
                 </div>
@@ -73,15 +68,10 @@ $this->set('menu_option', 'inicio');
             <?php else : ?>
                 <div class="agfg-competicion">
                     <?php foreach ($partidosAplazadosSenData as $partido) : ?>
-                        <?php
-                            $fase = $partido->fase->competicion->isTorneo()
-                                ? (empty($partido->xornada) || empty($partido->xornada->descricion) ? $partido->fase->nome : $partido->xornada->descricion)
-                                : (empty($partido->xornada) ? $partido->fase->categoria : "{$partido->fase->categoria} [X.{$partido->xornada->numero}]");
-                        ?>
                         <?= $this->element('resultados/partido', [
                             'hora' => 'Data pendente',
-                            'fase' => $fase,
                             'partido' => $partido,
+                            'ocultarResultado' => true
                         ]) ?>
                     <?php endforeach ?>
                 </div>

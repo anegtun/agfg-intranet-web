@@ -76,8 +76,11 @@
 }
 .agfg-partido-bottom-detalle {
   display: flex;
+  flex: 1 1 0;
+  min-width: 0;
   align-items: center;
   font-size: smaller;
+  padding: 0.25em;
 }
 .agfg-partido-bottom-detalle figure {
   margin-right: .5em;

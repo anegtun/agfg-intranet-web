@@ -50,16 +50,20 @@ class MainController extends AppController {
 
         if (in_array($identity['rol'], ['admin', 'comp', 'euro22'], true)) {
             $hoxe = FrozenDate::today();
+            $inicioSemana = $hoxe->modify('monday this week');
+            $finSemana = $inicioSemana->modify('+6 days');
+            $inicioSemanaAnterior = $inicioSemana->modify('-7 days');
+            $finSemanaAnterior = $inicioSemana->modify('-1 day');
             $tempadaActual = $this->Tempadas->findLast()->codigo;
             $partidosProximos = $this->Partidos
-                ->findDashboardMatchesBetween($hoxe, $hoxe->modify('+6 days'), $tempadaActual)
+                ->findDashboardMatchesBetween($inicioSemana, $finSemana, $tempadaActual)
                 ->toArray();
             $partidosAplazadosSenData = $this->Partidos
                 ->findPostponedWithoutDate($tempadaActual)
                 ->toArray();
 
             $partidosUltimosSeteDias = $this->Partidos
-                ->findDashboardRecentMatches($hoxe->modify('-6 days'), $hoxe, $tempadaActual)
+                ->findDashboardRecentMatches($inicioSemanaAnterior, $finSemanaAnterior, $tempadaActual)
                 ->toArray();
 
             $this->set(compact('partidosProximos', 'partidosUltimosSeteDias', 'partidosAplazadosSenData'));
