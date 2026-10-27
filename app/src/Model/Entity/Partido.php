@@ -15,14 +15,36 @@ class Partido extends Entity {
 
     protected $diasSemana = ['Dom','Lun','Mar','Mér','Xov','Ven','Sáb'];
 
-    public function formatDataHora() {
-        if(empty($this->data_partido)) {
-            return NULL;
+    public function formatHoraPartido(): string {
+        if ($this->adiado && empty($this->data_partido)) {
+            $dataOrixinal = $this->xornada->data ?? null;
+            return empty($dataOrixinal) ? 'Data pendente' : $dataOrixinal->format('d/m') . ' (orixinal)';
         }
-        return $this->data_partido->format('Y-m-d').' '.$this->hora_partido;
+
+        if ($this->fase->competicion->isTorneo()) {
+            $hora = $this->formatDiaHora();
+        } else {
+            $dataPartido = $this->data_calendario ?? $this->data_partido ?? null;
+            $hora = empty($dataPartido) ? '' : $dataPartido->format('d/m');
+            if (!empty($this->hora_partido)) {
+                $hora .= ($hora === '' ? '' : ' ') . $this->hora_partido;
+            }
+        }
+
+        if ($this->adiado) {
+            if ($hora === '') {
+                $dataPartido = $this->data_calendario ?? $this->data_partido ?? null;
+                $hora = empty($dataPartido) ? '' : $dataPartido->format('d/m');
+            }
+            if (!str_ends_with($hora, ' (adiado)')) {
+                $hora = rtrim($hora) . ' (adiado)';
+            }
+        }
+
+        return $hora;
     }
 
-    public function formatDiaHora() {
+    private function formatDiaHora() {
         if(empty($this->hora_partido) || empty($this->data_partido)) {
             return NULL;
         }

@@ -17,20 +17,16 @@ $emptyTemplates = [
         <table class="table table-striped table-hover">
         <?php foreach($partidos as $p) : ?>
             <?php
+                $categoria = $p->fase->categoria;
+                $logoCategoria = \App\Model\Categorias::getLogo($categoria);
                 $fase = empty($p->xornada->descricion) ? $p->fase->nome : $p->xornada->descricion;
-
-                $hora = $p->formatDataHora();
-                if(empty($hora) && !empty($p->adiado)) {
-                    $hora = '(adiado)';
-                }
-
                 $data_referencia = $p->data_partido ? $p->data_partido : $p->xornada->data;
                 $sabado = empty($data_referencia) ? NULL : $data_referencia->modify('next monday')->modify('previous saturday')->format('Y-m-d');
             ?>
 
             <tr>
-                <td><?= $hora ?></td>
-                <td><?= $p->fase->categoria ?></td>
+                <td><?= $p->formatHoraPartido() ?></td>
+                <td><img src='<?= h($logoCategoria) ?>' alt='Categoría <?= h($categoria) ?>' style='max-width: 35px; height: auto;'></td>
                 <td><?= $fase ?></td>
                 <td><?= $p->getNomeCurtoEquipa1() ?></td>
                 <td><?= $p->formatDesglose1() ?> (<?= $p->getPuntuacionTotalEquipa1() ?>)</td>

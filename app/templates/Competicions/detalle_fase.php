@@ -147,7 +147,7 @@ foreach ($fase->xornadas as $xornada) {
                                 <td>&nbsp;</td>
                                 <td><?= $this->AgfgForm->logo($p->equipa1, ['size'=>20]) ?> <?= $p->getNomeEquipa1() ?></td>
                                 <td><?= $this->AgfgForm->logo($p->equipa2, ['size'=>20]) ?> <?= $p->getNomeEquipa2() ?></td>
-                                <td><?= $p->formatDataHora() ?></td>
+                                <td><?= $p->formatHoraPartido() ?></td>
                                 <td>
                                     <?= $p->hasPuntuacionTotalEquipa1() ? $p->getPuntuacionTotalEquipa1() : '-' ?>
                                     -

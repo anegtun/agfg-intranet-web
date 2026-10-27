@@ -10,32 +10,6 @@
     $categoria = $partido->fase->categoria;
     $logoCategoria = \App\Model\Categorias::getLogo($categoria);
 
-    if ($partido->adiado && empty($partido->data_partido)) {
-        $dataOrixinal = $partido->xornada->data ?? null;
-        $hora = empty($dataOrixinal)
-            ? 'Data pendente'
-            : $dataOrixinal->format('d/m') . ' (orixinal)';
-    } else {
-        $dataPartido = $partido->data_calendario ?? $partido->data_partido ?? null;
-        if ($competicion->isTorneo()) {
-            $hora = $partido->formatDiaHora();
-        } else {
-            $hora = empty($dataPartido) ? '' : $dataPartido->format('d/m');
-            if (!empty($partido->hora_partido)) {
-                $hora .= ($hora === '' ? '' : ' ') . $partido->hora_partido;
-            }
-        }
-
-        if ($partido->adiado) {
-            if ($hora === '') {
-                $hora = empty($dataPartido) ? '' : $dataPartido->format('d/m');
-            }
-            if (!str_ends_with($hora, ' (adiado)')) {
-                $hora = rtrim($hora) . ' (adiado)';
-            }
-        }
-    }
-
     $faseMostrada = '';
     if ($competicion->isTorneoOuEliminatoria()) {
         $faseMostrada = " - {$partido->fase->nome}";
@@ -53,7 +27,7 @@
 
     <div class='agfg-partido-top'>
         <div class='agfg-partido-top-data'>
-            <span class="<?= $resaltarHora ? 'bg-danger' : '' ?>"><?= h($hora) ?></span>
+            <span class="<?= $resaltarHora ? 'bg-danger' : '' ?>"><?= h($partido->formatHoraPartido()) ?></span>
             <?= h($faseMostrada) ?>
         </div>
         <div class='agfg-partido-top-fase'>

@@ -89,7 +89,7 @@ class ResultadosController extends AppController {
 
         $partidos = $this->Partidos
             ->find()
-            ->contain(['Fase', 'Xornada', 'Equipa1'=>'Clube', 'Equipa2'=>'Clube', 'Campo', 'Arbitro', 'Umpire'])
+            ->contain(['Fase' => 'Competicion', 'Xornada', 'Equipa1'=>'Clube', 'Equipa2'=>'Clube', 'Campo', 'Arbitro', 'Umpire'])
             ->select(['data_calendario' => 'COALESCE(Partidos.data_partido, Xornada.data)'])
             ->enableAutoFields(true)
             ->where(['Fase.id_competicion'=>$id])

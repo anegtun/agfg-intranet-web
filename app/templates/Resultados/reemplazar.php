@@ -7,8 +7,6 @@ $this->set('cabeceiraMigas', [
 ]);
 
 $this->Html->script('reemplazar-equipos', ['block' => 'script']);
-
-$is_torneo = $competicion->isTorneo();
 ?>
 
 <div class="row form-group">
@@ -31,12 +29,11 @@ $is_torneo = $competicion->isTorneo();
     <?php foreach($partidos as $p) : ?>
         <?php
             $fase = "";
-            if($is_torneo) {
+            if($competicion->isTorneo()) {
                 $fase = empty($p->xornada->descricion) ? $p->fase->nome : $p->xornada->descricion;
             } else {
                 $fase = "{$p->fase->categoria} [X.{$p->xornada->numero}]";
             }
-            $hora = $is_torneo ? $p->formatDiaHora() : $p->formatDataHora();
 
             $logo1 = empty($equipas[$p->id_equipa1]->logo) ? '' : $this->Html->image($equipas[$p->id_equipa1]->logo, ['width'=>25]);
             $logo2 = empty($equipas[$p->id_equipa2]->logo) ? '' : $this->Html->image($equipas[$p->id_equipa2]->logo, ['width'=>25]);
@@ -52,7 +49,7 @@ $is_torneo = $competicion->isTorneo();
         <div class="agfg-partido" data-equipa1="<?= $p->id_equipa1 ?>" data-equipa2="<?= $p->id_equipa2 ?>" data-umpire="<?= $p->id_umpire ?>">
             
             <div class='agfg-partido-top'>
-                <div class='agfg-partido-top-data'><?= $hora ?></div>
+                <div class='agfg-partido-top-data'><?= $p->formatHoraPartido() ?></div>
                 <div class='agfg-partido-top-fase'><?= $fase ?></div>
             </div>
             
