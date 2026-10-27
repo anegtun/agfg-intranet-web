@@ -8,12 +8,7 @@
 
     $competicion = $partido->fase->competicion;
     $categoria = $partido->fase->categoria;
-
-    $logosCategoria = [
-        'M' => 'https://compartir.gaelicogalego.gal/content/logos/federacions/gaa-min.png',
-        'F' => 'https://compartir.gaelicogalego.gal/content/logos/federacions/lgfa-min.png',
-        'E' => 'https://compartir.gaelicogalego.gal/content/logos/gaelico-escolas/gaelico-escolas-min.png'
-    ];
+    $logoCategoria = \App\Model\Categorias::getLogo($categoria);
     $horaMostrada = preg_replace_callback(
         '/\b(\d{4})-(\d{2})-(\d{2})(?:\s+(\d{2}:\d{2}))?/',
         function ($coincidencias) {
@@ -40,8 +35,8 @@
             <span class="<?= $resaltarHora ? 'bg-danger' : '' ?>"><?= h($horaMostrada) ?></span>
         </div>
         <div class='agfg-partido-top-fase'>
-            <?php if (isset($logosCategoria[$categoria])) : ?>
-                <img src='<?= $logosCategoria[$categoria] ?>' alt='Categoría <?= h($categoria) ?>' style='max-width: 35px; height: auto;'>
+            <?php if ($logoCategoria !== null) : ?>
+                <img src='<?= h($logoCategoria) ?>' alt='Categoría <?= h($categoria) ?>' style='max-width: 35px; height: auto;'>
             <?php endif ?>
             <?= h($faseMostrada) ?>
         </div>
